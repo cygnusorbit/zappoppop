@@ -11,8 +11,8 @@
     $(function () {
         var items = (M.vars.modules || []).slice();
         var filter = 'all';
-        var PER_OPTS = [6, 12, 24, 48]; /* ZAPPOPPOP_EXT_PAGER */
-        var perPage = 6;
+        var PER_OPTS = [9, 18, 27, 54]; /* ZAPPOPPOP_EXT_PAGER */
+        var perPage = 9;
         var page = 1;
         var DEF = 'all-modules';
         var cats = (M.vars.categories || []).slice();
@@ -26,6 +26,7 @@
         var $search = $('#zpp-ext-search');
         var $pager = $('#zpp-ext-pager');
         var $cats = $('#zpp-ext-cats');
+        var $filters = $('#zpp-ext-filters'); /* ZAPPOPPOP_EXT_FILTERS */
         var $drop = $('#zpp-ext-drop');
         var $file = $('#zpp-ext-file');
         var $name = $('#zpp-ext-file-name');
@@ -37,6 +38,7 @@
             switch (f) {
                 case 'available': return isAvail(m);
                 case 'installed': return m.state === 'installed';
+                case 'uninstalled': return m.state !== 'installed';
                 case 'builtin': return m.source === 'core';
                 case 'uploaded': return m.source === 'uploaded';
                 default: return true;
@@ -121,8 +123,21 @@
 
         function card(m) {
             var $c = $('<article class="zpp-ext-item"></article>').attr('data-slug', m.slug);
+            if (m.box) { /* ZAPPOPPOP_EXT_BOX: pro = light orange, core = light dark blue, module.json "box" overrides */
+                $c.addClass('is-' + (m.box.kind || 'custom'));
+                if (m.box.bg) { $c.css('background-color', m.box.bg); }
+                if (m.box.border) { $c.css('border-color', m.box.border); }
+                if (m.box.color) { $c.css('color', m.box.color).addClass('has-box-color'); }
+            }
             var $top = $('<div class="zpp-ext-item-top"></div>').appendTo($c);
-            $top.append(thumb(m.image));
+            var $tw = $('<span class="zpp-ext-thumbwrap"></span>').appendTo($top); /* ZAPPOPPOP_EXT_BADGE */
+            $tw.append(thumb(m.image));
+            if (m.badge && m.badge.text) {
+                var $bd = $('<span class="zpp-ext-badge"></span>').addClass('is-' + (m.badge.kind || 'custom')).text(m.badge.text);
+                if (m.badge.bg) { $bd.css({ 'background-color': m.badge.bg, 'border-color': m.badge.bg }); }
+                if (m.badge.color) { $bd.css('color', m.badge.color); }
+                $tw.append($bd);
+            }
             var $head = $('<div class="zpp-ext-item-head"></div>').appendTo($top);
             $('<h3 class="zpp-ext-item-name"></h3>').text(m.name).appendTo($head);
             if (m.show_source !== false) {
@@ -213,6 +228,21 @@
             nb('last', d('last'), '\u00BB', page >= pages);
         }
 
+        /* ZAPPOPPOP_EXT_FILTERS: All / Installed / Uninstalled, counts follow the category and search */
+        function renderFilters() {
+            $filters.empty();
+            $.each([['all', 'f_all'], ['installed', 'f_installed'], ['uninstalled', 'f_uninstalled']], function (i, f) {
+                var n = 0;
+                for (var k = 0; k < items.length; k++) {
+                    if (inFilter(items[k], f[0]) && inCat(items[k], cat) && textMatch(items[k])) { n++; }
+                }
+                var $b = $('<button type="button"></button>').attr({ 'data-filter': f[0], 'aria-pressed': f[0] === filter ? 'true' : 'false' })
+                    .toggleClass('is-active', f[0] === filter).text(M.t(f[1]) + ' ');
+                $('<span class="count"></span>').text('(' + n + ')').appendTo($b);
+                $('<li></li>').append($b).appendTo($filters);
+            });
+        }
+
         function renderCats() {
             var known = false;
             $.each(cats, function (i, c) { if (c.slug === cat) { known = true; } });
@@ -251,6 +281,7 @@
             for (var k = from; k < Math.min(list.length, from + perPage); k++) { $grid.append(card(list[k])); }
             if (!list.length) { $('<p class="zpp-ext-empty"></p>').text(M.t(items.length ? 'no_match' : 'empty')).appendTo($grid); }
             renderPager(list.length, pages);
+            renderFilters();
             renderCats();
         }
 
@@ -262,7 +293,7 @@
             render();
         });
         $pager.on('change', '.zpp-ext-pg-size', function () {
-            perPage = Number($(this).val()) || 6;
+            perPage = Number($(this).val()) || 9;
             page = 1;
             render();
         });
@@ -297,6 +328,12 @@
             var known = {};
             $.each(cats, function (i, c) { known[c.slug] = true; });
             $.each(items, function (i, m) { if (m.category && !known[m.category]) { m.category = DEF; } });
+            render();
+        });
+
+        $filters.on('click', 'button', function () {
+            filter = String($(this).attr('data-filter')) || 'all';
+            page = 1;
             render();
         });
 

@@ -5,6 +5,7 @@
     "version": "1.1.2",
     "author": "ZapPopPop",
     "description": "Page load, always-on, repeat, exit intent and scroll depth triggers.",
+    "image": "icon.svg",
     "category": "all-modules",
     "default_active": true,
     "order": 30,

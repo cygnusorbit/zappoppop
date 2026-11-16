@@ -48,6 +48,8 @@ if (!class_exists('ZipArchive')) {
         <?php endif; ?>
     </div>
 
+    <ul class="zpp-mod-filters zpp-ext-filters" id="zpp-ext-filters" aria-label="<?php echo esc_attr__('Filter modules', 'zappoppop'); ?>"></ul> <!-- ZAPPOPPOP_EXT_FILTERS -->
+
     <div class="zpp-ext-catbar"> <!-- ZAPPOPPOP_EXT_PAGER -->
         <div class="zpp-ext-cats-wrap">
             <div class="zpp-ext-cats" id="zpp-ext-cats" role="group" aria-label="<?php echo esc_attr__('Module categories', 'zappoppop'); ?>"></div>

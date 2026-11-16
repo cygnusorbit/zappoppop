@@ -61,6 +61,8 @@ class ZapPopPop_Modules_Installer {
             'show_source' => !isset($m['show_source_pill']) || !empty($m['show_source_pill']),
             'show_state'  => !isset($m['show_state_pill']) || !empty($m['show_state_pill']),
             'pills'       => isset($m['pills']) ? array_values((array) $m['pills']) : [],
+            'box'         => self::box_out($m), /* ZAPPOPPOP_EXT_BOX */
+            'badge'       => self::badge_out($m), /* ZAPPOPPOP_EXT_BADGE */
             'deprecated'  => (bool) $m['deprecated'],
             'compatible'  => (bool) $m['compatible'],
             'requires'    => array_values($m['requires']),
@@ -72,6 +74,102 @@ class ZapPopPop_Modules_Installer {
             'image_raw'   => ZapPopPop_Module_Categories::image_raw($m),
             'image_base'  => ZapPopPop_Modules::module_url($m),
         ];
+    }
+
+    /** Hex colour (#rgb, #rgba, #rrggbb, #rrggbbaa) or ''. */
+    protected static function hex($v) {
+        return (is_string($v) && preg_match('/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', trim($v)) === 1) ? strtolower(trim($v)) : '';
+    }
+
+    /**
+     * ZAPPOPPOP_EXT_COLORS: default badge + card colours per kind (pro / core / custom) from defaults/extend-colors.json.
+     * Pro or a theme can change them with the zappoppop_extend_colors filter. Empty colour = follow the Theme page colours.
+     */
+    protected static function extend_colors() {
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+        $base = [];
+        foreach (['pro' => 'PRO', 'core' => 'CORE', 'custom' => ''] as $k => $label) {
+            $base[$k] = [
+                'badge' => ['enabled' => $k !== 'custom', 'text' => $label, 'bg' => '', 'color' => ''],
+                'box'   => ['bg' => '', 'color' => '', 'border' => ''],
+            ];
+        }
+        $raw  = [];
+        $file = ZAPPOPPOP_PATH . 'defaults/extend-colors.json';
+        if (is_file($file) && !is_link($file) && is_readable($file) && filesize($file) <= 20000) {
+            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin file, not a remote URL */ $j = json_decode((string) file_get_contents($file), true);
+            if (is_array($j)) {
+                $raw = $j;
+            }
+        }
+        $raw = apply_filters('zappoppop_extend_colors', $raw);
+        if (!is_array($raw)) {
+            $raw = [];
+        }
+        foreach ($base as $k => $unused) {
+            if (!isset($raw[$k]) || !is_array($raw[$k])) {
+                continue;
+            }
+            $b = (isset($raw[$k]['badge']) && is_array($raw[$k]['badge'])) ? $raw[$k]['badge'] : [];
+            $x = (isset($raw[$k]['box']) && is_array($raw[$k]['box'])) ? $raw[$k]['box'] : [];
+            if (array_key_exists('enabled', $b)) {
+                $base[$k]['badge']['enabled'] = !in_array(is_string($b['enabled']) ? strtolower(trim($b['enabled'])) : $b['enabled'], [false, 0, null, '', '0', 'false', 'no', 'off'], true);
+            }
+            if (isset($b['text']) && is_scalar($b['text'])) {
+                $base[$k]['badge']['text'] = mb_substr(trim(wp_strip_all_tags((string) $b['text'])), 0, 12);
+            }
+            foreach (['bg', 'color'] as $f) {
+                if (isset($b[$f])) {
+                    $base[$k]['badge'][$f] = self::hex($b[$f]);
+                }
+            }
+            foreach (['bg', 'color', 'border'] as $f) {
+                if (isset($x[$f])) {
+                    $base[$k]['box'][$f] = self::hex($x[$f]);
+                }
+            }
+        }
+        $cache = $base;
+        return $cache;
+    }
+
+    protected static function kind_of($m) {
+        return ($m['source'] === 'pro') ? 'pro' : (($m['source'] === 'core') ? 'core' : 'custom');
+    }
+
+    /** Thumbnail corner badge: module.json "badge" > defaults/extend-colors.json > theme colours. null = hidden. */
+    protected static function badge_out($m) {
+        $kind = self::kind_of($m);
+        $d    = self::extend_colors();
+        $d    = $d[$kind]['badge'];
+        $b    = (isset($m['badge']) && is_array($m['badge'])) ? $m['badge'] : [];
+        $on   = (array_key_exists('enabled', $b) && $b['enabled'] !== null) ? !empty($b['enabled']) : !empty($d['enabled']);
+        $text = (isset($b['text']) && $b['text'] !== '') ? $b['text'] : $d['text'];
+        if (!$on || $text === '') {
+            return null;
+        }
+        return [
+            'kind'  => $kind,
+            'text'  => $text,
+            'bg'    => (isset($b['bg']) && $b['bg'] !== '') ? $b['bg'] : $d['bg'],
+            'color' => (isset($b['color']) && $b['color'] !== '') ? $b['color'] : $d['color'],
+        ];
+    }
+
+    /** Card colours: module.json "box" > defaults/extend-colors.json > CSS fallback (pro light orange, core light dark blue). */
+    protected static function box_out($m) {
+        $kind = self::kind_of($m);
+        $d    = self::extend_colors();
+        $d    = $d[$kind]['box'];
+        $b    = (isset($m['box']) && is_array($m['box'])) ? $m['box'] : [];
+        $out  = ['kind' => $kind];
+        foreach (['bg', 'color', 'border'] as $f) {
+            $out[$f] = (isset($b[$f]) && $b[$f] !== '') ? $b[$f] : $d[$f];
+        }
+        return $out;
     }
 
     /** Turn manifest buttons/links into final hrefs: absolute and /site paths as-is, page.php?x=1 -> admin URL, anything else -> module folder file. */
@@ -305,6 +403,10 @@ class ZapPopPop_Modules_Installer {
                 'deprecated'      => __('Deprecated', 'zappoppop'),
                 'st_available'    => __('Available', 'zappoppop'),
                 'st_installed'    => __('Installed', 'zappoppop'),
+                'f_all'           => __('All', 'zappoppop'),
+                'f_installed'     => __('Installed', 'zappoppop'),
+                'f_uninstalled'   => __('Uninstalled', 'zappoppop'),
+                'f_label'         => __('Filter modules', 'zappoppop'),
                 'st_deleted'      => __('Deleted', 'zappoppop'),
                 /* translators: %s: plugin version */
                 'needs_version'   => __('Needs a newer ZapPopPop version.', 'zappoppop'),

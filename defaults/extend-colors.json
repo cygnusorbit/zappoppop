@@ -1,0 +1,15 @@
+{
+    "_note": "Extend page colours. Hex only (#rgb, #rrggbb, #rrggbbaa). Empty = follow the Theme page colours (badge) or the plain card (box). A module.json badge / box key overrides these per module.",
+    "pro": {
+        "badge": { "enabled": true, "text": "PRO", "bg": "", "color": "" },
+        "box": { "bg": "#fff1e2", "color": "", "border": "#f4d0a2" }
+    },
+    "core": {
+        "badge": { "enabled": true, "text": "CORE", "bg": "", "color": "" },
+        "box": { "bg": "#dde6f4", "color": "", "border": "#b4c5e0" }
+    },
+    "custom": {
+        "badge": { "enabled": false, "text": "", "bg": "", "color": "" },
+        "box": { "bg": "", "color": "", "border": "" }
+    }
+}

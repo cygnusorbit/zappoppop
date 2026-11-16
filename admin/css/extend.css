@@ -92,6 +92,26 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 .zpp-ext-pg-btn.button { min-width: 30px; height: 30px; padding: 0 8px; line-height: 28px; }
 .zpp-ext-pg-info { padding: 0 8px; color: var(--zpp-c-heading, #1d2327); white-space: nowrap; }
 
+/* ZAPPOPPOP_EXT_BADGE: PRO (primary) / CORE (secondary) bullet on the thumbnail top corner; module.json "badge" can override text, bg, color, enabled */
+.zpp-ext-thumbwrap { position: relative; -webkit-box-flex: 0; -ms-flex: 0 0 40px; flex: 0 0 40px; width: 40px; height: 40px; }
+.zpp-ext-thumbwrap .zpp-ext-item-img { width: 40px; height: 40px; }
+.zpp-ext-badge { position: absolute; top: -6px; left: -6px; z-index: 1; padding: 0 5px; min-width: 0; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -webkit-box-sizing: border-box; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-c-secondary-border, #c3c4c7); border-radius: var(--zpp-r-badge, 10px); background: var(--zpp-c-secondary-bg, #fff); color: var(--zpp-c-secondary-text, #1d2327); font-size: 9px; font-weight: 700; line-height: 14px; letter-spacing: .04em; text-transform: uppercase; pointer-events: none; -webkit-box-shadow: 0 0 0 2px var(--zpp-c-bg-card, #fff); box-shadow: 0 0 0 2px var(--zpp-c-bg-card, #fff); }
+.zpp-ext-badge.is-pro { background: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); color: var(--zpp-c-primary-text, #fff); }
+.rtl .zpp-ext-badge { left: auto; right: -6px; }
+
+/* ZAPPOPPOP_EXT_FILTERS: All / Installed / Uninstalled row (same look as the Settings > Module filters) */
+.zpp-ext-filters { margin: 16px 0 10px; font-size: var(--zpp-fs-body, 13px); }
+.zpp-ext-filters li { margin: 0; }
+.zpp-ext-filters button:focus-visible { outline: 2px solid var(--zpp-c-primary, #c1272d); outline-offset: 2px; }
+
+/* ZAPPOPPOP_EXT_BOX: PRO = light orange, CORE = light dark blue; module.json "box": {"bg","color"} overrides inline */
+.zpp-ext-item.is-pro { background: var(--zpp-ext-pro-bg, #fff1e2); border-color: var(--zpp-ext-pro-border, #f4d0a2); }
+.zpp-ext-item.is-core { background: var(--zpp-ext-core-bg, #dde6f4); border-color: var(--zpp-ext-core-border, #b4c5e0); }
+.zpp-ext-item.has-box-color .zpp-ext-item-name,
+.zpp-ext-item.has-box-color .zpp-ext-item-desc,
+.zpp-ext-item.has-box-color .zpp-ext-item-meta { color: inherit; }
+.zpp-ext-item .zpp-ext-badge { -webkit-box-shadow: none; box-shadow: none; }
+
 /* ZAPPOPPOP_EXT_UNINSTALL: installed card shows a secondary "Uninstall" button; "+" Module Category button (primary) ends the category tabs */
 #wpbody-content .zappoppop-extend-wrap .zpp-ext-item-actions .zpp-ext-uninstall { background: var(--zpp-c-secondary-bg, #fff); border-color: var(--zpp-c-secondary-border, #c3c4c7); color: var(--zpp-c-secondary-text, #1d2327); }
 #wpbody-content .zappoppop-extend-wrap .zpp-ext-item-actions .zpp-ext-uninstall:hover,

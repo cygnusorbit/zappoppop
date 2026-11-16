@@ -217,6 +217,8 @@ class ZapPopPop_Modules {
             'show_source_pill' => self::flag($raw, 'show_source_pill'),
             'show_state_pill' => self::flag($raw, 'show_state_pill'),
             'pills'          => self::pills($raw),
+            'box'            => self::box($raw), /* ZAPPOPPOP_EXT_BOX */
+            'badge'          => self::badge($raw), /* ZAPPOPPOP_EXT_BADGE */
             'default_active' => !empty($raw['default_active']),
             'order'          => $order,
             'on_missing'     => $on_miss,
@@ -301,6 +303,20 @@ class ZapPopPop_Modules {
         return $out;
     }
 
+    /** Optional module.json "box" for the Extend card (ZAPPOPPOP_EXT_BOX): {"bg": "#fff1e2", "color": "#1d2327"}. Hex colours only; missing = default (PRO light orange, CORE light dark blue). */
+    protected static function box($raw) {
+        $out = ['bg' => '', 'color' => '', 'border' => ''];
+        if (!is_array($raw) || !isset($raw['box']) || !is_array($raw['box'])) {
+            return $out;
+        }
+        foreach (['bg', 'color', 'border'] as $k) {
+            if (isset($raw['box'][$k]) && is_string($raw['box'][$k]) && preg_match('/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', trim($raw['box'][$k])) === 1) {
+                $out[$k] = strtolower(trim($raw['box'][$k]));
+            }
+        }
+        return $out;
+    }
+
     /** Optional boolean manifest key, true unless explicitly false / 0 / "false" / "no" / "off". */
     protected static function flag($raw, $key) {
         if (!is_array($raw) || !array_key_exists($key, $raw)) {
@@ -311,6 +327,35 @@ class ZapPopPop_Modules {
             return !in_array(strtolower(trim($v)), ['false', '0', 'no', 'off', ''], true);
         }
         return !empty($v);
+    }
+
+    /**
+     * Optional module.json "badge" for the thumbnail corner on the Extend page (ZAPPOPPOP_EXT_BADGE):
+     * {"enabled": true, "text": "PRO", "bg": "#c1272d", "color": "#ffffff"}. Every key is optional; missing keys use the
+     * defaults (PRO = primary colour, CORE = secondary colour). Text up to 12 chars, colours are #rgb / #rrggbb / #rrggbbaa only.
+     */
+    protected static function badge($raw) {
+        $out = ['enabled' => null, 'text' => '', 'bg' => '', 'color' => ''];
+        if (!is_array($raw) || !isset($raw['badge'])) {
+            return $out;
+        }
+        $b = $raw['badge'];
+        if (!is_array($b)) {
+            $out['enabled'] = !in_array(is_string($b) ? strtolower(trim($b)) : $b, [false, 0, null, '', '0', 'false', 'no', 'off'], true);
+            return $out;
+        }
+        if (array_key_exists('enabled', $b)) {
+            $out['enabled'] = self::flag($b, 'enabled');
+        }
+        if (isset($b['text']) && is_scalar($b['text'])) {
+            $out['text'] = mb_substr(trim(wp_strip_all_tags((string) $b['text'])), 0, 12);
+        }
+        foreach (['bg', 'color'] as $k) {
+            if (isset($b[$k]) && is_string($b[$k]) && preg_match('/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', trim($b[$k])) === 1) {
+                $out[$k] = strtolower(trim($b[$k]));
+            }
+        }
+        return $out;
     }
 
     /** Custom pills: "pills": ["New", {"text": "Pro"}], max 4, text up to 24 chars. */
