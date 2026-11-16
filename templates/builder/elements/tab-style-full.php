@@ -43,7 +43,7 @@ if (!defined('ABSPATH')) exit;
                 <input type="number" id="prop-form-icon-left-offset" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="iconLeftOffset" min="0" max="40" value="10" style="font-size:12px;" />
                 <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin:8px 0 4px;"><?php esc_html_e('ICON COLOR', 'zappoppop'); ?></label>
                 <div style="display:flex; gap:4px; align-items:center;">
-                    <input type="color" id="prop-form-icon-left-color" class="zappoppop-gp-bind" data-prop="iconLeftColor" value="#64748b" style="flex:1; height:30px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:4px; cursor:pointer; min-width:0;" />
+                    <input type="color" data-zpp-alpha="compact" id="prop-form-icon-left-color" class="zappoppop-gp-bind" data-prop="iconLeftColor" value="#64748b" style="flex:1; height:30px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:4px; cursor:pointer; min-width:0;" />
                     <button type="button" class="button zappoppop-icon-color-reset" data-target="#prop-form-icon-left-color" title="<?php esc_attr_e('Reset color', 'zappoppop'); ?><?php esc_html_e('" aria-label="', 'zappoppop'); ?><?php esc_attr_e('Reset left icon color', 'zappoppop'); ?>" style="height:30px; min-width:30px; padding:0; font-size:11px;">&#8635;</button>
                 </div>
             </div>
@@ -58,7 +58,7 @@ if (!defined('ABSPATH')) exit;
                 <input type="number" id="prop-form-icon-right-offset" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="iconRightOffset" min="0" max="40" value="10" style="font-size:12px;" />
                 <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin:8px 0 4px;"><?php esc_html_e('ICON COLOR', 'zappoppop'); ?></label>
                 <div style="display:flex; gap:4px; align-items:center;">
-                    <input type="color" id="prop-form-icon-right-color" class="zappoppop-gp-bind" data-prop="iconRightColor" value="#64748b" style="flex:1; height:30px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:4px; cursor:pointer; min-width:0;" />
+                    <input type="color" data-zpp-alpha="compact" id="prop-form-icon-right-color" class="zappoppop-gp-bind" data-prop="iconRightColor" value="#64748b" style="flex:1; height:30px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:4px; cursor:pointer; min-width:0;" />
                     <button type="button" class="button zappoppop-icon-color-reset" data-target="#prop-form-icon-right-color" title="<?php esc_attr_e('Reset color', 'zappoppop'); ?><?php esc_html_e('" aria-label="', 'zappoppop'); ?><?php esc_attr_e('Reset right icon color', 'zappoppop'); ?>" style="height:30px; min-width:30px; padding:0; font-size:11px;">&#8635;</button>
                 </div>
             </div>
@@ -79,7 +79,7 @@ if (!defined('ABSPATH')) exit;
 <div class="zappoppop-insp-section" id="insp-section-bg-color" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">
     <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;"><?php esc_html_e('BACKGROUND COLOR', 'zappoppop'); ?></div>
     <div style="display:flex; align-items:center; gap:10px;">
-        <input type="color" id="prop-bg-color" class="widefat zappoppop-gp-bind" data-prop="bgColor" value="#3b82f6" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer; flex:1;" />
+        <input type="color" id="prop-bg-color" class="widefat zappoppop-gp-bind" data-zpp-alpha="1" data-prop="bgColor" value="#3b82f6" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer; flex:1;" />
         <label style="display:inline-flex; align-items:center; gap:5px; font-size:11px; color:#cbd5e1; cursor:pointer; white-space:nowrap;">
             <input type="checkbox" id="prop-bg-transparent" class="zappoppop-gp-bind" data-prop="transparentFill" value="1" /> <?php esc_html_e('Transparent', 'zappoppop'); ?>
         </label>
@@ -120,12 +120,12 @@ if (!defined('ABSPATH')) exit;
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('TEXT COLOR', 'zappoppop'); ?></label>
-            <input type="color" id="prop-color" class="widefat zappoppop-gp-bind" data-prop="color" value="#ffffff" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
+            <input type="color" id="prop-color" class="widefat zappoppop-gp-bind" data-zpp-alpha="1" data-prop="color" value="#ffffff" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
         </div>
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('FOREGROUND COLOR', 'zappoppop'); ?></label>
             <div style="display:flex; gap:4px; align-items:center;">
-                <input type="color" id="prop-fg-color" class="widefat zappoppop-gp-bind" data-prop="fgColor" value="#64748b" title="<?php esc_attr_e('Icons & accents', 'zappoppop'); ?>" style="flex:1; height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer; min-width:0;" />
+                <input type="color" data-zpp-alpha="compact" id="prop-fg-color" class="widefat zappoppop-gp-bind" data-prop="fgColor" value="#64748b" title="<?php esc_attr_e('Icons & accents', 'zappoppop'); ?>" style="flex:1; height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer; min-width:0;" />
                 <button type="button" id="prop-fg-color-reset" class="button" title="<?php esc_attr_e('Reset foreground color', 'zappoppop'); ?><?php esc_html_e('" aria-label="', 'zappoppop'); ?><?php esc_attr_e('Reset foreground color', 'zappoppop'); ?>" style="height:34px; min-width:30px; padding:0; font-size:11px;">&#8635;</button>
             </div>
         </div>
@@ -177,7 +177,7 @@ if (!defined('ABSPATH')) exit;
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('BORDER COLOR', 'zappoppop'); ?></label>
-            <input type="color" id="prop-border-color" class="widefat zappoppop-gp-bind" data-prop="borderColor" value="#334155" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
+            <input type="color" data-zpp-alpha="compact" id="prop-border-color" class="widefat zappoppop-gp-bind" data-prop="borderColor" value="#334155" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
         </div>
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('RADIUS (PX)', 'zappoppop'); ?></label>
@@ -211,7 +211,7 @@ if (!defined('ABSPATH')) exit;
         </div>
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('COLOR', 'zappoppop'); ?></label>
-            <input type="color" id="prop-shadow-color" class="widefat zappoppop-gp-bind" data-prop="shadowColor" value="#000000" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
+            <input type="color" data-zpp-alpha="compact" id="prop-shadow-color" class="widefat zappoppop-gp-bind" data-prop="shadowColor" value="#000000" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
         </div>
     </div>
 </div>
@@ -223,15 +223,15 @@ if (!defined('ABSPATH')) exit;
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
         <div>
             <label style="display:block; font-size:10px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Bg', 'zappoppop'); ?></label>
-            <input type="color" id="prop-elem-hover-bg" class="zappoppop-gp-bind" data-prop="hoverBgColor" value="#0284c7" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
+            <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-bg" class="zappoppop-gp-bind" data-prop="hoverBgColor" value="#0284c7" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
         </div>
         <div>
             <label style="display:block; font-size:10px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Text', 'zappoppop'); ?></label>
-            <input type="color" id="prop-elem-hover-color" class="zappoppop-gp-bind" data-prop="hoverTextColor" value="#ffffff" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
+            <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-color" class="zappoppop-gp-bind" data-prop="hoverTextColor" value="#ffffff" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
         </div>
         <div>
             <label style="display:block; font-size:10px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Border', 'zappoppop'); ?></label>
-            <input type="color" id="prop-elem-hover-border" class="zappoppop-gp-bind" data-prop="hoverBorderColor" value="#0284c7" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
+            <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-border" class="zappoppop-gp-bind" data-prop="hoverBorderColor" value="#0284c7" style="width:100%; height:32px; border:1px solid #334155; border-radius:4px; background:#090d16; cursor:pointer;" />
         </div>
     </div>
 </div>

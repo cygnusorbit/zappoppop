@@ -477,8 +477,9 @@
             $(window).on('resize', function() {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
-                    if (window.ZapPopPopBuilderLayers && $('#zappoppop-floating-layers-panel').length) {
-                        window.ZapPopPopBuilderLayers.bindPanelDragging();
+                    if (window.ZapPopPopBuilderLayers && $('#zappoppop-floating-layers-panel').length
+                        && typeof window.ZapPopPopBuilderLayers.bindPanelInteractions === 'function') {
+                        window.ZapPopPopBuilderLayers.bindPanelInteractions();
                     }
                 }, 150);
             });

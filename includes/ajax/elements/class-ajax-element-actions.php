@@ -34,8 +34,8 @@ class ZapPopPop_Ajax_Element_Actions {
         if (isset($el['closeAction']))   $clean['closeAction']   = sanitize_text_field($el['closeAction']);
         if (isset($el['cookie_days']))   $clean['cookie_days']   = intval($el['cookie_days']);
         if (isset($el['btnText']))       $clean['btnText']       = sanitize_text_field($el['btnText']);
-        if (isset($el['hoverBg']))       $clean['hoverBg']       = sanitize_hex_color($el['hoverBg']) ?: sanitize_text_field($el['hoverBg']);
-        if (isset($el['hoverColor']))    $clean['hoverColor']    = sanitize_hex_color($el['hoverColor']) ?: sanitize_text_field($el['hoverColor']);
+        if (isset($el['hoverBg']))       $clean['hoverBg']       = ZapPopPop_Color::sanitize($el['hoverBg'], sanitize_text_field($el['hoverBg']));
+        if (isset($el['hoverColor']))    $clean['hoverColor']    = ZapPopPop_Color::sanitize($el['hoverColor'], sanitize_text_field($el['hoverColor']));
         return $clean;
     }
 }

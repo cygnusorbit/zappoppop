@@ -9,7 +9,9 @@ class ZapPopPop_Front_Renderer {
     public static function is_transparent_bg($bg) {
         $bg = strtolower(trim((string) $bg));
         $bg = str_replace(' ', '', $bg);
-        return $bg === 'transparent' || $bg === 'rgba(0,0,0,0)' || $bg === 'rgba(255,255,255,0)' || $bg === '#00000000' || $bg === '#fff0';
+        if ($bg === 'transparent' || $bg === 'rgba(0,0,0,0)' || $bg === 'rgba(255,255,255,0)' || $bg === '#00000000' || $bg === '#fff0') { return true; }
+        /* alpha colour picker output: any colour with zero alpha */
+        return preg_match('/^#[0-9a-f]{6}00$/', $bg) === 1 || preg_match('/^#[0-9a-f]{3}0$/', $bg) === 1 || preg_match('/^rgba\(\d+(?:\.\d+)?,\d+(?:\.\d+)?,\d+(?:\.\d+)?,0(?:\.0+)?\)$/', $bg) === 1;
     }
 
     public static function config_has_transparent_canvas(array $config) {

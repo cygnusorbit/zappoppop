@@ -23,17 +23,10 @@ if (!class_exists('ZipArchive')) {
     <div id="zpp-ext-notice" class="zpp-mod-notice" role="status" aria-live="polite" hidden></div>
     <noscript><div class="notice notice-warning"><p><?php esc_html_e('JavaScript is required to manage modules.', 'zappoppop'); ?></p></div></noscript>
 
-    <div class="zpp-ext-card zpp-ext-upload" id="zpp-ext-upload-card">
-        <div class="zpp-ext-card-head">
-            <span class="dashicons dashicons-upload"></span>
-            <h3><?php esc_html_e('Upload Module', 'zappoppop'); ?></h3>
-        </div>
-        <?php if ($ext_can_upload) : ?>
-            <p class="zpp-ext-help"><?php
-                /* translators: %s: maximum zip size */
-                echo esc_html(sprintf(__('Upload a module .zip (module.json plus HTML, CSS and JS files, up to %s). An uploaded module stays Available until you click Install.', 'zappoppop'), size_format(ZapPopPop_Modules_Installer::MAX_ZIP)));
-            ?></p>
-            <div class="zpp-ext-upload-row">
+    <div class="zpp-ext-card zpp-ext-upload<?php echo $ext_can_upload ? '' : ' is-single'; ?>" id="zpp-ext-upload-card">
+        <div class="zpp-ext-upload-cols">
+            <?php if ($ext_can_upload) : ?>
+            <div class="zpp-ext-upload-left">
                 <div class="zpp-ext-drop" id="zpp-ext-drop">
                     <span class="dashicons dashicons-media-archive"></span>
                     <span class="zpp-ext-drop-text"><?php esc_html_e('Drag a module .zip here, or', 'zappoppop'); ?>
@@ -41,11 +34,26 @@ if (!class_exists('ZipArchive')) {
                     <input type="file" id="zpp-ext-file" class="zpp-ext-file" accept=".zip,application/zip,application/x-zip-compressed">
                     <span class="zpp-ext-file-name" id="zpp-ext-file-name"></span>
                 </div>
-                <button type="button" class="button button-primary" id="zpp-ext-upload-btn" disabled><?php esc_html_e('Upload Module', 'zappoppop'); ?></button>
             </div>
-        <?php else : ?>
-            <p class="zpp-ext-help"><?php echo esc_html($ext_block); ?></p>
-        <?php endif; ?>
+            <?php endif; ?>
+            <div class="zpp-ext-upload-right">
+                <div class="zpp-ext-card-head">
+                    <span class="dashicons dashicons-upload"></span>
+                    <h3><?php esc_html_e('Upload Module', 'zappoppop'); ?></h3>
+                </div>
+                <?php if ($ext_can_upload) : ?>
+                    <p class="zpp-ext-help"><?php
+                        /* translators: %s: maximum zip size */
+                        echo esc_html(sprintf(__('Upload a module .zip (module.json plus HTML, CSS and JS files, up to %s). An uploaded module stays Available until you click Install.', 'zappoppop'), size_format(ZapPopPop_Modules_Installer::MAX_ZIP)));
+                    ?></p>
+                    <div class="zpp-ext-upload-actions">
+                        <button type="button" class="button button-primary" id="zpp-ext-upload-btn" disabled><?php esc_html_e('Upload Module', 'zappoppop'); ?></button>
+                    </div>
+                <?php else : ?>
+                    <p class="zpp-ext-help"><?php echo esc_html($ext_block); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <ul class="zpp-mod-filters zpp-ext-filters" id="zpp-ext-filters" aria-label="<?php echo esc_attr__('Filter modules', 'zappoppop'); ?>"></ul> <!-- ZAPPOPPOP_EXT_FILTERS -->

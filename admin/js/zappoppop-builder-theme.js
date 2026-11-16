@@ -41,6 +41,18 @@
         return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + Number(a.toFixed(2)) + ')';
     }
 
+    function imgEscape(u) {
+        return String(u).replace(/"/g, '%22').replace(/\\/g, '%5C').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\s/g, '%20');
+    }
+
+    function setImageControls(panel, url) {
+        var val = (typeof url === 'string') ? url.trim() : '';
+        var inp = panel.querySelector('.zpp-bt-image-url');
+        var thumb = panel.querySelector('.zpp-bt-image-thumb');
+        if (inp && inp.value !== val) inp.value = val;
+        if (thumb) thumb.style.backgroundImage = val ? 'url("' + imgEscape(val) + '")' : 'none';
+    }
+
     function getActiveSettings() {
         // ZAPPOPPOP: the saved server settings are the single source of truth. The old localStorage copy
         // (written on every live-preview keystroke) could be stale, so colors painted by the server CSS
@@ -100,8 +112,19 @@
         var chevronSvg  = "url(\"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='" + iconEncoded + "' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E\")";
 
         var layerSelRgba = hexToRgba(s.layer_sel_bg_color || '#3b82f6', s.layer_sel_bg_opacity !== undefined ? s.layer_sel_bg_opacity : 22);
+        var glowRgba = hexToRgba(s.glow_color || '#22d3ee', s.glow_opacity !== undefined ? s.glow_opacity : 0);
+        var edgeRgba = hexToRgba(s.edge_border_color || '#ff8a2a', s.edge_border_opacity !== undefined ? s.edge_border_opacity : 0);
+        var stageImgUrl = (typeof s.stage_image_url === 'string') ? s.stage_image_url.trim() : '';
+        var stageDim = hexToRgba(s.stage_bg_color, 100 - clampOpacity(s.stage_image_opacity !== undefined ? s.stage_image_opacity : 100));
+        var stageImage = stageImgUrl ? ('linear-gradient(' + stageDim + ', ' + stageDim + '), url("' + imgEscape(stageImgUrl) + '")') : 'none';
 
         return {
+            '--zpp-builder-glow':                glowRgba,
+            '--zpp-builder-glow-shadow':         '0 0 10px 1px ' + glowRgba,
+            '--zpp-builder-edge-border':         edgeRgba,
+            '--zpp-builder-edge-ring':           'inset 0 0 0 1px ' + edgeRgba,
+            '--zpp-builder-stage-image':         stageImage,
+            '--zpp-builder-layers-border':       normalizeHex(s.layers_border_color, '#2a78b8'),
             '--zpp-builder-layer-sel-bg':        layerSelRgba,
             '--zpp-builder-layer-sel-text':      normalizeHex(s.layer_sel_text_color, '#f8fafc'),
             '--zpp-builder-layer-sel-border':    normalizeHex(s.layer_sel_border_color, '#3b82f6'),
@@ -165,6 +188,13 @@
         var body = document.body;
         var map = compileVariablesMap(settings);
 
+        if (body) {
+            var fxOn = Number(settings.glow_opacity) > 0 || Number(settings.edge_border_opacity) > 0;
+            if (fxOn) { body.classList.add('zpp-fx-on'); } else { body.classList.remove('zpp-fx-on'); }
+            var bgOn = typeof settings.stage_image_url === 'string' && settings.stage_image_url.trim() !== '';
+            if (bgOn) { body.classList.add('zpp-bg-img'); } else { body.classList.remove('zpp-bg-img'); }
+        }
+
         Object.keys(map).forEach(function(prop) {
             if (map[prop] !== undefined) {
                 root.style.setProperty(prop, map[prop]);
@@ -196,7 +226,11 @@
 
         shell.style.backgroundColor = map['--zpp-builder-stage-bg'];
         shell.style.borderColor = map['--zpp-builder-content-border'];
-        shell.style.backgroundImage = map['--zpp-builder-checker-image'];
+        var hasStageImg = map['--zpp-builder-stage-image'] && map['--zpp-builder-stage-image'] !== 'none';
+        shell.style.backgroundImage = hasStageImg ? map['--zpp-builder-stage-image'] : map['--zpp-builder-checker-image'];
+        shell.style.backgroundSize = hasStageImg ? 'cover' : '';
+        shell.style.backgroundPosition = hasStageImg ? 'center' : '';
+        shell.style.backgroundRepeat = hasStageImg ? 'no-repeat' : '';
 
         // 01. Header & Toolbar (+ Dedicated Header Text & Border)
         shell.querySelectorAll('[data-pv-role="header"]').forEach(function(el) {
@@ -436,7 +470,7 @@
             }
         });
 
-        var colorInputs = csBody.querySelectorAll('input[type="color"]');
+        var colorInputs = csBody.querySelectorAll('input[type="color"], input[data-zpp-alpha]');
         if (colorInputs.length > 0) {
             bgHexColor = colorInputs[0].value;
         } else {
@@ -1322,6 +1356,13 @@
             }
         });
 
+        panel.querySelectorAll('.zpp-bt-image-url').forEach(function(imgInp) {
+            var iKey = imgInp.getAttribute('data-image-key');
+            if (iKey) {
+                out[iKey] = imgInp.value.trim();
+            }
+        });
+
         panel.querySelectorAll('.zpp-bt-opacity-number').forEach(function(numInp) {
             var oKey = numInp.getAttribute('data-opacity-num-for');
             if (oKey) {
@@ -1348,6 +1389,10 @@
 
         Object.keys(settings).forEach(function(key) {
             var val = settings[key];
+            if (key === 'stage_image_url') {
+                setImageControls(panel, val);
+                return;
+            }
             if (key.indexOf('_opacity') !== -1) {
                 var opVal = clampOpacity(val);
                 var range = panel.querySelector('.zpp-bt-opacity-range[data-opacity-key="' + key + '"]');
@@ -1516,11 +1561,68 @@
                 e.preventDefault();
                 var pKey = btn.getAttribute('data-preset');
                 if (DATA.presets && DATA.presets[pKey]) {
-                    populateSettingsIntoDOM(panel, DATA.presets[pKey]);
+                    var presetData = Object.assign({}, DATA.presets[pKey]);
+                    // keep the user's own uploaded image across presets; the bundled starfield follows the preset
+                    var curImgEl = panel.querySelector('.zpp-bt-image-url');
+                    var curImg = curImgEl ? curImgEl.value.trim() : '';
+                    if (curImg && curImg !== (DATA.builtinBg || '')) {
+                        var curOpEl = panel.querySelector('.zpp-bt-opacity-number[data-opacity-num-for="stage_image_opacity"]');
+                        presetData.stage_image_url = curImg;
+                        if (curOpEl) presetData.stage_image_opacity = clampOpacity(curOpEl.value);
+                    }
+                    populateSettingsIntoDOM(panel, presetData);
                     sendBuilderThemeAjaxSave(panel, null, false);
                 }
             });
         });
+
+        var imgInput = panel.querySelector('.zpp-bt-image-url');
+        if (imgInput) {
+            imgInput.addEventListener('input', function() {
+                setImageControls(panel, imgInput.value);
+                syncLive();
+            });
+            var imgChoose = panel.querySelector('.zpp-bt-image-choose');
+            if (imgChoose) {
+                imgChoose.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!window.wp || !window.wp.media) { imgInput.focus(); return; }
+                    if (!panel._zppMedia) {
+                        panel._zppMedia = window.wp.media({
+                            title: 'Choose builder background image',
+                            button: { text: 'Use this image' },
+                            library: { type: 'image' },
+                            multiple: false
+                        });
+                        panel._zppMedia.on('select', function() {
+                            var att = panel._zppMedia.state().get('selection').first();
+                            var data = att ? att.toJSON() : null;
+                            if (data && data.url) {
+                                setImageControls(panel, data.url);
+                                syncLive();
+                            }
+                        });
+                    }
+                    panel._zppMedia.open();
+                });
+            }
+            var imgBuiltin = panel.querySelector('.zpp-bt-image-builtin');
+            if (imgBuiltin) {
+                imgBuiltin.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    setImageControls(panel, DATA.builtinBg || '');
+                    syncLive();
+                });
+            }
+            var imgRemove = panel.querySelector('.zpp-bt-image-remove');
+            if (imgRemove) {
+                imgRemove.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    setImageControls(panel, '');
+                    syncLive();
+                });
+            }
+        }
 
         var saveBtn = panel.querySelector('#zpp-bt-save-btn');
         if (saveBtn) {

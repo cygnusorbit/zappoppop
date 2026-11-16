@@ -292,7 +292,49 @@ class ZapPopPop_Ajax_Templates {
         ));
     }
 
-    const CATS_OPT = 'zappoppop_library_categories';
+    const CATS_OPT  = 'zappoppop_library_categories';
+    const ALIAS_OPT = 'zappoppop_library_cat_aliases'; /* ZPP_CAT_ALIAS: old slug => new slug after a rename */
+
+    /** Old => new category slugs (so premade cards that still use an old slug land in the renamed category). */
+    public static function category_aliases() {
+        $a = get_option(self::ALIAS_OPT, array());
+        $out = array();
+        if (is_array($a)) {
+            foreach ($a as $k => $v) {
+                $k = sanitize_key((string) $k);
+                $v = is_scalar($v) ? sanitize_key((string) $v) : '';
+                if ($k !== '' && $v !== '' && $k !== $v) { $out[$k] = $v; }
+            }
+        }
+        return $out;
+    }
+
+    /** Applies slug renames: moves saved templates and records aliases for premade (file based) templates. */
+    private static function apply_cat_renames($renames, $cats) {
+        if (empty($renames)) { return; }
+        $valid = array();
+        foreach ($cats as $c) { $valid[$c['slug']] = 1; }
+        $saved = get_option(self::OPT, array());
+        if (is_array($saved)) {
+            $changed = false;
+            foreach ($saved as $id => $t) {
+                if (is_array($t) && isset($t['category']) && is_string($t['category']) && isset($renames[$t['category']])) {
+                    $saved[$id]['category'] = $renames[$t['category']];
+                    $changed = true;
+                }
+            }
+            if ($changed) { update_option(self::OPT, $saved, false); }
+        }
+        $al = self::category_aliases();
+        foreach ($al as $k => $v) {
+            if (isset($renames[$v])) { $al[$k] = $renames[$v]; }
+        }
+        foreach ($renames as $old => $new) { $al[$old] = $new; }
+        foreach ($al as $k => $v) {
+            if ($k === $v || isset($valid[$k]) || !isset($valid[$v])) { unset($al[$k]); }
+        }
+        if (empty($al)) { delete_option(self::ALIAS_OPT); } else { update_option(self::ALIAS_OPT, $al, false); }
+    }
 
     public static function default_categories() {
         return array(
@@ -332,12 +374,16 @@ class ZapPopPop_Ajax_Templates {
         }
         $out  = array();
         $seen = array();
+        $renames = array();
         foreach (array_slice($raw, 0, 30) as $r) {
             if (!is_array($r)) { continue; }
             $label = isset($r['label']) && is_scalar($r['label']) ? sanitize_text_field((string) $r['label']) : '';
             $label = function_exists('mb_substr') ? mb_substr($label, 0, 40) : substr($label, 0, 40);
             if ($label === '') { continue; }
             $slug = isset($r['slug']) && is_scalar($r['slug']) ? sanitize_key((string) $r['slug']) : '';
+            $orig = isset($r['orig']) && is_scalar($r['orig']) ? sanitize_key((string) $r['orig']) : '';
+            if ($slug === '' && $orig !== '') { $slug = $orig; }
+            if ($orig === 'custom') { $slug = 'custom'; } elseif ($slug === 'custom') { $slug = 'custom-cat'; }
             if ($slug === '') { $slug = sanitize_title($label); }
             if ($slug === '') { $slug = 'cat'; }
             if ($slug === 'all') { $slug = 'all-cat'; }
@@ -345,12 +391,14 @@ class ZapPopPop_Ajax_Templates {
             $i = 2;
             while (isset($seen[$slug])) { $slug = $base . '-' . $i; $i++; }
             $seen[$slug] = 1;
+            if ($orig !== '' && $orig !== $slug) { $renames[$orig] = $slug; }
             $out[] = array('slug' => $slug, 'label' => $label);
         }
         if (!isset($seen['custom'])) {
             $out[] = array('slug' => 'custom', 'label' => __('My Templates', 'zappoppop'));
         }
         update_option(self::CATS_OPT, $out, false);
+        self::apply_cat_renames($renames, $out);
         wp_send_json_success(array('cats' => $out, 'message' => __('Categories saved.', 'zappoppop')));
     }
 

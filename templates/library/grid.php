@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="zappoppop-library-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;">
+<div class="zappoppop-library-grid is-pg-pending" data-cols="4" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;">
     <?php foreach ($templates as $tpl) : 
         $json_str = wp_json_encode($tpl['config']);
         ?>
@@ -25,6 +25,12 @@ if (!defined('ABSPATH')) {
                 <span style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.4);backdrop-filter:blur(2px);color:#ffffff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                     <?php echo esc_html($tpl['cat_label']); ?>
                 </span>
+                <?php if (!empty($tpl['badge']) && is_array($tpl['badge']) && empty($tpl['badge']['hide'])) :
+                    $zpp_b  = $tpl['badge'];
+                    $zpp_bs = (!empty($zpp_b['bg']) ? 'background:' . $zpp_b['bg'] . ';' : '') . (!empty($zpp_b['color']) ? 'color:' . $zpp_b['color'] . ';' : '');
+                    ?>
+                    <span class="zpp-tier-badge zpp-tier-<?php echo (isset($tpl['tier']) && $tpl['tier'] === 'pro') ? 'pro' : 'core'; ?>"<?php echo $zpp_bs !== '' ? ' style="' . esc_attr($zpp_bs) . '"' : ''; ?>><?php echo esc_html($zpp_b['text']); ?></span>
+                <?php endif; ?>
             </div>
 
             <!-- Card Body -->
@@ -58,4 +64,5 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     <?php endforeach; ?>
+    <script>(function(){var g=document.currentScript&&document.currentScript.parentNode;if(!g){return;}try{var v=parseInt(window.localStorage.getItem('zappoppop_lib_view'),10);if(v===3||v===4){g.setAttribute('data-cols',String(v));}}catch(e){}window.setTimeout(function(){g.className=g.className.replace(/\s*is-pg-pending/g,'');},4000);})();</script>
 </div>

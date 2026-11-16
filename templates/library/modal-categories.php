@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
             <button type="button" class="lc-x" id="zappoppop-lc-close" aria-label="<?php esc_attr_e('Close', 'zappoppop'); ?>">&times;</button>
         </div>
         <div class="lc-bd">
-            <p class="lc-note"><?php esc_html_e('Drag to reorder. These are the filter pills shown above the template grid.', 'zappoppop'); ?></p>
+            <p class="lc-note"><?php esc_html_e('Drag to reorder. These are the filter pills shown above the template grid. The slug (right field) is the value used in template.json "category"; renaming it keeps your saved templates and premade cards in the category.', 'zappoppop'); ?></p>
             <ul class="lc-list" id="zappoppop-lc-list"></ul>
             <div class="lc-add">
                 <input type="text" id="zappoppop-lc-new" maxlength="40" placeholder="<?php esc_attr_e('New category name...', 'zappoppop'); ?>">

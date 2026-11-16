@@ -276,4 +276,8 @@
     color: #64748b;
     user-select: none;
 }
+.zappoppop-universal-color-opacity-suite [data-zappoppop-opacity-card="color_opacity"],
+.zappoppop-universal-color-opacity-suite [data-zappoppop-opacity-card="background_opacity"] {
+    display: none !important;
+}
 /* === ZAPPOPPOP_COLOR_BG_OPACITY_CSS_END === */

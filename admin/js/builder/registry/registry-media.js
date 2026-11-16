@@ -76,7 +76,7 @@
             if (src) {
                 innerHtml = '<img src="' + escAttr(src) + '" alt="' + alt + '" draggable="false" style="width:100%;height:100%;object-fit:' + fit + ';display:block;border-radius:inherit;pointer-events:none;">';
             } else {
-                innerHtml = '<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1e293b;color:#94a3b8;font-size:11px;border:1px dashed #475569;border-radius:inherit;pointer-events:none;"><span class="dashicons dashicons-format-image" style="font-size:24px;width:24px;height:24px;margin-bottom:4px;"></span><span>Select Image</span></div>';
+                innerHtml = '<div style="width:100%;height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1e293b;color:#94a3b8;font-size:11px;border:1px dashed #475569;border-radius:inherit;pointer-events:none;"><span class="dashicons dashicons-format-image" style="font-size:24px;width:24px;height:24px;margin-bottom:4px;"></span><span>Select Image</span></div>';
             }
         } else if (canonical === 'video') {
             // ZAPPOPPOP_VIDEO_STAGE_V2

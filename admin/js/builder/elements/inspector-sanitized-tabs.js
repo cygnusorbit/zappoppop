@@ -117,9 +117,9 @@
                             '</div>' +
                             '<div id="gp-hover-fields-panel" style="display:none;margin-top:8px;">' +
                                 '<div class="gp-grid-3">' +
-                                    '<div><label>HOVER BG</label><input type="color" id="gp-prop-hover-bg" value="#1d4ed8"></div>' +
-                                    '<div><label>HOVER TEXT</label><input type="color" id="gp-prop-hover-color" value="#ffffff"></div>' +
-                                    '<div><label>HOVER BORDER</label><input type="color" id="gp-prop-hover-border" value="#1e40af"></div>' +
+                                    '<div><label>HOVER BG</label><input type="color" data-zpp-alpha="compact" id="gp-prop-hover-bg" value="#1d4ed8"></div>' +
+                                    '<div><label>HOVER TEXT</label><input type="color" data-zpp-alpha="compact" id="gp-prop-hover-color" value="#ffffff"></div>' +
+                                    '<div><label>HOVER BORDER</label><input type="color" data-zpp-alpha="compact" id="gp-prop-hover-border" value="#1e40af"></div>' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
@@ -143,7 +143,7 @@
                                 '</div>' +
                                 '<div>' +
                                     '<label>ICON COLOR</label>' +
-                                    '<input type="color" id="gp-prop-icon-color" value="#64748b">' +
+                                    '<input type="color" data-zpp-alpha="compact" id="gp-prop-icon-color" value="#64748b">' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
@@ -171,7 +171,7 @@
                                     '<div><label>BLUR</label><input type="number" id="gp-sh-blur" value="12" min="0"></div>' +
                                     '<div><label>SPREAD</label><input type="number" id="gp-sh-spread" value="0"></div>' +
                                 '</div>' +
-                                '<div><label>SHADOW COLOR</label><input type="color" id="gp-sh-color" value="#0f172a"></div>' +
+                                '<div><label>SHADOW COLOR</label><input type="color" data-zpp-alpha="compact" id="gp-sh-color" value="#0f172a"></div>' +
                             '</div>' +
                         '</div>' +
                         '<!-- Custom CSS Class & Inline Style -->' +
@@ -512,7 +512,7 @@
                                 '<input type="number" id="gp-cnt-prog-pct" min="0" max="100" value="' + (parseInt(el.content, 10) || 65) + '">' +
                             '</div>' +
                             '<div><label>BAR FILL COLOR</label>' +
-                                '<input type="color" id="gp-cnt-prog-color" value="' + (el.progressColor || '#2563eb') + '">' +
+                                '<input type="color" data-zpp-alpha="compact" id="gp-cnt-prog-color" value="' + (el.progressColor || '#2563eb') + '">' +
                             '</div>' +
                         '</div>' +
                         '<div class="gp-grid-2">' +
@@ -681,7 +681,7 @@
                                 '<input type="number" id="gp-cnt-rating-max" min="3" max="10" value="' + (parseInt(el.content, 10) || 5) + '">' +
                             '</div>' +
                             '<div><label>ACTIVE STAR COLOR</label>' +
-                                '<input type="color" id="gp-cnt-rating-color" value="' + (el.ratingColor || '#f59e0b') + '">' +
+                                '<input type="color" data-zpp-alpha="compact" id="gp-cnt-rating-color" value="' + (el.ratingColor || '#f59e0b') + '">' +
                             '</div>' +
                         '</div>';
                     break;

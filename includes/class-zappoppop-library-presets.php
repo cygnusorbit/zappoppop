@@ -15,6 +15,37 @@ class ZapPopPop_Library_Presets {
         return ZAPPOPPOP_PATH . 'library-presets/';
     }
 
+    /** Corner badge for a card: defaults/library-badges.json, then template.json "badge" override. Colours empty = theme colours. */
+    public static function badge($tier, $meta = array()) {
+        static $file = null;
+        if ($file === null) {
+            $file = array();
+            $bp   = ZAPPOPPOP_PATH . 'defaults/library-badges.json';
+            if (is_readable($bp) && filesize($bp) < 65536) {
+                /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin file, not a remote URL */ $bj = json_decode((string) file_get_contents($bp), true);
+                if (is_array($bj)) { $file = $bj; }
+            }
+            $file = apply_filters('zappoppop_library_badges', $file);
+            if (!is_array($file)) { $file = array(); }
+        }
+        $key = ($tier === 'pro') ? 'pro' : 'core';
+        $out = array('text' => strtoupper($key), 'bg' => '', 'color' => '', 'hide' => false);
+        $src = array(isset($file[$key]) && is_array($file[$key]) ? $file[$key] : array());
+        if (isset($meta['badge']) && (is_array($meta['badge']) || is_object($meta['badge']))) { $src[] = (array) $meta['badge']; }
+        foreach ($src as $row) {
+            if (isset($row['text'])) {
+                $t = sanitize_text_field((string) $row['text']);
+                $out['text'] = function_exists('mb_substr') ? mb_substr($t, 0, 12) : substr($t, 0, 12);
+            }
+            foreach (array('bg', 'color') as $k) {
+                if (isset($row[$k])) { $h = sanitize_hex_color((string) $row[$k]); $out[$k] = $h ? $h : ''; }
+            }
+            if (isset($row['hide'])) { $out['hide'] = filter_var($row['hide'], FILTER_VALIDATE_BOOLEAN); }
+        }
+        if ($out['text'] === '') { $out['hide'] = true; }
+        return $out;
+    }
+
     /** @return array id => template (same shape as saved user templates, plus 'preset' => true) */
     public static function all() {
         static $cache = null;
@@ -138,6 +169,7 @@ class ZapPopPop_Library_Presets {
                 'no_download' => $no_dl,
                 'tier'        => ($root['source'] === 'pro' || (isset($meta['tier']) && $meta['tier'] === 'pro')) ? 'pro' : 'free',
                 'source'      => $root['source'],
+                'badge'       => self::badge(($root['source'] === 'pro' || (isset($meta['tier']) && $meta['tier'] === 'pro')) ? 'pro' : 'free', $meta),
             );
         }
         return $cache;

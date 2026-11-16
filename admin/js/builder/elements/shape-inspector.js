@@ -8,7 +8,7 @@
     'use strict';
     if (!$ || window.ZapPopPopShapeInspector) { return; }
 
-    var HEX = /^#[0-9a-f]{6}$/i;
+    var HEX = /^#(?:[0-9a-f]{6}|[0-9a-f]{8})$/i;
     var DEF_FILL = '#3b82f6';
     var DEF_STROKE = '#0284c7';
 

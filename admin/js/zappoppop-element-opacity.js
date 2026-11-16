@@ -394,17 +394,8 @@
         // Update JS Model
         if (model) {
             model.opacity = elOp;
-            model.color = colorHex;
-            model.color_opacity = colorOp;
-            model.background_color = bgHex;
-            model.background_opacity = bgOp;
-            if (model.fill !== undefined) model.fill = colorHex;
             if (model.style && typeof model.style === 'object') {
                 model.style.opacity = elOp;
-                model.style.color = rgbaColor;
-                model.style.color_opacity = colorOp;
-                model.style.background_color = rgbaBg;
-                model.style.background_opacity = bgOp;
             }
         }
 
@@ -412,79 +403,15 @@
         if (nativeInputs.opacityInput && document.activeElement !== nativeInputs.opacityInput) {
             nativeInputs.opacityInput.value = String(elOp);
         }
-        if (nativeInputs.colorInput && document.activeElement !== nativeInputs.colorInput) {
-            nativeInputs.colorInput.value = colorHex;
-        }
-        if (nativeInputs.bgInput && document.activeElement !== nativeInputs.bgInput) {
-            nativeInputs.bgInput.value = bgHex;
-        }
 
         if (!layerEl) return;
 
         // Store authoritative data attributes on the canvas layer DOM
         layerEl.setAttribute('data-element-opacity', String(elOp));
-        layerEl.setAttribute('data-raw-color', colorHex);
-        layerEl.setAttribute('data-color-opacity', String(colorOp));
-        layerEl.setAttribute('data-raw-bg-color', bgHex);
-        layerEl.setAttribute('data-background-opacity', String(bgOp));
 
         // 1. Apply Element Opacity
         layerEl.style.opacity = String(elAlpha);
         layerEl.style.setProperty('--zpp-el-opacity', String(elAlpha));
-        layerEl.style.setProperty('--zpp-color-opacity', String(Number((colorOp / 100).toFixed(4))));
-        layerEl.style.setProperty('--zpp-bg-opacity', String(Number((bgOp / 100).toFixed(4))));
-
-        // 2. Apply Color + Color Opacity across all inner element types
-        layerEl.style.color = rgbaColor;
-        var textTargets = layerEl.querySelectorAll(
-            '.zappoppop-layer-inner, .zappoppop-element-content, .zappoppop-layer-content, ' +
-            'button, a, input, textarea, select, span, p, h1, h2, h3, h4, h5, h6, label, i'
-        );
-        textTargets.forEach(function(node) {
-            node.style.color = rgbaColor;
-        });
-
-        // Vector Shapes & Icons (SVG fill + stroke opacity)
-        var svgs = layerEl.querySelectorAll('svg, svg path, svg rect, svg circle, svg polygon, svg ellipse, svg line');
-        svgs.forEach(function(svgNode) {
-            if (svgNode.tagName.toLowerCase() === 'svg') {
-                svgNode.style.color = rgbaColor;
-                svgNode.style.fill = rgbaColor;
-                svgNode.style.fillOpacity = String(Number((colorOp / 100).toFixed(4)));
-            } else {
-                var curFill = svgNode.getAttribute('fill');
-                if (!curFill || curFill !== 'none') {
-                    svgNode.style.fill = rgbaColor;
-                    svgNode.style.fillOpacity = String(Number((colorOp / 100).toFixed(4)));
-                }
-            }
-        });
-
-        // Divider elements
-        var dividers = layerEl.querySelectorAll('hr, .zappoppop-divider-line');
-        dividers.forEach(function(div) {
-            div.style.borderColor = rgbaColor;
-            div.style.backgroundColor = rgbaColor;
-        });
-
-        // Pro elements (Progress Bar fill, Star Rating active stars)
-        var proForegrounds = layerEl.querySelectorAll('.zappoppop-star-active, .zappoppop-progress-fill, .zappoppop-rating-stars');
-        proForegrounds.forEach(function(pf) {
-            pf.style.color = rgbaColor;
-            if (pf.classList.contains('zappoppop-progress-fill')) {
-                pf.style.backgroundColor = rgbaColor;
-            }
-        });
-
-        // 3. Apply Background Color + Background Opacity
-        layerEl.style.backgroundColor = rgbaBg;
-        var bgTargets = layerEl.querySelectorAll(
-            '.zappoppop-layer-inner, button, input[type="text"], input[type="email"], textarea, select, ' +
-            '.zappoppop-image-select-item, .zappoppop-title-select-item'
-        );
-        bgTargets.forEach(function(bgNode) {
-            bgNode.style.backgroundColor = rgbaBg;
-        });
     }
 
     function updateSuiteUI(suite, state, layerEl) {
@@ -660,10 +587,6 @@
         if (suite && model) {
             var st = collectStateFromSuite(suite);
             model.opacity = st.elOp;
-            model.color = st.colorHex;
-            model.color_opacity = st.colorOp;
-            model.background_color = st.bgHex;
-            model.background_opacity = st.bgOp;
         }
 
         var layers = window.zappoppopLayers || (window.ZapPopPop && window.ZapPopPop.layers) || (window.ZapPopPopBuilder && window.ZapPopPopBuilder.layers);
@@ -675,22 +598,8 @@
                     if (domEl.hasAttribute('data-element-opacity')) {
                         layer.opacity = clampOpacity(domEl.getAttribute('data-element-opacity'), 100);
                     }
-                    if (domEl.hasAttribute('data-raw-color')) {
-                        layer.color = domEl.getAttribute('data-raw-color');
-                    }
-                    if (domEl.hasAttribute('data-color-opacity')) {
-                        layer.color_opacity = clampOpacity(domEl.getAttribute('data-color-opacity'), 100);
-                    }
-                    if (domEl.hasAttribute('data-raw-bg-color')) {
-                        layer.background_color = domEl.getAttribute('data-raw-bg-color');
-                    }
-                    if (domEl.hasAttribute('data-background-opacity')) {
-                        layer.background_opacity = clampOpacity(domEl.getAttribute('data-background-opacity'), 100);
-                    }
                 }
                 if (layer.opacity === undefined) layer.opacity = 100;
-                if (layer.color_opacity === undefined) layer.color_opacity = 100;
-                if (layer.background_opacity === undefined) layer.background_opacity = 100;
             });
         }
     }

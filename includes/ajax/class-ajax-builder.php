@@ -500,6 +500,11 @@ class ZapPopPop_Ajax_Builder {
                     if (isset($cVal['anim_delay'])) $data['canvasMeta'][$cKey]['anim_delay'] = intval($cVal['anim_delay']);
                     if (isset($cVal['anim_disappearance'])) $data['canvasMeta'][$cKey]['anim_disappearance'] = sanitize_text_field($cVal['anim_disappearance']);
                     if (isset($cVal['canvas_radius'])) $data['canvasMeta'][$cKey]['canvas_radius'] = max(0, min(500, intval($cVal['canvas_radius'])));
+                    foreach (array('bg_color', 'grad_color1', 'grad_color2', '_prev_bg_color') as $zappoppop_ck) {
+                        if (!isset($cVal[$zappoppop_ck])) { continue; }
+                        $zappoppop_cv = ZapPopPop_Color::sanitize($cVal[$zappoppop_ck]);
+                        if ($zappoppop_cv === '') { unset($data['canvasMeta'][$cKey][$zappoppop_ck]); } else { $data['canvasMeta'][$cKey][$zappoppop_ck] = $zappoppop_cv; }
+                    }
                 }
             }
         }
@@ -511,6 +516,11 @@ class ZapPopPop_Ajax_Builder {
                     if (isset($cVal['anim_delay'])) $data['canvas_meta'][$cKey]['anim_delay'] = intval($cVal['anim_delay']);
                     if (isset($cVal['anim_disappearance'])) $data['canvas_meta'][$cKey]['anim_disappearance'] = sanitize_text_field($cVal['anim_disappearance']);
                     if (isset($cVal['canvas_radius'])) $data['canvas_meta'][$cKey]['canvas_radius'] = max(0, min(500, intval($cVal['canvas_radius'])));
+                    foreach (array('bg_color', 'grad_color1', 'grad_color2', '_prev_bg_color') as $zappoppop_ck) {
+                        if (!isset($cVal[$zappoppop_ck])) { continue; }
+                        $zappoppop_cv = ZapPopPop_Color::sanitize($cVal[$zappoppop_ck]);
+                        if ($zappoppop_cv === '') { unset($data['canvas_meta'][$cKey][$zappoppop_ck]); } else { $data['canvas_meta'][$cKey][$zappoppop_ck] = $zappoppop_cv; }
+                    }
                 }
             }
         }
@@ -640,7 +650,7 @@ class ZapPopPop_Ajax_Builder {
         if (isset($el['iconSize'])) $clean['iconSize'] = intval($el['iconSize']);
         if (isset($el['progressMode'])) $clean['progressMode'] = in_array($el['progressMode'], array('manual','form','steps'), true) ? $el['progressMode'] : 'manual';
         if (isset($el['progressPercent'])) $clean['progressPercent'] = max(0, min(100, intval($el['progressPercent'])));
-        if (isset($el['progressColor'])) $clean['progressColor'] = sanitize_hex_color($el['progressColor']);
+        if (isset($el['progressColor'])) $clean['progressColor'] = ZapPopPop_Color::sanitize($el['progressColor'], null);
         if (isset($el['progressStriped'])) $clean['progressStriped'] = !empty($el['progressStriped']);
         if (isset($el['progressAnimated'])) $clean['progressAnimated'] = !empty($el['progressAnimated']);
         if (isset($el['buttonAction'])) $clean['buttonAction'] = sanitize_key($el['buttonAction']);
@@ -667,7 +677,7 @@ class ZapPopPop_Ajax_Builder {
         if (isset($el['maxSelect'])) $clean['maxSelect'] = max(1, intval($el['maxSelect']));
         if (isset($el['columns'])) $clean['columns'] = max(1, min(6, intval($el['columns'])));
         if (isset($el['multiSelect'])) $clean['multiSelect'] = !empty($el['multiSelect']);
-        if (isset($el['activeColor'])) $clean['activeColor'] = sanitize_hex_color($el['activeColor']);
+        if (isset($el['activeColor'])) $clean['activeColor'] = ZapPopPop_Color::sanitize($el['activeColor'], null);
         if (isset($el['dateFormat'])) $clean['dateFormat'] = sanitize_text_field($el['dateFormat']);
         if (isset($el['minDate'])) $clean['minDate'] = sanitize_text_field($el['minDate']);
         if (isset($el['maxDate'])) $clean['maxDate'] = sanitize_text_field($el['maxDate']);
@@ -682,9 +692,9 @@ class ZapPopPop_Ajax_Builder {
         if (isset($el['showEyeToggle'])) $clean['showEyeToggle'] = !empty($el['showEyeToggle']);
         if (isset($el['ratingMax']))$clean['ratingMax'] = in_array(intval($el['ratingMax']), array(5, 10), true) ? intval($el['ratingMax']) : 5;
         if (isset($el['ratingShape'])) $clean['ratingShape'] = sanitize_key($el['ratingShape']);
-        if (isset($el['ratingColor'])) $clean['ratingColor'] = sanitize_hex_color($el['ratingColor']);
-        if (isset($el['ratingInactiveColor']) && !is_array($el['ratingInactiveColor'])) { $zappoppop_ric = sanitize_hex_color((string) $el['ratingInactiveColor']); if ($zappoppop_ric) { $clean['ratingInactiveColor'] = $zappoppop_ric; } } /* ZAPPOPPOP_RATING */
-        foreach (array('iconLeftColor', 'iconRightColor', 'fgColor') as $zappoppop_ic) { if (isset($el[$zappoppop_ic]) && !is_array($el[$zappoppop_ic])) { $zappoppop_icv = sanitize_hex_color((string) $el[$zappoppop_ic]); if ($zappoppop_icv) { $clean[$zappoppop_ic] = $zappoppop_icv; } } } /* ZAPPOPPOP_ICON_COLOR */
+        if (isset($el['ratingColor'])) $clean['ratingColor'] = ZapPopPop_Color::sanitize($el['ratingColor'], null);
+        if (isset($el['ratingInactiveColor']) && !is_array($el['ratingInactiveColor'])) { $zappoppop_ric = ZapPopPop_Color::sanitize((string) $el['ratingInactiveColor']); if ($zappoppop_ric) { $clean['ratingInactiveColor'] = $zappoppop_ric; } } /* ZAPPOPPOP_RATING */
+        foreach (array('iconLeftColor', 'iconRightColor', 'fgColor') as $zappoppop_ic) { if (isset($el[$zappoppop_ic]) && !is_array($el[$zappoppop_ic])) { $zappoppop_icv = ZapPopPop_Color::sanitize((string) $el[$zappoppop_ic]); if ($zappoppop_icv) { $clean[$zappoppop_ic] = $zappoppop_icv; } } } /* ZAPPOPPOP_ICON_COLOR */
 
         
         // === PHASE 4: SANITIZED 5-TAB & 3-TAB LAYER SETTINGS WHITELIST ===

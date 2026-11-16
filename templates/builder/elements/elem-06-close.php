@@ -31,7 +31,7 @@ if (!defined('ABSPATH')) exit;
         </div>
         <div>
             <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('GLYPH COLOR', 'zappoppop'); ?></label>
-            <input type="color" id="prop-close-glyph-color" class="widefat zappoppop-gp-bind" data-prop="color" value="#64748b" style="width:100%;height:32px;padding:2px;border:1px solid #334155;border-radius:4px;background:#090d16;cursor:pointer;box-sizing:border-box;font-size:12px;">
+            <input type="color" data-zpp-alpha="compact" id="prop-close-glyph-color" class="widefat zappoppop-gp-bind" data-prop="color" value="#64748b" style="width:100%;height:32px;padding:2px;border:1px solid #334155;border-radius:4px;background:#090d16;cursor:pointer;box-sizing:border-box;font-size:12px;">
         </div>
     </div>
     <div style="margin-top:8px;" id="prop-close-cookie-wrap">

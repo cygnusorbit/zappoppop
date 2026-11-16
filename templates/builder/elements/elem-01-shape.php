@@ -37,7 +37,7 @@ if (!defined('ABSPATH')) exit;
     <div class="zappoppop-shape-field">
         <label class="zappoppop-shape-label" for="prop-shape-fill"><?php esc_html_e('FILL COLOR', 'zappoppop'); ?></label>
         <div class="zappoppop-shape-color" data-zpp-clear-for="prop-shape-transparent">
-            <input type="color" id="prop-shape-fill" class="zappoppop-gp-bind" data-prop="shapeFill" value="#3b82f6">
+            <input type="color" data-zpp-alpha="1" id="prop-shape-fill" class="zappoppop-gp-bind" data-prop="shapeFill" value="#3b82f6">
             <label class="zappoppop-shape-clear" title="<?php esc_attr_e('Transparent (no fill)', 'zappoppop'); ?>">
                 <input type="checkbox" id="prop-shape-transparent" class="zappoppop-gp-bind" data-prop="shapeNoFill" value="1" aria-label="<?php esc_attr_e('Transparent fill', 'zappoppop'); ?>">
                 <span class="zappoppop-shape-clear-sw" aria-hidden="true"></span>
@@ -49,7 +49,7 @@ if (!defined('ABSPATH')) exit;
         <div>
             <label class="zappoppop-shape-label" for="prop-shape-stroke-color"><?php esc_html_e('STROKE COLOR', 'zappoppop'); ?></label>
             <div class="zappoppop-shape-color" data-zpp-clear-for="prop-shape-stroke-transparent">
-                <input type="color" id="prop-shape-stroke-color" data-zpp-prop="strokeColor" value="#0284c7">
+                <input type="color" data-zpp-alpha="1" id="prop-shape-stroke-color" data-zpp-prop="strokeColor" value="#0284c7">
                 <label class="zappoppop-shape-clear zappoppop-shape-clear-icon" title="<?php esc_attr_e('Transparent stroke', 'zappoppop'); ?>">
                     <input type="checkbox" id="prop-shape-stroke-transparent" aria-label="<?php esc_attr_e('Transparent stroke', 'zappoppop'); ?>">
                     <span class="zappoppop-shape-clear-sw" aria-hidden="true"></span>

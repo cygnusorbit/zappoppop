@@ -46,6 +46,8 @@ foreach (ZapPopPop_Library_Presets::all() as $zappoppop_pt) {
         'bg_preview'  => 'linear-gradient(135deg, #2563eb, #0f172a)',
         'image'       => $zappoppop_pt['image'],
         'preset'      => true,
+        'tier'        => isset($zappoppop_pt['tier']) ? $zappoppop_pt['tier'] : 'free',
+        'badge'       => isset($zappoppop_pt['badge']) ? $zappoppop_pt['badge'] : null,
         'no_download' => !empty($zappoppop_pt['no_download']),
         'config'      => [
             'meta'     => ['width' => $zappoppop_pt['width'], 'height' => $zappoppop_pt['height'], 'bg_mode' => 'solid', 'bg_color' => '#ffffff'],
@@ -59,8 +61,10 @@ $templates = array_merge($zappoppop_user_cards, $zappoppop_preset_cards, $templa
 // Keep card badges in sync with renamed categories
 if (!class_exists('ZapPopPop_Ajax_Templates')) { require_once ZAPPOPPOP_PATH . 'includes/ajax/class-ajax-templates.php'; }
 $zappoppop_cat_map = [];
+$zappoppop_cat_alias = ZapPopPop_Ajax_Templates::category_aliases(); /* ZPP_CAT_ALIAS */
 foreach (ZapPopPop_Ajax_Templates::get_categories() as $zappoppop_c) { $zappoppop_cat_map[$zappoppop_c['slug']] = $zappoppop_c['label']; }
 foreach ($templates as $zappoppop_i => $zappoppop_t) {
+    if (isset($zappoppop_cat_alias[$zappoppop_t['category']]) && !isset($zappoppop_cat_map[$zappoppop_t['category']])) { $templates[$zappoppop_i]['category'] = $zappoppop_cat_alias[$zappoppop_t['category']]; $zappoppop_t['category'] = $zappoppop_cat_alias[$zappoppop_t['category']]; }
     /* ZAPPOPPOP_TPL_CAT_FALLBACK: deleted category -> My Templates */
     if (!empty($zappoppop_t['user']) && !isset($zappoppop_cat_map[$zappoppop_t['category']])) { $templates[$zappoppop_i]['category'] = 'custom'; $zappoppop_t['category'] = 'custom'; }
     if (isset($zappoppop_cat_map[$zappoppop_t['category']])) { $templates[$zappoppop_i]['cat_label'] = $zappoppop_cat_map[$zappoppop_t['category']]; }

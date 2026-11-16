@@ -73,11 +73,11 @@
                 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed #e2e8f0;">' +
                     '<div>' +
                         '<label>Hover Background</label>' +
-                        '<input type="color" id="insp-link-hover-bg" value="' + (el.hoverBg || '#059669') + '" class="zappoppop-insp-input" style="height:32px;">' +
+                        '<input type="color" data-zpp-alpha="compact" id="insp-link-hover-bg" value="' + (el.hoverBg || '#059669') + '" class="zappoppop-insp-input" style="height:32px;">' +
                     '</div>' +
                     '<div>' +
                         '<label>Hover Text Color</label>' +
-                        '<input type="color" id="insp-link-hover-color" value="' + (el.hoverColor || '#ffffff') + '" class="zappoppop-insp-input" style="height:32px;">' +
+                        '<input type="color" data-zpp-alpha="compact" id="insp-link-hover-color" value="' + (el.hoverColor || '#ffffff') + '" class="zappoppop-insp-input" style="height:32px;">' +
                     '</div>' +
                 '</div>' +
             '</div>';

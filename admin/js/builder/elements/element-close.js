@@ -82,7 +82,7 @@
                 '</div>' +
                 '<div style="margin-top:10px;padding-top:10px;border-top:1px dashed #e2e8f0;">' +
                     '<label>Hover Color</label>' +
-                    '<input type="color" id="insp-close-hover-color" value="' + (el.hoverColor || '#0f172a') + '" class="zappoppop-insp-input" style="height:32px;">' +
+                    '<input type="color" data-zpp-alpha="compact" id="insp-close-hover-color" value="' + (el.hoverColor || '#0f172a') + '" class="zappoppop-insp-input" style="height:32px;">' +
                 '</div>' +
             '</div>';
 

@@ -19,6 +19,18 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 .zpp-ext-file-name { font-weight: 600; color: var(--zpp-c-heading, #1d2327); word-break: break-all; }
 #zpp-ext-upload-btn { height: var(--zpp-h-button, 34px); }
 
+/* Upload Module card: 2 columns. Left = drop box, right = title, description, button. */
+.zpp-ext-upload-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; -webkit-box-align: stretch; -ms-flex-align: stretch; align-items: stretch; }
+.zpp-ext-upload.is-single .zpp-ext-upload-cols { grid-template-columns: minmax(0, 1fr); }
+.zpp-ext-upload-left { display: -webkit-box; display: -ms-flexbox; display: flex; min-width: 0; }
+.zpp-ext-upload-left .zpp-ext-drop { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; text-align: center; min-height: 140px; padding: 20px; }
+.zpp-ext-upload-left .zpp-ext-drop .dashicons { width: 36px; height: 36px; font-size: 36px; }
+.zpp-ext-upload-right { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; min-width: 0; }
+.zpp-ext-upload-right .zpp-ext-card-head { margin: 0 0 12px; padding: 0 0 12px; }
+.zpp-ext-upload-right .zpp-ext-help { margin: 0 0 16px; }
+.zpp-ext-upload-actions { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 782px) { .zpp-ext-upload-cols { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+
 .zpp-ext-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--zpp-gap, 16px); }
 .zpp-ext-item { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; background: var(--zpp-c-bg-card, #fff); border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde); border-radius: var(--zpp-r-card, 3px); box-shadow: var(--zpp-shadow-card, 0 1px 1px rgba(0,0,0,.04)); padding: 16px; box-sizing: border-box; min-width: 0; }
 .zpp-ext-item.is-busy { opacity: .55; pointer-events: none; }

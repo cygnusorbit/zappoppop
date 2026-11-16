@@ -923,3 +923,69 @@
     background-color: var(--zpp-builder-element-hover, #334155);
 }
 .zpp-bt-extra-pill .zpp-bt-mini-tag { min-width: 22px; }
+
+/* Space (rows 17-18): live-preview glow + edge rings, only while body.zpp-fx-on */
+body.zpp-fx-on .zpp-pv-acc-item,
+body.zpp-fx-on .zpp-pv-layers-widget,
+body.zpp-fx-on .zpp-pv-save-btn,
+body.zpp-fx-on .zpp-pv-sidebar {
+    box-shadow: var(--zpp-builder-glow-shadow);
+}
+body.zpp-fx-on .zpp-pv-canvas-tab:not(.is-active),
+body.zpp-fx-on .zpp-pv-subtoolbar {
+    box-shadow: var(--zpp-builder-edge-ring);
+}
+
+/* Space phase 3: live preview mirrors title-bar-only accordions + Layers Panel frame */
+body.zpp-fx-on .zpp-pv-acc-item {
+    border-color: transparent;
+    box-shadow: none;
+}
+body.zpp-fx-on .zpp-pv-acc-hdr {
+    border: 1px solid var(--zpp-builder-accordion-border, #334155);
+    border-radius: 4px;
+    box-shadow: var(--zpp-builder-glow-shadow);
+}
+body.zpp-fx-on .zpp-pv-acc-body {
+    border: 0;
+}
+body.zpp-fx-on .zpp-pv-layers-widget,
+body.zpp-fx-on .zpp-pv-layers-hdr,
+body.zpp-fx-on .zpp-pv-layer-item:not(.zpp-pv-layer-selected) {
+    border-color: var(--zpp-builder-layers-border, #2a78b8);
+}
+
+/* Space phase 4: Stage Background Image row (row 20) */
+.zpp-bt-image-pill {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1 1 260px;
+    min-width: 0;
+}
+.zpp-bt-image-thumb {
+    display: block;
+    flex: 0 0 auto;
+    width: 38px;
+    height: 24px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: #0f172a center / cover no-repeat;
+}
+.zpp-bt-image-url {
+    flex: 1 1 160px;
+    min-width: 0;
+    height: 28px;
+    padding: 2px 8px;
+    font-size: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+}
+.zpp-bt-image-pill .button {
+    height: 28px;
+    min-height: 28px;
+    line-height: 26px;
+    padding: 0 10px;
+    font-size: 11px;
+}

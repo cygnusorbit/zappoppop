@@ -96,7 +96,7 @@ class ZapPopPop_Ajax_Element_Registry {
 
         foreach ( array( 'iconLeftColor', 'iconRightColor', 'fgColor' ) as $zappoppop_ic ) { /* ZAPPOPPOP_ICON_COLOR */
             if ( isset( $el[ $zappoppop_ic ] ) && ! is_array( $el[ $zappoppop_ic ] ) ) {
-                $zappoppop_icv = sanitize_hex_color( (string) $el[ $zappoppop_ic ] );
+                $zappoppop_icv = ZapPopPop_Color::sanitize( (string) $el[ $zappoppop_ic ] );
                 if ( $zappoppop_icv ) { $clean[ $zappoppop_ic ] = $zappoppop_icv; }
             }
         }

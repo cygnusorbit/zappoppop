@@ -5,7 +5,7 @@
         if (document.readyState !== 'loading') { fn(); } else { document.addEventListener('DOMContentLoaded', fn); }
     }
     function $all(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
-    function isHex6(v) { return /^#[0-9a-f]{6}$/i.test(v); }
+    function isHex6(v) { return /^#(?:[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v); }
 
     ready(function () {
         var form = document.getElementById('zpp-theme-form');
@@ -29,7 +29,7 @@
         /* ---- Color pickers -> text field ---- */
         $all('.zpp-theme-picker', form).forEach(function (picker) {
             picker.addEventListener('input', function () {
-                var text = picker.parentNode.querySelector('input[type="text"]');
+                var text = picker.parentNode.querySelector('input[type="text"][data-zpp-var]');
                 text.value = picker.value;
                 applyVar(text);
             });
@@ -38,7 +38,7 @@
         /* ---- Per-field reset ---- */
         $all('.zpp-theme-field-reset', form).forEach(function (btn) {
             btn.addEventListener('click', function () {
-                var text = btn.parentNode.querySelector('input[type="text"]');
+                var text = btn.parentNode.querySelector('input[type="text"][data-zpp-var]');
                 text.value = text.getAttribute('data-default') || '';
                 text.dispatchEvent(new Event('input', { bubbles: true }));
             });
@@ -142,7 +142,7 @@
             var action = document.getElementById('zpp-theme-action').value;
             if (action === 'save') {
                 $all('.zpp-theme-picker', form).forEach(function (picker) {
-                    var text = picker.parentNode.querySelector('input[type="text"]');
+                    var text = picker.parentNode.querySelector('input[type="text"][data-zpp-var]');
                     if (text && text.value === '' ) { text.value = picker.value; }
                 });
             }

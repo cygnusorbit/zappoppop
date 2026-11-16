@@ -1,0 +1,34 @@
+/* ZapPopPop alpha colour picker. Theme-variable driven (same --zpp-* tokens as the Theme page). Chrome / Safari / Firefox / Edge safe. */
+.zpp-cp { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 6px; -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; width: 100%; box-sizing: border-box; }
+.zpp-cp-btn { -webkit-box-flex: 0; -ms-flex: 0 0 40px; flex: 0 0 40px; width: 40px; height: 32px; padding: 3px; margin: 0; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1); border-radius: var(--zpp-r-button, 4px); background: var(--zpp-c-bg-card, #fff); cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; line-height: 0; }
+.zpp-cp-btn:hover:not(:disabled), .zpp-cp-btn[aria-expanded="true"] { border-color: var(--zpp-c-primary, #2563eb); }
+.zpp-cp-btn:focus-visible { outline: 2px solid var(--zpp-c-primary, #2563eb); outline-offset: 1px; }
+.zpp-cp-btn:disabled { opacity: .5; cursor: default; }
+.zpp-cp-chk, .zpp-cp-alpha, .zpp-cp-prev { background-color: #fff; background-image: -webkit-linear-gradient(45deg, #cfd4da 25%, transparent 25%, transparent 75%, #cfd4da 75%), -webkit-linear-gradient(45deg, #cfd4da 25%, transparent 25%, transparent 75%, #cfd4da 75%); background-image: linear-gradient(45deg, #cfd4da 25%, transparent 25%, transparent 75%, #cfd4da 75%), linear-gradient(45deg, #cfd4da 25%, transparent 25%, transparent 75%, #cfd4da 75%); background-size: 8px 8px; background-position: 0 0, 4px 4px; }
+.zpp-cp-chk { display: block; position: relative; width: 100%; height: 100%; border-radius: 2px; overflow: hidden; }
+.zpp-cp-fill { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+.zpp-cp .zpp-cp-hex { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; width: auto; height: 32px; margin: 0; padding: 0 8px; box-sizing: border-box; font-family: Consolas, Menlo, Monaco, monospace; font-size: 11px; text-transform: lowercase; }
+.zappoppop-shape-color.is-clear .zpp-cp { opacity: .45; }
+
+.zpp-cp-pop { display: none; position: fixed; top: 0; left: 0; z-index: 1000001; width: 236px; padding: 12px; box-sizing: border-box; background: var(--zpp-c-bg-card, #fff); color: var(--zpp-c-text, #1d2327); border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1); border-radius: var(--zpp-r-card, 6px); box-shadow: 0 10px 28px rgba(0, 0, 0, .22); }
+.zpp-cp-pop.is-open { display: block; }
+.zpp-cp-sv { position: relative; height: 140px; margin: 0 0 12px; border-radius: 4px; cursor: crosshair; background-image: -webkit-linear-gradient(bottom, #000, rgba(0, 0, 0, 0)), -webkit-linear-gradient(left, #fff, rgba(255, 255, 255, 0)); background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0)), linear-gradient(to right, #fff, rgba(255, 255, 255, 0)); -ms-touch-action: none; touch-action: none; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+.zpp-cp-bar { position: relative; height: 12px; margin: 0 0 12px; border-radius: 6px; cursor: pointer; -ms-touch-action: none; touch-action: none; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+.zpp-cp-hue { background-image: -webkit-linear-gradient(left, #f00, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00); background-image: linear-gradient(to right, #f00, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00); }
+.zpp-cp-alpha-fill { position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: 6px; }
+.zpp-cp-thumb { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; box-sizing: border-box; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 1px 3px rgba(0, 0, 0, .35); pointer-events: none; }
+.zpp-cp-bar .zpp-cp-thumb { top: 50%; }
+.zpp-cp-sv:focus-visible, .zpp-cp-bar:focus-visible { outline: 2px solid var(--zpp-c-primary, #2563eb); outline-offset: 2px; }
+.zpp-cp-foot { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; gap: 8px; }
+.zpp-cp-pct { display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 6px; margin: 0; font-size: var(--zpp-fs-small, 12px); font-weight: 600; color: var(--zpp-c-muted, #64748b); }
+.zpp-cp-pop .zpp-cp-pct-in { width: 56px; height: 30px; margin: 0; padding: 0 6px; box-sizing: border-box; text-align: center; }
+.zpp-cp-pop .zpp-cp-clear { height: 30px; padding: 0 10px; margin: 0; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1); border-radius: var(--zpp-r-button, 4px); background: var(--zpp-c-bg-card, #fff); color: var(--zpp-c-text, #1d2327); font-size: var(--zpp-fs-small, 12px); font-weight: 600; line-height: 1; cursor: pointer; }
+.zpp-cp-pop .zpp-cp-clear:hover { border-color: var(--zpp-c-primary, #2563eb); color: var(--zpp-c-primary, #2563eb); }
+.zpp-cp.is-compact .zpp-cp-hex { display: none; }
+.zpp-cp.is-compact .zpp-cp-btn { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; width: 100%; }
+.zpp-cp-pop .zpp-cp-pop-hex { display: block; width: 100%; height: 30px; margin: 0 0 12px; padding: 0 8px; box-sizing: border-box; font-family: Consolas, Menlo, Monaco, monospace; font-size: 12px; }
+/* ZPP_CP_FOOT_FIX: opacity caption above the field, Transparent button never overflows */
+.zpp-cp-pop .zpp-cp-foot { -webkit-box-align: end; -ms-flex-align: end; align-items: flex-end; -ms-flex-wrap: nowrap; flex-wrap: nowrap; }
+.zpp-cp-pop .zpp-cp-pct { display: grid; grid-template-columns: auto auto; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 4px 6px; -webkit-box-flex: 0; -ms-flex: 0 0 auto; flex: 0 0 auto; }
+.zpp-cp-pop .zpp-cp-pct > span:first-child { grid-column: 1 / -1; line-height: 1.2; }
+.zpp-cp-pop .zpp-cp-clear { -webkit-box-flex: 0; -ms-flex: 0 0 auto; flex: 0 0 auto; white-space: nowrap; margin-left: auto; }

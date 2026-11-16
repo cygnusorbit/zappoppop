@@ -25,3 +25,25 @@
     .zappoppop-library-wrap .zpp-drop-row { -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; }
     .zappoppop-library-wrap .zpp-drop-state { text-align: left; }
 }
+
+/* Two-column import card: left = drag & drop box, right = title, description & button. */
+.zappoppop-library-wrap .zpp-imp-cols { display: -ms-grid; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; -webkit-box-align: stretch; -ms-flex-align: stretch; align-items: stretch; }
+.zappoppop-library-wrap .zpp-imp-col { min-width: 0; box-sizing: border-box; }
+.zappoppop-library-wrap .zpp-imp-col-left { display: -webkit-box; display: -ms-flexbox; display: flex; }
+.zappoppop-library-wrap .zpp-imp-col-left .zpp-imp-drop { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; text-align: center; min-height: 160px; }
+.zappoppop-library-wrap .zpp-imp-col-left .zpp-imp-drop .dashicons { font-size: 36px; width: 36px; height: 36px; }
+.zappoppop-library-wrap .zpp-imp-col-right { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+.zappoppop-library-wrap .zpp-imp-col-right .zpp-imp-help { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; }
+.zappoppop-library-wrap .zpp-imp-actions { margin: 0; }
+@media (max-width: 782px) {
+    .zappoppop-library-wrap .zpp-imp-cols { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .zappoppop-library-wrap .zpp-imp-col-left .zpp-imp-drop { min-height: 120px; }
+}
+
+/* zpp-imp-pos: position only (design unchanged). Left = drop box full height, right = title, description, button at the bottom. */
+.zappoppop-library-wrap .zpp-imp-cols { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+.zappoppop-library-wrap .zpp-imp-col-right { -webkit-box-pack: start; -ms-flex-pack: start; justify-content: flex-start; }
+.zappoppop-library-wrap .zpp-imp-col-right .zpp-imp-actions { margin-top: auto; padding-top: 12px; }
+@media (max-width: 782px) {
+    .zappoppop-library-wrap .zpp-imp-cols { grid-template-columns: minmax(0, 1fr); }
+}

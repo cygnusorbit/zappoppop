@@ -1,0 +1,5 @@
+{
+    "_help": "Library card corner badges. text = label (max 12 chars). bg / color = hex like #ef5f33; leave empty to follow the admin theme (PRO = Primary colour, CORE = Secondary colour). Set \"hide\": true to remove a badge. A single template can override these with {\"template\": {\"badge\": {\"text\": \"NEW\", \"bg\": \"#16a34a\"}}} in its template.json.",
+    "pro":  { "text": "PRO",  "bg": "", "color": "", "hide": false },
+    "core": { "text": "CORE", "bg": "", "color": "", "hide": false }
+}

@@ -233,3 +233,7 @@ body.zappoppop-admin-themed #wpbody-content .zappoppop-theme-wrap .zpp-theme-fie
 #wpbody-content .zappoppop-theme-wrap .zpp-theme-search { margin: 0 0 16px; }
 #wpbody-content .zappoppop-theme-wrap .zpp-theme-search input[type="search"] { display: block; width: 100%; max-width: 100%; height: 34px; margin: 0; padding: 0 10px; box-sizing: border-box; }
 #wpbody-content .zappoppop-theme-wrap .zpp-theme-tools-foot { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+
+/* Alpha colour picker inside Theme page field rows */
+#wpbody-content .zappoppop-theme-wrap .zpp-theme-input-row .zpp-cp { flex: 0 0 auto; width: auto; }
+#wpbody-content .zappoppop-theme-wrap .zpp-theme-input-row .zpp-cp-btn { width: 40px; height: var(--zpp-h-input, 32px); min-height: var(--zpp-h-input, 32px); border-radius: var(--zpp-r-input, 3px); }

@@ -752,3 +752,135 @@
         background: var(--zpp-builder-accent-color) !important;
         background-color: var(--zpp-builder-accent-color) !important;
     }
+
+    /* Space (rows 17-18): optional neon glow + edge rings. Scoped to body.zpp-fx-on, so themes with both at 0% are untouched. */
+    html body.zpp-fx-on .zappoppop-acc-item > .zappoppop-acc-header,
+    html body.zpp-fx-on #zappoppop-floating-layers-panel,
+    html body.zpp-fx-on .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save,
+    html body.zpp-fx-on .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save:hover:not(:disabled),
+    html body.zpp-fx-on .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template,
+    html body.zpp-fx-on .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:hover:not(:disabled) {
+        box-shadow: var(--zpp-builder-glow-shadow) !important;
+    }
+    html body.zpp-fx-on #zappoppop-settings-drawer,
+    html body.zpp-fx-on #zappoppop-inspector-drawer.zappoppop-inspector-drawer {
+        box-shadow: var(--zpp-builder-glow-shadow) !important;
+    }
+    /* Missing borders (inset rings, no layout shift): inactive canvas tabs + the elements ribbon frame, via Edge Border (18) */
+    html body.zpp-fx-on #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper:not(.active),
+    html body.zpp-fx-on #zappoppop-ribbon-wrap {
+        box-shadow: var(--zpp-builder-edge-ring) !important;
+    }
+    /* Bug fix: a broader subtoolbar-button rule outranked the ribbon rule, so row 16 "Border" was ignored (ribbon always used the field border) */
+    html body #zappoppop-ribbon .zappoppop-ribbon-tool.zappoppop-ribbon-btn {
+        border-color: var(--zpp-builder-element-border) !important;
+    }
+    html body #zappoppop-ribbon .zappoppop-ribbon-tool.zappoppop-ribbon-btn:hover,
+    html body #zappoppop-ribbon .zappoppop-ribbon-tool.zappoppop-ribbon-btn:focus {
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+    /* Canvas corner brackets (reference HUD frame), drawn outside the popup so it never clips popup content */
+    html body.zpp-fx-on #zappoppop-canvas-box::before {
+        content: "" !important;
+        position: absolute !important;
+        top: -7px !important; right: -7px !important; bottom: -7px !important; left: -7px !important;
+        pointer-events: none !important;
+        z-index: 2 !important;
+        background:
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 0 0 / 16px 2px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 0 0 / 2px 16px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 100% 0 / 16px 2px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 100% 0 / 2px 16px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 0 100% / 16px 2px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 0 100% / 2px 16px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 100% 100% / 16px 2px no-repeat,
+            linear-gradient(var(--zpp-builder-guide-color), var(--zpp-builder-guide-color)) 100% 100% / 2px 16px no-repeat !important;
+        filter: drop-shadow(0 0 4px var(--zpp-builder-glow)) !important;
+    }
+    /* Accordion = outlined TITLE BAR only; the card and body carry no border (glow would clip, so overflow stays visible) */
+    html body.zpp-fx-on .zappoppop-acc-item {
+        border-color: transparent !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+    }
+    html body.zpp-fx-on .zappoppop-acc-item > .zappoppop-acc-header,
+    html body.zpp-fx-on .zappoppop-acc-item > .zappoppop-acc-header:hover,
+    html body.zpp-fx-on .zappoppop-acc-item > .zappoppop-acc-header.active {
+        border: 1px solid var(--zpp-builder-accordion-border) !important;
+        border-radius: 6px !important;
+        box-shadow: var(--zpp-builder-glow-shadow) !important;
+    }
+    html body.zpp-fx-on .zappoppop-acc-item > .zappoppop-acc-body {
+        border: 0 !important;
+    }
+
+    /* Space phase 3: Layer Settings borders + colour mapping (inspector markup is inline-styled, so rules are !important) */
+    html body.zpp-fx-on #zappoppop-inspector-drawer .element-panel.zappoppop-panel-specific {
+        border-color: transparent !important;
+    }
+    /* each numbered panel title ("1. Shape / Vector Geometry", "9. Button Label & Click Action"...) = outlined title bar */
+    html body.zpp-fx-on #zappoppop-inspector-drawer .element-panel.zappoppop-panel-specific > div:first-child {
+        padding: 7px 10px !important;
+        margin-bottom: 10px !important;
+        border: 1px solid var(--zpp-builder-accordion-border) !important;
+        border-radius: 6px !important;
+        background: var(--zpp-builder-accordion-bg) !important;
+        color: var(--zpp-builder-accordion-text) !important;
+        box-shadow: var(--zpp-builder-glow-shadow) !important;
+    }
+    html body.zpp-fx-on #zappoppop-inspector-drawer .zappoppop-shape-head > div,
+    html body.zpp-fx-on #zappoppop-inspector-drawer .zappoppop-tab-pane > div[style*="#38bdf8"] {
+        color: var(--zpp-builder-accordion-text) !important;
+    }
+    /* hard-coded #475569 labels were unreadable on dark themes */
+    html body.zpp-fx-on #zappoppop-inspector-drawer .zappoppop-shape-label {
+        color: var(--zpp-builder-muted-text) !important;
+    }
+    /* drawer frames + header dividers (drawers had no border at all) */
+    html body.zpp-fx-on #zappoppop-inspector-drawer.zappoppop-inspector-drawer {
+        border-left: 1px solid var(--zpp-builder-content-border) !important;
+    }
+    html body.zpp-fx-on #zappoppop-settings-drawer {
+        border-right: 1px solid var(--zpp-builder-content-border) !important;
+    }
+    html body.zpp-fx-on #zappoppop-inspector-titlebar,
+    html body.zpp-fx-on #zappoppop-inspector-tabs-bar,
+    html body.zpp-fx-on .zappoppop-settings-drawer-header {
+        border-bottom: 1px solid var(--zpp-builder-content-border) !important;
+    }
+    /* Layers Panel (row 19): own frame colour instead of the orange accordion/field border */
+    html body.zpp-fx-on #zappoppop-floating-layers-panel {
+        border: 1px solid var(--zpp-builder-layers-border) !important;
+    }
+    html body.zpp-fx-on #zappoppop-layers-header {
+        border-color: var(--zpp-builder-layers-border) !important;
+    }
+    html body.zpp-fx-on #zappoppop-layers-list .zappoppop-layer-item:not(.selected):not(.active) {
+        border-color: var(--zpp-builder-layers-border) !important;
+    }
+
+    /* Space phase 4: stage background image (row 20). Image sits on the whole builder body; stage layers go transparent so it shows through the glass panels. */
+    html body.zpp-bg-img #wpbody {
+        background-image: var(--zpp-builder-stage-image) !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+    }
+    /* Space phase 5: .zappoppop-builder-wrap is position:fixed, so #wpbody collapses to a thin strip on tall viewports. Paint the image on the fixed wrapper itself so it always covers the whole builder. */
+    html body.zpp-bg-img #wpbody .zappoppop-builder-wrap {
+        background-image: var(--zpp-builder-stage-image) !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+    }
+    html body.zpp-bg-img #wpbody .zappoppop-main-frame,
+    html body.zpp-bg-img #wpbody [data-zpp-role="stage"],
+    html body.zpp-bg-img #wpbody .zappoppop-stage,
+    html body.zpp-bg-img #wpbody #zappoppop-stage,
+    html body.zpp-bg-img #wpbody .zappoppop-builder-stage,
+    html body.zpp-bg-img #wpbody .zappoppop-canvas-viewport,
+    html body.zpp-bg-img #wpbody .zappoppop-canvas-area,
+    html body.zpp-bg-img #wpbody .zappoppop-builder-workspace {
+        --zpp-builder-stage-bg: transparent;
+        background-color: transparent !important;
+    }

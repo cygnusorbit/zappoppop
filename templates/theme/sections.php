@@ -59,7 +59,7 @@ if (!defined('ABSPATH')) {
                     <?php else : ?>
                         <div class="zpp-theme-input-row">
                             <?php if ($is_color) : ?>
-                                <input type="color" class="zpp-theme-picker" value="<?php echo esc_attr(preg_match('/^#[0-9a-f]{6}$/i', $val) ? $val : '#000000'); ?>" aria-label="<?php echo esc_attr($field['label']); ?>">
+                                <input type="color" class="zpp-theme-picker" data-zpp-alpha="compact" value="<?php echo esc_attr(preg_match('/^#(?:[0-9a-f]{6}|[0-9a-f]{8})$/i', $val) ? $val : '#000000'); ?>" aria-label="<?php echo esc_attr($field['label']); ?>">
                             <?php endif; ?>
                             <input type="text" id="<?php echo esc_attr($id); ?>" name="<?php echo esc_attr($name); ?>"
                                    value="<?php echo esc_attr($val); ?>"

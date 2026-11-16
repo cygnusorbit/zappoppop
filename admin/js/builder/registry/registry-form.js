@@ -967,7 +967,7 @@
         $('#prop-shadow-y').val(parseInt(el.shadowY, 10) || 0);
         $('#prop-shadow-blur').val(parseInt(el.shadowBlur, 10) || 0);
         $('#prop-shadow-spread').val(parseInt(el.shadowSpread, 10) || 0);
-        $('#prop-shadow-color').val(/^#[0-9a-fA-F]{6}$/.test(el.shadowColor || '') ? el.shadowColor : '#000000');
+        $('#prop-shadow-color').val(/^(?:#[0-9a-fA-F]{3,8}|rgba?\([^)]*\))$/.test(el.shadowColor || '') ? el.shadowColor : '#000000');
     }
     $(document).off('click.zppSbShadow', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]')
         .on('click.zppSbShadow', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', function() {

@@ -111,18 +111,18 @@ if (!defined('ABSPATH')) {
                             </select>
                             
                             <div id="set-canvas-solid-wrap">
-                                <input type="color" id="set-canvas-bg-color" value="#ffffff" class="widefat" style="height:34px;padding:2px;">
+                                <input type="color" data-zpp-alpha="1" id="set-canvas-bg-color" value="#ffffff" class="widefat" style="height:34px;padding:2px;">
                             </div>
 
                             <div id="set-canvas-gradient-wrap" style="display:none;">
                                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
                                     <div>
                                         <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Color 1', 'zappoppop'); ?></label>
-                                        <input type="color" id="set-canvas-grad-color1" value="#3b82f6" class="widefat" style="height:32px;padding:2px;">
+                                        <input type="color" data-zpp-alpha="1" id="set-canvas-grad-color1" value="#3b82f6" class="widefat" style="height:32px;padding:2px;">
                                     </div>
                                     <div>
                                         <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Color 2', 'zappoppop'); ?></label>
-                                        <input type="color" id="set-canvas-grad-color2" value="#1d4ed8" class="widefat" style="height:32px;padding:2px;">
+                                        <input type="color" data-zpp-alpha="1" id="set-canvas-grad-color2" value="#1d4ed8" class="widefat" style="height:32px;padding:2px;">
                                     </div>
                                 </div>
                                 <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Gradient Angle (0-360°)', 'zappoppop'); ?></label>

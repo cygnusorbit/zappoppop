@@ -64,7 +64,7 @@
                     '</div>' +
                     '<div>' +
                         '<label>Icon Color</label>' +
-                        '<input type="color" id="insp-icon-color" value="' + color + '" class="zappoppop-insp-input" style="height:32px;">' +
+                        '<input type="color" data-zpp-alpha="compact" id="insp-icon-color" value="' + color + '" class="zappoppop-insp-input" style="height:32px;">' +
                     '</div>' +
                 '</div>' +
             '</div>';

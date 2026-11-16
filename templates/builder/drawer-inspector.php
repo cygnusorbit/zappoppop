@@ -305,7 +305,7 @@ if (!defined('ABSPATH')) exit;
                         </div>
                         <div>
                             <label for="prop-divider-color" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('LINE COLOR', 'zappoppop'); ?></label>
-                            <input type="color" id="prop-divider-color" class="widefat zappoppop-input" value="#94a3b8" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;border-radius:4px;padding:2px;cursor:pointer;">
+                            <input type="color" data-zpp-alpha="compact" id="prop-divider-color" class="widefat zappoppop-input" value="#94a3b8" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;border-radius:4px;padding:2px;cursor:pointer;">
                         </div>
                     </div>
 

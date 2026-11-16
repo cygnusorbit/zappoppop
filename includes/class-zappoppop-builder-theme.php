@@ -27,6 +27,24 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             add_action( 'wp_ajax_zappoppop_save_builder_theme', array( __CLASS__, 'ajax_save_builder_theme' ) );
             add_action( 'wp_ajax_zappoppop_reset_builder_theme', array( __CLASS__, 'ajax_reset_builder_theme' ) );
             add_action( 'admin_init', array( __CLASS__, 'maybe_handle_post_save' ), 5 );
+            add_filter( 'admin_body_class', array( __CLASS__, 'filter_admin_body_class' ) );
+        }
+
+        /**
+         * Adds .zpp-fx-on when the active theme uses Panel Glow (17) or Edge Border Rings (18).
+         */
+        public static function filter_admin_body_class( $classes ) {
+            if ( ! in_array( self::get_current_page_slug(), array( 'zappoppop-theme', 'zappoppop-builder' ), true ) ) {
+                return $classes;
+            }
+            $s = self::get_settings();
+            if ( intval( $s['glow_opacity'] ) > 0 || intval( $s['edge_border_opacity'] ) > 0 ) {
+                $classes .= ' zpp-fx-on';
+            }
+            if ( ! empty( $s['stage_image_url'] ) ) {
+                $classes .= ' zpp-bg-img';
+            }
+            return $classes;
         }
 
         /**
@@ -104,14 +122,35 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 'element_border_color'     => '#334155',
                 'element_icon_color'       => '#94a3b8',
                 'element_hover_color'      => '#334155',
+
+                // 17. Panel Glow / 18. Edge Border Rings (0% opacity = off, existing themes unchanged)
+                'glow_color'               => '#22d3ee',
+                'glow_opacity'             => 0,
+                'edge_border_color'        => '#ff8a2a',
+                'edge_border_opacity'      => 0,
+
+                // 19. Layers Panel Frame (frame, header & row borders of the floating Layers Panel; active with 17/18)
+                'layers_border_color'      => '#2a78b8',
+
+                // 20. Stage Background Image (URL from the Media Library; opacity = how strongly it shows)
+                'stage_image_url'          => '',
+                'stage_image_opacity'      => 100,
             );
+        }
+
+        /**
+         * Built-in Space starfield (bundled SVG, no external request).
+         */
+        public static function builtin_stage_image_url() {
+            $base = defined( 'ZAPPOPPOP_URL' ) ? ZAPPOPPOP_URL : plugin_dir_url( dirname( __FILE__ ) );
+            return $base . 'admin/img/space-stars.svg';
         }
 
         /**
          * Starter Presets (Night Mode, Day Mode, Midnight Glass).
          */
         public static function get_presets() {
-            return array(
+            $presets = array(
                 'slate_night' => array(
                     'label'                  => 'Night Mode',
                     'header_bg_color'        => '#0f172a',
@@ -251,6 +290,69 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'element_hover_color'      => '#1e293b',
                 ),
             );
+
+            // Space: deep-space cockpit HUD (navy glass panels, orange borders, cyan glow).
+            $presets['space'] = array(
+                'label'                  => 'Space',
+                'header_bg_color'        => '#060d1f',
+                'header_bg_opacity'      => 88,
+                'header_text_color'      => '#e6f1ff',
+                'header_border_color'    => '#1d4568',
+                'content_bg_color'       => '#07122a',
+                'content_bg_opacity'     => 72,
+                'content_text_color'     => '#d7ecff',
+                'content_border_color'   => '#1f6fa8',
+                'accordion_bg_color'     => '#0b1a33',
+                'accordion_bg_opacity'   => 85,
+                'accordion_text_color'   => '#ff9a3c',
+                'accordion_border_color' => '#ff8a2a',
+                'field_bg_color'         => '#050b18',
+                'field_bg_opacity'       => 80,
+                'field_text_color'       => '#e6f1ff',
+                'field_border_color'     => '#ff8a2a',
+                'text_color'             => '#cfe6ff',
+                'muted_text_color'       => '#7fa3c7',
+                'icon_color'             => '#9fdcff',
+                'hover_active_color'     => '#2f80ff',
+                'border_color'           => '#27415f',
+                'border_opacity'         => 85,
+                'stage_bg_color'         => '#030814',
+                'stage_bg_opacity'       => 100,
+                'checker_color'          => '#0b1730',
+                'checker_opacity'        => 0,
+                'save_btn_bg_color'      => '#06263d',
+                'save_btn_text_color'    => '#7df3ff',
+                'save_btn_border_color'  => '#22d3ee',
+                'canvas_guide_color'     => '#22d3ee',
+                'canvas_guide_opacity'   => 90,
+                'layer_sel_bg_color'     => '#2f80ff',
+                'layer_sel_bg_opacity'   => 22,
+                'layer_sel_text_color'   => '#ffffff',
+                'layer_sel_border_color' => '#22d3ee',
+                'update_btn_bg_color'    => '#ff8a2a',
+                'update_btn_text_color'  => '#190b00',
+                'update_btn_border_color'=> '#ffb15c',
+                'element_bg_color'       => '#0a1426',
+                'element_text_color'     => '#e6f1ff',
+                'element_border_color'   => '#2a5f8f',
+                'element_icon_color'     => '#9fdcff',
+                'element_hover_color'    => '#13294d',
+                'glow_color'             => '#22d3ee',
+                'glow_opacity'           => 45,
+                'edge_border_color'      => '#ff8a2a',
+                'edge_border_opacity'    => 70,
+                'layers_border_color'    => '#2a78b8',
+            );
+            $presets['space']['stage_image_url']     = self::builtin_stage_image_url();
+            $presets['space']['stage_image_opacity'] = 100;
+
+            // Back-fill any key a preset does not define, so switching presets never leaks values.
+            $defaults = self::get_defaults();
+            foreach ( $presets as $p_key => $p_data ) {
+                $presets[ $p_key ] = array_merge( $defaults, $p_data );
+            }
+
+            return $presets;
         }
 
         public static function get_settings() {
@@ -278,6 +380,12 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             foreach ( $defaults as $key => $default_val ) {
                 if ( ! isset( $raw[ $key ] ) ) {
                     $clean[ $key ] = $default_val;
+                    continue;
+                }
+
+                if ( 'stage_image_url' === $key ) {
+                    $url = is_scalar( $raw[ $key ] ) ? esc_url_raw( trim( (string) wp_unslash( $raw[ $key ] ) ), array( 'http', 'https' ) ) : '';
+                    $clean[ $key ] = ( strlen( $url ) <= 2000 ) ? $url : '';
                     continue;
                 }
 
@@ -336,6 +444,15 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             $accent_soft    = self::hex_to_rgba( $s['hover_active_color'], 18 );
             $accent_ring    = self::hex_to_rgba( $s['hover_active_color'], 32 );
             $layer_sel_rgba = self::hex_to_rgba( $s['layer_sel_bg_color'], $s['layer_sel_bg_opacity'] );
+            $glow_rgba      = self::hex_to_rgba( $s['glow_color'], $s['glow_opacity'] );
+            $edge_rgba      = self::hex_to_rgba( $s['edge_border_color'], $s['edge_border_opacity'] );
+
+            $stage_image = 'none';
+            if ( ! empty( $s['stage_image_url'] ) ) {
+                $safe_url    = str_replace( array( '"', '\\', '(', ')', ' ', "\n", "\r" ), array( '%22', '%5C', '%28', '%29', '%20', '', '' ), (string) $s['stage_image_url'] );
+                $dim_rgba    = self::hex_to_rgba( $s['stage_bg_color'], 100 - intval( $s['stage_image_opacity'] ) );
+                $stage_image = 'linear-gradient(' . $dim_rgba . ', ' . $dim_rgba . '), url("' . $safe_url . '")';
+            }
 
             $icon_hex_clean = rawurlencode( $s['icon_color'] );
             $chevron_svg    = "url(\"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='{$icon_hex_clean}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E\")";
@@ -396,6 +513,12 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 '--zpp-builder-element-border'     => $s['element_border_color'],
                 '--zpp-builder-element-icon'       => $s['element_icon_color'],
                 '--zpp-builder-element-hover'      => $s['element_hover_color'],
+                '--zpp-builder-glow'               => $glow_rgba,
+                '--zpp-builder-glow-shadow'        => '0 0 10px 1px ' . $glow_rgba,
+                '--zpp-builder-edge-border'        => $edge_rgba,
+                '--zpp-builder-edge-ring'          => 'inset 0 0 0 1px ' . $edge_rgba,
+                '--zpp-builder-layers-border'      => $s['layers_border_color'],
+                '--zpp-builder-stage-image'        => $stage_image,
             );
 
             $out = '';
@@ -449,6 +572,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'settings' => self::get_settings(),
                     'defaults' => self::get_defaults(),
                     'presets'  => self::get_presets(),
+                    'builtinBg' => self::builtin_stage_image_url(),
                 )
             );
         }
@@ -699,7 +823,75 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'extra_color_keys' => array( 'element_icon_color' => 'Ico', 'element_hover_color' => 'Hov' ),
                     'opacity_key'      => null,
                 ),
+                array(
+                    'num'         => '17',
+                    'title'       => 'Panel Glow',
+                    'desc'        => 'Soft neon glow around accordions, Layers Panel, side drawers, Save buttons & ribbon buttons. Opacity 0% = off.',
+                    'color_key'   => 'glow_color',
+                    'opacity_key' => 'glow_opacity',
+                ),
+                array(
+                    'num'         => '18',
+                    'title'       => 'Edge Border Rings',
+                    'desc'        => 'Border for inactive canvas tabs and the frame around the elements ribbon bar (inset, no layout shift). Opacity 0% = off.',
+                    'color_key'   => 'edge_border_color',
+                    'opacity_key' => 'edge_border_opacity',
+                ),
+                array(
+                    'num'         => '19',
+                    'title'       => 'Layers Panel Frame',
+                    'desc'        => 'Border of the floating Layers Panel, its header and its layer rows, so it can differ from the orange field/accordion borders. Applies while Panel Glow or Edge Border Rings is on.',
+                    'color_key'   => 'layers_border_color',
+                    'opacity_key' => null,
+                ),
+                array(
+                    'num'         => '20',
+                    'title'       => 'Stage Background Image',
+                    'desc'        => 'Image behind the whole builder (the Space starfield or your own upload). Opacity = how strongly it shows; the rest is dimmed with the Stage color (row 10).',
+                    'type'        => 'image',
+                    'image_key'   => 'stage_image_url',
+                    'opacity_key' => 'stage_image_opacity',
+                ),
             );
+        }
+
+        /**
+         * Row 20: Media Library picker + URL field + opacity (not a colour row).
+         */
+        public static function render_image_row( $f, $settings ) {
+            $i_key = $f['image_key'];
+            $o_key = $f['opacity_key'];
+            $i_val = isset( $settings[ $i_key ] ) ? (string) $settings[ $i_key ] : '';
+            $o_val = isset( $settings[ $o_key ] ) ? intval( $settings[ $o_key ] ) : 100;
+            $thumb = $i_val ? "background-image:url('" . esc_url( $i_val ) . "')" : '';
+            ?>
+            <div class="zpp-bt-compact-row zpp-bt-image-row" data-setting-num="<?php echo esc_attr( $f['num'] ); ?>" title="<?php echo esc_attr( $f['desc'] ); ?>">
+                <div class="zpp-bt-row-top">
+                    <div class="zpp-bt-row-label">
+                        <span class="zpp-bt-row-num"><?php echo esc_html( $f['num'] ); ?></span>
+                        <label class="zpp-bt-row-title" for="zpp-bt-<?php echo esc_attr( $i_key ); ?>"><?php echo esc_html( $f['title'] ); ?></label>
+                        <small class="zpp-bt-row-desc"><?php echo esc_html( $f['desc'] ); ?></small>
+                    </div>
+                </div>
+                <div class="zpp-bt-row-controls">
+                    <div class="zpp-bt-image-pill">
+                        <span class="zpp-bt-image-thumb" style="<?php echo esc_attr( $thumb ); ?>"></span>
+                        <input type="text" id="zpp-bt-<?php echo esc_attr( $i_key ); ?>" class="zpp-bt-image-url" name="zpp_builder_theme[<?php echo esc_attr( $i_key ); ?>]" data-image-key="<?php echo esc_attr( $i_key ); ?>" value="<?php echo esc_attr( $i_val ); ?>" placeholder="<?php echo esc_attr__( 'https://… or choose from the Media Library', 'zappoppop' ); ?>" spellcheck="false" />
+                        <button type="button" class="button zpp-bt-image-choose"><?php echo esc_html__( 'Choose Image', 'zappoppop' ); ?></button>
+                        <button type="button" class="button zpp-bt-image-builtin"><?php echo esc_html__( 'Space Starfield', 'zappoppop' ); ?></button>
+                        <button type="button" class="button zpp-bt-image-remove"><?php echo esc_html__( 'Remove', 'zappoppop' ); ?></button>
+                    </div>
+                    <div class="zpp-bt-opacity-inline" title="<?php echo esc_attr__( 'Image visibility (0–100%)', 'zappoppop' ); ?>">
+                        <span class="zpp-bt-op-lbl"><?php echo esc_html__( 'Opacity', 'zappoppop' ); ?></span>
+                        <input type="range" class="zpp-bt-opacity-range" data-opacity-key="<?php echo esc_attr( $o_key ); ?>" data-paired-color="stage_bg_color" min="0" max="100" step="1" value="<?php echo esc_attr( $o_val ); ?>" />
+                        <div class="zpp-bt-opacity-num-box">
+                            <input type="number" name="zpp_builder_theme[<?php echo esc_attr( $o_key ); ?>]" class="zpp-bt-opacity-number" data-opacity-num-for="<?php echo esc_attr( $o_key ); ?>" data-paired-color="stage_bg_color" min="0" max="100" step="1" value="<?php echo esc_attr( $o_val ); ?>" />
+                            <span>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
         }
 
         public static function render_settings_panel() {
@@ -739,11 +931,15 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     <!-- LEFT: Compact 13-Row Settings Table (2-Line Compact Row: Title on Line 1, Controls on Line 2) -->
                     <div class="zpp-bt-settings-pane">
                         <div class="zpp-bt-pane-header">
-                            <span>Theme Setting (1–16)</span>
+                            <span>Theme Setting (1–20)</span>
                             <span>Bg / Text / Border / Opacity</span>
                         </div>
                         <div class="zpp-bt-compact-list">
                             <?php foreach ( $fields as $f ) :
+                                if ( ! empty( $f['type'] ) && 'image' === $f['type'] ) {
+                                    self::render_image_row( $f, $settings );
+                                    continue;
+                                }
                                 $c_key  = $f['color_key'];
                                 $c_val  = isset( $settings[ $c_key ] ) ? $settings[ $c_key ] : '#0f172a';
                                 $o_key  = $f['opacity_key'];

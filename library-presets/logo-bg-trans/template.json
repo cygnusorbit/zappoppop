@@ -3,12 +3,20 @@
         "title": "Logo-BG-Trans",
         "description": "Dessss",
         "category": "custom",
+        "tier": "core",
         "image": "images/Screenshot-2026-11-08-at-12.22.07.png",
         "download": false,
         "assets": [
             "images/ZapPopPop-Logo-100px.png",
             "images/Screenshot-2026-11-08-at-12.22.07.png"
         ]
+    },
+    "badge": { 
+    
+    "text": "core", 
+    "bg": "#245985", 
+    "color": "#ffffff" 
+    
     },
     "data": {
         "title": "Logo-BG-Trans",

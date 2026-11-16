@@ -1,5 +1,5 @@
 /**
- * ZapPopPop Library: pagination + 3x3 / 4x4 / 5x5 view (columns x rows).
+ * ZapPopPop Library: pagination + 3x3 / 4x4 view (columns x rows).
  * Works on top of the existing search / category filter: it only pages the cards the filter leaves visible.
  * ES5 + jQuery: Chrome, Safari, Firefox, Edge.
  */
@@ -8,12 +8,12 @@
 
     var KEY = 'zappoppop_lib_view';
     var HIDE = 'zpp-pg-off';
-    var cols = 3, page = 1, lastSig = '', timer = 0;
+    var cols = 4, page = 1, lastSig = '', timer = 0;
 
     function load() {
         try {
             var v = parseInt(window.localStorage.getItem(KEY), 10);
-            if (v === 3 || v === 4 || v === 5) { cols = v; }
+            if (v === 3 || v === 4) { cols = v; }
         } catch (e) {}
     }
 
@@ -63,7 +63,6 @@
         var $grid = $('.zappoppop-library-grid'), per = cols * cols, $v, total, pages, from, to, sig;
         if (!$grid.length) { return; }
         $grid.attr('data-cols', cols);
-        reset();
         $v = visible();
         total = $v.length;
         sig = $v.map(function () { return $(this).attr('data-id'); }).get().join(',');
@@ -74,7 +73,12 @@
         if (page < 1) { page = 1; }
         from = (page - 1) * per;
         to = from + per;
-        $v.each(function (i) { if (i < from || i >= to) { $(this).addClass(HIDE); } });
+        /* diff only: cards that stay visible are never touched, so nothing flickers on 3x3 / 4x4 / 5x5 flips */
+        $cards().each(function () {
+            var i = $v.index(this), off = i > -1 && (i < from || i >= to);
+            if (off !== this.classList.contains(HIDE)) { this.classList[off ? 'add' : 'remove'](HIDE); }
+        });
+        $grid.removeClass('is-pg-pending');
         $('.zpp-pg-view').each(function () {
             var on = parseInt($(this).attr('data-cols'), 10) === cols;
             $(this).toggleClass('is-active', on).attr('aria-pressed', on ? 'true' : 'false');
@@ -96,7 +100,7 @@
         load();
         $(document).on('click.zppPg', '.zpp-pg-view', function (e) {
             e.preventDefault();
-            cols = parseInt($(this).attr('data-cols'), 10) || 3;
+            cols = parseInt($(this).attr('data-cols'), 10) || 4;
             page = 1;
             save();
             refresh(false);

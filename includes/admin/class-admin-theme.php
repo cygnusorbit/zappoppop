@@ -373,6 +373,16 @@ class ZapPopPop_Admin_Theme {
         wp_enqueue_style('zappoppop-overview-css', ZAPPOPPOP_URL . 'admin/css/overview.css', [], $v);
         wp_enqueue_style('zappoppop-theme-css', ZAPPOPPOP_URL . 'admin/css/theme.css', ['zappoppop-dashboard-css', 'zappoppop-overview-css', 'zappoppop-theme-global-css'], $v);
         wp_enqueue_script('zappoppop-overview-js', ZAPPOPPOP_URL . 'admin/js/overview.js', ['jquery'], $v, true);
+        wp_enqueue_style('zappoppop-alpha-picker-css', ZAPPOPPOP_URL . 'admin/css/zappoppop-alpha-picker.css', ['zappoppop-theme-css'], $v);
+        wp_enqueue_script('zappoppop-alpha-picker-js', ZAPPOPPOP_URL . 'admin/js/zappoppop-alpha-picker.js', [], $v, true);
+        wp_localize_script('zappoppop-alpha-picker-js', 'zappoppop_alpha_vars', ['i18n' => [
+            'pick'    => __('Pick colour', 'zappoppop'),
+            'hex'     => __('Colour value', 'zappoppop'),
+            'sv'      => __('Saturation and brightness', 'zappoppop'),
+            'hue'     => __('Hue', 'zappoppop'),
+            'opacity' => __('Opacity', 'zappoppop'),
+            'clear'   => __('Transparent', 'zappoppop'),
+        ]]);
         wp_enqueue_script('zappoppop-theme-js', ZAPPOPPOP_URL . 'admin/js/theme.js', [], $v, true);
         wp_enqueue_media();
         wp_enqueue_script('zappoppop-theme-logo-js', ZAPPOPPOP_URL . 'admin/js/theme-logo.js', ['zappoppop-theme-js'], $v, true);

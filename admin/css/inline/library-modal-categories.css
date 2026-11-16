@@ -1,5 +1,5 @@
 #zappoppop-lib-cats-modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:99999;align-items:center;justify-content:center}
-#zappoppop-lib-cats-modal .lc-dlg{background:#fff;color:#1e293b;border-radius:10px;width:480px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
+#zappoppop-lib-cats-modal .lc-dlg{background:#fff;color:#1e293b;border-radius:10px;width:640px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
 #zappoppop-lib-cats-modal .lc-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#0f172a;color:#fff}
 #zappoppop-lib-cats-modal .lc-hd h3{margin:0;font-size:15px;color:#fff}
 #zappoppop-lib-cats-modal .lc-x{background:transparent;border:0;color:#94a3b8;font-size:24px;cursor:pointer;line-height:1}
@@ -19,3 +19,7 @@
 #zappoppop-lib-cats-modal .lc-add input{flex:1}
 #zappoppop-lib-cats-modal .lc-msg{display:none;margin-top:8px;font-size:12px}
 #zappoppop-lib-cats-modal .lc-ft{display:flex;justify-content:space-between;gap:8px;padding:12px 18px;border-top:1px solid #e2e8f0}
+#zappoppop-lib-cats-modal .lc-row input.lc-label{flex:1 1 auto}
+#zappoppop-lib-cats-modal .lc-row input.lc-slug{flex:0 0 170px;width:170px;font-family:Menlo,Consolas,monospace;font-size:12px;color:#475569}
+#zappoppop-lib-cats-modal .lc-row input.lc-slug[readonly]{background:#f1f5f9;color:#94a3b8}
+@media (max-width:600px){#zappoppop-lib-cats-modal .lc-row{flex-wrap:wrap}#zappoppop-lib-cats-modal .lc-row input.lc-slug{flex:1 1 100%;width:auto}}

@@ -20,6 +20,11 @@
     function $m() { return $('#zappoppop-lib-cats-modal'); }
     function $list() { return $('#zappoppop-lc-list'); }
 
+    /* ZPP_CAT_SLUG */
+    function cleanSlug(v) {
+        return String(v || '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-_]+|[-_]+$/g, '');
+    }
+
     function msg(text, ok) {
         $('#zappoppop-lc-msg').css('color', ok ? '#008a20' : '#b32d2e').text(text).show();
     }
@@ -29,6 +34,10 @@
         var $r = $('<li class="lc-row"></li>').attr('data-slug', c.slug);
         $r.append('<span class="lc-grip" title="Drag to reorder" aria-hidden="true">&#8801;</span>');
         $r.append($('<input type="text" maxlength="40" class="lc-label">').val(c.label));
+        $r.append($('<input type="text" maxlength="40" class="lc-slug" spellcheck="false" autocomplete="off" aria-label="Category slug">')
+            .attr('placeholder', 'slug (auto)')
+            .attr('title', locked ? 'This slug is fixed' : 'Category slug (a-z, 0-9, - and _). Used in template.json "category".')
+            .val(c.slug).prop('readonly', locked));
         $r.append('<button type="button" class="lc-btn lc-up" title="Move up" aria-label="Move up">&#9650;</button>');
         $r.append('<button type="button" class="lc-btn lc-down" title="Move down" aria-label="Move down">&#9660;</button>');
         if (locked) {
@@ -52,7 +61,10 @@
         var out = [];
         $list().children('.lc-row').each(function () {
             var label = $.trim($(this).find('.lc-label').val());
-            if (label) { out.push({ slug: $(this).attr('data-slug') || '', label: label }); }
+            if (!label) { return; }
+            var orig = $(this).attr('data-slug') || '';
+            var slug = orig === 'custom' ? 'custom' : cleanSlug($(this).find('.lc-slug').val());
+            out.push({ slug: slug, orig: orig, label: label });
         });
         return out;
     }
@@ -86,7 +98,13 @@
     }
 
     function save() {
-        var cats = collect(), v = vars(), $b = $('#zappoppop-lc-save');
+        var cats = collect(), v = vars(), $b = $('#zappoppop-lc-save'), seenSlug = {}, k;
+        for (k = 0; k < cats.length; k++) {
+            if (!cats[k].slug) { continue; }
+            if (cats[k].slug === 'all') { msg('The slug "all" is reserved.', false); return; }
+            if (seenSlug[cats[k].slug]) { msg('Duplicate slug: ' + cats[k].slug, false); return; }
+            seenSlug[cats[k].slug] = 1;
+        }
         $b.prop('disabled', true);
         $.ajax({
             url: v.ajax_url, type: 'POST', dataType: 'json',
@@ -111,6 +129,9 @@
             .on('click.zppLc', '#zappoppop-lib-cats-modal', function (e) { if (e.target === this) { close(); } })
             .on('click.zppLc', '#zappoppop-lc-add', function (e) { e.preventDefault(); addNew(); })
             .on('keydown.zppLc', '#zappoppop-lc-new', function (e) { if (e.keyCode === 13) { e.preventDefault(); addNew(); } })
+            .on('blur.zppLc change.zppLc', '#zappoppop-lib-cats-modal .lc-slug', function () {
+                if (!this.readOnly) { this.value = cleanSlug(this.value); }
+            })
             .on('click.zppLc', '#zappoppop-lc-save', function (e) { e.preventDefault(); save(); })
             .on('click.zppLc', '#zappoppop-lc-reset', function (e) {
                 e.preventDefault();

@@ -15,15 +15,15 @@ if (!defined('ABSPATH')) exit;
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
             <div>
                 <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Bg', 'zappoppop'); ?></label>
-                <input type="color" id="prop-elem-hover-bg" class="zappoppop-gp-bind" data-prop="hoverBgColor" data-elem-prop="hoverBgColor" value="#0284c7" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
+                <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-bg" class="zappoppop-gp-bind" data-prop="hoverBgColor" data-elem-prop="hoverBgColor" value="#0284c7" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
             </div>
             <div>
                 <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Text', 'zappoppop'); ?></label>
-                <input type="color" id="prop-elem-hover-color" class="zappoppop-gp-bind" data-prop="hoverTextColor" data-elem-prop="hoverTextColor" value="#ffffff" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
+                <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-color" class="zappoppop-gp-bind" data-prop="hoverTextColor" data-elem-prop="hoverTextColor" value="#ffffff" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
             </div>
             <div>
                 <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Border', 'zappoppop'); ?></label>
-                <input type="color" id="prop-elem-hover-border" class="zappoppop-gp-bind" data-prop="hoverBorderColor" data-elem-prop="hoverBorderColor" value="#0284c7" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
+                <input type="color" data-zpp-alpha="compact" id="prop-elem-hover-border" class="zappoppop-gp-bind" data-prop="hoverBorderColor" data-elem-prop="hoverBorderColor" value="#0284c7" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@ if (!defined('ABSPATH')) exit;
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <div>
                 <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Hover Glyph Color', 'zappoppop'); ?></label>
-                <input type="color" id="prop-glyph-hover-color" class="zappoppop-gp-bind" data-prop="hoverColor" data-elem-prop="hoverColor" value="#ef4444" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
+                <input type="color" data-zpp-alpha="compact" id="prop-glyph-hover-color" class="zappoppop-gp-bind" data-prop="hoverColor" data-elem-prop="hoverColor" value="#ef4444" style="width:100%; height:30px; border:1px solid #475569; border-radius:4px; background:#0f172a; cursor:pointer;">
             </div>
             <div>
                 <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Rotation (0°–360°)', 'zappoppop'); ?></label>

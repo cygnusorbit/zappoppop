@@ -5938,7 +5938,7 @@
     function run(){
         var el=activeEl();
         if(!el||['close','close_icon'].indexOf(String(el.type||'').toLowerCase())===-1) return;
-        var v=/^#[0-9a-f]{6}$/i.test(el.color||'')?el.color:'#64748b';
+        var v=/^#(?:[0-9a-f]{6}|[0-9a-f]{8})$/i.test(el.color||'')?el.color:'#64748b';
         $('#prop-close-glyph-color').val(v);
     }
     function sched(){[0,60,200,350,700,1200].forEach(function(ms){setTimeout(run,ms);});}
