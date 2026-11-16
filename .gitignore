@@ -3,8 +3,12 @@ Thumbs.db
 scripts/
 node_modules/
 /vendor/
+/scripts/
 .wp-env.json
 .wp-env/
+.dev
+.gitignore
+.distignore
 *.bak
 *.bak-layerfx
 *.bak-layerfx1
