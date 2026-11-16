@@ -38,15 +38,11 @@ class ZapPopPop_Ajax_Settings {
 
         $this->verify_security();
 
-        // Support both nested 'settings' array and flattened POST payload
-        $raw = [];
-        if (isset($_POST['settings']) && is_array($_POST['settings'])) {
-            /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by sanitize_settings() */ $raw = wp_unslash($_POST['settings']);
-        } elseif (isset($_POST['data'])) {
-            /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by sanitize_settings() */ parse_str(wp_unslash($_POST['data']), $parsed);
-            $raw = isset($parsed['settings']) && is_array($parsed['settings']) ? $parsed['settings'] : $parsed;
-        } else {
-            $raw = wp_unslash($_POST);
+        // Support both nested 'settings' array and flattened POST payload (plain text at read; sanitize_settings() then validates key by key)
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        $raw = ZapPopPop_Sanitizer::post_array('settings');
+        if (empty($raw)) {
+            $raw = ZapPopPop_Sanitizer::post_all();
         }
 
         $existing = get_option('zappoppop_settings', []);

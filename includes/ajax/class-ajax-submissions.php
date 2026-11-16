@@ -216,7 +216,7 @@ class ZapPopPop_Ajax_Submissions {
         }
 
         $ids   = isset($_POST['ids']) && is_array($_POST['ids']) ? array_map('intval', wp_unslash($_POST['ids'])) : [];
-        /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- reduced to [A-Za-z0-9_-] by preg_replace */ $label = isset($_POST['label_id']) ? preg_replace('/[^A-Za-z0-9_\-]/', '', (string) wp_unslash($_POST['label_id'])) : '';
+        $label = isset($_POST['label_id']) ? preg_replace('/[^A-Za-z0-9_\-]/', '', sanitize_text_field(wp_unslash($_POST['label_id']))) : '';
         $mode  = isset($_POST['mode']) ? sanitize_key(wp_unslash($_POST['mode'])) : 'add';
         if (!in_array($mode, ['add', 'remove', 'clear'], true)) {
             $mode = 'add';

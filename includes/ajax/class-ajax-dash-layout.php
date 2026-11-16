@@ -86,7 +86,8 @@ class ZapPopPop_Ajax_Dash_Layout {
         if (!wp_verify_nonce($nonce, 'zappoppop_admin_nonce')) {
             wp_send_json_error(['message' => __('Security check failed. Please refresh the page.', 'zappoppop')], 403);
         }
-        /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each key is sanitize_key()d and checked against an allow-list */ $raw = isset($_POST['cols']) ? (array) wp_unslash($_POST['cols']) : [];
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        $raw = ZapPopPop_Sanitizer::post_array('cols');
         $clean = [];
         $seen  = [];
         for ($i = 0; $i < self::COLUMNS; $i++) {

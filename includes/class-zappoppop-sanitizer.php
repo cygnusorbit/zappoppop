@@ -56,12 +56,12 @@ class ZapPopPop_Sanitizer {
         $value = null;
         if ($source === 'REQUEST') {
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- callers verify the nonce; the text is validated and deep-sanitised below
-            $value = isset($_REQUEST[$key]) ? $_REQUEST[$key] : null;
+            $value = isset($_REQUEST[$key]) ? wp_unslash($_REQUEST[$key]) : null;
         } else {
             // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- callers verify the nonce; the text is validated and deep-sanitised below
-            $value = isset($_POST[$key]) ? $_POST[$key] : null;
+            $value = isset($_POST[$key]) ? wp_unslash($_POST[$key]) : null;
         }
-        return is_string($value) ? wp_unslash($value) : '';
+        return is_string($value) ? $value : '';
     }
 
     /**
@@ -95,7 +95,7 @@ class ZapPopPop_Sanitizer {
     /** One uploaded file with every entry sanitised, or null. The temp path is still checked by the caller with is_uploaded_file(). */
     public static function uploaded_file($key) {
         $key = (string) $key;
-        if (empty($_FILES[$key]) || !is_array($_FILES[$key])) {
+        if (empty($_FILES[$key]) || !is_array($_FILES[$key])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify the nonce
             return null;
         }
         $f = $_FILES[$key]; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every entry is sanitised below
@@ -109,6 +109,158 @@ class ZapPopPop_Sanitizer {
             'size'     => isset($f['size']) ? absint($f['size']) : 0,
             'type'     => (isset($f['type']) && is_string($f['type'])) ? sanitize_mime_type($f['type']) : '',
         );
+    }
+
+    /**
+     * Posted array field, unslashed and reduced to plain text at the point of read (tags stripped, control characters
+     * removed, keys cleaned). For settings-style payloads whose fields are re-sanitised one by one by their owner.
+     * Popup definitions (markup allowed) must keep using request_json() / popup_payload().
+     * $wrap_scalar: a single posted value becomes a one-item list (same as the old (array) cast).
+     */
+    public static function post_array($key, $source = 'POST', $wrap_scalar = false) {
+        $key = (string) $key;
+        if ($source === 'REQUEST') {
+            $value = isset($_REQUEST[$key]) ? map_deep(wp_unslash($_REQUEST[$key]), 'sanitize_textarea_field') : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- callers verify the nonce
+        } else {
+            $value = isset($_POST[$key]) ? map_deep(wp_unslash($_POST[$key]), 'sanitize_textarea_field') : null; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify the nonce
+        }
+        if (is_array($value)) {
+            return self::clean_keys_deep($value, 0);
+        }
+        return ($wrap_scalar && is_string($value) && $value !== '') ? array($value) : array();
+    }
+
+    /** The whole $_POST, unslashed and reduced to plain text (flattened-form payloads). Callers verify the nonce. */
+    public static function post_all() {
+        $value = map_deep(wp_unslash($_POST), 'sanitize_textarea_field'); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callers verify the nonce
+        return is_array($value) ? self::clean_keys_deep($value, 0) : array();
+    }
+
+    protected static function clean_keys_deep($node, $depth) {
+        if ($depth > self::MAX_DEPTH) {
+            return array();
+        }
+        $out = array();
+        foreach ($node as $k => $v) {
+            if (!is_int($k)) {
+                $k = self::clean_key($k);
+                if ($k === '') {
+                    continue;
+                }
+            }
+            $out[$k] = is_array($v) ? self::clean_keys_deep($v, $depth + 1) : $v;
+        }
+        return $out;
+    }
+
+    /**
+     * Allowlist for popup markup produced by ZapPopPop_Front_Renderer (block / shortcode output).
+     * Built from what the renderer really emits: layout tags, form controls, iframes, SVG shapes, canvas, media,
+     * data-* and the aria-* attributes it uses. Scripts and event handlers are never allowed.
+     * Extend with the 'zappoppop_block_kses_allowed_html' filter (add-ons that render their own element markup).
+     */
+    public static function render_allowed_html() {
+        static $allowed = null;
+        if ($allowed !== null) {
+            return $allowed;
+        }
+        $allowed = self::allowed_html();
+        $aria    = array_fill_keys(array('aria-hidden', 'aria-label', 'aria-live', 'aria-pressed', 'aria-expanded', 'aria-controls',
+            'aria-describedby', 'aria-labelledby', 'aria-modal', 'aria-checked', 'aria-selected', 'aria-disabled', 'aria-required',
+            'aria-invalid', 'aria-busy', 'aria-atomic', 'aria-current', 'aria-haspopup', 'aria-valuenow', 'aria-valuemin',
+            'aria-valuemax', 'aria-valuetext', 'aria-errormessage', 'aria-relevant', 'aria-roledescription'), true);
+        $global  = array_merge($aria, array('class' => true, 'id' => true, 'style' => true, 'title' => true, 'role' => true,
+            'tabindex' => true, 'lang' => true, 'dir' => true, 'hidden' => true, 'draggable' => true, 'spellcheck' => true, 'data-*' => true));
+        $svg_attrs = array_fill_keys(array('transform', 'fill', 'fill-opacity', 'fill-rule', 'clip-rule', 'clip-path', 'stroke', 'stroke-width',
+            'stroke-opacity', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray', 'stroke-dashoffset',
+            'vector-effect', 'opacity', 'mask', 'filter', 'focusable'), true);
+        $svg = array_merge($global, $svg_attrs);
+        $extra = array(
+            'form'           => array('action' => true, 'method' => true, 'name' => true, 'novalidate' => true, 'autocomplete' => true, 'enctype' => true, 'target' => true),
+            'label'          => array('for' => true),
+            'input'          => array('accept' => true, 'multiple' => true, 'minlength' => true, 'autocapitalize' => true, 'inputmode' => true, 'size' => true, 'list' => true, 'form' => true),
+            'textarea'       => array('minlength' => true, 'autocapitalize' => true, 'inputmode' => true, 'wrap' => true),
+            'select'         => array('size' => true, 'autocomplete' => true),
+            'iframe'         => array('sandbox' => true, 'srcdoc' => false, 'allow' => true, 'allowfullscreen' => true, 'loading' => true, 'referrerpolicy' => true, 'scrolling' => true),
+            'canvas'         => array('width' => true, 'height' => true),
+            'video'          => array('src' => true, 'poster' => true, 'controls' => true, 'autoplay' => true, 'loop' => true, 'muted' => true, 'playsinline' => true, 'preload' => true, 'width' => true, 'height' => true, 'crossorigin' => true),
+            'audio'          => array('src' => true, 'controls' => true, 'autoplay' => true, 'loop' => true, 'muted' => true, 'preload' => true),
+            'source'         => array('src' => true, 'type' => true, 'srcset' => true, 'media' => true, 'sizes' => true),
+            'svg'            => array_merge($svg, array('xmlns' => true, 'viewbox' => true, 'preserveaspectratio' => true, 'width' => true, 'height' => true, 'x' => true, 'y' => true, 'version' => true)),
+            'g'              => $svg,
+            'path'           => array_merge($svg, array('d' => true, 'pathlength' => true)),
+            'circle'         => array_merge($svg, array('cx' => true, 'cy' => true, 'r' => true)),
+            'ellipse'        => array_merge($svg, array('cx' => true, 'cy' => true, 'rx' => true, 'ry' => true)),
+            'rect'           => array_merge($svg, array('x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true)),
+            'line'           => array_merge($svg, array('x1' => true, 'y1' => true, 'x2' => true, 'y2' => true)),
+            'polyline'       => array_merge($svg, array('points' => true)),
+            'polygon'        => array_merge($svg, array('points' => true)),
+            'defs'           => $svg,
+            'lineargradient' => array_merge($svg, array('x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'gradientunits' => true, 'gradienttransform' => true, 'spreadmethod' => true)),
+            'radialgradient' => array_merge($svg, array('cx' => true, 'cy' => true, 'r' => true, 'fx' => true, 'fy' => true, 'gradientunits' => true, 'gradienttransform' => true, 'spreadmethod' => true)),
+            'stop'           => array_merge($svg, array('offset' => true, 'stop-color' => true, 'stop-opacity' => true)),
+            'clippath'       => array_merge($svg, array('clippathunits' => true)),
+            'text'           => array_merge($svg, array('x' => true, 'y' => true, 'dx' => true, 'dy' => true, 'text-anchor' => true, 'font-size' => true, 'font-family' => true, 'font-weight' => true)),
+            'tspan'          => array_merge($svg, array('x' => true, 'y' => true, 'dx' => true, 'dy' => true)),
+        );
+        foreach ($extra as $tag => $attrs) {
+            $attrs         = array_merge($global, $attrs);
+            $allowed[$tag] = isset($allowed[$tag]) ? array_merge($allowed[$tag], $attrs) : $attrs;
+        }
+        // Every allowed tag may carry the global attributes (layout wrappers add data-* / aria-* / role freely).
+        foreach ($allowed as $tag => $attrs) {
+            $allowed[$tag] = array_merge(is_array($attrs) ? $attrs : array(), $global);
+        }
+        $allowed = (array) apply_filters('zappoppop_block_kses_allowed_html', $allowed);
+        return $allowed;
+    }
+
+    /** Inline-style properties the renderer writes that wp_kses() would otherwise drop. */
+    public static function render_safe_css($props = array()) {
+        $more = array(
+            'position', 'top', 'right', 'bottom', 'left', 'inset', 'z-index', 'display', 'flex', 'flex-direction', 'flex-wrap', 'flex-grow',
+            'flex-shrink', 'flex-basis', 'align-items', 'align-content', 'align-self', 'justify-content', 'justify-items', 'justify-self',
+            'order', 'gap', 'row-gap', 'column-gap', 'grid', 'grid-template-columns', 'grid-template-rows', 'grid-column', 'grid-row',
+            'place-items', 'place-content', 'width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'aspect-ratio',
+            'box-sizing', 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'padding', 'padding-top', 'padding-right',
+            'padding-bottom', 'padding-left', 'overflow', 'overflow-x', 'overflow-y', 'opacity', 'visibility', 'transform', 'transform-origin',
+            'transform-style', 'perspective', 'transition', 'transition-property', 'transition-duration', 'transition-timing-function',
+            'transition-delay', 'animation', 'animation-name', 'animation-duration', 'animation-delay', 'animation-timing-function',
+            'animation-iteration-count', 'animation-direction', 'animation-fill-mode', 'animation-play-state', 'filter', 'backdrop-filter',
+            'mix-blend-mode', 'clip-path', 'object-fit', 'object-position', 'pointer-events', 'cursor', 'user-select', 'resize', 'outline',
+            'outline-color', 'outline-style', 'outline-width', 'outline-offset', 'box-shadow', 'text-shadow', 'border-radius',
+            'border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border',
+            'border-top', 'border-right', 'border-bottom', 'border-left', 'border-color', 'border-style', 'border-width', 'border-collapse',
+            'background', 'background-color', 'background-image', 'background-position', 'background-size', 'background-repeat',
+            'background-attachment', 'background-clip', 'background-origin', 'color', 'font', 'font-family', 'font-size', 'font-style',
+            'font-weight', 'font-variant', 'line-height', 'letter-spacing', 'word-spacing', 'word-break', 'overflow-wrap', 'white-space',
+            'text-align', 'text-decoration', 'text-transform', 'text-indent', 'text-overflow', 'vertical-align', 'list-style', 'content',
+            'fill', 'stroke', 'stroke-width', 'vector-effect', '-webkit-text-stroke', '-webkit-text-fill-color', '-webkit-background-clip',
+            '-webkit-box-shadow', '-webkit-transform', '-webkit-transition', '-webkit-appearance', 'appearance', '-webkit-backdrop-filter',
+            '-webkit-mask', 'mask', 'mask-image', 'mask-size', 'scroll-behavior', 'touch-action', 'will-change',
+        );
+        $more = (array) apply_filters('zappoppop_block_kses_safe_css', $more);
+        return array_values(array_unique(array_merge((array) $props, $more)));
+    }
+
+    /**
+     * Output-side kses for popup markup (block render callback). Escaping already happens where the renderer builds
+     * each value; this is the second layer. Return false from 'zappoppop_block_output_kses' to bypass it for a
+     * site where an exotic custom element is being stripped (support escape hatch).
+     */
+    public static function kses_render($html) {
+        $html = (string) $html;
+        if ($html === '') {
+            return '';
+        }
+        if (!apply_filters('zappoppop_block_output_kses', true)) {
+            return $html;
+        }
+        $css = array(__CLASS__, 'render_safe_css');
+        add_filter('safe_style_css', $css);
+        $out = wp_kses($html, self::render_allowed_html(), array_merge(wp_allowed_protocols(), array('data')));
+        remove_filter('safe_style_css', $css);
+        return $out;
     }
 
     /** Popup / template / backup payload (array or object): keys cleaned, every string value sanitised by its content and key. */

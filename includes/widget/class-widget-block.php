@@ -69,11 +69,10 @@ class ZapPopPop_Widget_Block {
         }
         /*
          * Every attribute is whitelisted above (sanitize_key uid, fixed mode list, clamped integer delay).
-         * The markup returned by the shortcode is escaped where it is generated (ZapPopPop_Front_Renderer:
-         * esc_attr / esc_html / esc_url / wp_kses on every value). It deliberately contains the popup's own
-         * <style> and <script> tags, so a second wp_kses() pass here would strip them and break the popup.
+         * ZapPopPop_Front_Renderer escapes each value as it builds the markup; the finished markup is then passed
+         * through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render) as a second, output-side layer.
          */
-        $zappoppop_html = do_shortcode('[zappoppop uid="' . esc_attr($uid) . '" mode="' . esc_attr($mode) . '" delay="' . absint($delay) . '"]');
-        return is_string($zappoppop_html) ? $zappoppop_html : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped at generation, see comment above
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        return ZapPopPop_Sanitizer::kses_render(do_shortcode('[zappoppop uid="' . esc_attr($uid) . '" mode="' . esc_attr($mode) . '" delay="' . absint($delay) . '"]'));
     }
 }

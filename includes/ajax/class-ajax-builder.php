@@ -407,7 +407,7 @@ class ZapPopPop_Ajax_Builder {
         }
 
         $this->verify_security();
-        $uids = isset($_POST['uids']) ? array_filter((array) wp_unslash($_POST['uids']), 'is_scalar') : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each uid is sanitize_key()d below
+        $uids = array_values(array_filter(array_map('sanitize_key', ZapPopPop_Sanitizer::post_array('uids', 'POST', true))));
         if (empty($uids)) {
             wp_send_json_error(['message' => __('No popups were selected for deletion.', 'zappoppop')]);
         }

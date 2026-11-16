@@ -410,7 +410,7 @@ class ZapPopPop_Admin_Theme {
                 $status = 'imported';
             }
         } else {
-            $raw = isset($_POST['zpp_theme']) && is_array($_POST['zpp_theme']) ? /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by the theme sanitiser */ wp_unslash($_POST['zpp_theme']) : [];
+            $raw = ZapPopPop_Sanitizer::post_array('zpp_theme');
             update_option(self::OPTION, self::sanitize_all($raw));
         }
 

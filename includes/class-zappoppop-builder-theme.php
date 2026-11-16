@@ -518,9 +518,10 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
         public static function ajax_save_builder_theme() {
             self::verify_request_security();
 
+            if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
             $raw = isset( $_POST['settings'] ) && is_array( $_POST['settings'] )
-                ? wp_unslash( $_POST['settings'] )
-                : wp_unslash( $_POST );
+                ? ZapPopPop_Sanitizer::post_array( 'settings' )
+                : ZapPopPop_Sanitizer::post_all();
 
             $sanitized = self::sanitize_settings( $raw );
             self::persist_settings( $sanitized );
@@ -557,7 +558,8 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 || ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'zappoppop_theme_nonce' ) );
 
             if ( $verified ) {
-                $raw = wp_unslash( $_POST['zpp_builder_theme'] );
+                if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+                $raw = ZapPopPop_Sanitizer::post_array( 'zpp_builder_theme' );
                 $sanitized = self::sanitize_settings( $raw );
                 self::persist_settings( $sanitized );
             }

@@ -29,10 +29,11 @@ class ZapPopPop_Ajax_Frontend {
         }
 
         // 3. Extract & Sanitize Form Fields
-        /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every field is sanitised by type below */ $raw_fields = isset($_POST['fields']) && is_array($_POST['fields']) ? wp_unslash($_POST['fields']) : [];
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        $raw_fields = isset($_POST['fields']) && is_array($_POST['fields']) ? ZapPopPop_Sanitizer::post_array('fields') : [];
         if (empty($raw_fields)) {
-            foreach ($_POST as $k =>$v) {
-                if (!in_array($k, ['action', 'nonce', 'popup_uid', 'uid', 'country', 'quiz_score', 'g-recaptcha-response', 'recaptcha_token'], true)) {$raw_fields[$k] = wp_unslash($v);
+            foreach (ZapPopPop_Sanitizer::post_all() as $k => $v) {
+                if (!in_array($k, ['action', 'nonce', 'popup_uid', 'uid', 'country', 'quiz_score', 'g-recaptcha-response', 'recaptcha_token'], true)) {$raw_fields[$k] = $v;
                 }
             }
         }

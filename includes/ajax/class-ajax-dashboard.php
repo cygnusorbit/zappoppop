@@ -186,7 +186,8 @@ class ZapPopPop_Ajax_Dashboard {
             wp_send_json_error(['message' => __('You do not have permission to export campaigns.', 'zappoppop')], 403);
         }
         global $wpdb;
-        /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each uid is sanitize_key()d below */ $raw  = isset($_POST['uids']) ? (array) wp_unslash($_POST['uids']) : [];
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        $raw  = ZapPopPop_Sanitizer::post_array('uids', 'POST', true);
         $uids = array_values(array_unique(array_filter(array_map('sanitize_key', $raw))));
         if (empty($uids)) {
             wp_send_json_error(['message' => __('No campaigns selected.', 'zappoppop')]);

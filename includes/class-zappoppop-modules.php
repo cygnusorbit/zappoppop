@@ -174,7 +174,7 @@ class ZapPopPop_Modules {
         /* Declarative modules own exactly one namespaced settings key; they can never claim a built-in key. */
         $fields      = self::fields($raw);
         /* "accordion": "accordion.html" = static Inspector markup. Such a module may keep owning a few legacy settings keys. */
-        $html        = (!$core && isset($raw['accordion']) && $raw['accordion'] === 'accordion.html');
+        $html        = (isset($raw['accordion']) && $raw['accordion'] === 'accordion.html'); /* ZAPPOPPOP_CORE_HTML: built-in modules may ship accordion.html too */
         $declarative = ($fields && $template === '' && !$html);
         $ext_key     = 'ext_' . str_replace('-', '_', $slug);
         $data_keys   = self::slug_list($raw, 'data_keys', false);

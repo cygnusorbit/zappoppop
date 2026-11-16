@@ -70,7 +70,8 @@ class ZapPopPop_Admin_Pages {
         $notice = '';
         if (isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] && isset($_POST['zappoppop_settings_nonce'])) {
             if (check_admin_referer('zappoppop_save_settings_action', 'zappoppop_settings_nonce')) {
-                /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by sanitize_settings() */ $raw = isset($_POST['settings']) && is_array($_POST['settings']) ? wp_unslash($_POST['settings']) : wp_unslash($_POST);
+                if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+                $raw = isset($_POST['settings']) && is_array($_POST['settings']) ? ZapPopPop_Sanitizer::post_array('settings') : ZapPopPop_Sanitizer::post_all();
                 $existing = get_option('zappoppop_settings', []);
                 if (!is_array($existing)) {
                     $existing = [];

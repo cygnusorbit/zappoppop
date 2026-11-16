@@ -109,7 +109,8 @@ class ZapPopPop_Admin_Network {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'zappoppop'), '', array('response' => 403));
         }
         check_admin_referer(self::NONCE, 'zpp_network_nonce');
-        $raw = isset($_POST['zpp_network']) && is_array($_POST['zpp_network']) ? wp_unslash($_POST['zpp_network']) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised field by field in sanitize()
+        if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+        $raw = ZapPopPop_Sanitizer::post_array('zpp_network');
         update_site_option(self::OPTION, self::sanitize($raw));
         wp_safe_redirect(add_query_arg(array('page' => self::PAGE, 'zpp_status' => 'saved'), network_admin_url('admin.php')));
         exit;

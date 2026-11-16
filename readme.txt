@@ -1,11 +1,11 @@
 === ZapPopPop ===
 Contributors: ZapPopPop
-Donate link: https://zappoppop.com/
-Tags: popup, modal, popup builder, optin, lead generation, forms builder
+Donate link: https://zappoppop.com
+Tags: popup, modal, popup builder, optin, lead generation, form builder
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.01
+Stable tag: 1.0.02
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,10 +31,6 @@ ZapPopPop bringing you multi-layering real-time responsive popups or forms visua
 = Does ZapPopPop work on multisite? =
 Yes. Network activate it and every site gets its own tables and settings; new sites are set up automatically and deleting a site removes its ZapPopPop tables. Super admins can set defaults for new sites under Network Admin > ZapPopPop.
 
-== External services ==
-
-ZapPopPop only contacts a third-party service when the site owner turns the matching feature on. No visitor data is sent otherwise.
-
 == Frequently Asked Questions ==
 
 = Does ZapPopPop track visitors? =
@@ -44,19 +40,22 @@ No. ZapPopPop runs locally on your WordPress installation and does not track per
 Go to ZapPopPop > Settings > Builder. "Show guide" turns the guided tour on or off for everyone, and "Restart tour" replays it for you the next time you open the builder. The "Guide Steps" tab lets you edit, reorder, hide or add steps. Each admin sees the tour once; the ? button in the builder toolbar relaunches it at any time.
 
 = How do I translate ZapPopPop? =
-
 The plugin is fully internationalized (text domain `zappoppop`, domain path `/languages`). Use `languages/zappoppop.pot` as the template, save your `.po`/`.mo` as `wp-content/languages/plugins/zappoppop-{locale}.po/.mo`, then run `wp i18n make-json wp-content/languages/plugins --no-purge` to create the JSON files used by the JavaScript strings.
 
-== External services ==
+= Where does ZapPopPop store additional files? =
+Only in `wp-content/uploads/` (resolved with `wp_upload_dir()`): imported template images under `uploads/zappoppop-templates/` and, if you install optional extension modules, `uploads/zappoppop-modules/`. The plugin never writes to its own folder, so updates never remove your data.
 
-ZapPopPop does not contact any third-party service on its own. All fonts (Inter, Roboto, Montserrat, Poppins, Open Sans, Lato) and the Font Awesome icons are bundled with the plugin, so no request is sent to a CDN and no visitor data leaves your site for them.
+= How do I install an extension module? =
+Go to ZapPopPop > Extend > Upload Module and choose a module zip. Only administrators can do this (network administrators on multisite), and it is disabled when `DISALLOW_FILE_MODS` is set. Modules are unpacked into `wp-content/uploads/zappoppop-modules/`, only static files are accepted (PHP is blocked), and the built-in modules are never modified.
+
+== External services ==
+ZapPopPop does not send any data to a third-party service. Nothing is loaded from a CDN: the fonts (Inter, Roboto, Montserrat, Poppins, Open Sans, Lato) and the Font Awesome icons are bundled with the plugin, and no visitor data leaves your site.
 
 == Third-party libraries ==
-
 * Font Awesome Free 6.5.1 - icons CC BY 4.0, fonts SIL OFL 1.1, code MIT - https://fontawesome.com/license/free (bundled in `assets/vendor/fontawesome/`).
 * Inter, Roboto, Montserrat, Poppins, Open Sans and Lato - SIL Open Font License 1.1, packaged from Fontsource (bundled in `assets/vendor/fonts/`, licence file in each folder).
 
-== Changelog  ==
+== Changelog ==
 
-= Complete” =
+= 1.0.02 =
 * Initial release of ZapPopPop.
