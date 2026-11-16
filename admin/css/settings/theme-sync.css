@@ -1,0 +1,93 @@
+/* Settings page: matches the Theme page, driven by global --zpp-* variables. */
+body.wp-admin #wpcontent .zappoppop-dash.zappoppop-settings-wrap {
+    box-sizing: border-box; width: auto; max-width: none;
+    margin: 0 0 0 2px; padding: 0 20px 40px 0;
+}
+body.wp-admin #wpcontent .zappoppop-settings-wrap .zappoppop-dash-bar { box-sizing: border-box; max-width: 100%; }
+.zappoppop-settings-wrap .zappoppop-dash-bar { position: -webkit-sticky; position: sticky; top: 32px; z-index: 30; }
+#wpbody-content .zappoppop-settings-wrap .notice { margin: 0 0 16px; }
+
+/* Bar actions (same look as Theme page) */
+.zappoppop-dash-bar .cell.actions { gap: 8px; padding: 0 12px; border-right: 0; border-left: 1px solid #e5e5e5; }
+.zpp-bar-btn { display: -webkit-inline-box; display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px; border: 1px solid var(--zpp-c-secondary-border, #c3c4c7); border-radius: var(--zpp-r-button, 3px); background: var(--zpp-c-secondary-bg, #fff); color: var(--zpp-c-secondary-text, #1d2327); font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.zpp-bar-btn:hover, .zpp-bar-btn:focus { background: var(--zpp-c-secondary-hover, #f6f7f7); color: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); outline: 0; box-shadow: none; }
+.zpp-bar-btn.is-primary { background: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); color: var(--zpp-c-primary-text, #fff); }
+.zpp-bar-btn.is-primary:hover, .zpp-bar-btn.is-primary:focus { background: var(--zpp-c-primary-hover, #a51f25); border-color: var(--zpp-c-primary-hover, #a51f25); color: var(--zpp-c-primary-text, #fff); }
+.zpp-bar-btn[disabled] { opacity: .6; cursor: default; }
+.zpp-bar-btn .dashicons { font-size: 16px; width: 16px; height: 16px; }
+.zpp-bar-msg { font-size: 12px; font-weight: 600; color: var(--zpp-c-muted, #787c82); }
+
+/* Tabs: pill look identical to Theme page */
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-tabs-nav {
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; border: 0; background: none; box-shadow: none;
+}
+#wpbody-content .zappoppop-settings-wrap .zappoppop-tab-btn {
+    -webkit-appearance: none; appearance: none; display: -webkit-inline-box; display: inline-flex; align-items: center;
+    height: 30px; margin: 0; padding: 0 12px; box-sizing: border-box; cursor: pointer; white-space: nowrap;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-secondary-border, #c3c4c7); border-radius: var(--zpp-r-button, 3px);
+    background: var(--zpp-c-secondary-bg, #fff); color: var(--zpp-c-secondary-text, #1d2327);
+    font-family: inherit; font-size: 12px; font-weight: 600; line-height: 1;
+}
+#wpbody-content .zappoppop-settings-wrap .zappoppop-tab-btn:hover { background: var(--zpp-c-secondary-hover, #f6f7f7); border-color: var(--zpp-c-primary, #c1272d); color: var(--zpp-c-secondary-text, #1d2327); }
+#wpbody-content .zappoppop-settings-wrap .zappoppop-tab-btn:focus { outline: 0; box-shadow: 0 0 0 1px var(--zpp-c-primary, #c1272d); }
+#wpbody-content .zappoppop-settings-wrap .zappoppop-tab-btn.active {
+    background: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); color: var(--zpp-c-primary-text, #fff);
+}
+
+/* Panels = Theme page cards */
+#wpbody-content .zappoppop-settings-wrap .zappoppop-tab-content {
+    background: var(--zpp-c-bg-card, #fff); border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde);
+    border-radius: var(--zpp-r-card, 3px); box-shadow: var(--zpp-shadow-card, 0 1px 1px rgba(0,0,0,.04));
+    padding: 20px; margin: 0 0 16px; box-sizing: border-box;
+}
+.zappoppop-settings-wrap .zappoppop-settings-section h3 {
+    margin: 0 0 16px; padding: 0 0 12px; font-size: var(--zpp-fs-h2, 15px); font-weight: var(--zpp-fw-heading, 600);
+    color: var(--zpp-c-heading, #1d2327); font-family: var(--zpp-font-heading, inherit); border-bottom: var(--zpp-bw, 1px) solid var(--zpp-c-row-border, #eee);
+}
+.zappoppop-settings-wrap .zappoppop-settings-section .form-table th { color: var(--zpp-c-text, #1d2327); font-size: var(--zpp-fs-base, 13px); }
+.zappoppop-settings-wrap .zappoppop-settings-section .description,
+.zappoppop-settings-wrap .zappoppop-settings-section fieldset label { color: var(--zpp-c-muted, #787c82); font-size: var(--zpp-fs-small, 12px); }
+.zappoppop-settings-wrap .zappoppop-settings-section fieldset label { color: var(--zpp-c-text, #1d2327); }
+.zappoppop-settings-wrap .zappoppop-settings-section input[type="text"],
+.zappoppop-settings-wrap .zappoppop-settings-section input[type="email"],
+.zappoppop-settings-wrap .zappoppop-settings-section select {
+    background: var(--zpp-c-input-bg, #fff); color: var(--zpp-c-input-text, #1e293b);
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-input-border, #8c8f94); border-radius: var(--zpp-r-input, 3px);
+    font-size: var(--zpp-fs-input, 12px); min-height: var(--zpp-h-input, 32px); box-sizing: border-box;
+}
+.zappoppop-settings-wrap .zappoppop-settings-section input:focus,
+.zappoppop-settings-wrap .zappoppop-settings-section select:focus {
+    border-color: var(--zpp-c-input-focus, #c1272d); box-shadow: 0 0 0 1px var(--zpp-c-input-focus, #c1272d);
+}
+.zappoppop-settings-wrap .zappoppop-settings-submit-bar { margin: 8px 0 0; display: flex; align-items: center; gap: 12px; }
+.zappoppop-settings-wrap .zappoppop-settings-submit-bar .button-primary { min-height: var(--zpp-h-button, 34px); padding: 0 20px; }
+
+/* ZAPPOPPOP_SETTINGS_FIELDS */
+/* Settings fields: one height for every input + select, with a themed dropdown arrow.
+   The global themed `background` shorthand wipes WordPress' native arrow, so it is redrawn here. */
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section .form-table td > input[type="text"],
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section .form-table td > input[type="email"],
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section .form-table td > input[type="number"],
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section .form-table td > input[type="url"],
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section .form-table td > input[type="password"],
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section input.zpp-pg-label,
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section select {
+    box-sizing: border-box; height: var(--zpp-h-input, 32px); min-height: var(--zpp-h-input, 32px);
+    margin: 0; padding: 0 10px; line-height: normal; vertical-align: middle;
+}
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    padding-right: 30px; max-width: 100%; cursor: pointer; text-overflow: ellipsis;
+    background-color: var(--zpp-c-input-bg, #fff);
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2712%27%20height%3D%2712%27%20viewBox%3D%270%200%2012%2012%27%3E%3Cpath%20d%3D%27M2%204l4%204%204-4%27%20fill%3D%27none%27%20stroke%3D%27%2350575e%27%20stroke-width%3D%271.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 12px 12px;
+}
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section select::-ms-expand { display: none; }
+#wpbody-content .zappoppop-settings-wrap .zappoppop-settings-section select:disabled { opacity: .6; cursor: not-allowed; }
+
+@media (max-width: 782px) {
+    body.wp-admin #wpcontent .zappoppop-dash.zappoppop-settings-wrap { padding-right: 10px; }
+    .zappoppop-settings-wrap .zappoppop-dash-bar { top: 46px; height: auto; flex-wrap: wrap; }
+    .zappoppop-dash-bar .cell.actions { width: 100%; border-left: 0; border-top: 1px solid #e5e5e5; padding: 8px 12px; flex-wrap: wrap; }
+    #wpbody-content .zappoppop-settings-wrap .zappoppop-tab-content { padding: 14px; }
+}

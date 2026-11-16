@@ -1,0 +1,43 @@
+<?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- template variables are local to the method that includes this file
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+if (!current_user_can('manage_options')) {
+    wp_die('Unauthorized');
+}
+
+global $wpdb;
+$notice_msg  = '';
+$notice_type = 'success';
+
+// Handle Tools Actions (single shared service)
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['zappoppop_tools_nonce'])) {
+    list($notice_msg, $notice_type) = ZapPopPop_Ajax_Tools::handle_post();
+}
+?>
+<div class="wrap zappoppop-dash zappoppop-tools-wrap">
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/header.php'; ?>
+
+    <?php if (!empty($notice_msg)) : ?>
+        <div class="notice notice-<?php echo esc_attr($notice_type); ?> is-dismissible" style="margin-bottom:20px;">
+            <p><?php echo esc_html($notice_msg); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <!-- System Environment & Health Diagnostics -->
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/system-info.php'; ?>
+
+    <!-- Database Schema Table Status & Repair -->
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/database-maintenance.php'; ?>
+
+    <!-- Bulk JSON Backup Export & Import -->
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/bulk-portability.php'; ?>
+
+    <!-- Saved defaults (settings / theme / new popup) -->
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/saved-defaults.php'; ?>
+
+    <!-- Restore options + maintenance -->
+    <?php include ZAPPOPPOP_PATH . 'templates/tools/maintenance.php'; ?>
+</div>

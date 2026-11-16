@@ -1,0 +1,69 @@
+/* ZPP_PROMO: promotional placements (rendered only while Pro is inactive). Colours follow the Theme page variables;
+   --zpp-promo-fg / -bg / -cta-fg / -cta-bg are set inline from defaults/promo.json. */
+.zappoppop-dash-bar{position:relative}
+.zappoppop-dash-bar .cell.promo{position:absolute;left:50%;top:0;bottom:0;-webkit-transform:translateX(-50%);transform:translateX(-50%);max-width:calc(100% - 760px);min-width:0;padding:0 10px;gap:8px;border-right:0;font-size:12px;background:var(--zpp-promo-bg,transparent);color:var(--zpp-promo-fg,var(--zpp-c-text,#1d2327));white-space:nowrap;z-index:1}
+.zpp-promo-text{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.zpp-promo-text a{color:inherit;text-decoration:underline}
+.zappoppop-dash-bar .zpp-promo-cta{display:-webkit-inline-box;display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:var(--zpp-r-button,3px);background:var(--zpp-promo-cta-bg,var(--zpp-c-primary,#c1272d));color:var(--zpp-promo-cta-fg,var(--zpp-c-primary-text,#fff));font-size:11px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.zappoppop-dash-bar .zpp-promo-cta:hover,.zappoppop-dash-bar .zpp-promo-cta:focus{color:var(--zpp-promo-cta-fg,var(--zpp-c-primary-text,#fff));-webkit-filter:brightness(1.12);filter:brightness(1.12);outline:0}
+
+.zpp-promo-x{display:-webkit-inline-box;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin:0;padding:0;border:0;border-radius:50%;background:transparent;color:var(--zpp-promo-fg,var(--zpp-c-muted,#787c82));cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;opacity:.8}
+.zpp-promo-x:hover,.zpp-promo-x:focus{opacity:1;outline:0;background:rgba(0,0,0,.08)}
+.zpp-promo-x .dashicons{font-size:16px;width:16px;height:16px}
+
+.zappoppop-promo--box{position:relative;margin-top:16px;padding:12px 30px 12px 12px;border:1px solid var(--zpp-c-border,#dcdcde);border-left:3px solid var(--zpp-c-primary,#c1272d);border-radius:var(--zpp-r-card,6px);background:var(--zpp-promo-bg,var(--zpp-c-bg-card,#fff));color:var(--zpp-promo-fg,var(--zpp-c-text,#1d2327))}
+.zappoppop-promo--box .zpp-promo-x{position:absolute;top:6px;right:6px}
+.zappoppop-promo--box .zpp-promo-img{display:block;max-width:100%;height:auto;margin:0 0 10px;border-radius:var(--zpp-r-button,3px)}
+.zappoppop-promo--box .zpp-promo-title{display:block;margin:0 0 4px;font-size:13px;color:inherit}
+.zappoppop-promo--box .zpp-promo-body{margin:0 0 10px;font-size:12px;line-height:1.45;color:var(--zpp-promo-fg,var(--zpp-c-muted,#475569))}
+.zappoppop-promo--box .zpp-promo-btn.button{background:var(--zpp-promo-cta-bg,var(--zpp-c-primary,#c1272d));border-color:var(--zpp-promo-cta-bg,var(--zpp-c-primary,#c1272d));color:var(--zpp-promo-cta-fg,var(--zpp-c-primary-text,#fff));box-shadow:none}
+.zappoppop-promo--box .zpp-promo-btn.button:hover,.zappoppop-promo--box .zpp-promo-btn.button:focus{color:var(--zpp-promo-cta-fg,var(--zpp-c-primary-text,#fff));-webkit-filter:brightness(1.12);filter:brightness(1.12)}
+
+/* Dashboard slider: one grid cell, the same width as a dashboard box (1/3). */
+.zpp-promo-slider{position:relative;display:grid;grid-template-columns:minmax(0,1fr);margin:0;overflow:hidden;box-sizing:border-box;border:1px solid var(--zpp-c-border,#dcdcde);border-radius:var(--zpp-r-card,3px);background:var(--zpp-promo-bg,var(--zpp-c-primary,#c1272d));color:var(--zpp-promo-fg,#fff);box-shadow:var(--zpp-shadow-card,0 1px 1px rgba(0,0,0,.04))}
+.zpp-promo-slide{position:relative;grid-area:1/1;display:-webkit-box;display:flex;min-height:190px;background:var(--zpp-promo-bg,var(--zpp-c-primary,#c1272d));opacity:0;visibility:hidden;-webkit-transition:opacity .4s ease,visibility .4s;transition:opacity .4s ease,visibility .4s}
+.zpp-promo-slide.is-active{opacity:1;visibility:visible}
+.zpp-promo-slide .zpp-promo-bg{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.zpp-promo-slide.has-img::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;background:-webkit-linear-gradient(left,rgba(0,0,0,.7),rgba(0,0,0,.15));background:linear-gradient(90deg,rgba(0,0,0,.7),rgba(0,0,0,.15))}
+.zpp-promo-slide-body{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;-webkit-box-flex:1;flex:1 1 auto;min-width:0;padding:16px 46px 34px;box-sizing:border-box}
+.zpp-promo-slider .zpp-promo-title{display:block;margin:0 0 6px;font-size:16px;line-height:1.25;color:var(--zpp-promo-fg,#fff)}
+.zpp-promo-slider .zpp-promo-body{margin:0 0 12px;font-size:12px;line-height:1.45;color:var(--zpp-promo-fg,#fff)}
+.zpp-promo-slider .zpp-promo-body a{color:inherit;text-decoration:underline}
+.zpp-promo-slider .zpp-promo-btn.button{background:var(--zpp-promo-cta-bg,#fff);border-color:var(--zpp-promo-cta-bg,#fff);color:var(--zpp-promo-cta-fg,var(--zpp-c-primary,#c1272d));font-weight:700;box-shadow:none}
+.zpp-promo-slider .zpp-promo-btn.button:hover,.zpp-promo-slider .zpp-promo-btn.button:focus{color:var(--zpp-promo-cta-fg,var(--zpp-c-primary,#c1272d));-webkit-filter:brightness(.94);filter:brightness(.94)}
+.zpp-promo-slider .zpp-promo-x{position:absolute;top:6px;right:6px;z-index:4;color:var(--zpp-promo-fg,#fff)}
+.zpp-promo-slider .zpp-promo-x:hover,.zpp-promo-slider .zpp-promo-x:focus{background:rgba(0,0,0,.25)}
+.zpp-promo-nav{position:absolute;top:50%;z-index:4;display:-webkit-inline-box;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin:-14px 0 0;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.3);color:#fff;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none}
+.zpp-promo-nav:hover,.zpp-promo-nav:focus{background:rgba(0,0,0,.55);outline:0}
+.zpp-promo-prev{left:8px}
+.zpp-promo-next{right:8px}
+.zpp-promo-dots{position:absolute;left:0;right:0;bottom:8px;z-index:4;display:flex;justify-content:center;gap:6px}
+.zpp-promo-dot{width:8px;height:8px;margin:0;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none}
+.zpp-promo-dot.is-active{background:#fff}
+.zpp-promo-dot:focus{outline:2px solid #fff;outline-offset:1px}
+
+@media (max-width:1200px){.zappoppop-dash-bar .cell.promo{display:none}}
+@media (max-width:1100px){.zpp-promo-slide{min-height:170px}}
+@media (prefers-reduced-motion:reduce){.zpp-promo-slide{-webkit-transition:none;transition:none}}
+
+/* Dashboard slider as a movable box: no box padding, the drag handle sits top right, the close button top left. */
+.zappoppop-overview-wrap .zappoppop-box.zpp-promo-slider{padding:0;margin:0;overflow:hidden;border:1px solid var(--zpp-c-border,#dcdcde);background:var(--zpp-promo-bg,var(--zpp-c-primary,#c1272d));color:var(--zpp-promo-fg,#fff)}
+.zappoppop-overview-wrap .zappoppop-box.zpp-promo-slider .zpp-promo-x{left:6px;right:auto}
+.zappoppop-overview-wrap .zappoppop-box.zpp-promo-slider .zappoppop-box-grip{top:6px;right:6px;color:#fff;background:rgba(0,0,0,.3);border-color:transparent;opacity:.85}
+.zappoppop-overview-wrap .zappoppop-box.zpp-promo-slider:hover .zappoppop-box-grip,.zappoppop-overview-wrap .zappoppop-box.zpp-promo-slider .zappoppop-box-grip:focus{background:rgba(0,0,0,.55);border-color:transparent;opacity:1}
+
+/* ZPP_PROMO_IMG_LINK: clickable promo image */
+.zpp-promo-img-link{display:block}
+.zpp-promo-slide .zpp-promo-bg-link{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;display:block;cursor:pointer}
+.zpp-promo-slide.has-link::before{pointer-events:none}
+.zpp-promo-slide.has-link .zpp-promo-slide-body{pointer-events:none}
+.zpp-promo-slide.has-link .zpp-promo-slide-body a,.zpp-promo-slide.has-link .zpp-promo-slide-body button{pointer-events:auto}
+.zpp-promo-bg-link:focus{outline:2px solid #fff;outline-offset:-3px}
+
+/* ZPP_PROMO_IMG_FIT: image fills the width, height follows the image (image_fit "auto", the default) */
+.zappoppop-promo--box .zpp-promo-img{width:100%}
+.zpp-promo-slide.has-img.fit-auto{display:block;min-height:0;-ms-flex-item-align:start;align-self:start}
+.zpp-promo-slide.fit-auto .zpp-promo-bg-link{position:relative;top:auto;left:auto;height:auto}
+.zpp-promo-slide.fit-auto .zpp-promo-bg{position:static;display:block;width:100%;height:auto;max-width:100%}
+.zpp-promo-slide.fit-auto .zpp-promo-slide-body{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden}
+.zpp-promo-slide.fit-auto.no-copy::before,.zpp-promo-slide.fit-auto.no-copy .zpp-promo-slide-body{display:none}

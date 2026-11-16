@@ -1,0 +1,17 @@
+.zappoppop-subs-topbar{display:flex;align-items:center;background:#fff;border:1px solid #dcdcde;height:44px;margin:10px 0 14px;padding:0 12px;gap:14px}
+.zappoppop-subs-topbar h1{font-size:13px;font-weight:600;margin:0;padding:0;line-height:1}
+.zappoppop-subs-topbar .spacer{flex:1}
+.zappoppop-subs-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.zappoppop-subs-tabs{display:flex;gap:4px}
+.zappoppop-subs-tabs button{background:#f6f7f7;border:1px solid #c3c4c7;color:#2c3338;padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;line-height:1.4}
+.zappoppop-subs-tabs button small{font-size:9px;color:#b32d2e}
+.zappoppop-subs-tabs button.active{background:#c1272d;border-color:#c1272d;color:#fff;font-weight:600}
+.zappoppop-subs-tabs button.active small{color:#fff}
+.zappoppop-subs-searchbox{display:flex;align-items:center;gap:6px}
+.zappoppop-subs-popup-tabs{display:flex;flex-wrap:wrap;gap:0;margin:0 0 12px;border-bottom:1px solid #c3c4c7}
+.zappoppop-subs-popup-tabs .zappoppop-ptab{display:inline-block;padding:8px 14px;margin:0 4px -1px 0;font-size:12px;color:#2c3338;text-decoration:none;background:#f6f7f7;border:1px solid #c3c4c7;border-bottom-color:#c3c4c7;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box}
+.zappoppop-subs-popup-tabs .zappoppop-ptab:hover{background:#fff;color:#c1272d}
+.zappoppop-subs-popup-tabs .zappoppop-ptab:focus{outline:0;box-shadow:0 0 0 1px #c1272d}
+.zappoppop-subs-popup-tabs .zappoppop-ptab.active{background:#fff;color:#c1272d;font-weight:600;border-bottom-color:#fff;border-top:2px solid #c1272d}
+.zappoppop-subs-popup-tabs .zappoppop-ptab small{font-size:10px;color:#787c82}
+.zappoppop-subs-searchbox input[type=search]{width:140px;height:28px}

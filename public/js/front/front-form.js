@@ -1,0 +1,812 @@
+/**
+ * ZapPopPop Frontend Lead Capture & Form Submission Controller
+ * Normalizes .zappoppop-submit-trigger & .zappoppop-submit-btn
+ */
+(function(window, $) {
+    'use strict';
+
+    var vars = window.zappoppop_front_vars || {
+        ajax_url: '',
+        nonce: '',
+        enable_recaptcha: false,
+        recaptcha_site_key: ''
+    };
+
+    window.ZapPopPopFrontForm = {
+        init: function() {
+            this.bindSubmissions();
+        },
+
+        bindSubmissions: function() {
+            var self = this;
+
+            $(document).on('click', '.zappoppop-submit-btn, .zappoppop-submit-trigger', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var $canvas = $btn.closest('.zappoppop-canvas-container, .zappoppop-canvas-stage, .zappoppop-box');
+                var $popup  = $btn.closest('.zappoppop-popup-wrap, .zappoppop-overlay');
+                var uid     = $popup.data('uid');
+
+                self.processSubmission($canvas, $btn, uid, $popup);
+            });
+        },
+
+        processSubmission: function($canvas, $btn, uid, $popup) {
+            var self = this;
+            var fields = {};
+            var hasEmail = false;
+            var emailVal = '';
+
+            $canvas.find('input, select, textarea').each(function() {
+                var $input = $(this);
+                var name = $input.attr('name') || $input.data('field-name') || $input.attr('type');
+                if (name === '_zappoppop_hp_email') return;
+                var zppKeyM = /^fields\[([^\]]+)\](\[\])?$/.exec(name || ''); /* ZAPPOPPOP_FIELD_KEY */
+                if (zppKeyM) { name = zppKeyM[1]; }
+                if (!name || $input.attr('type') === 'submit') return;
+
+                var val = $input.val();
+                var zppT = String($input.attr('type') || '').toLowerCase();
+                if (zppT === 'file') return;
+                if ((zppT === 'checkbox' || zppT === 'radio') && !this.checked) return;
+                if (zppT === 'checkbox' && fields[name] !== undefined) { fields[name] = fields[name] + ', ' + val; } else { fields[name] = val; }
+
+                if ($input.attr('type') === 'email' || name.indexOf('email') !== -1) {
+                    hasEmail = true;
+                    emailVal = val;
+                }
+            });
+
+            if (hasEmail && emailVal) {
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailVal)) {
+                    self.showError($canvas, 'Please enter a valid email address.');
+                    return;
+                }
+            }
+
+            var origText = $btn.text();
+            $btn.prop('disabled', true).text($btn.attr('data-loading-text') || 'Submitting...'); /* ZAPPOPPOP_SUBMIT_LOADING */
+
+            if (vars.enable_recaptcha && vars.recaptcha_site_key && typeof window.grecaptcha !== 'undefined') {
+                window.grecaptcha.ready(function() {
+                    window.grecaptcha.execute(vars.recaptcha_site_key, { action: 'zappoppop_submit' })
+                        .then(function(token) {
+                            self.dispatchAjax(fields, token, $canvas, $btn, origText, uid, $popup);
+                        })
+                        .catch(function() {
+                            self.dispatchAjax(fields, '', $canvas, $btn, origText, uid, $popup);
+                        });
+                });
+            } else {
+                self.dispatchAjax(fields, '', $canvas, $btn, origText, uid, $popup);
+            }
+        },
+
+        dispatchAjax: function(fields, recaptchaToken, $canvas, $btn, origText, uid, $popup) {
+            var self = this;
+            var payload = {
+                action: 'zappoppop_submit_form',
+                nonce: vars.nonce,
+                popup_uid: uid,
+                fields: fields,
+                recaptcha_token: recaptchaToken
+            };
+
+            $.ajax({
+                url: vars.ajax_url,
+                type: 'POST',
+                data: payload,
+                dataType: 'json',
+                success: function(res) {
+                    $btn.prop('disabled', false).text(origText);
+
+                    if (res && res.success) {
+                        /* ZAPPOPPOP_SUBMIT_ROUTING: honour the Submit layer's post-submit action */
+                        var zppAct = $btn.attr('data-submit-action') || 'default';
+                        if (zppAct === 'redirect' && $btn.attr('data-redirect-url')) {
+                            $(document).trigger('zappoppop:form_submitted', [res.data]);
+                            window.location.href = $btn.attr('data-redirect-url');
+                            return;
+                        }
+                        if (zppAct === 'next_canvas' && $popup && $popup.find('[data-canvas="' + (parseInt($btn.attr('data-goto-canvas'), 10) || 2) + '"]').length) { /* ZAPPOPPOP_SUBMIT_CANVAS_GUARD */
+                            var zppTo = parseInt($btn.attr('data-goto-canvas'), 10) || 2;
+                            $(document).trigger('zappoppop:form_submitted', [res.data]);
+                            var $zppNext = $('<button type="button" class="zappoppop-next-canvas-btn zappoppop-next-screen-btn" aria-hidden="true" tabindex="-1" style="display:none"></button>')
+                                .attr({ 'data-goto-canvas': zppTo, 'data-goto-screen': zppTo, 'data-goto': zppTo });
+                            ($popup && $popup.length ? $popup.find('.zappoppop-box').first() : $canvas).append($zppNext);
+                            $zppNext.trigger('click');
+                            setTimeout(function() { $zppNext.remove(); }, 50);
+                            return;
+                        }
+                        if (window.ZapPopPopFrontDisplay && typeof window.ZapPopPopFrontDisplay.triggerCelebration === 'function') {
+                            window.ZapPopPopFrontDisplay.triggerCelebration();
+                        }
+                        $(document).trigger('zappoppop:form_submitted', [res.data]);
+
+                        if (res.data && res.data.redirect_url) {
+                            window.location.href = res.data.redirect_url;
+                        } else {
+                            var successMsg = (res.data && res.data.double_optin && res.data.message) ? res.data.message : ($btn.attr('data-confirm-message') || ((res.data && res.data.message) ? res.data.message : 'Thank you for your submission!')); /* ZAPPOPPOP_SUBMIT_CONFIRM + ZAPPOPPOP_DOI_AJAX */
+                            self.showSuccess($canvas, successMsg, $popup);
+                            setTimeout(function() {
+                                if (window.ZapPopPopFrontDisplay) {
+                                    window.ZapPopPopFrontDisplay.close(uid);
+                                }
+                            }, 2200);
+                        }
+                    } else {
+                        var errMsg = (res && res.data && res.data.message) ? res.data.message : 'Submission failed. Please try again.';
+                        self.showError($canvas, errMsg);
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).text(origText);
+                    self.showError($canvas, 'Network error. Please try again.');
+                }
+            });
+        },
+
+        showError: function($canvas, msg) {
+            var $msgBox = $canvas.find('.zappoppop-status-bubble');
+            if (!$msgBox.length) {
+                $msgBox = $('<div class="zappoppop-status-bubble" style="color:#dc2626;font-size:12px;font-weight:600;margin-top:8px;text-align:center;"></div>');
+                $canvas.append($msgBox);
+            }
+            $msgBox.css('color', '#dc2626').text(msg).show();
+        },
+
+        showSuccess: function($canvas, msg, $popup) {
+            var $statusOverlay = $popup.find('.zappoppop-status-overlay');
+            if ($statusOverlay.length) {
+                $statusOverlay.find('.zappoppop-status-message').text(msg);
+                $statusOverlay.css('display', 'flex').fadeIn(200);
+            } else {
+                var $msgBox = $canvas.find('.zappoppop-status-bubble');
+                if (!$msgBox.length) {
+                    $msgBox = $('<div class="zappoppop-status-bubble" style="color:#16a34a;font-size:12px;font-weight:600;margin-top:8px;text-align:center;"></div>');
+                    $canvas.append($msgBox);
+                }
+                $msgBox.css('color', '#16a34a').text(msg).show();
+            }
+        }
+    };
+
+    $(document).ready(function() {
+        window.ZapPopPopFrontForm.init();
+    });
+
+})(window, jQuery);
+
+/* === ZAPPOPPOP_PHASE5_FRONT_RUNTIME_START === */
+(function(window, $) {
+    'use strict';
+
+    function ingestDynamicUrlParameters() {
+        if (typeof URLSearchParams === 'undefined') return;
+        var params = new URLSearchParams(window.location.search);
+        $('[data-dynamic-default="true"][data-param-name]').each(function() {
+            var $field =$(this);
+            var paramKey = $field.attr('data-param-name');
+            if (paramKey && params.has(paramKey)) {
+                var val = params.get(paramKey);
+                $field.val(val).trigger('change');
+            }
+        });
+    }
+
+    function applyFieldFilters(val, filterCsv) {
+        if (!filterCsv || typeof val !== 'string') return val;
+        var filters = filterCsv.split(',');
+        filters.forEach(function(f) {
+            f = $.trim(f);
+            if (f === 'trim') val = $.trim(val);
+            else if (f === 'strip_tags') val = val.replace(/<[^>]*>?/gm, '');
+            else if (f === 'lowercase') val = val.toLowerCase();
+            else if (f === 'digits') val = val.replace(/[^0-9]/g, '');
+            else if (f === 'alpha') val = val.replace(/[^a-zA-Z\s]/g, '');
+            else if (f === 'alphanumeric') val = val.replace(/[^a-zA-Z0-9\s]/g, '');
+        });
+        return val;
+    }
+
+    function bindDecomposed26Runtime() {
+        ingestDynamicUrlParameters();
+
+        // 1. Tile & Image Select Interactive Choice Cards (Elements 19 & 20)
+        $(document).off('click.zappoppopChoiceCard').on('click.zappoppopChoiceCard', '.zappoppop-choice-card', function(e) {
+            e.preventDefault();
+            var $card =$(this);
+            var $grid =$card.closest('.zappoppop-interactive-choices');
+            var isMulti = String($grid.attr('data-multi')) === 'true';
+            var actColor = $grid.attr('data-active-color') || '#0284c7';
+
+            if (!isMulti) {
+                $grid.find('.zappoppop-choice-card').removeClass('is-selected').css({
+                    borderColor: '#cbd5e1',
+                    background: '#f1f5f9',
+                    color: '#334155'
+                });
+                $card.addClass('is-selected');
+            } else {
+                $card.toggleClass('is-selected');
+            }
+
+            $grid.find('.zappoppop-choice-card.is-selected').each(function() {
+                if ($(this).hasClass('zappoppop-tile-option')) {$(this).css({ background: actColor, color: '#ffffff', borderColor: actColor });
+                } else {
+                    $(this).css({ borderColor: actColor });
+                }
+            });
+
+            var selectedVals = [];
+            $grid.find('.zappoppop-choice-card.is-selected').each(function() {
+                selectedVals.push($(this).attr('data-value'));
+            });
+            $grid.find('input[type="hidden"]').val(selectedVals.join(', ')).trigger('change');
+        });
+
+        // 2. Interactive Star / Heart / Thumb Rating (Element 25)
+        $(document).off('click.zappoppopRatingGlyph').on('click.zappoppopRatingGlyph', '.zappoppop-rating-glyph-legacy', function(e) { /* ZAPPOPPOP_RATING_LEGACY_OFF */
+            e.preventDefault();
+            var $glyph =$(this);
+            var score = parseInt($glyph.attr('data-score'), 10) || 5;
+            var $wrap =$glyph.closest('.zappoppop-interactive-rating');
+            var actCol = $wrap.attr('data-active-color') || '#f59e0b'; var inCol = $wrap.attr('data-inactive-color') || '#cbd5e1'; /* ZAPPOPPOP_RATING */
+            $wrap.find('.zappoppop-rating-glyph').each(function() {
+                var s = parseInt($(this).attr('data-score'), 10) || 1;
+                $(this).css('color', s <= score ? actCol : inCol);
+            });
+            $wrap.find('input[type="hidden"]').val(score).trigger('change');
+        });
+
+        // 3. Password Eye Reveal Toggle (Element 24)
+        $(document).off('click.zappoppopPwEye').on('click.zappoppopPwEye', '.zappoppop-pw-eye-toggle', function(e) {
+            e.preventDefault();
+            var $inp =$(this).siblings('input.zappoppop-input-password');
+            if (!$inp.length) return;
+            var curType = $inp.attr('type'); var nextType = (curType === 'password') ? 'text' : 'password'; $inp.attr('type', nextType); /* ZAPPOPPOP_PW_EYE_STATE */
+            $(this).attr('aria-pressed', nextType === 'text' ? 'true' : 'false').attr('aria-label', nextType === 'text' ? 'Hide password' : 'Show password').find('i').toggleClass('fa-eye', nextType === 'password').toggleClass('fa-eye-slash', nextType === 'text');
+        });
+
+        // 4. File Upload Dropzone Filename Display (Element 23)
+        $(document).off('change.zappoppopFileDrop').on('change.zappoppopFileDrop', '.zappoppop-upload-dropzone input[type="file"]', function() {
+            var files = this.files;
+            if (files && files.length > 0) {
+                var names = [];
+                for (var i = 0; i < files.length; i++) names.push(files[i].name);
+                /* ZAPPOPPOP_UPLOAD_LABEL_KEEP: file names are listed below the field */
+            }
+        });
+
+        // 5. Apply Advanced Tab Sanitization Filters on blur/change
+        $(document).off('blur.zappoppopAdvFilters').on('blur.zappoppopAdvFilters', '[data-filters]', function() {
+            var $inp =$(this);
+            var filterCsv = $inp.attr('data-filters');
+            if (filterCsv && $inp.val()) {
+                $inp.val(applyFieldFilters($inp.val(), filterCsv));
+            }
+        });
+    }
+
+    $(function() {
+        bindDecomposed26Runtime();
+    });
+})(window, jQuery);
+/* === ZAPPOPPOP_PHASE5_FRONT_RUNTIME_END === */
+
+/* === ZAPPOPPOP_PHASE4_RUNTIME_LOGIC_AND_DATA_START === */
+(function($) {
+    'use strict';
+
+    /* ZAPPOPPOP_DYN_DEFAULT_V2: URL parameter first, then cookie (names matched case-insensitively) */
+    function zppReadCookie(name) {
+        var want = String(name || '').toLowerCase(), parts = (document.cookie || '').split(';');
+        for (var i = 0; i < parts.length; i++) {
+            var idx = parts[i].indexOf('=');
+            if (idx < 0) { continue; }
+            var k = $.trim(parts[i].slice(0, idx));
+            if (k.toLowerCase() === want) {
+                try { return decodeURIComponent(parts[i].slice(idx + 1)); } catch (e) { return parts[i].slice(idx + 1); }
+            }
+        }
+        return null;
+    }
+
+    function applyDynamicUrlParams() {
+        var params = null;
+        try { params = new URLSearchParams(window.location.search || ''); } catch (e) { params = null; }
+        function lookup(name) {
+            var want = String(name || '').toLowerCase(), found = null;
+            if (params) {
+                params.forEach(function (val, key) { if (found === null && String(key).toLowerCase() === want) { found = val; } });
+            }
+            return (found !== null && found !== '') ? found : zppReadCookie(name);
+        }
+        $('[data-param-name]').each(function () {
+            var $el = $(this);
+            var val = lookup($el.attr('data-param-name'));
+            if (val === null || val === '') { return; }
+            var $t = $el.is('input, textarea, select') ? $el : $el.find('input, textarea, select').first();
+            if (!$t.length) { return; }
+            if ($t.is(':checkbox, :radio')) {
+                $t.prop('checked', /^(1|true|on|yes)$/i.test(val) || String($t.val()).toLowerCase() === String(val).toLowerCase());
+            } else {
+                $t.val(val);
+            }
+            $t.trigger('input').trigger('change');
+        });
+    }
+
+    function evaluateConditionalLogic($scope) {
+        if (window.__zppLogicV2) { return; } /* ZAPPOPPOP_LOGIC_V1_RETIRED */
+        var $root = ($scope && $scope.length) ?$scope : $(document);$root.find('[data-logic-enabled="1"], [data-logic-enabled="true"]').each(function() {
+            var $target =$(this);
+            var action  = $target.attr('data-logic-action') || 'show';
+            var match   = $target.attr('data-logic-match') || 'all';
+            var rawRules = $target.attr('data-logic-rules') || '[]';
+            var rules = [];
+            try { rules = JSON.parse(rawRules); } catch (e) { rules = []; }
+            if (!Array.isArray(rules) || !rules.length) return;
+
+            var results = rules.map(function(r) {
+                var fieldKey = r.field || '';
+                var op       = r.operator || 'is';
+                var expected = String(r.value || '').toLowerCase();
+                var $inp =$root.find('[name="' + fieldKey + '"], [data-field-token="' + fieldKey + '"], #' + fieldKey).first();
+                var actual = String($inp.val() || '').toLowerCase();
+
+                if (op === 'is') return actual === expected;
+                if (op === 'is_not') return actual !== expected;
+                if (op === 'contains') return actual.indexOf(expected) !== -1;
+                if (op === 'not_empty') return actual.trim() !== '';
+                return true;
+            });
+
+            var passed = (match === 'any')
+                ? results.some(function(b) { return b; })
+                : results.every(function(b) { return b; });
+
+            var shouldShow = (action === 'show') ? passed : !passed;
+            $target.toggle(shouldShow);
+        });
+    }
+
+    $(function() {
+        applyDynamicUrlParams();
+        evaluateConditionalLogic($(document));$(document).on('input change', '.zappoppop-modal input, .zappoppop-modal select, .zappoppop-modal textarea', function() {
+            evaluateConditionalLogic($(this).closest('.zappoppop-modal'));
+        });
+    });
+})(jQuery);
+/* === ZAPPOPPOP_PHASE4_RUNTIME_LOGIC_AND_DATA_END === */
+
+/* === ZAPPOPPOP_PHASE4_INTERACTIVE_WIDGET_RUNTIME_START === */
+(function($) {
+    'use strict';
+
+    // 1. Password Visibility Eye Toggle on Frontend
+    $(document).on('click', '.zappoppop-pw-eye-toggle', function(e) {
+        e.preventDefault();
+        var $inp =$(this).siblings('input');
+        if ($inp.length) {
+            var cur = $inp.attr('type') === 'password' ? 'text' : 'password';$inp.attr('type', cur);
+        }
+    });
+
+    // 2. Interactive Tile & Image Select Choice Clicks on Frontend
+    $(document).on('click', '.zappoppop-tile-option, .zappoppop-imageselect-option', function() {
+        var $opt =$(this);
+        var $wrap =$opt.closest('[data-field-token], .zappoppop-form-field-wrap');
+        var isMulti = $wrap.attr('data-multi') === '1';
+        if (!isMulti) {
+            $opt.siblings().removeClass('is-selected active');
+        }
+        $opt.toggleClass('is-selected active');
+        var vals = [];
+        $wrap.find('.is-selected, .active').each(function() {
+            vals.push($(this).attr('data-value') ||$(this).text().trim());
+        });
+        $wrap.find('input[type="hidden"]').val(vals.join(', ')).trigger('change');
+    });
+
+    // 3. Interactive Star Rating Selection on Frontend
+    $(document).on('click', '.zappoppop-rating-glyph-legacy', function() { /* ZAPPOPPOP_RATING_LEGACY_OFF */
+        var $g =$(this);
+        var score = parseInt($g.attr('data-score'), 10) || 5;
+        var $wrap =$g.closest('.zappoppop-rating-wrap');
+        var activeCol = $wrap.attr('data-active-color') || '#f59e0b';
+        $wrap.find('.zappoppop-rating-glyph').each(function() {
+            var s = parseInt($(this).attr('data-score'), 10) || 1;
+            $(this).css('color', s <= score ? activeCol : '#cbd5e1');
+        });
+        $wrap.find('input[type="hidden"]').val(score).trigger('change');
+    });
+})(jQuery);
+/* === ZAPPOPPOP_PHASE4_INTERACTIVE_WIDGET_RUNTIME_END === */
+
+/* === ZAPPOPPOP_ADV_RUNTIME_START === */
+(function($) {
+    'use strict';
+    if (window.__zppAdvRuntime) return;
+    window.__zppAdvRuntime = true;
+
+    function slot(c) { return c === '9' || c === 'a' || c === '*'; }
+    function slotOk(m, ch) {
+        if (m === '9') return /[0-9]/.test(ch);
+        if (m === 'a') return /[A-Za-z]/.test(ch);
+        return /[A-Za-z0-9]/.test(ch);
+    }
+    function applyMask(val, mask) {
+        var out = '', vi = 0;
+        for (var mi = 0; mi < mask.length && vi < val.length; mi++) {
+            var m = mask.charAt(mi);
+            if (slot(m)) {
+                var found = false;
+                while (vi < val.length) {
+                    var ch = val.charAt(vi++);
+                    if (slotOk(m, ch)) { out += ch; found = true; break; }
+                }
+                if (!found) break;
+            } else {
+                out += m;
+                if (val.charAt(vi) === m) vi++;
+            }
+        }
+        return out;
+    }
+    function applyFilters(val, csv, live) {
+        var f = String(csv || '').split(','), v = String(val);
+        if (f.indexOf('striptags') !== -1) v = v.replace(/<[^>]*>?/g, '');
+        if (f.indexOf('alpha') !== -1) v = v.replace(/[^A-Za-z\s]/g, '');
+        if (f.indexOf('digits') !== -1) v = v.replace(/\D/g, '');
+        if (f.indexOf('lowercase') !== -1) v = v.toLowerCase();
+        if (f.indexOf('uppercase') !== -1) v = v.toUpperCase();
+        if (!live && f.indexOf('trim') !== -1) v = $.trim(v);
+        return v;
+    }
+
+    document.addEventListener('focusin', function(e) {
+        var t = e.target;
+        if (!t || !t.getAttribute) return;
+        var mask = t.getAttribute('data-input-mask');
+        if (mask && (!t.maxLength || t.maxLength < 1 || t.maxLength > mask.length)) { t.maxLength = mask.length; }
+    }, true);
+
+    document.addEventListener('input', function(e) {
+        var t = e.target;
+        if (!t || !t.getAttribute || typeof t.value !== 'string') return;
+        var mask = t.getAttribute('data-input-mask'), fil = t.getAttribute('data-filters');
+        if (!mask && !fil) return;
+        var v = t.value, n = v;
+        if (fil) n = applyFilters(n, fil, true);
+        if (mask) n = applyMask(n, mask);
+        if (n !== v) t.value = n;
+    }, true);
+
+    document.addEventListener('focusout', function(e) {
+        var t = e.target;
+        if (!t || !t.getAttribute || typeof t.value !== 'string') return;
+        var fil = t.getAttribute('data-filters');
+        if (!fil) return;
+        var n = applyFilters(t.value, fil, false);
+        if (n !== t.value) t.value = n;
+    }, true);
+
+    function bubble($f, msg) {
+        $('.zappoppop-error-bubble').remove();
+        var $b = $('<div class="zappoppop-error-bubble"></div>').text(msg);
+        $('body').append($b);
+        var off = $f.offset() || { top: 0, left: 0 };
+        $b.css({ position: 'absolute', top: (off.top - $b.outerHeight() - 8) + 'px', left: off.left + 'px',
+            background: '#ef4444', color: '#ffffff', padding: '6px 12px', borderRadius: '0px', fontSize: '12px',
+            fontWeight: '600', zIndex: 9999999, boxShadow: '0 4px 12px rgba(239,68,68,0.3)' });
+        try { $f.trigger('focus'); } catch (err) {}
+        setTimeout(function() { $b.fadeOut(300, function() { $b.remove(); }); }, 3500);
+    }
+
+    function validate($p) {
+        var bad = null, msg = '';
+        var $all = $p.find('input, textarea, select');
+        $all.each(function() {
+            var t = this, $f = $(t);
+            if (t.type === 'hidden' || t.type === 'button' || t.type === 'submit' || !$f.is(':visible')) return;
+            var csv = t.getAttribute('data-filters');
+            if (csv && typeof t.value === 'string') {
+                var nv = applyFilters(t.value, csv, false);
+                if (nv !== t.value) t.value = nv;
+            }
+            var rules = String(t.getAttribute('data-validators') || '').split(',').filter(Boolean);
+            var req = t.hasAttribute('required') || rules.indexOf('required') !== -1;
+            var v = $f.is(':checkbox') ? (($p.find('input[type="checkbox"][name="' + t.name + '"]:checked').length) ? '1' : '') /* ZAPPOPPOP_CBGROUP_REQ */ : ((t.type === 'radio') ? ($p.find('input[type="radio"][name="' + t.name + '"]:checked').length ? '1' : '') : $f.val()); /* ZAPPOPPOP_RADIO_REQ */
+            v = Array.isArray(v) ? v.join(',') : String(v == null ? '' : v);
+            var custom = t.getAttribute('data-invalid-msg');
+            function fail(m) { bad = $f; msg = m; return false; }
+            if (!v) {
+                if (req) return fail(t.getAttribute('data-error-msg') || custom || 'This field is required.');
+                return;
+            }
+            if (rules.indexOf('email') !== -1 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+                return fail(custom || 'Please enter a valid email address.');
+            }
+            if (t.type === 'number') { /* ZAPPOPPOP_NUMBER_RANGE */
+                var nv2 = parseFloat(v), mn = t.getAttribute('min'), mx = t.getAttribute('max');
+                if (isNaN(nv2)) return fail(custom || 'Please enter a valid number.');
+                if (mn !== null && mn !== '' && nv2 < parseFloat(mn)) return fail(custom || ('Value must be at least ' + mn + '.'));
+                if (mx !== null && mx !== '' && nv2 > parseFloat(mx)) return fail(custom || ('Value must be at most ' + mx + '.'));
+            }
+            if (rules.indexOf('equal') !== -1) {
+                var eq = t.getAttribute('data-equal-value');
+                if (eq !== null && v !== eq) return fail(custom || 'Value does not match.');
+            }
+            if (rules.indexOf('inarray') !== -1) {
+                var list = String(t.getAttribute('data-in-list') || '').split(',').map(function(x) { return $.trim(x).toLowerCase(); }).filter(Boolean);
+                if (list.length && list.indexOf(v.toLowerCase()) === -1) return fail(custom || 'Value is not in the allowed list.');
+            }
+            if (rules.indexOf('noduplicates') !== -1) {
+                var dup = false;
+                $all.each(function() {
+                    if (this === t || this.type === 'hidden' || this.type === 'checkbox' || this.type === 'radio' || this.type === 'file') return;
+                    if (!$(this).is(':visible')) return;
+                    if (String($(this).val() || '').toLowerCase() === v.toLowerCase()) { dup = true; return false; }
+                });
+                if (dup) return fail(custom || 'This value is already used in another field.');
+            }
+        });
+        return bad ? { field: bad, msg: msg } : null;
+    }
+
+    document.addEventListener('click', function(e) {
+        var btn = (e.target && e.target.closest) ? e.target.closest('.zappoppop-submit-trigger') : null;
+        if (!btn) return;
+        var popup = btn.closest('.zappoppop-popup-wrap') || document.body;
+        var res = validate($(popup));
+        if (res) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            bubble(res.field, res.msg);
+        }
+    }, true);
+})(jQuery);
+/* === ZAPPOPPOP_ADV_RUNTIME_END === */
+
+/* === ZAPPOPPOP_TA_COUNT_START === */
+(function() {
+    'use strict';
+    if (window.__zppTaCount) return;
+    window.__zppTaCount = true;
+    document.addEventListener('input', function(e) {
+        var t = e.target;
+        if (!t || t.tagName !== 'TEXTAREA' || !t.parentNode) return;
+        var c = t.parentNode.querySelector('.zappoppop-ta-count');
+        if (!c) return;
+        var max = parseInt(c.getAttribute('data-max'), 10) || 0;
+        c.textContent = t.value.length + ' / ' + max;
+    }, true);
+})();
+/* === ZAPPOPPOP_TA_COUNT_END === */
+
+/* === ZAPPOPPOP_MULTISELECT_RUNTIME_START === */
+(function() {
+    'use strict';
+    if (window.__zppMultiSel) return;
+    window.__zppMultiSel = true;
+    document.addEventListener('change', function(e) {
+        var t = e.target;
+        if (!t || t.tagName !== 'SELECT' || !t.multiple) return;
+        var max = parseInt(t.getAttribute('data-max-select'), 10) || 0;
+        if (!max) return;
+        var picked = [];
+        for (var i = 0; i < t.options.length; i++) { if (t.options[i].selected) picked.push(t.options[i]); }
+        if (picked.length > max) {
+            var last = t.getAttribute('data-last-valid') ? t.getAttribute('data-last-valid').split('\u0001') : [];
+            for (var j = 0; j < t.options.length; j++) { t.options[j].selected = last.indexOf(t.options[j].value) !== -1; }
+        } else {
+            t.setAttribute('data-last-valid', picked.map(function(o) { return o.value; }).join('\u0001'));
+        }
+    }, true);
+})();
+/* === ZAPPOPPOP_MULTISELECT_RUNTIME_END === */
+
+/* === ZAPPOPPOP_MS_CHIPS_START === */
+(function() {
+    'use strict';
+    if (window.__zppMsChips) return;
+    window.__zppMsChips = true;
+    function paint(chip, on) {
+        chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+        chip.style.background = on ? '#c2185b' : '#f1f5f9';
+        chip.style.color = on ? '#ffffff' : '#475569';
+        chip.style.borderColor = on ? '#c2185b' : '#cbd5e1';
+    }
+    document.addEventListener('click', function(e) {
+        var chip = (e.target && e.target.closest) ? e.target.closest('.zappoppop-ms-chip') : null;
+        if (!chip) return;
+        var wrap = chip.closest('.zappoppop-ms-wrap');
+        var sel = wrap ? wrap.querySelector('select') : null;
+        if (!sel) return;
+        var opt = sel.options[parseInt(chip.getAttribute('data-idx'), 10)];
+        if (!opt) return;
+        var max = parseInt(sel.getAttribute('data-max-select'), 10) || 0;
+        var count = 0;
+        for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].selected) count++; }
+        if (!opt.selected && max && count >= max) { return; }
+        opt.selected = !opt.selected;
+        paint(chip, opt.selected);
+        var ev;
+        try { ev = new Event('change', { bubbles: true }); } catch (err) { ev = document.createEvent('Event'); ev.initEvent('change', true, true); }
+        sel.dispatchEvent(ev);
+    }, true);
+})();
+/* === ZAPPOPPOP_MS_CHIPS_END === */
+
+/* === ZAPPOPPOP_UPLOAD_VALIDATE_START === */
+(function($) {
+    'use strict';
+    function fmtSize(b) {
+        if (b >= 1048576) return (b / 1048576).toFixed(1) + ' MB';
+        if (b >= 1024) return Math.round(b / 1024) + ' KB';
+        return b + ' B';
+    }
+    function setFiles(inp, arr) {
+        try {
+            var dt = new DataTransfer();
+            arr.forEach(function(f) { dt.items.add(f); });
+            inp.files = dt.files;
+        } catch (err) { if (!arr.length) { inp.value = ''; } }
+    }
+    function render(inp, err) {
+        var $list = $(inp).closest('.zappoppop-upload-wrap').find('.zappoppop-upload-list').first();
+        $list.empty();
+        if (err) {
+            $('<div class="zappoppop-upload-error" role="alert"></div>').text(err).css({
+                color: '#b91c1c', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0px',
+                padding: '3px 6px', fontSize: '11px', boxSizing: 'border-box'
+            }).appendTo($list);
+        }
+        var files = inp.files;
+        if (!files || !files.length) return;
+        for (var i = 0; i < files.length; i++) {
+            var $row = $('<div class="zappoppop-upload-item"></div>').css({
+                display: 'flex', alignItems: 'center', gap: '6px', background: '#ffffff', border: '1px solid #cbd5e1',
+                borderRadius: '0px', padding: '3px 6px', fontSize: '11px', color: '#334155', boxSizing: 'border-box'
+            });
+            $('<span class="zappoppop-upload-item-name"></span>').text(files[i].name).css({ flex: '1 1 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }).appendTo($row);
+            $('<span></span>').text(fmtSize(files[i].size)).css({ fontSize: '9px', color: '#94a3b8', flexShrink: 0 }).appendTo($row);
+            $('<button type="button" class="zappoppop-upload-remove" aria-label="Remove file"></button>').text('\u00d7').attr('data-idx', i).css({
+                border: 'none', background: '#fee2e2', color: '#b91c1c', borderRadius: '50%', width: '16px', height: '16px',
+                lineHeight: '14px', padding: 0, cursor: 'pointer', fontSize: '13px', flexShrink: 0
+            }).appendTo($row);
+            $list.append($row);
+        }
+    }
+    function key(f) { return f.name + '|' + f.size + '|' + f.lastModified; }
+
+    $(document).off('change.zappoppopUploadValidate').on('change.zappoppopUploadValidate', '.zappoppop-upload-dropzone input[type="file"]', function() {
+        var inp = this;
+        var picked = Array.prototype.slice.call(inp.files || []);
+        var multi = inp.hasAttribute('multiple');
+        var maxMb = parseInt(inp.getAttribute('data-max-size'), 10) || 0;
+        var maxFiles = parseInt(inp.getAttribute('data-max-files'), 10) || 0;
+        var msgTpl = inp.getAttribute('data-size-msg') || 'File too large. Maximum size is {max}MB.';
+        var allowed = String(inp.getAttribute('accept') || '').toLowerCase().split(',').map(function(x) { return x.trim(); }).filter(Boolean);
+        var prev = multi ? (inp._zppKept || []) : [];
+        var err = '', ok = [];
+        picked.forEach(function(f) {
+            var nm = String(f.name || '').toLowerCase();
+            var ext = nm.lastIndexOf('.') > -1 ? nm.slice(nm.lastIndexOf('.')) : '';
+            if (maxMb && f.size > maxMb * 1048576) { err = err || msgTpl.replace(/\{max\}/g, maxMb).replace(/\{file\}/g, f.name); return; }
+            if (allowed.length && allowed.indexOf(ext) === -1) { err = err || ('File type not allowed: ' + f.name); return; }
+            ok.push(f);
+        });
+        var seen = {}, merged = [];
+        prev.concat(ok).forEach(function(f) { var k = key(f); if (!seen[k]) { seen[k] = 1; merged.push(f); } });
+        if (multi && maxFiles && merged.length > maxFiles) {
+            err = err || ('You can upload up to ' + maxFiles + ' files.');
+            merged = merged.slice(0, maxFiles);
+        }
+        if (!multi) { merged = merged.slice(0, 1); }
+        inp._zppKept = merged;
+        setFiles(inp, merged);
+        render(inp, err);
+    });
+
+    $(document).off('click.zappoppopUploadRemove').on('click.zappoppopUploadRemove', '.zappoppop-upload-remove', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        var inp = $(this).closest('.zappoppop-upload-wrap').find('input[type="file"]')[0];
+        if (!inp || !inp.files) return;
+        var idx = parseInt($(this).attr('data-idx'), 10);
+        var arr = Array.prototype.slice.call(inp.files).filter(function(f, j) { return j !== idx; });
+        inp._zppKept = arr;
+        setFiles(inp, arr);
+        render(inp, '');
+        $(inp).trigger('zappoppop:upload-changed');
+    });
+})(jQuery);
+/* === ZAPPOPPOP_UPLOAD_VALIDATE_END === */
+
+/* === ZAPPOPPOP_PW_TOGGLE_START === */
+(function() {
+    'use strict';
+    function findInput(btn) {
+        var wrap = btn.closest('.zappoppop-password-wrap, .wp-pwd');
+        return wrap ? wrap.querySelector('input.zappoppop-input-password') : null;
+    }
+    function setState(btn, inp, show) {
+        inp.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        var ic = btn.querySelector('.dashicons');
+        if (ic) {
+            ic.classList.toggle('dashicons-visibility', !show);
+            ic.classList.toggle('dashicons-hidden', show);
+        }
+    }
+    document.addEventListener('mousedown', function(e) {
+        if (e.target && e.target.closest && e.target.closest('.zappoppop-pw-toggle')) { e.preventDefault(); }
+    }, true);
+    document.addEventListener('click', function(e) {
+        var btn = e.target && e.target.closest ? e.target.closest('.zappoppop-pw-toggle') : null;
+        if (!btn) return;
+        var inp = findInput(btn);
+        if (!inp) return;
+        e.preventDefault(); e.stopPropagation();
+        var show = inp.type === 'password';
+        setState(btn, inp, show);
+        try { inp.focus(); var l = inp.value.length; inp.setSelectionRange(l, l); } catch (er) {}
+    }, true);
+    function reset(e) {
+        var f = e.target;
+        if (!f || !f.querySelectorAll) return;
+        Array.prototype.forEach.call(f.querySelectorAll('.zappoppop-pw-toggle'), function(b) {
+            var i = findInput(b); if (i) setState(b, i, false);
+        });
+    }
+    document.addEventListener('submit', reset, true);
+    document.addEventListener('reset', reset, true);
+})();
+/* === ZAPPOPPOP_PW_TOGGLE_END === */
+
+/* === ZAPPOPPOP_BLOCK_EMPTY_SUBMIT_START === */
+(function($) {
+    'use strict';
+    if (window.__zppBlockEmptySubmit) return;
+    window.__zppBlockEmptySubmit = true;
+    var SKIP_TYPES = { hidden: 1, button: 1, submit: 1, reset: 1, image: 1, checkbox: 1, radio: 1, file: 1, range: 1, color: 1 };
+
+    function isBlank($f) {
+        var v = $f.val();
+        if (Array.isArray(v)) return v.length === 0;
+        return $.trim(String(v == null ? '' : v)) === '';
+    }
+
+    function bubble($f, msg) {
+        $('.zappoppop-error-bubble').remove();
+        var $b = $('<div class="zappoppop-error-bubble"></div>').text(msg);
+        $('body').append($b);
+        var off = $f.offset() || { top: 0, left: 0 };
+        $b.css({ position: 'absolute', top: Math.max(0, off.top - $b.outerHeight() - 8) + 'px', left: off.left + 'px',
+            background: '#ef4444', color: '#ffffff', padding: '6px 12px', borderRadius: '0px', fontSize: '12px',
+            fontWeight: '600', zIndex: 9999999, boxShadow: '0 4px 12px rgba(239,68,68,0.3)' });
+        try { $f.trigger('focus'); } catch (err) {}
+        setTimeout(function() { $b.fadeOut(300, function() { $b.remove(); }); }, 3500);
+    }
+
+    document.addEventListener('click', function(e) {
+        var btn = (e.target && e.target.closest) ? e.target.closest('.zappoppop-submit-trigger') : null;
+        if (!btn || btn.getAttribute('data-block-empty') !== '1') return;
+        var scope = btn.closest('.zappoppop-canvas-container') || btn.closest('.zappoppop-popup-wrap') || document.body;
+        var empty = null;
+        $(scope).find('input, textarea, select').each(function() {
+            var t = this, $f = $(t);
+            var type = String(t.type || '').toLowerCase();
+            if (SKIP_TYPES[type] || t.disabled || t.readOnly || t.name === '_zappoppop_hp_email' || !$f.is(':visible')) return;
+            if (isBlank($f)) { empty = $f; return false; }
+        });
+        if (!empty) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        bubble(empty, btn.getAttribute('data-empty-msg') || 'Please fill in all fields before submitting.');
+    }, true);
+})(jQuery);
+/* === ZAPPOPPOP_BLOCK_EMPTY_SUBMIT_END === */

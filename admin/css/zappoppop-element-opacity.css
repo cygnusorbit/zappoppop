@@ -1,0 +1,279 @@
+/* === ZAPPOPPOP_COLOR_BG_OPACITY_CSS_START === */
+/* Harmonized with /admin.php?page=zappoppop-theme > Builder Design Tokens */
+
+/* Force-unhide any previously suppressed Opacity or Background Color sections on ALL elements */
+.zappoppop-inspector [data-setting-group="opacity"],
+.zappoppop-inspector [data-setting-group="background_color"],
+.zappoppop-inspector [data-setting-group="color"],
+.zappoppop-layer-settings [data-setting-group="opacity"],
+.zappoppop-layer-settings [data-setting-group="background_color"],
+.zappoppop-layer-settings [data-setting-group="color"],
+.zappoppop-inspector .zappoppop-opacity-section,
+.zappoppop-inspector .zappoppop-bg-color-group,
+.zappoppop-active-layer-shape [data-setting-group="opacity"],
+.zappoppop-active-layer-shape [data-setting-group="background_color"],
+[data-element="shape"] [data-setting-group="opacity"],
+[data-element="shape"] [data-setting-group="background_color"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.zappoppop-universal-color-opacity-suite {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0 14px 0;
+    padding: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.zappoppop-universal-suite-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.zappoppop-universal-suite-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #0f172a;
+    margin: 0;
+}
+
+.zappoppop-universal-suite-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: #6366f1;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 999px;
+    padding: 1px 7px;
+}
+
+.zappoppop-opacity-control-card {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 9px 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.zappoppop-opacity-control-card:hover,
+.zappoppop-opacity-control-card:focus-within {
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.zappoppop-opacity-control-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.zappoppop-opacity-control-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #334155;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.zappoppop-color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zappoppop-universal-color-well {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px !important;
+    height: 28px !important;
+    min-width: 30px !important;
+    padding: 2px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 5px !important;
+    background: #ffffff !important;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.zappoppop-universal-color-well::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.zappoppop-universal-color-well::-webkit-color-swatch {
+    border: none;
+    border-radius: 3px;
+}
+
+.zappoppop-universal-color-hex {
+    flex: 1 1 auto;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 5px !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+.zappoppop-universal-color-hex:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+    outline: none !important;
+}
+
+.zappoppop-opacity-swatch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    font-variant-numeric: tabular-nums;
+}
+
+.zappoppop-opacity-swatch-checker {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+    background-image:
+        linear-gradient(45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(-45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #cbd5e1 75%),
+        linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
+    background-size: 6px 6px;
+    background-position: 0 0, 0 3px, 3px -3px, -3px 0;
+    flex-shrink: 0;
+}
+
+.zappoppop-opacity-swatch-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+}
+
+.zappoppop-opacity-control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.zappoppop-opacity-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1 1 auto;
+    height: 5px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+}
+
+.zappoppop-opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #6366f1;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+.zappoppop-opacity-slider::-webkit-slider-thumb:hover {
+    background: #4f46e5;
+    transform: scale(1.08);
+}
+
+.zappoppop-opacity-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #6366f1;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+    cursor: pointer;
+}
+
+.zappoppop-opacity-number-wrap {
+    display: inline-flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    padding: 0 6px 0 0;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.zappoppop-opacity-number-wrap:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.zappoppop-opacity-number {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    height: 26px !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    text-align: right;
+    font-size: 12px !important;
+    font-weight: 600;
+    color: #0f172a !important;
+    padding: 0 3px 0 4px !important;
+    margin: 0 !important;
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+}
+
+.zappoppop-opacity-number::-webkit-outer-spin-button,
+.zappoppop-opacity-number::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.zappoppop-opacity-unit {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    user-select: none;
+}
+/* === ZAPPOPPOP_COLOR_BG_OPACITY_CSS_END === */

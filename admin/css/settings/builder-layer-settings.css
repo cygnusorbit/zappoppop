@@ -1,0 +1,43 @@
+/* Settings > Builder > Element / Layer Settings (styled like the Theme page: neutral cards, primary-colour tabs) */
+.zappoppop-bld-subtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.zappoppop-bld-subtabs .zpp-theme-tab { height: 30px; padding: 0 12px; border-radius: 3px; font-size: 12px; cursor: pointer; }
+.zappoppop-bld-subtabs .zpp-theme-tab.is-active,
+.zappoppop-ls-tabs .zpp-theme-tab.is-active {
+    background: var(--zpp-c-primary, #2563eb) !important;
+    border-color: var(--zpp-c-primary, #2563eb) !important;
+    color: var(--zpp-c-primary-text, #fff) !important;
+}
+.zappoppop-bld-pane[hidden],
+.zappoppop-ls-el[hidden],
+.zappoppop-ls-pane[hidden] { display: none !important; }
+
+.zappoppop-ls-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1040px; margin-top: 12px; }
+.zappoppop-ls-elements { margin: 0; padding: 0; list-style: none; background: var(--zpp-c-bg-card, #fff); border: 1px solid var(--zpp-c-border, #dcdcde); border-radius: 3px; box-shadow: 0 1px 1px rgba(0,0,0,.04); max-height: 640px; overflow-y: auto; }
+.zappoppop-ls-elements li { margin: 0; border-bottom: 1px solid #f0f0f1; }
+.zappoppop-ls-elements li:last-child { border-bottom: 0; }
+.zappoppop-ls-el-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; background: transparent; border: 0; border-left: 3px solid transparent; text-align: left; font-size: 13px; color: #1d2327; cursor: pointer; }
+.zappoppop-ls-el-btn:hover { background: #f6f7f7; }
+.zappoppop-ls-el-btn.is-active { background: #f0f6fc; border-left-color: var(--zpp-c-primary, #2563eb); font-weight: 600; }
+.zappoppop-ls-el-btn:focus { outline: 0; box-shadow: inset 0 0 0 2px var(--zpp-c-primary, #2563eb); }
+.zappoppop-ls-num { flex: none; min-width: 22px; height: 20px; line-height: 20px; text-align: center; font-size: 11px; font-weight: 600; color: #50575e; background: #f0f0f1; border-radius: 3px; }
+.zappoppop-ls-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zappoppop-ls-dot { display: none; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--zpp-c-primary, #2563eb); }
+.zappoppop-ls-el-btn.has-override .zappoppop-ls-dot { display: inline-block; }
+
+.zappoppop-ls-main { min-width: 0; }
+.zappoppop-ls-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 0 10px; margin: 0 0 12px; border-bottom: 1px solid #eee; }
+.zappoppop-ls-head h4 { margin: 0; font-size: 14px; }
+.zappoppop-ls-tabs { margin: 0 0 12px; }
+.zappoppop-ls-tabs .zpp-theme-tab { height: 30px; padding: 0 12px; border-radius: 3px; font-size: 12px; cursor: pointer; }
+.zappoppop-ls-note { margin: 0 0 10px; padding: 8px 12px; background: #f6f7f7; border: 1px solid #dcdcde; border-left: 3px solid #dba617; font-size: 12px; color: #50575e; }
+
+.zappoppop-ls-main .zappoppop-bld-list { max-width: none; }
+.zappoppop-ls-main .zappoppop-bld-list li + li { border-top: 0; }
+.zappoppop-ls-main .zappoppop-bld-list li.is-child { padding-left: 34px; background: #fcfcfc; }
+.zappoppop-ls-main .zappoppop-bld-list li.is-child .bld-name { font-weight: 500; }
+.zappoppop-ls-main .zappoppop-bld-list li.is-off .bld-name { color: #8c8f94; }
+
+@media (max-width: 782px) {
+    .zappoppop-ls-layout { grid-template-columns: 1fr; }
+    .zappoppop-ls-elements { max-height: 240px; }
+}

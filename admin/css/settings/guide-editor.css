@@ -1,0 +1,43 @@
+/* Settings > Builder > Guide Steps (same neutral cards / primary accents as the Theme page) */
+.zappoppop-gs { max-width: 860px; }
+.zappoppop-gs.is-master-off { opacity: .5; pointer-events: none; }
+.zappoppop-gs-master { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; gap: 16px; max-width: 860px; box-sizing: border-box; margin: 0 0 12px; padding: 12px 14px; background: var(--zpp-c-bg-card, #fff); border: 1px solid var(--zpp-c-border, #dcdcde); border-radius: 3px; }
+.zappoppop-gs-master-name { font-size: 13px; font-weight: 600; color: #1d2327; }
+.zappoppop-gs-master-desc { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: #646970; }
+.zappoppop-gs-toolbar { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; gap: 8px; margin: 12px 0; }
+.zappoppop-gs-count { font-size: 12px; color: var(--zpp-c-muted, #646970); }
+.zappoppop-gs-toolbar-btns { display: -webkit-box; display: -ms-flexbox; display: flex; gap: 8px; }
+.zappoppop-gs-list { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; gap: 6px; }
+
+.zappoppop-gs-row { background: var(--zpp-c-bg-card, #fff); border: 1px solid var(--zpp-c-border, #dcdcde); border-radius: 3px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .04); box-shadow: 0 1px 1px rgba(0, 0, 0, .04); }
+.zappoppop-gs-row.is-off .zappoppop-gs-title { color: #8c8f94; }
+.zappoppop-gs-head { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 10px; padding: 10px 12px; }
+.zappoppop-gs-num { -ms-flex: none; flex: none; min-width: 22px; height: 20px; line-height: 20px; text-align: center; font-size: 11px; font-weight: 600; color: #50575e; background: #f0f0f1; border-radius: 3px; }
+.zappoppop-gs-title { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; width: 100%; font-weight: 600; }
+.zappoppop-gs-tag { -ms-flex: none; flex: none; padding: 1px 8px; font-size: 11px; color: #50575e; background: #f6f7f7; border: 1px solid #dcdcde; border-radius: 10px; white-space: nowrap; }
+.zappoppop-gs-row[data-custom="1"] .zappoppop-gs-tag { color: var(--zpp-c-primary, #2563eb); border-color: var(--zpp-c-primary, #2563eb); background: #fff; }
+.zappoppop-gs-actions { -ms-flex: none; flex: none; display: -webkit-box; display: -ms-flexbox; display: flex; gap: 4px; }
+.zappoppop-gs-actions .button { display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; min-width: 30px; height: 30px; padding: 0; }
+.zappoppop-gs-actions .button[disabled] { opacity: .4; }
+.zappoppop-gs-actions .dashicons { width: 18px; height: 18px; font-size: 18px; line-height: 18px; }
+.zappoppop-gs-actions .zappoppop-gs-del { color: var(--zpp-c-danger, #b32d2e); }
+.zappoppop-gs-actions .button[aria-expanded="true"] { border-color: var(--zpp-c-primary, #2563eb); color: var(--zpp-c-primary, #2563eb); }
+
+.zappoppop-gs-body { display: -ms-grid; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; border-top: 1px solid #f0f0f1; background: #fcfcfc; }
+.zappoppop-gs-body[hidden],
+.zappoppop-gs-if-custom[hidden] { display: none !important; }
+.zappoppop-gs-field { display: block; min-width: 0; }
+.zappoppop-gs-field > span { display: block; margin: 0 0 4px; font-size: 12px; font-weight: 600; color: #1d2327; }
+.zappoppop-gs-field input[type="text"],
+.zappoppop-gs-field select,
+.zappoppop-gs-field textarea { width: 100%; max-width: none; }
+.zappoppop-gs-wide { grid-column: 1 / -1; }
+
+.zappoppop-gs .button:focus,
+.zappoppop-gs-title:focus { outline: 2px solid var(--zpp-c-primary, #2563eb); outline-offset: 1px; }
+
+@media (max-width: 782px) {
+    .zappoppop-gs-body { grid-template-columns: 1fr; }
+    .zappoppop-gs-head { -ms-flex-wrap: wrap; flex-wrap: wrap; }
+    .zappoppop-gs-tag { display: none; }
+}

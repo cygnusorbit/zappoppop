@@ -1,0 +1,125 @@
+/* ZapPopPop Library: uniform buttons (colour + highlight) and centred icon buttons.
+   Loaded after every other library stylesheet. Chrome / Safari / Firefox / Edge safe. */
+
+/* ===== Card icon buttons: ONE neutral look ===== */
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del {
+    background: var(--zpp-c-secondary-bg, #fff) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-secondary-border, #cbd5e1) !important;
+    color: var(--zpp-c-secondary-text, #334155) !important;
+}
+/* ===== Primary action (Import / Use) ===== */
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use {
+    background: var(--zpp-c-primary, #2563eb) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-primary, #2563eb) !important;
+    color: var(--zpp-c-primary-text, #fff) !important;
+}
+/* ===== Uniform highlight (hover / focus / active) ===== */
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del:focus {
+    background: var(--zpp-c-secondary-hover, #f1f5f9) !important;
+    border-color: var(--zpp-c-primary, #2563eb) !important;
+    color: var(--zpp-c-primary, #2563eb) !important;
+}
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use:hover,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use:focus {
+    background: var(--zpp-c-primary-hover, #1d4ed8) !important;
+    border-color: var(--zpp-c-primary-hover, #1d4ed8) !important;
+    color: var(--zpp-c-primary-text, #fff) !important;
+}
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn:focus,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use:focus {
+    outline: 0 !important;
+    box-shadow: 0 0 0 1px var(--zpp-c-primary, #2563eb) !important;
+}
+
+/* ===== Centering: button box + glyph + row ===== */
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del {
+    display: -webkit-inline-box !important; display: -ms-inline-flexbox !important; display: inline-flex !important;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+    -webkit-box-sizing: border-box; box-sizing: border-box;
+    flex: 0 0 32px; float: none; vertical-align: middle;
+    text-align: center; text-indent: 0; text-transform: none; overflow: visible;
+}
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-preview-btn::before,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-tpl-import-btn::before,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-use::before,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-dl::before,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-edit::before,
+body .zappoppop-library-wrap .zappoppop-tpl-card .zappoppop-usertpl-del::before {
+    position: static !important; display: block !important;
+    width: 14px; height: 14px; margin: 0 !important; padding: 0 !important;
+    font-size: 14px !important; line-height: 14px !important; text-align: center;
+    -webkit-box-flex: 0; -ms-flex: none; flex: none; vertical-align: middle;
+}
+body .zappoppop-library-wrap .zappoppop-tpl-card .zpp-tpl-foot > div {
+    display: -webkit-box; display: -ms-flexbox; display: flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+    gap: 6px;
+}
+
+/* ===== Preview modal + template editor modal: same palette ===== */
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal .button,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-ghost {
+    background: var(--zpp-c-secondary-bg, #fff) !important;
+    border-color: var(--zpp-c-secondary-border, #cbd5e1) !important;
+    color: var(--zpp-c-secondary-text, #334155) !important;
+}
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal .button:hover,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-ghost:hover {
+    background: var(--zpp-c-secondary-hover, #f1f5f9) !important;
+    border-color: var(--zpp-c-primary, #2563eb) !important;
+    color: var(--zpp-c-primary, #2563eb) !important;
+}
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal .button.is-on,
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal #zappoppop-lp-use,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-blue,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-orange {
+    background: var(--zpp-c-primary, #2563eb) !important;
+    border-color: var(--zpp-c-primary, #2563eb) !important;
+    color: var(--zpp-c-primary-text, #fff) !important;
+    -webkit-filter: none; filter: none;
+}
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal .button.is-on:hover,
+body .zappoppop-library-wrap #zappoppop-lib-preview-modal #zappoppop-lp-use:hover,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-blue:hover,
+body .zappoppop-library-wrap #zappoppop-te-modal .te-orange:hover {
+    background: var(--zpp-c-primary-hover, #1d4ed8) !important;
+    border-color: var(--zpp-c-primary-hover, #1d4ed8) !important;
+    color: var(--zpp-c-primary-text, #fff) !important;
+    -webkit-filter: none; filter: none;
+}
+
+/* ===== Category pills: same hover highlight ===== */
+#wpbody-content .zappoppop-library-wrap .zappoppop-cat-btn:hover {
+    background: var(--zpp-c-secondary-hover, #f1f5f9);
+    border-color: var(--zpp-c-primary, #2563eb);
+    color: var(--zpp-c-primary, #2563eb);
+}
+#wpbody-content .zappoppop-library-wrap .zappoppop-cat-btn.active:hover {
+    background: var(--zpp-c-primary-hover, #1d4ed8);
+    border-color: var(--zpp-c-primary-hover, #1d4ed8);
+    color: var(--zpp-c-primary-text, #fff);
+}

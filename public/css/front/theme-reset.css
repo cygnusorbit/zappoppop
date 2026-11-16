@@ -1,0 +1,26 @@
+/* ZapPopPop layer isolation: identical in the builder stage and on the frontend */
+.zappoppop-popup-wrap .zappoppop-layer-item,
+#zappoppop-canvas-box .zappoppop-canvas-item {
+    text-transform: none;
+    letter-spacing: normal;
+    text-shadow: none;
+}
+.zappoppop-popup-wrap .zappoppop-layer-item button,
+.zappoppop-popup-wrap .zappoppop-layer-item input,
+.zappoppop-popup-wrap .zappoppop-layer-item select,
+.zappoppop-popup-wrap .zappoppop-layer-item textarea,
+#zappoppop-canvas-box .zappoppop-canvas-item button,
+#zappoppop-canvas-box .zappoppop-canvas-item input,
+#zappoppop-canvas-box .zappoppop-canvas-item select,
+#zappoppop-canvas-box .zappoppop-canvas-item textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+    margin: 0;
+    min-height: 0;
+    max-width: none;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}

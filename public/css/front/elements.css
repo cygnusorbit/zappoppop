@@ -1,0 +1,638 @@
+/* ==========================================================================
+   ZapPopPop Frontend Elements: Complete 26-Element Stage & Runtime Styling
+   Compatible with Chrome, Safari, Firefox, Edge, iPadOS, iOS, Android
+   ========================================================================== */
+
+/* Universal Layer Container Reset */
+.zappoppop-front-element {
+    display: block;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.zappoppop-front-element * {
+    box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   1. TITLE ELEMENT (Headings <h1> through <h4>)
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element h1,
+.zappoppop-front-element h2,
+.zappoppop-front-element h3,
+.zappoppop-front-element h4 {
+    margin: 0;
+    padding: 0;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   2. TEXT ELEMENT (Paragraphs, Spans & Blocks)
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element p,
+.zappoppop-front-element span,
+.zappoppop-front-element div {
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   3. IMAGE ELEMENT
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element img {
+    max-width: 100%;
+    height: 100%;
+    display: block;
+    border-style: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. VIDEO ELEMENT (Responsive 16:9 Wrapper & Players)
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element iframe,
+.zappoppop-front-element video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: none;
+    border-radius: inherit;
+    background: #000000;
+    object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   5. SHAPE ELEMENT (SVG Vector Presets)
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+    pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   6. FORM INPUTS: TEXT FIELD, EMAIL, NUMBER & DATE
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element input[type="text"],
+.zappoppop-front-element input[type="email"],
+.zappoppop-front-element input[type="number"],
+.zappoppop-front-element input[type="date"] {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: inherit;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: inherit;
+    color: #0f172a;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.zappoppop-front-element input[type="text"]:focus,
+.zappoppop-front-element input[type="email"]:focus,
+.zappoppop-front-element input[type="number"]:focus,
+.zappoppop-front-element input[type="date"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    background-color: #ffffff;
+}
+
+.zappoppop-front-element input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+.zappoppop-front-element input::-webkit-input-placeholder {
+    color: #94a3b8;
+}
+
+.zappoppop-front-element input::-moz-placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   7. SELECT / DROPDOWN
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element select {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: inherit;
+    padding: 0 32px 0 12px;
+    font-family: inherit;
+    font-size: inherit;
+    color: #0f172a;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zappoppop-front-element select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   8. RADIOS & CHECKBOXES
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element input[type="radio"],
+.zappoppop-front-element input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #2563eb;
+    flex-shrink: 0;
+}
+
+.zappoppop-front-element label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   9. STAR RATING
+   -------------------------------------------------------------------------- */
+.zappoppop-field-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.zappoppop-rating-star {
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease;
+    display: inline-block;
+    line-height: 1;
+}
+
+.zappoppop-rating-star:hover {
+    transform: scale(1.2);
+}
+
+/* --------------------------------------------------------------------------
+   10. RANGE SLIDER
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.zappoppop-front-element input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.zappoppop-front-element input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #2563eb;
+    margin-top: -6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease;
+}
+
+.zappoppop-front-element input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.zappoppop-front-element input[type="range"]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #2563eb;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease;
+}
+
+.zappoppop-front-element input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+}
+
+.zappoppop-front-element input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.2);
+}
+
+/* --------------------------------------------------------------------------
+   11. DIGITAL SIGNATURE PAD
+   -------------------------------------------------------------------------- */
+.zappoppop-sig-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: #ffffff;
+}
+
+.zappoppop-sig-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+    border: 1px dashed #94a3b8;
+    border-radius: inherit;
+}
+
+.zappoppop-sig-clear {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    color: #475569;
+    cursor: pointer;
+    line-height: 1.4;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.zappoppop-sig-clear:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   12. PROGRESS BAR
+   -------------------------------------------------------------------------- */
+.zappoppop-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: #e2e8f0;
+    border-radius: inherit;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   13. FILE UPLOAD
+   -------------------------------------------------------------------------- */
+.zappoppop-front-element input[type="file"] {
+    width: 100%;
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   14. SUBMIT BUTTON
+   -------------------------------------------------------------------------- */
+.zappoppop-submit-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: inherit;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.zappoppop-submit-btn:hover {
+    filter: brightness(1.08);
+}
+
+.zappoppop-submit-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+.zappoppop-submit-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+    filter: grayscale(0.2);
+}
+
+/* --------------------------------------------------------------------------
+   15. CALL-TO-ACTION LINK BUTTON
+   -------------------------------------------------------------------------- */
+.zappoppop-link-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: inherit;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.zappoppop-link-btn:hover {
+    filter: brightness(1.08);
+    text-decoration: none;
+}
+
+.zappoppop-link-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+/* --------------------------------------------------------------------------
+   16. NEXT CANVAS STEP BUTTON
+   -------------------------------------------------------------------------- */
+.zappoppop-next-canvas-btn,
+.zappoppop-next-screen-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: inherit;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease;
+}
+
+.zappoppop-next-canvas-btn:hover,
+.zappoppop-next-screen-btn:hover {
+    filter: brightness(1.08);
+}
+
+.zappoppop-next-canvas-btn:active,
+.zappoppop-next-screen-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+/* --------------------------------------------------------------------------
+   17. PAY CHECKOUT BUTTON
+   -------------------------------------------------------------------------- */
+.zappoppop-pay-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: inherit;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease;
+}
+
+.zappoppop-pay-btn:hover {
+    filter: brightness(1.08);
+}
+
+.zappoppop-pay-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+/* --------------------------------------------------------------------------
+   18. ON-CANVAS CLOSE ICON BUTTON
+   -------------------------------------------------------------------------- */
+.zappoppop-close-btn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
+}
+
+.zappoppop-close-btn:hover {
+    transform: scale(1.15);
+    opacity: 0.85;
+}
+
+.zappoppop-close-btn:active {
+    transform: scale(0.95);
+}
+
+/* Remove Firefox inner focus outline on buttons */
+button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+   19. VALIDATION ERROR TOOLTIP BUBBLES
+   -------------------------------------------------------------------------- */
+.zappoppop-validation-bubble {
+    animation: zappoppopBubbleBounce 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zappoppopBubbleBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(6px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Typography Cadence Inheritance: Ensure Letter-Spacing & Line-Height Cascade to Inputs and Buttons */
+.zappoppop-front-element p,
+.zappoppop-front-element span,
+.zappoppop-front-element div,
+.zappoppop-front-element input[type="text"],
+.zappoppop-front-element input[type="email"],
+.zappoppop-front-element input[type="number"],
+.zappoppop-front-element select,
+.zappoppop-front-element button,
+.zappoppop-submit-btn,
+.zappoppop-link-btn,
+.zappoppop-next-canvas-btn {
+    letter-spacing: inherit;
+    line-height: inherit;
+}
+
+
+/* Phase 2: Live Frontend Button Hover Transitions */
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover button,
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover a,
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-submit-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-link-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-next-canvas-btn {
+    background: var(--zappoppop-hover-bg) !important;
+}
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover button,
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover a,
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover .zappoppop-submit-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover .zappoppop-link-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover .zappoppop-next-canvas-btn {
+    color: var(--zappoppop-hover-color) !important;
+}
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover button,
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover a,
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover .zappoppop-submit-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover .zappoppop-link-btn,
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover .zappoppop-next-canvas-btn {
+    border-color: var(--zappoppop-hover-border) !important;
+}
+
+
+/* --- Parity Phase 2: Public Hover States --- */
+.zappoppop-element[data-has-hover="true"] {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.zappoppop-element[data-has-hover="true"]:hover {
+    background-color: var(--zappoppop-hover-bg) !important;
+    color: var(--zappoppop-hover-color) !important;
+    border-color: var(--zappoppop-hover-border) !important;
+}
+
+
+/* --- Parity: Title Semantic Element Harmonization --- */
+.zappoppop-title-inner {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    text-align: inherit !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+/* ZAPPOPPOP_PHASE5_DECOMPOSED_26_CSS: Cross-Browser Styles for 26 Decomposed Elements */
+.zappoppop-form-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.zappoppop-form-input:focus {
+    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.25);
+}
+.zappoppop-choice-card {
+    transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.zappoppop-choice-card:hover {
+    transform: translateY(-1px);
+}
+.zappoppop-Choice-card.is-selected,
+.zappoppop-choice-card.is-selected {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+.zappoppop-rating-glyph {
+    transition: transform 0.12s ease, color 0.12s ease;
+}
+.zappoppop-rating-glyph:hover {
+    transform: scale(1.18);
+}
+
+
+
+/* ZAPPOPPOP_TF_FILL: form inputs fill their layer box (cross-browser) */
+.zappoppop-layer-item > .zappoppop-tf-wrap,
+.zappoppop-layer-item > .zappoppop-form-input,
+.zappoppop-layer-item > .zappoppop-tf-wrap > .zappoppop-form-input {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0;
+    box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+}
+
+/* ZAPPOPPOP_FG_COLOR: foreground colour for icons & accents */
+.zappoppop-layer-item[style*="--zappoppop-fg"] .zappoppop-front-btn i,
+.zappoppop-layer-item[style*="--zappoppop-fg"] .zappoppop-front-btn .dashicons { color: var(--zappoppop-fg); }
+.zappoppop-layer-item[style*="--zappoppop-fg"] input[type="checkbox"],
+.zappoppop-layer-item[style*="--zappoppop-fg"] input[type="radio"] { accent-color: var(--zappoppop-fg); }

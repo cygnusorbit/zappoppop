@@ -1,0 +1,178 @@
+/**
+ * ZapPopPop Tools: Portability Sub-Module
+ * Handles instant client-side bulk JSON backups & schema validation.
+ */
+(function($) {
+    'use strict';
+
+    window.ZapPopPopToolsPortability = {
+        init: function() {
+            this.bindExport();
+            this.bindImport();
+        },
+
+        bindExport: function() {
+            $(document).on('click', '#zappoppop-bulk-export-btn', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var origText = $btn.html();
+                var ajaxUrl = (window.zappoppop_vars && window.zappoppop_vars.ajax_url) ? window.zappoppop_vars.ajax_url : ajaxurl;
+                var nonce = (window.zappoppop_vars && window.zappoppop_vars.nonce) ? window.zappoppop_vars.nonce : '';
+
+                $btn.prop('disabled', true).html('Generating Backup...');
+
+                $.ajax({
+                    url: ajaxUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'zappoppop_bulk_export',
+                        nonce: nonce
+                    },
+                    success: function(response) {
+                        if (response && response.success && response.data) {
+                            var payload = response.data.payload;
+                            var filename = response.data.filename || ('zappoppop-bulk-backup-' + new Date().toISOString().slice(0, 10) + '.json');
+                            var jsonString = JSON.stringify(payload, null, 2);
+
+                            var blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
+                            var downloadUrl = URL.createObjectURL(blob);
+                            var a = document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = downloadUrl;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
+
+                            setTimeout(function() {
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(downloadUrl);
+                            }, 100);
+
+                            $btn.prop('disabled', false).html('Download Started!');
+                            setTimeout(function() {
+                                $btn.html(origText);
+                            }, 2500);
+                        } else {
+                            var $form = $('#zappoppop-bulk-export-form');
+                            if ($form.length) {
+                                $form.off('submit').submit();
+                            } else {
+                                alert((response.data && response.data.message) ? response.data.message : wp.i18n.__('Backup generation failed.', 'zappoppop'));
+                                $btn.prop('disabled', false).html(origText);
+                            }
+                        }
+                    },
+                    error: function() {
+                        var $form = $('#zappoppop-bulk-export-form');
+                        if ($form.length) {
+                            $form.off('submit').submit();
+                        } else {
+                            alert(wp.i18n.__('Server communication error. Please try again.', 'zappoppop'));
+                            $btn.prop('disabled', false).html(origText);
+                        }
+                    }
+                });
+            });
+        },
+
+        bindImport: function() {
+            var self = this;
+            $(document).on('submit', '#zappoppop-bulk-import-form', function(e) {
+                var fileInput = document.getElementById('zappoppop-bulk-import-file');
+                if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+                    return; // Let browser HTML5 validation catch missing file
+                }
+
+                var file = fileInput.files[0];
+                if (file.type && file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    alert(wp.i18n.__('Please select a valid JSON file (*.json).', 'zappoppop'));
+                    e.preventDefault();
+                    return;
+                }
+
+                // If FileReader is supported, validate and upload via AJAX for instant feedback
+                if (window.FileReader && window.FormData) {
+                    e.preventDefault();
+                    var $btn = $('#zappoppop-bulk-import-btn');
+                    var origText = $btn.html();
+                    var $status = $('#zappoppop-import-status-text');
+
+                    $btn.prop('disabled', true).html('Validating...');
+                    $status.show().text('Reading backup archive...');
+
+                    var reader = new FileReader();
+                    reader.onload = function(evt) {
+                        try {
+                            var parsed = JSON.parse(evt.target.result);
+                            if (!parsed || (typeof parsed !== 'object') || (!parsed.items && !parsed.campaigns)) {
+                                alert(wp.i18n.__('Invalid backup file. The selected JSON does not contain valid ZapPopPop campaigns or items.', 'zappoppop'));
+                                $btn.prop('disabled', false).html(origText);
+                                $status.hide();
+                                return;
+                            }
+
+                            $btn.html('Restoring...');
+                            $status.text('Importing popups and A/B tests...');
+
+                            var ajaxUrl = (window.zappoppop_vars && window.zappoppop_vars.ajax_url) ? window.zappoppop_vars.ajax_url : ajaxurl;
+                            var nonce = (window.zappoppop_vars && window.zappoppop_vars.nonce) ? window.zappoppop_vars.nonce : '';
+
+                            var formData = new FormData();
+                            formData.append('action', 'zappoppop_bulk_import');
+                            formData.append('nonce', nonce);
+                            formData.append('import_data', evt.target.result);
+                            if ($('#zappoppop-import-dryrun').is(':checked')) { formData.append('dry_run', '1'); }
+                            if ($('#zappoppop-import-settings').is(':checked')) { formData.append('import_settings', '1'); }
+
+                            $.ajax({
+                                url: ajaxUrl,
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response && response.success) {
+                                        $btn.html('Restored!');
+                                        $status.css('color', '#10b981').text(response.data.message || 'Restoration complete!');
+                                        if (response.data && response.data.dry_run) { $btn.prop('disabled', false).html(origText); } else { setTimeout(function() { window.location.reload(); }, 1400); }
+                                    } else {
+                                        var errMsg = (response.data && response.data.message) ? response.data.message : 'Import failed.';
+                                        alert(wp.i18n.__('Import Error:', 'zappoppop') + ' ' + errMsg);
+                                        $btn.prop('disabled', false).html(origText);
+                                        $status.hide();
+                                    }
+                                },
+                                error: function() {
+                                    // Fallback to native submission on AJAX failure
+                                    var form = document.getElementById('zappoppop-bulk-import-form');
+                                    if (form) {
+                                        form.submit();
+                                    } else {
+                                        alert(wp.i18n.__('Network error while processing import.', 'zappoppop'));
+                                        $btn.prop('disabled', false).html(origText);
+                                        $status.hide();
+                                    }
+                                }
+                            });
+
+                        } catch (err) {
+                            alert(wp.i18n.__('JSON Syntax Error: The file contents could not be parsed as valid JSON.', 'zappoppop'));
+                            $btn.prop('disabled', false).html(origText);
+                            $status.hide();
+                        }
+                    };
+
+                    reader.onerror = function() {
+                        alert(wp.i18n.__('Could not read the selected file.', 'zappoppop'));
+                        $btn.prop('disabled', false).html(origText);
+                        $status.hide();
+                    };
+
+                    reader.readAsText(file);
+                }
+            });
+        }
+    };
+})(jQuery);

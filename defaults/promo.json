@@ -1,0 +1,123 @@
+{
+  "_help": {
+    "about": "Edit this file to control the promotional items shown on the free version. Everything is hidden automatically while the Pro add-on is active.",
+    "enabled": "Master switch. false hides every promo item.",
+    "show_close": "true = items have a close (x) button. false = no close button, the item always stays. Can also be set per slot.",
+    "remember_dismiss": "Only matters when the close button is shown. true = a closed item stays closed (see reshow_days). false = closing only hides it until the next page refresh, so it appears again every time. Can also be set per slot.",
+    "slots": "header_text = text in the centre of the top bar. builder_box = box under 'Save as default for new popups' in the builder. dashboard_slider = sliding images in a movable Dashboard box (drag it like the other boxes; its height follows the slides). menu_item = extra link at the end of the ZapPopPop admin menu.",
+    "per slot": "enabled (true/false), start and end (YYYY-MM-DD, optional schedule), show_close (true/false, overrides the top-level value), remember_dismiss (optional, overrides the top-level value), reshow_days (a closed item appears again after this many days; 0 = only when its id or content changes), id (optional; change it to show a closed item again).",
+    "fields": "title, text (links <a>, <strong>, <em>, <br> allowed), cta (button label), url, new_tab (true/false), image (file name of an image placed in this defaults/ folder, e.g. slide1.jpg, or a full URL), image_url (optional: clicking the image opens this URL), image_new_tab (optional true/false; default follows new_tab).",
+    "colors": "text_color, bg_color, cta_text_color, cta_bg_color: hex values such as #ffffff. Leave empty to use the Theme page colours. Slides inherit the slot colours unless they set their own.",
+    "dashboard_slider": "interval = milliseconds between slides. slides = list of entries with the fields above (maximum 8).",
+    "menu_item": "text = menu label (default Go PRO), url = where it links, text_color and bg_color = menu item colours.",
+    "note": "JSON does not allow comments or trailing commas. Keys starting with an underscore are ignored. Put images (png, jpg, gif, webp, svg, avif) in this defaults/ folder.",
+    "plugin_link": "Link on the Plugins screen, right after 'Deactivate'. text = label (default Go PRO), url = where it links, new_tab (true/false), text_color = hex colour of the text (empty = Theme primary colour). enabled=false removes it.",
+    "image_fit": "Dashboard slider images: auto (default) = the image fills the full width and its height follows the image size, so the box grows or shrinks to fit; text and button are drawn on top of the image. cover = fixed box height, the image is cropped to fill it. Set image_fit on the slot or on a single slide."
+  },
+  "enabled": true,
+  "remember_dismiss": true,
+  "show_close": true,
+  "slots": {
+    "header_text": {
+      "enabled": true,
+      "text": "Unlock advanced popup features with Pro.",
+      "cta": "Go Pro",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "start": "",
+      "end": "",
+      "reshow_days": 1,
+      "text_color": "",
+      "bg_color": "",
+      "cta_text_color": "",
+      "cta_bg_color": ""
+    },
+    "builder_box": {
+      "enabled": true,
+      "show_close": false,
+      "title": "Need more power?",
+      "text": "Upgrade to Pro for extra elements, triggers and templates.",
+      "cta": "See Pro features",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "image": "",
+      "start": "",
+      "end": "",
+      "reshow_days": 1,
+      "text_color": "",
+      "bg_color": "",
+      "cta_text_color": "",
+      "cta_bg_color": "",
+      "image_url": ""
+    },
+    "dashboard_slider": {
+      "enabled": true,
+      "show_close": false,
+      "interval": 5000,
+      "start": "",
+      "end": "",
+      "slides": [
+        {
+          "title": "",
+          "text": "",
+          "cta": "",
+          "url": "",
+          "new_tab": true,
+          "image": "images/promo1.jpeg",
+          "image_url": "https://zappoppop.com"
+        },
+        {
+    	  "title": "",
+          "text": "",
+          "cta": "",
+          "url": "",
+          "new_tab": true,
+          "image": "images/promo2.jpeg",
+          "image_url": "https://zappoppop.com"
+        },
+         {
+    	  "title": "",
+          "text": "",
+          "cta": "",
+          "url": "",
+          "new_tab": true,
+          "image": "images/promo3.jpeg",
+          "image_url": "https://zappoppop.com"
+        },
+          {
+    	  "title": "",
+          "text": "",
+          "cta": "",
+          "url": "",
+          "new_tab": true,
+          "image": "images/promo4.jpeg",
+          "image_url": "https://zappoppop.com"
+        }
+      ],
+      "reshow_days": 1,
+      "text_color": "",
+      "bg_color": "#b42d7b",
+      "cta_text_color": "",
+      "cta_bg_color": ""
+    },
+    "menu_item": {
+      "enabled": true,
+      "text": "Upgrade to PRO",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "text_color": "#ef5f33",
+      "bg_color": "#000",
+      "start": "",
+      "end": ""
+    },
+    "plugin_link": {
+      "enabled": true,
+      "text": "Go PRO",
+      "url": "https://zappoppop.com",
+      "new_tab": true,
+      "text_color": "",
+      "start": "",
+      "end": ""
+    }
+  }
+}

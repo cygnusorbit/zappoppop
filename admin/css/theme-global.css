@@ -1,0 +1,357 @@
+/* ZapPopPop global admin theme. Variables are emitted inline (--zpp-*).
+   Applied only when body has .zappoppop-admin-themed. Chrome/Safari/Firefox/Edge safe. */
+
+body.zappoppop-admin-themed #wpcontent,
+body.zappoppop-admin-themed #wpbody { background: var(--zpp-c-bg-page); }
+
+body.zappoppop-admin-themed #wpbody-content {
+    font-family: var(--zpp-font-base);
+    font-size: var(--zpp-fs-base);
+    font-weight: var(--zpp-fw-body);
+    line-height: var(--zpp-lh-base);
+    color: var(--zpp-c-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.zappoppop-admin-themed #wpbody-content h1,
+body.zappoppop-admin-themed #wpbody-content h2,
+body.zappoppop-admin-themed #wpbody-content h3,
+body.zappoppop-admin-themed #wpbody-content h4 {
+    font-family: var(--zpp-font-heading);
+    font-weight: var(--zpp-fw-heading);
+    color: var(--zpp-c-heading);
+}
+body.zappoppop-admin-themed #wpbody-content h1 { font-size: var(--zpp-fs-h1); }
+body.zappoppop-admin-themed #wpbody-content h2 { font-size: var(--zpp-fs-h2); }
+body.zappoppop-admin-themed #wpbody-content h3 { font-size: var(--zpp-fs-h3); }
+
+body.zappoppop-admin-themed #wpbody-content .description,
+body.zappoppop-admin-themed #wpbody-content small,
+body.zappoppop-admin-themed #wpbody-content .howto { font-size: var(--zpp-fs-small); color: var(--zpp-c-muted); }
+
+:where(body.zappoppop-admin-themed #wpbody-content) a { color: var(--zpp-c-link); }
+:where(body.zappoppop-admin-themed #wpbody-content) a:hover,
+:where(body.zappoppop-admin-themed #wpbody-content) a:focus { color: var(--zpp-c-link-hover); }
+
+body.zappoppop-admin-themed #wpbody-content code,
+body.zappoppop-admin-themed #wpbody-content pre,
+body.zappoppop-admin-themed #wpbody-content .code { font-family: var(--zpp-font-mono); }
+
+/* Labels */
+body.zappoppop-admin-themed #wpbody-content label {
+    font-size: var(--zpp-fs-label);
+    font-weight: var(--zpp-fw-label);
+    letter-spacing: var(--zpp-ls-label);
+    text-transform: var(--zpp-tt-label);
+}
+body.zappoppop-admin-themed #wpbody-content label:has(input[type="checkbox"]),
+body.zappoppop-admin-themed #wpbody-content label:has(input[type="radio"]) { text-transform: none; }
+
+/* Buttons */
+body.zappoppop-admin-themed #wpbody-content .button,
+body.zappoppop-admin-themed #wpbody-content button.button,
+body.zappoppop-admin-themed #wpbody-content .wp-core-ui .button {
+    font-family: var(--zpp-font-base);
+    font-size: var(--zpp-fs-button);
+    font-weight: var(--zpp-fw-button);
+    min-height: var(--zpp-h-button);
+    height: var(--zpp-h-button);
+    border-radius: var(--zpp-r-button);
+    background: var(--zpp-c-secondary-bg);
+    color: var(--zpp-c-secondary-text);
+    border: var(--zpp-bw) solid var(--zpp-c-secondary-border);
+}
+/* Center label (horizontal + vertical) at any "Button height" */
+body.zappoppop-admin-themed #wpbody-content .button:not(.button-link):not([hidden]),
+body.zappoppop-admin-themed #wpbody-content button.button:not(.button-link):not([hidden]),
+body.zappoppop-admin-themed #wpbody-content .wp-core-ui .button:not(.button-link):not([hidden]) {
+    display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+    gap: 4px; box-sizing: border-box;
+    padding-top: 0; padding-bottom: 0;
+    line-height: 1; text-align: center; vertical-align: middle;
+}
+body.zappoppop-admin-themed #wpbody-content .button:not(.button-link) .dashicons { margin: 0; line-height: 1; }
+
+body.zappoppop-admin-themed #wpbody-content .button:hover,
+body.zappoppop-admin-themed #wpbody-content .button:focus { background: var(--zpp-c-secondary-hover); color: var(--zpp-c-secondary-text); }
+
+body.zappoppop-admin-themed #wpbody-content .button-primary,
+body.zappoppop-admin-themed #wpbody-content .button.button-primary {
+    background: var(--zpp-c-primary);
+    border-color: var(--zpp-c-primary);
+    color: var(--zpp-c-primary-text);
+}
+body.zappoppop-admin-themed #wpbody-content .button-primary:hover,
+body.zappoppop-admin-themed #wpbody-content .button-primary:focus {
+    background: var(--zpp-c-primary-hover);
+    border-color: var(--zpp-c-primary-hover);
+    color: var(--zpp-c-primary-text);
+}
+body.zappoppop-admin-themed #wpbody-content .button-link-delete,
+body.zappoppop-admin-themed #wpbody-content .zpp-btn-danger,
+body.zappoppop-admin-themed #wpbody-content .button.zpp-btn-danger {
+    background: var(--zpp-c-danger);
+    border-color: var(--zpp-c-danger);
+    color: var(--zpp-c-danger-text);
+}
+
+/* Inputs */
+body.zappoppop-admin-themed #wpbody-content input[type="text"],
+body.zappoppop-admin-themed #wpbody-content input[type="search"],
+body.zappoppop-admin-themed #wpbody-content input[type="email"],
+body.zappoppop-admin-themed #wpbody-content input[type="url"],
+body.zappoppop-admin-themed #wpbody-content input[type="number"],
+body.zappoppop-admin-themed #wpbody-content input[type="password"],
+body.zappoppop-admin-themed #wpbody-content select,
+body.zappoppop-admin-themed #wpbody-content textarea {
+    font-family: var(--zpp-font-base);
+    font-size: var(--zpp-fs-input);
+    background-color: var(--zpp-c-input-bg);
+    color: var(--zpp-c-input-text);
+    border: var(--zpp-bw) solid var(--zpp-c-input-border);
+    border-radius: var(--zpp-r-input);
+}
+body.zappoppop-admin-themed #wpbody-content input[type="text"],
+body.zappoppop-admin-themed #wpbody-content input[type="search"],
+body.zappoppop-admin-themed #wpbody-content input[type="email"],
+body.zappoppop-admin-themed #wpbody-content input[type="url"],
+body.zappoppop-admin-themed #wpbody-content input[type="number"],
+body.zappoppop-admin-themed #wpbody-content input[type="password"],
+body.zappoppop-admin-themed #wpbody-content select { min-height: var(--zpp-h-input); }
+body.zappoppop-admin-themed #wpbody-content input::-webkit-input-placeholder { color: var(--zpp-c-input-placeholder); }
+body.zappoppop-admin-themed #wpbody-content input::-moz-placeholder { color: var(--zpp-c-input-placeholder); opacity: 1; }
+body.zappoppop-admin-themed #wpbody-content input::placeholder { color: var(--zpp-c-input-placeholder); }
+body.zappoppop-admin-themed #wpbody-content input:focus,
+body.zappoppop-admin-themed #wpbody-content select:focus,
+body.zappoppop-admin-themed #wpbody-content textarea:focus {
+    border-color: var(--zpp-c-input-focus);
+    box-shadow: 0 0 0 1px var(--zpp-c-input-focus);
+    outline: none;
+}
+
+/* Cards / KPI / panels */
+body.zappoppop-admin-themed .zappoppop-kpi-card,
+body.zappoppop-admin-themed .zappoppop-table-toolbar,
+body.zappoppop-admin-themed .zappoppop-table-container,
+body.zappoppop-admin-themed .zpp-theme-box,
+body.zappoppop-admin-themed .zpp-theme-panel {
+    background: var(--zpp-c-bg-card);
+    border-color: var(--zpp-c-border);
+    border-width: var(--zpp-bw);
+}
+body.zappoppop-admin-themed .zappoppop-kpi-card { border-radius: var(--zpp-r-card); padding: var(--zpp-p-card) calc(var(--zpp-p-card) + 4px); box-shadow: var(--zpp-shadow-card); }
+body.zappoppop-admin-themed .zappoppop-kpi-grid { gap: var(--zpp-gap); }
+body.zappoppop-admin-themed .zappoppop-kpi-card .kpi-label { color: var(--zpp-c-kpi-label); }
+body.zappoppop-admin-themed .zappoppop-kpi-card .kpi-val { color: var(--zpp-c-kpi-value); font-size: var(--zpp-fs-kpi); font-weight: var(--zpp-fw-kpi); }
+body.zappoppop-admin-themed .zappoppop-table-container { box-shadow: var(--zpp-shadow-card); }
+
+/* Tables */
+body.zappoppop-admin-themed #wpbody-content table.widefat,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table {
+    background: var(--zpp-c-row-bg);
+    border-color: var(--zpp-c-row-border);
+    font-size: var(--zpp-fs-table);
+}
+body.zappoppop-admin-themed #wpbody-content table.widefat th,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table th,
+body.zappoppop-admin-themed #wpbody-content table.widefat thead td {
+    background: var(--zpp-c-th-bg);
+    color: var(--zpp-c-th-text);
+    border-color: var(--zpp-c-row-border);
+    font-size: var(--zpp-fs-table);
+}
+body.zappoppop-admin-themed #wpbody-content table.widefat td,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table td {
+    color: var(--zpp-c-text);
+    border-color: var(--zpp-c-row-border);
+    font-size: var(--zpp-fs-table);
+}
+body.zappoppop-admin-themed #wpbody-content table.striped > tbody > :nth-child(odd) { background: var(--zpp-c-row-stripe); }
+body.zappoppop-admin-themed #wpbody-content table.widefat tbody tr:hover { background: var(--zpp-c-row-hover); }
+
+/* Badges & chips */
+body.zappoppop-admin-themed .zappoppop-status-badge { font-size: var(--zpp-fs-badge); border-radius: var(--zpp-r-badge); text-transform: var(--zpp-tt-badge); }
+body.zappoppop-admin-themed .zappoppop-status-badge.status-publish { background: var(--zpp-c-badge-pub-bg); color: var(--zpp-c-badge-pub-text); }
+body.zappoppop-admin-themed .zappoppop-status-badge.status-draft { background: var(--zpp-c-badge-draft-bg); color: var(--zpp-c-badge-draft-text); }
+body.zappoppop-admin-themed .zappoppop-shortcode-chip {
+    background: var(--zpp-c-chip-bg); color: var(--zpp-c-chip-text); border-color: var(--zpp-c-chip-border); font-family: var(--zpp-font-mono);
+}
+
+/* Notices */
+body.zappoppop-admin-themed #wpbody-content .notice-success { border-left-color: var(--zpp-c-success); }
+body.zappoppop-admin-themed #wpbody-content .notice-warning { border-left-color: var(--zpp-c-warning); }
+body.zappoppop-admin-themed #wpbody-content .notice-info { border-left-color: var(--zpp-c-info); }
+body.zappoppop-admin-themed #wpbody-content .notice-error { border-left-color: var(--zpp-c-danger); }
+
+/* Modals (dashboard modal classes) */
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-backdrop { background: var(--zpp-c-modal-backdrop); }
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-card { background: var(--zpp-c-modal-bg); border-radius: var(--zpp-r-card); box-shadow: var(--zpp-shadow-modal); }
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-header { background: var(--zpp-c-modal-head-bg); color: var(--zpp-c-modal-head-text); }
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-header h3 { color: var(--zpp-c-modal-head-text); font-size: var(--zpp-fs-modal-title); }
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-close { color: var(--zpp-c-modal-close); }
+
+/* Scrollbars */
+body.zappoppop-admin-themed .zappoppop-table-container,
+body.zappoppop-admin-themed .zappoppop-dashboard-modal-body { scrollbar-width: thin; scrollbar-color: var(--zpp-c-scroll-thumb) var(--zpp-c-scroll-track); }
+body.zappoppop-admin-themed ::-webkit-scrollbar-thumb { background: var(--zpp-c-scroll-thumb); border-radius: 3px; }
+body.zappoppop-admin-themed ::-webkit-scrollbar-track { background: var(--zpp-c-scroll-track); }
+
+/* ZPP_TABLE_FIX: uniform list-table backgrounds.
+   Header colour only on thead/tfoot; body rows own the background; cells stay transparent. */
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat { background: var(--zpp-c-row-bg); border-color: var(--zpp-c-border); }
+
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > thead > tr > th,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > thead > tr > td,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tfoot > tr > th,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tfoot > tr > td {
+    background: var(--zpp-c-th-bg);
+    color: var(--zpp-c-th-text);
+    border-color: var(--zpp-c-row-border);
+}
+
+/* Body cells (including the row-header checkbox <th>) never paint their own background */
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr > th,
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr > td {
+    background: transparent;
+    color: var(--zpp-c-text);
+    border-color: var(--zpp-c-row-border);
+}
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr > th.check-column { vertical-align: middle; }
+
+/* Row backgrounds: one colour per row (white / stripe), hover on the whole row */
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr:nth-child(odd)  { background: var(--zpp-c-row-bg); }
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr:nth-child(even) { background: var(--zpp-c-row-stripe); }
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr:hover          { background: var(--zpp-c-row-hover); }
+body.zappoppop-admin-themed #wpbody-content table.wp-list-table.widefat > tbody > tr.inline-edit-row { background: #f0f0f1; }
+
+/* ZPP_LIST_BADGES */
+body.zappoppop-admin-themed .zappoppop-badge { font-size: var(--zpp-fs-badge); border-radius: var(--zpp-r-badge); text-transform: var(--zpp-tt-badge); }
+body.zappoppop-admin-themed .zappoppop-badge.zappoppop-badge-success { background: var(--zpp-c-badge-pub-bg); color: var(--zpp-c-badge-pub-text); }
+body.zappoppop-admin-themed .zappoppop-badge.zappoppop-badge-draft { background: var(--zpp-c-badge-draft-bg); color: var(--zpp-c-badge-draft-text); }
+body.zappoppop-admin-themed #wpbody-content .row-actions a { font-size: var(--zpp-fs-small); }
+body.zappoppop-admin-themed #wpbody-content .row-actions .submitdelete { color: var(--zpp-c-danger); }
+
+/* ZPP_OVERVIEW_SYNC */
+/* Dashboard overview + shared top bar (.zappoppop-dash-bar is also used on the Popups page) */
+body.zappoppop-admin-themed .zappoppop-dash-bar {
+    background: var(--zpp-c-bg-card);
+    border: var(--zpp-bw) solid var(--zpp-c-border);
+    border-radius: var(--zpp-r-card);
+    box-shadow: var(--zpp-shadow-card);
+}
+body.zappoppop-admin-themed .zappoppop-dash-bar .cell { border-color: var(--zpp-c-row-border); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .bar-btn { color: var(--zpp-c-text); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .bar-btn:hover,
+body.zappoppop-admin-themed .zappoppop-dash-bar .bar-btn:focus,
+body.zappoppop-admin-themed .zappoppop-dash-bar .bar-btn[aria-expanded="true"] { background: var(--zpp-c-row-hover); color: var(--zpp-c-link-hover); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .cell.title { color: var(--zpp-c-heading); font-family: var(--zpp-font-heading); font-size: var(--zpp-fs-base); font-weight: var(--zpp-fw-heading); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .cell.title .dashicons { color: var(--zpp-c-primary); }
+
+/* Bar action buttons */
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn {
+    background: var(--zpp-c-secondary-bg); color: var(--zpp-c-secondary-text);
+    border: var(--zpp-bw) solid var(--zpp-c-secondary-border); border-radius: var(--zpp-r-button);
+    font-family: var(--zpp-font-base); font-size: var(--zpp-fs-button); font-weight: var(--zpp-fw-button);
+}
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn:hover,
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn:focus { background: var(--zpp-c-secondary-hover); color: var(--zpp-c-link-hover); border-color: var(--zpp-c-primary); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn.is-primary { background: var(--zpp-c-primary); border-color: var(--zpp-c-primary); color: var(--zpp-c-primary-text); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn.is-primary:hover,
+body.zappoppop-admin-themed .zappoppop-dash-bar .zpp-bar-btn.is-primary:focus { background: var(--zpp-c-primary-hover); border-color: var(--zpp-c-primary-hover); color: var(--zpp-c-primary-text); }
+body.zappoppop-admin-themed .zappoppop-dash-bar .cell.actions input[type="search"] {
+    background: var(--zpp-c-input-bg); color: var(--zpp-c-input-text);
+    border: var(--zpp-bw) solid var(--zpp-c-input-border); border-radius: var(--zpp-r-input); font-size: var(--zpp-fs-input);
+}
+
+/* Dropdown menus */
+body.zappoppop-admin-themed .zappoppop-dd {
+    background: var(--zpp-c-bg-card); border: var(--zpp-bw) solid var(--zpp-c-border);
+    box-shadow: var(--zpp-shadow-modal); border-radius: var(--zpp-r-card);
+    scrollbar-width: thin; scrollbar-color: var(--zpp-c-scroll-thumb) var(--zpp-c-scroll-track);
+}
+body.zappoppop-admin-themed .zappoppop-dd a { color: var(--zpp-c-text); font-size: var(--zpp-fs-small); }
+body.zappoppop-admin-themed .zappoppop-dd a:hover,
+body.zappoppop-admin-themed .zappoppop-dd a:focus { background: var(--zpp-c-row-hover); color: var(--zpp-c-link-hover); }
+body.zappoppop-admin-themed .zappoppop-dd a .dashicons { color: var(--zpp-c-muted); }
+body.zappoppop-admin-themed .zappoppop-dd .dd-sep { background: var(--zpp-c-row-border); }
+body.zappoppop-admin-themed .zappoppop-dd .dd-empty { color: var(--zpp-c-muted); font-size: var(--zpp-fs-small); }
+
+/* Grid + boxes */
+body.zappoppop-admin-themed .zappoppop-dash-grid { gap: var(--zpp-gap); }
+body.zappoppop-admin-themed .zappoppop-box {
+    background: var(--zpp-c-bg-card); border: var(--zpp-bw) solid var(--zpp-c-border);
+    border-radius: var(--zpp-r-card); box-shadow: var(--zpp-shadow-card); padding: var(--zpp-p-card);
+}
+body.zappoppop-admin-themed .zappoppop-box h2 {
+    color: var(--zpp-c-heading); font-family: var(--zpp-font-heading); font-size: var(--zpp-fs-h2);
+    font-weight: var(--zpp-fw-heading); border-bottom: var(--zpp-bw) solid var(--zpp-c-row-border);
+}
+body.zappoppop-admin-themed .zappoppop-box h2 .dashicons { color: var(--zpp-c-primary); }
+body.zappoppop-admin-themed .zappoppop-box .notice-info {
+    background: var(--zpp-c-bg-page); color: var(--zpp-c-text); font-size: var(--zpp-fs-small);
+    border-left: 4px solid var(--zpp-c-info); border-radius: var(--zpp-r-button);
+}
+body.zappoppop-admin-themed .zappoppop-box .notice-info a { color: var(--zpp-c-link); }
+body.zappoppop-admin-themed .zappoppop-box .notice-info a:hover { color: var(--zpp-c-link-hover); }
+
+/* Primary action button inside boxes */
+body.zappoppop-admin-themed .zappoppop-btn-red {
+    background: var(--zpp-c-primary); color: var(--zpp-c-primary-text); border-radius: var(--zpp-r-button);
+    font-family: var(--zpp-font-base); font-weight: var(--zpp-fw-button);
+}
+body.zappoppop-admin-themed .zappoppop-btn-red:hover,
+body.zappoppop-admin-themed .zappoppop-btn-red:focus { background: var(--zpp-c-primary-hover); color: var(--zpp-c-primary-text); }
+
+/* Lists */
+body.zappoppop-admin-themed .zappoppop-pop-list li,
+body.zappoppop-admin-themed .zappoppop-sub-list li { border-bottom: var(--zpp-bw) solid var(--zpp-c-row-border); font-size: var(--zpp-fs-table); }
+body.zappoppop-admin-themed .zappoppop-pop-list li .t { color: var(--zpp-c-text); }
+body.zappoppop-admin-themed .zappoppop-pop-list li .m,
+body.zappoppop-admin-themed .zappoppop-sub-list .when,
+body.zappoppop-admin-themed .zappoppop-sub-list .pop { color: var(--zpp-c-muted); font-size: var(--zpp-fs-small); }
+body.zappoppop-admin-themed .zappoppop-pop-list li .a a { font-size: var(--zpp-fs-small); }
+body.zappoppop-admin-themed .zappoppop-sub-list .who { color: var(--zpp-c-text); }
+body.zappoppop-admin-themed .zappoppop-sub-list li.is-unread .who { color: var(--zpp-c-link); }
+body.zappoppop-admin-themed .zappoppop-sub-list li.is-unread .dot { background: var(--zpp-c-primary); }
+
+/* Tool tiles */
+body.zappoppop-admin-themed .zappoppop-tool-tiles { gap: var(--zpp-gap); }
+body.zappoppop-admin-themed .zappoppop-tool-tiles .tile { background: var(--zpp-c-bg-card); border: var(--zpp-bw) solid var(--zpp-c-border); border-radius: var(--zpp-r-button); }
+body.zappoppop-admin-themed .zappoppop-tool-tiles .tile:hover,
+body.zappoppop-admin-themed .zappoppop-tool-tiles .tile:focus { border-color: var(--zpp-c-primary); }
+body.zappoppop-admin-themed .zappoppop-tool-tiles .ico { color: var(--zpp-c-muted); }
+body.zappoppop-admin-themed .zappoppop-tool-tiles .lbl { background: var(--zpp-c-primary); color: var(--zpp-c-primary-text); font-family: var(--zpp-font-base); }
+body.zappoppop-admin-themed .zappoppop-tool-tiles .tile:hover .lbl { background: var(--zpp-c-primary-hover); }
+
+/* ZAPPOPPOP_GLOBAL_SELECT_ARROW */
+/* Single-value dropdowns keep a visible arrow on every themed page (the old `background` shorthand removed it) */
+body.zappoppop-admin-themed #wpbody-content select:not([multiple]):not([size]) {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    padding-right: 28px; text-overflow: ellipsis; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2712%27%20height%3D%2712%27%20viewBox%3D%270%200%2012%2012%27%3E%3Cpath%20d%3D%27M2%204l4%204%204-4%27%20fill%3D%27none%27%20stroke%3D%27%23787c82%27%20stroke-width%3D%271.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 9px center; background-size: 12px 12px;
+}
+body.zappoppop-admin-themed #wpbody-content select::-ms-expand { display: none; }
+
+/* ZPP_THEME_ACTIVE: active / selected / current button state (Theme > Buttons > Active background + Active text) */
+body.zappoppop-admin-themed .button.is-active,
+body.zappoppop-admin-themed .button.active,
+body.zappoppop-admin-themed .button.current,
+body.zappoppop-admin-themed .button.is-on,
+body.zappoppop-admin-themed .button[aria-pressed="true"],
+body.zappoppop-admin-themed .zpp-bar-btn.is-active,
+body.zappoppop-admin-themed a.zappoppop-view-btn.current,
+body.zappoppop-admin-themed .zpp-cat-pill.is-active,
+body.zappoppop-admin-themed .zpp-theme-tab.is-active,
+body.zappoppop-admin-themed .zappoppop-subs-tabs button.active,
+body.zappoppop-admin-themed .zpp-pg .page-numbers.current,
+body.zappoppop-admin-themed #zappoppop-lib-preview-modal .lp-bar .button.is-on {
+    background: var(--zpp-c-active) !important;
+    border-color: var(--zpp-c-active) !important;
+    color: var(--zpp-c-active-text) !important;
+}
+body.zappoppop-admin-themed a.zappoppop-view-btn.current .count,
+body.zappoppop-admin-themed .zappoppop-subs-tabs button.active small { color: var(--zpp-c-active-text) !important; }

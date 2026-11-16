@@ -1,0 +1,147 @@
+/* ==========================================================================
+   ZapPopPop Popups Library: Header Toolbar & Filter Pills
+   Compatible with Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+
+.zappoppop-library-wrap {
+    margin: 20px 20px 0 2px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    box-sizing: border-box;
+    color: #1e293b;
+}
+
+.zappoppop-library-header {
+    margin-bottom: 24px;
+}
+
+.zappoppop-library-header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zappoppop-library-header p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+}
+
+/* Category Filter Toolbar & Search Bar */
+.zappoppop-library-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.zappoppop-library-categories {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Category Filter Buttons Normalization */
+.zappoppop-cat-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    line-height: 1.2;
+    box-sizing: border-box;
+}
+
+.zappoppop-cat-btn::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.zappoppop-cat-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.zappoppop-cat-btn.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
+}
+
+/* Keyword Search Input */
+.zappoppop-library-search-wrap {
+    position: relative;
+    min-width: 240px;
+}
+
+.zappoppop-library-search-wrap .dashicons {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+}
+
+#zappoppop-lib-search {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 6px 12px 6px 32px;
+    font-size: 12px;
+    color: #1e293b;
+    background: #ffffff;
+    width: 100%;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#zappoppop-lib-search::-webkit-input-placeholder {
+    color: #94a3b8;
+}
+
+#zappoppop-lib-search::-moz-placeholder {
+    color: #94a3b8;
+}
+
+#zappoppop-lib-search:-ms-input-placeholder {
+    color: #94a3b8;
+}
+
+#zappoppop-lib-search:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}

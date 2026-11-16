@@ -1,0 +1,450 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * ZapPopPop Component & Typography Libraries Manager
+ * Manages conditional asset enqueuing for typography, icons, and frontend interactive libraries.
+ */
+class ZapPopPop_Libraries {
+
+    /**
+     * Catalog of third-party component extensions and assets.
+     *
+     * @return array
+     */
+    public static function get_library_definitions() {
+        return [
+            'font_awesome' => [
+                'name'    => 'Font Awesome 6',
+                'type'    => 'style',
+                'handle'  => 'zappoppop-font-awesome',
+                'src'     => self::fa_url(),
+                'deps'    => [],
+                'ver'     => '6.5.1',
+                'setting' => 'font_awesome',
+            ],
+            'air_datepicker_css' => [
+                'name'    => 'Air Datepicker CSS',
+                'type'    => 'style',
+                'handle'  => 'zappoppop-air-datepicker-css',
+                'src'     => plugins_url( 'public/vendor/air-datepicker.min.css', dirname( __FILE__ ) ),
+                'deps'    => [],
+                'ver'     => '3.5.0',
+                'setting' => 'load_air_datepicker',
+            ],
+            'air_datepicker_js' => [
+                'name'      => 'Air Datepicker JS',
+                'type'      => 'script',
+                'handle'    => 'zappoppop-air-datepicker-js',
+                'src'       => plugins_url( 'public/vendor/air-datepicker.min.js', dirname( __FILE__ ) ),
+                'deps'      => [],
+                'ver'       => '3.5.0',
+                'in_footer' => true,
+                'setting'   => 'load_air_datepicker',
+            ],
+            'jquery_mask' => [
+                'name'      => 'jQuery Mask Plugin',
+                'type'      => 'script',
+                'handle'    => 'zappoppop-jquery-mask',
+                'src'       => plugins_url( 'public/vendor/jquery.mask.min.js', dirname( __FILE__ ) ),
+                'deps'      => ['jquery'],
+                'ver'       => '1.14.16',
+                'in_footer' => true,
+                'setting'   => 'load_jquery_mask',
+            ],
+            'range_slider_css' => [
+                'name'    => 'Ion Range Slider CSS',
+                'type'    => 'style',
+                'handle'  => 'zappoppop-range-slider-css',
+                'src'     => plugins_url( 'public/vendor/ion.rangeSlider.min.css', dirname( __FILE__ ) ),
+                'deps'    => [],
+                'ver'     => '2.3.1',
+                'setting' => 'load_range_slider',
+            ],
+            'range_slider_js' => [
+                'name'      => 'Ion Range Slider JS',
+                'type'      => 'script',
+                'handle'    => 'zappoppop-range-slider-js',
+                'src'       => plugins_url( 'public/vendor/ion.rangeSlider.min.js', dirname( __FILE__ ) ),
+                'deps'      => ['jquery'],
+                'ver'       => '2.3.1',
+                'in_footer' => true,
+                'setting'   => 'load_range_slider',
+            ],
+        ];
+    }
+
+    /**
+     * Check if a library feature is active in settings.
+     *
+     * @param string $key
+     * @return bool
+     */
+    public static function is_library_enabled($key) {
+        $settings = get_option('zappoppop_settings', []);
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        switch ($key) {
+            case 'font_awesome':
+                return !empty($settings['font_awesome']);
+            case 'google_fonts':
+                return empty($settings['disable_google_fonts']) && !empty($settings['google_fonts']);
+            case 'air_datepicker':
+            case 'load_air_datepicker':
+                return !empty($settings['load_air_datepicker']) || !empty($settings['air_datepicker']);
+            case 'jquery_mask':
+            case 'load_jquery_mask':
+                return !empty($settings['load_jquery_mask']) || !empty($settings['jquery_mask']);
+            case 'range_slider':
+            case 'load_range_slider':
+                return !empty($settings['load_range_slider']) || !empty($settings['range_slider']);
+            default:
+                return !empty($settings[$key]);
+        }
+    }
+
+    /**
+     * Enqueue active component extension scripts & styles for public frontend.
+     */
+    public static function enqueue_frontend_libraries() {
+        $settings = get_option('zappoppop_settings', []);
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        // 1. Font Awesome 6 Icons
+        if (!empty($settings['font_awesome'])) {
+            wp_enqueue_style(
+                'zappoppop-font-awesome',
+                self::fa_url(),
+                [],
+                '6.5.1'
+            );
+        }
+
+        // Air Datepicker (CSS & JS)
+        if (!empty($settings['load_air_datepicker']) || !empty($settings['air_datepicker'])) {
+            wp_enqueue_style(
+                'zappoppop-air-datepicker-css',
+                plugins_url( 'public/vendor/air-datepicker.min.css', dirname( __FILE__ ) ),
+                [],
+                '3.5.0'
+            );
+            wp_enqueue_script(
+                'zappoppop-air-datepicker-js',
+                plugins_url( 'public/vendor/air-datepicker.min.js', dirname( __FILE__ ) ),
+                [],
+                '3.5.0',
+                true
+            );
+        }
+
+        // jQuery Mask Plugin
+        if (!empty($settings['load_jquery_mask']) || !empty($settings['jquery_mask'])) {
+            wp_enqueue_script(
+                'zappoppop-jquery-mask',
+                plugins_url( 'public/vendor/jquery.mask.min.js', dirname( __FILE__ ) ),
+                ['jquery'],
+                '1.14.16',
+                true
+            );
+        }
+
+        // Ion Range Slider (CSS & JS)
+        if (!empty($settings['load_range_slider']) || !empty($settings['range_slider'])) {
+            wp_enqueue_style(
+                'zappoppop-range-slider-css',
+                plugins_url( 'public/vendor/ion.rangeSlider.min.css', dirname( __FILE__ ) ),
+                [],
+                '2.3.1'
+            );
+            wp_enqueue_script(
+                'zappoppop-range-slider-js',
+                plugins_url( 'public/vendor/ion.rangeSlider.min.js', dirname( __FILE__ ) ),
+                ['jquery'],
+                '2.3.1',
+                true
+            );
+        }
+    }
+
+    /**
+     * Enqueue typography & icon assets in the Visual Builder for WYSIWYG accuracy.
+     */
+    public static function enqueue_builder_libraries() {
+        $settings = get_option('zappoppop_settings', []);
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        if (!empty($settings['font_awesome'])) {
+            wp_enqueue_style(
+                'zappoppop-font-awesome',
+                self::fa_url(),
+                [],
+                '6.5.1'
+            );
+        }
+
+        if (empty($settings['disable_google_fonts']) && !empty($settings['google_fonts'])) {
+            $default_font = !empty($settings['default_font']) ? $settings['default_font'] : '';
+            $font_url = self::get_google_font_url($default_font);
+            if ($font_url) {
+                // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the font URL already identifies the requested families
+                wp_enqueue_style('zappoppop-google-fonts', $font_url, [], null);
+            }
+        }
+
+        /* ZAPPOPPOP_LAYER_FONTS_BUILDER: editor stage must load the same fonts/weights as the front */
+        $zappoppop_lf = self::get_layer_fonts_url(null);
+        if ($zappoppop_lf) {
+            // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the font URL already identifies the requested families
+            wp_enqueue_style('zappoppop-layer-fonts', $zappoppop_lf, [], null);
+        }
+    }
+
+    /**
+     * Output the bundled font stylesheet and custom @font-face rules in <head>.
+     */
+    public static function print_font_head_tags() {
+        $settings = get_option('zappoppop_settings', []);
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        $disable_google_fonts = !empty($settings['disable_google_fonts']);
+        $google_fonts_enabled = !empty($settings['google_fonts']);
+        $default_font         = !empty($settings['default_font']) ? $settings['default_font'] : 'inherit';
+
+        if (!$disable_google_fonts && ($google_fonts_enabled || ($default_font !== 'inherit' && !empty($default_font)))) {
+            $font_url = self::get_google_font_url($default_font);
+            if ($font_url) {
+                self::print_style('zappoppop-google-fonts');
+            }
+        }
+
+        $custom_fonts_css = self::generate_custom_fonts_css();
+        if (!empty($custom_fonts_css)) {
+            echo self::inline_style_tag('custom-fonts', $custom_fonts_css); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- printed by wp_print_styles(), CSS text with tags stripped
+        }
+    }
+
+    /**
+     * URL of the Font Awesome stylesheet bundled with the plugin.
+     *
+     * @return string
+     */
+    public static function fa_url() {
+        return ZAPPOPPOP_URL . 'assets/vendor/fontawesome/css/all.min.css';
+    }
+
+    /**
+     * Make sure a plugin stylesheet handle is registered with the WordPress style API.
+     *
+     * @param string $handle
+     * @return bool
+     */
+    private static function register_known_style($handle) {
+        $known = [
+            'zappoppop-font-awesome' => [self::fa_url(), '6.5.1'],
+            'zappoppop-layer-fonts'  => [self::fonts_url(), ZAPPOPPOP_VERSION],
+            'zappoppop-google-fonts' => [self::fonts_url(), ZAPPOPPOP_VERSION],
+            'zappoppop-pw-toggle'    => [ZAPPOPPOP_URL . 'public/css/front-password-toggle.css', ZAPPOPPOP_VERSION],
+            'zappoppop-optin-confirm' => [ZAPPOPPOP_URL . 'public/css/optin-confirm.css', ZAPPOPPOP_VERSION],
+        ];
+        if (isset($known[$handle]) && !wp_style_is($handle, 'registered')) {
+            wp_register_style($handle, $known[$handle][0], [], $known[$handle][1]);
+        }
+        return wp_style_is($handle, 'registered');
+    }
+
+    /**
+     * Print a stylesheet link right here. Footer markup is rendered after wp_head,
+     * so wp_enqueue_style() would be too late; a handle that was already printed is skipped.
+     *
+     * @param string $handle
+     */
+    public static function print_style($handle) {
+        if (self::register_known_style($handle)) {
+            wp_print_styles($handle);
+        }
+    }
+
+    /**
+     * Same as print_style() but returns the link markup.
+     *
+     * @param string $handle
+     * @return string
+     */
+    public static function style_tag($handle) {
+        if (!self::register_known_style($handle)) {
+            return '';
+        }
+        ob_start();
+        wp_print_styles($handle);
+        return (string) ob_get_clean();
+    }
+
+    /**
+     * Dynamic CSS for markup that is rendered after wp_head / the footer scripts (popup markup, per-layer rules):
+     * registers a source-less style handle, attaches the CSS with wp_add_inline_style() and prints it right here
+     * with wp_print_styles(). A handle is printed once per request; $dedupe adds a hash of the CSS to the handle,
+     * so identical rules print once and different rules each print.
+     *
+     * @param string $handle
+     * @param string $css
+     * @param bool   $dedupe
+     * @return string The printed style markup ('' when there is no CSS or the handle was already printed).
+     */
+    public static function inline_style_tag($handle, $css, $dedupe = false) {
+        $css = trim(wp_strip_all_tags((string) $css));
+        if ($css === '') {
+            return '';
+        }
+        $handle = 'zappoppop-' . preg_replace('/[^A-Za-z0-9_-]/', '', (string) $handle);
+        if ($dedupe) {
+            $handle .= '-' . substr(md5($css), 0, 10);
+        }
+        if (!wp_style_is($handle, 'registered')) {
+            wp_register_style($handle, false, [], ZAPPOPPOP_VERSION);
+        }
+        wp_add_inline_style($handle, $css);
+        ob_start();
+        wp_print_styles($handle);
+        return (string) ob_get_clean();
+    }
+
+    /**
+     * URL of the stylesheet that declares the bundled font families.
+     *
+     * @return string
+     */
+    public static function fonts_url() {
+        return ZAPPOPPOP_URL . 'assets/vendor/fonts/fonts.css';
+    }
+
+    /**
+     * Resolve the bundled font stylesheet for the selected family.
+     *
+     * @param string $font_family
+     * @return string
+     */
+    public static function get_google_font_url($font_family = '') {
+        return self::fonts_url();
+    }
+
+    /* ZAPPOPPOP_LAYER_FONTS: bundled font stylesheet when a layer uses one of the packaged families */
+    public static function get_layer_fonts_url($config = null) {
+        $map = [
+            'inter'      => 'Inter:wght@300;400;500;600;700;800;900',
+            'roboto'     => 'Roboto:wght@300;400;500;700;900',
+            'montserrat' => 'Montserrat:wght@300;400;500;600;700;800;900',
+            'poppins'    => 'Poppins:wght@300;400;500;600;700;800;900',
+            'open sans'  => 'Open+Sans:wght@300;400;500;600;700;800',
+            'lato'       => 'Lato:wght@300;400;700;900',
+        ];
+        $settings = get_option('zappoppop_settings', []);
+        if (is_array($settings) && !empty($settings['disable_google_fonts'])) {
+            return '';
+        }
+        $found = [];
+        if ($config === null) {
+            $found = array_keys($map);
+        } elseif (is_array($config)) {
+            array_walk_recursive($config, function ($v, $k) use (&$found, $map) {
+                if ($k !== 'fontFamily' || !is_string($v) || $v === '') return;
+                $parts = explode(',', $v);
+                $name  = strtolower(trim($parts[0], " \t\n\r\"'"));
+                if (isset($map[$name])) $found[$name] = $name;
+            });
+        }
+        if (empty($found)) {
+            return '';
+        }
+        // All packaged families share one local stylesheet; browsers fetch only the faces a page uses.
+        return self::fonts_url();
+    }
+
+    /**
+     * Parse and compile custom font declarations into CSS @font-face blocks.
+     *
+     * @return string
+     */
+    public static function generate_custom_fonts_css() {
+        $raw = function_exists('zappoppop_get_setting') ? zappoppop_get_setting('custom_fonts', '') : '';
+        if (empty(trim($raw))) {
+            $settings = get_option('zappoppop_settings', []);
+            $raw = !empty($settings['custom_fonts']) ? $settings['custom_fonts'] : '';
+        }
+
+        if (empty(trim($raw))) {
+            return '';
+        }
+
+        if (strpos($raw, '@font-face') !== false) {
+            return wp_strip_all_tags($raw);
+        }
+
+        $css = '';
+        $lines = explode("
+", str_replace("
+", '', $raw));
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line)) {
+                continue;
+            }
+            if (strpos($line, ':') !== false) {
+                $parts = explode(':', $line, 2);
+                $font_name = trim(sanitize_text_field($parts[0]));
+                $font_src  = isset($parts[1]) ? trim($parts[1]) : '';
+                if (!empty($font_name) && !empty($font_src)) {
+                    $css .= "@font-face {\n  font-family: '" . esc_attr($font_name) . "';\n  src: " . esc_attr($font_src) . ";\n  font-display: swap;\n}\n";
+                }
+            }
+        }
+        return $css;
+    }
+
+    /**
+     * Extract unique custom font family names for the Visual Builder font dropdown.
+     *
+     * @return array
+     */
+    public static function get_custom_font_families() {
+        $raw = function_exists('zappoppop_get_setting') ? zappoppop_get_setting('custom_fonts', '') : '';
+        if (empty(trim($raw))) {
+            $settings = get_option('zappoppop_settings', []);
+            $raw = !empty($settings['custom_fonts']) ? $settings['custom_fonts'] : '';
+        }
+
+        $names = [];
+        if (empty(trim($raw))) {
+            return $names;
+        }
+
+        $lines = explode("
+", str_replace("
+", '', $raw));
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line)) {
+                continue;
+            }
+            if (preg_match("/font-family\s*:\s*['\"]?([^'\";]+)/i", $line, $matches)) {
+                $names[] = trim($matches[1]);
+            } elseif (strpos($line, ':') !== false) {
+                $parts = explode(':', $line, 2);
+                $names[] = trim(sanitize_text_field($parts[0]));
+            }
+        }
+
+        $filtered = array_filter($names);
+        $unique   = array_unique($filtered);
+        return array_values($unique);
+    }
+}

@@ -1,0 +1,754 @@
+/* Prevent browser turning white or showing dark gaps when resizing smaller */
+    html, body.wp-admin, #wpwrap, #wpcontent, #wpbody, #wpbody-content,
+    .zappoppop-builder-wrap, #zappoppop-builder, .zappoppop-builder-container,
+    .zappoppop-builder-body, .zappoppop-builder-main, .zappoppop-workspace,
+    [data-zpp-role="workspace-root"] {
+        background-color: var(--zpp-builder-stage-bg) !important;
+        border-color: var(--zpp-builder-header-border) !important;
+    }
+
+    [data-zpp-role="workspace-flex"],
+    .zappoppop-builder-body, .zappoppop-builder-main, .zappoppop-workspace {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+    }
+
+    /* 10 & 11. Workspace Stage + Fixed 20px Checkerboard Grid */
+    [data-zpp-role="stage"],
+    .zappoppop-stage, #zappoppop-stage, .zappoppop-builder-stage,
+    .zappoppop-canvas-viewport, .zappoppop-canvas-area {
+        background-color: var(--zpp-builder-stage-bg) !important;
+        background-image: var(--zpp-builder-checker-image) !important;
+        background-size: 20px 20px !important;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0 !important;
+        background-repeat: repeat !important;
+        flex: 1 1 0% !important;
+        min-width: 120px !important;
+    }
+
+    /* 01. Header, Secondary Toolbar, Top Wrapper & Floating Alignment Bar */
+    [data-zpp-role="header-top-wrap"],
+    [data-zpp-role="header"],
+    [data-zpp-role="subtoolbar"],
+    [data-zpp-role="floating-bar"],
+    .zappoppop-builder-header, .zappoppop-header, .zappoppop-topbar, #zappoppop-builder-header,
+    .zappoppop-element-toolbar, .zappoppop-subtoolbar, .zappoppop-tools-bar {
+        background: var(--zpp-builder-header-bg) !important;
+        background-color: var(--zpp-builder-header-bg) !important;
+        background-image: none !important;
+        border-color: var(--zpp-builder-header-border) !important;
+        color: var(--zpp-builder-header-text) !important;
+    }
+
+    /* Force ALL inner wrapper divs inside Header & Subtoolbar to never flash black on click */
+    [data-zpp-role="header"] div:not([data-zpp-role="canvas-tab-pill"]):not([data-zpp-role="canvas-tab-pill-active"]),
+    [data-zpp-role="subtoolbar"] div,
+    [data-zpp-role="header-group"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Single-Layer Canvas Tab Pills in Top Header (Inactive vs Active + :active/:focus states) */
+    [data-zpp-role="canvas-tab-pill"],
+    [data-zpp-role="canvas-tab-pill"]:hover,
+    [data-zpp-role="canvas-tab-pill"]:focus,
+    [data-zpp-role="canvas-tab-pill"]:active {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        background-image: none !important;
+        border: 1px solid var(--zpp-builder-field-border) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-header-text) !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    [data-zpp-role="canvas-tab-pill-active"],
+    [data-zpp-role="canvas-tab-pill-active"]:hover,
+    [data-zpp-role="canvas-tab-pill-active"]:focus,
+    [data-zpp-role="canvas-tab-pill-active"]:active {
+        background: var(--zpp-builder-accent-color) !important;
+        background-color: var(--zpp-builder-accent-color) !important;
+        background-image: none !important;
+        border: 1px solid var(--zpp-builder-accent-color) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: #ffffff !important;
+        border-radius: 6px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+        outline: none !important;
+    }
+
+    /* Strip inner button borders/backgrounds inside Canvas Tab Pills (even on :active/:focus) */
+    [data-zpp-role="canvas-tab-pill"] *,
+    [data-zpp-role="canvas-tab-pill"] *:hover,
+    [data-zpp-role="canvas-tab-pill"] *:focus,
+    [data-zpp-role="canvas-tab-pill"] *:active,
+    [data-zpp-role="canvas-tab-inner"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        border: none !important;
+        border-width: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+        color: var(--zpp-builder-header-text) !important;
+    }
+
+    [data-zpp-role="canvas-tab-pill-active"] *,
+    [data-zpp-role="canvas-tab-pill-active"] *:hover,
+    [data-zpp-role="canvas-tab-pill-active"] *:focus,
+    [data-zpp-role="canvas-tab-pill-active"] *:active,
+    [data-zpp-role="canvas-tab-pill-active"] [data-zpp-role="canvas-tab-inner"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        border: none !important;
+        border-width: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+        color: #ffffff !important;
+    }
+
+    /* 02. Content & Sidebar Background (+ Dedicated Content Text & Border) */
+    [data-zpp-role="sidebar"],
+    [data-zpp-role="sidebar-header"],
+    [data-zpp-role="content-panel"],
+    [data-zpp-role="layers-panel"],
+    [data-zpp-role="layers-body"],
+    #zappoppop-popup-settings, .zappoppop-popup-settings,
+    #zappoppop-settings-panel, .zappoppop-settings-panel,
+    .zappoppop-inspector, #zappoppop-inspector, .zappoppop-layer-settings,
+    .zappoppop-left-panel, .zappoppop-right-panel,
+    .zappoppop-accordion-body, .zappoppop-accordion-content,
+    .zappoppop-module-body, .zappoppop-module-content {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        border-color: var(--zpp-builder-content-border) !important;
+        color: var(--zpp-builder-content-text) !important;
+        /* backdrop-filter removed: repaints the canvas behind the drawers on every frame */
+    }
+
+    /* 03. Single Generic Accordion Tab Background (+ Dedicated Accordion Text & Border) */
+    [data-zpp-role="accordion-header"],
+    [data-zpp-role="layers-header"],
+    .zappoppop-accordion-header, .zappoppop-module-header,
+    .zappoppop-section-header, .zappoppop-panel-header,
+    .zappoppop-group-header, .zappoppop-collapse-header,
+    details > summary {
+        background: var(--zpp-builder-accordion-bg) !important;
+        background-color: var(--zpp-builder-accordion-bg) !important;
+        border: 1px solid var(--zpp-builder-accordion-border) !important;
+        border-color: var(--zpp-builder-accordion-border) !important;
+        color: var(--zpp-builder-accordion-text) !important;
+    }
+
+    /* 04. Form Fields, Header Inputs, (+) Button & Standalone Toolbar Buttons (Including :active/:focus so NO black flash!) */
+    [data-zpp-role="field"],
+    [data-zpp-role="toolbar-btn"],
+    [data-zpp-role="toolbar-btn"]:hover,
+    [data-zpp-role="toolbar-btn"]:focus,
+    [data-zpp-role="toolbar-btn"]:active,
+    [data-zpp-role="add-canvas-btn"],
+    [data-zpp-role="add-canvas-btn"]:hover,
+    [data-zpp-role="add-canvas-btn"]:focus,
+    [data-zpp-role="add-canvas-btn"]:active,
+    [data-zpp-role="layer-row"],
+    [data-zpp-role="header"] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+    [data-zpp-role="header"] select,
+    [data-zpp-role="header"] button:not([data-zpp-role="save-btn"]):not([data-zpp-role="active-pill"]):not([data-zpp-role="canvas-tab-inner"]):not([data-zpp-role="canvas-tab-pill-active"]),
+    [data-zpp-role="header"] button:not([data-zpp-role="save-btn"]):not([data-zpp-role="active-pill"]):not([data-zpp-role="canvas-tab-inner"]):not([data-zpp-role="canvas-tab-pill-active"]):active,
+    [data-zpp-role="header"] button:not([data-zpp-role="save-btn"]):not([data-zpp-role="active-pill"]):not([data-zpp-role="canvas-tab-inner"]):not([data-zpp-role="canvas-tab-pill-active"]):focus,
+    [data-zpp-role="subtoolbar"] button:not([data-zpp-role="active-pill"]),
+    [data-zpp-role="subtoolbar"] button:not([data-zpp-role="active-pill"]):active,
+    [data-zpp-role="subtoolbar"] button:not([data-zpp-role="active-pill"]):focus,
+    [data-zpp-role="sidebar"] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="button"]):not([type="submit"]),
+    [data-zpp-role="sidebar"] select,
+    [data-zpp-role="sidebar"] textarea,
+    [data-zpp-role="content-panel"] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="button"]):not([type="submit"]),
+    [data-zpp-role="content-panel"] select,
+    [data-zpp-role="content-panel"] textarea {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        background-image: none !important;
+        border: 1px solid var(--zpp-builder-field-border) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-field-text) !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Canvas Pill Switcher Row Wrapper inside 1. Canvas Settings */
+    [data-zpp-role="canvas-pill-bar"] {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border: 1px solid var(--zpp-builder-field-border) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+    }
+
+    [data-zpp-role="sidebar"] select,
+    [data-zpp-role="content-panel"] select {
+        background-image: var(--zpp-builder-select-chevron) !important;
+        background-repeat: no-repeat !important;
+        background-position: right 10px center !important;
+        background-size: 12px 12px !important;
+        padding-right: 28px !important;
+    }
+
+    /* 07. Icon Color inside Toolbar & Action Buttons */
+    [data-zpp-role="toolbar-btn"] svg,
+    [data-zpp-role="toolbar-btn"] i,
+    [data-zpp-role="toolbar-btn"] .dashicons,
+    [data-zpp-role="add-canvas-btn"] *,
+    [data-zpp-role="floating-bar"] svg,
+    [data-zpp-role="floating-bar"] i,
+    [data-zpp-role="floating-bar"] button {
+        color: var(--zpp-builder-icon-color) !important;
+    }
+
+    /* 08. Hover, Active Tabs, Active Canvas Pill & Active Switches (even on :active/:focus) */
+    [data-zpp-role="active-pill"],
+    [data-zpp-role="active-pill"]:hover,
+    [data-zpp-role="active-pill"]:focus,
+    [data-zpp-role="active-pill"]:active {
+        background: var(--zpp-builder-accent-color) !important;
+        background-color: var(--zpp-builder-accent-color) !important;
+        background-image: none !important;
+        border: 1px solid var(--zpp-builder-accent-color) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: #ffffff !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    [data-zpp-role="active-pill"] * {
+        color: #ffffff !important;
+        background: transparent !important;
+    }
+
+    [data-zpp-role="subtab-active"] {
+        color: var(--zpp-builder-accent-color) !important;
+        border-bottom: 2px solid var(--zpp-builder-accent-color) !important;
+        background: transparent !important;
+    }
+
+    [data-zpp-role="subtab-inactive"] {
+        color: var(--zpp-builder-muted-text) !important;
+        border-bottom: 2px solid transparent !important;
+        background: transparent !important;
+    }
+
+    /* 09. Dividers, Toggle Rows & Range Slider Tracks */
+    [data-zpp-role="divider-line"],
+    [data-zpp-role="sidebar"] hr,
+    [data-zpp-role="content-panel"] hr {
+        border-color: var(--zpp-builder-border-color) !important;
+        background-color: var(--zpp-builder-border-color) !important;
+    }
+
+    [data-zpp-role="divider-row"] {
+        border-bottom-color: var(--zpp-builder-border-color) !important;
+        border-top-color: var(--zpp-builder-border-color) !important;
+    }
+
+    [data-zpp-role="sidebar"] input[type="range"],
+    [data-zpp-role="content-panel"] input[type="range"] {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        height: 6px !important;
+        border-radius: 999px !important;
+        background: var(--zpp-builder-border-color) !important;
+        background-color: var(--zpp-builder-border-color) !important;
+        accent-color: var(--zpp-builder-accent-color) !important;
+        outline: none !important;
+        border: none !important;
+    }
+
+    [data-zpp-role="sidebar"] input[type="range"]::-webkit-slider-thumb,
+    [data-zpp-role="content-panel"] input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        width: 14px !important;
+        height: 14px !important;
+        border-radius: 50% !important;
+        background: var(--zpp-builder-accent-color) !important;
+        border: 2px solid #ffffff !important;
+        cursor: pointer !important;
+    }
+
+    /* 12. Primary Save Buttons */
+    [data-zpp-role="save-btn"] {
+        background: var(--zpp-builder-save-bg) !important;
+        background-color: var(--zpp-builder-save-bg) !important;
+        border: 1px solid var(--zpp-builder-save-border) !important;
+        border-color: var(--zpp-builder-save-border) !important;
+        color: var(--zpp-builder-save-text) !important;
+    }
+
+    /* 13. Dedicated Canvas Guide Line Color */
+    [data-zpp-role="canvas-guide"],
+    .zappoppop-guide-line,
+    .zappoppop-snap-line,
+    .zappoppop-alignment-guide,
+    .zappoppop-canvas-guide,
+    .zappoppop-canvas-boundary {
+        border-color: var(--zpp-builder-guide-color) !important;
+    }
+
+    /* ==== ZAPPOPPOP KNOWN-DOM THEMING: class driven, so nothing flashes or depends on JS name matching ==== */
+
+    /* Header canvas tabs: state follows the builder's own .active class (always in sync with Canvas Settings) */
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper:hover {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        background-image: none !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-header-text) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper:not(.active):hover {
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-canvas-tab,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-canvas-tab:hover,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-canvas-tab:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-canvas-tab:active,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-tab-delete-canvas,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper .zappoppop-tab-delete-canvas:hover {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+        color: var(--zpp-builder-header-text) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active:hover {
+        background: var(--zpp-builder-accent-color) !important;
+        background-color: var(--zpp-builder-accent-color) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: #ffffff !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-canvas-tab,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-canvas-tab:hover,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-canvas-tab:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-canvas-tab:active,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-tab-delete-canvas,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-tabs-container .zappoppop-canvas-tab-wrapper.active .zappoppop-tab-delete-canvas:hover {
+        background: transparent !important;
+        background-color: transparent !important;
+        color: #ffffff !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:active {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        background-image: none !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-icon-color) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover {
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+
+    /* Canvas Settings > SELECT CANVAS TO CONFIGURE bullets (same .active source of truth) */
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullets-bar {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-field-text) !important;
+        box-shadow: none !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet:hover {
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet .zappoppop-bullet-dot {
+        background: var(--zpp-builder-muted-text) !important;
+        box-shadow: none !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet.active,
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet.active:hover {
+        background: var(--zpp-builder-accent-color) !important;
+        background-color: var(--zpp-builder-accent-color) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: #ffffff !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-canvas-bullet.active .zappoppop-bullet-dot {
+        background: #ffffff !important;
+    }
+    html body #zappoppop-settings-drawer .zappoppop-bullet-add-btn {
+        background: var(--zpp-builder-field-bg) !important;
+        border: 1px solid var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-icon-color) !important;
+    }
+
+    /* Save button + Update state (unsaved changes) */
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save:hover:not(:disabled),
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save:active,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:hover:not(:disabled),
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:active {
+        background: var(--zpp-builder-save-bg) !important;
+        background-color: var(--zpp-builder-save-bg) !important;
+        background-image: none !important;
+        border-color: var(--zpp-builder-save-border) !important;
+        color: var(--zpp-builder-save-text) !important;
+        box-shadow: none !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty:hover:not(:disabled),
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty:focus,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty:active {
+        background: var(--zpp-builder-update-bg) !important;
+        background-color: var(--zpp-builder-update-bg) !important;
+        border-color: var(--zpp-builder-update-border) !important;
+        color: var(--zpp-builder-update-text) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save:hover:not(:disabled),
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty:hover:not(:disabled),
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:hover:not(:disabled) {
+        filter: brightness(0.92) !important;
+    }
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save .dashicons, html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save i, html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save span,
+    html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template .dashicons, html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template i, html body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template span {
+        color: inherit !important;
+    }
+
+    /* Accordions: ONE border on the rounded card, header + body inside it (no square inner border at the corners) */
+    html body .zappoppop-acc-item {
+        background: var(--zpp-builder-content-bg) !important;
+        border: 1px solid var(--zpp-builder-accordion-border) !important;
+        border-radius: 6px !important;
+        overflow: hidden !important;
+    }
+    html body .zappoppop-acc-item > .zappoppop-acc-header,
+    html body .zappoppop-acc-item > .zappoppop-acc-header:hover,
+    html body .zappoppop-acc-item > .zappoppop-acc-header.active {
+        background: var(--zpp-builder-accordion-bg) !important;
+        background-color: var(--zpp-builder-accordion-bg) !important;
+        background-image: none !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        color: var(--zpp-builder-accordion-text) !important;
+    }
+    html body .zappoppop-acc-item > .zappoppop-acc-header::after,
+    html body .zappoppop-acc-item > .zappoppop-acc-header::before {
+        color: var(--zpp-builder-icon-color) !important;
+    }
+    html body .zappoppop-acc-item > .zappoppop-acc-body {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        border: 0 !important;
+        border-top: 1px solid var(--zpp-builder-accordion-border) !important;
+        color: var(--zpp-builder-content-text) !important;
+    }
+
+    /* Layers panel + Selected Layer Highlight (theme row 14) */
+    html body #zappoppop-floating-layers-panel {
+        background: var(--zpp-builder-content-bg) !important;
+        border-color: var(--zpp-builder-content-border) !important;
+    }
+    html body #zappoppop-layers-header {
+        background: var(--zpp-builder-accordion-bg) !important;
+        border-color: var(--zpp-builder-accordion-border) !important;
+        color: var(--zpp-builder-accordion-text) !important;
+    }
+    html body #zappoppop-layers-header .dashicons,
+    html body #zappoppop-layers-toggle-collapse {
+        color: var(--zpp-builder-icon-color) !important;
+    }
+    html body #zappoppop-layers-list {
+        background: var(--zpp-builder-content-bg) !important;
+    }
+    html body #zappoppop-layers-list .zappoppop-layer-item {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border: 1px solid var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-field-text) !important;
+    }
+    html body #zappoppop-layers-list .zappoppop-layer-item:hover:not(.active):not(.selected) {
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-layers-list .zappoppop-layer-item.active,
+    html body #zappoppop-layers-list .zappoppop-layer-item.selected,
+    html body #zappoppop-layers-list .zappoppop-layer-item.active:hover,
+    html body #zappoppop-layers-list .zappoppop-layer-item.selected:hover {
+        background: var(--zpp-builder-layer-sel-bg) !important;
+        background-color: var(--zpp-builder-layer-sel-bg) !important;
+        border-color: var(--zpp-builder-layer-sel-border) !important;
+        color: var(--zpp-builder-layer-sel-text) !important;
+        font-weight: 600 !important;
+    }
+
+    /* Elements ribbon buttons (theme row 16) */
+    html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool {
+        background: var(--zpp-builder-element-bg) !important;
+        background-color: var(--zpp-builder-element-bg) !important;
+        border: 1px solid var(--zpp-builder-element-border) !important;
+        color: var(--zpp-builder-element-text) !important;
+    }
+    html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool .dashicons {
+        color: var(--zpp-builder-element-icon) !important;
+    }
+    html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool:hover,
+    html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool:focus {
+        background: var(--zpp-builder-element-hover) !important;
+        background-color: var(--zpp-builder-element-hover) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: var(--zpp-builder-element-text) !important;
+    }
+    html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool:hover .dashicons {
+        color: var(--zpp-builder-accent-color) !important;
+    }
+
+    /* Canvas guide frame: a real dashed border that follows the canvas corner radius in every browser
+       (outline ignores border-radius in older Safari / Firefox, which made the corners look wrong) */
+    html body #zappoppop-canvas-box {
+        outline: 0 !important;
+        outline-offset: 0 !important;
+    }
+    html body #zappoppop-canvas-box::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        box-sizing: border-box !important;
+        border: 1px dashed var(--zpp-builder-guide-color) !important;
+        border-radius: inherit !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+    }
+
+    /* ==== ZAPPOPPOP LAYER SETTINGS THEMING: right inspector mapped to Builder Theme rows 02/03/04/07/08/09 ==== */
+    /* Class + id driven (no JS guessing). Inline hard-coded hex values in the inspector markup are remapped below. */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        background-image: none !important;
+        border-color: var(--zpp-builder-content-border) !important;
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-titlebar {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        border-bottom-color: var(--zpp-builder-content-border) !important;
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-inspector-title {
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-close,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-header-icon {
+        background: transparent !important;
+        color: var(--zpp-builder-icon-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-close:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-header-icon:hover {
+        color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-tabs-bar {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        border-bottom-color: var(--zpp-builder-content-border) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-tab {
+        background: transparent !important;
+        background-color: transparent !important;
+        border-bottom: 3px solid transparent !important;
+        color: var(--zpp-builder-muted-text) !important;
+        box-shadow: none !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-tab:hover {
+        background: var(--zpp-builder-accent-soft) !important;
+        background-color: var(--zpp-builder-accent-soft) !important;
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-tab.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-tab.active:hover {
+        background: var(--zpp-builder-accent-soft) !important;
+        background-color: var(--zpp-builder-accent-soft) !important;
+        border-bottom: 3px solid var(--zpp-builder-accent-color) !important;
+        color: var(--zpp-builder-accent-color) !important;
+        box-shadow: none !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-inspector-body {
+        background: var(--zpp-builder-content-bg) !important;
+        background-color: var(--zpp-builder-content-bg) !important;
+        color: var(--zpp-builder-content-text) !important;
+    }
+
+    /* Remap hard-coded inline hex values (template + JS generated markup) to theme variables */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#38bdf8"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #38bdf8"] {
+        color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#94a3b8"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #94a3b8"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#64748b"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #64748b"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#475569"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #475569"] {
+        color: var(--zpp-builder-muted-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#cbd5e1"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #cbd5e1"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#e2e8f0"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #e2e8f0"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#f1f5f9"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #f1f5f9"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#f8fafc"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #f8fafc"] {
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="#334155"], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="#1e293b"] {
+        border-color: var(--zpp-builder-content-border) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-section-label {
+        color: var(--zpp-builder-accent-color) !important;
+        border-bottom-color: var(--zpp-builder-border-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-prop-label {
+        color: var(--zpp-builder-content-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-sublabel,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-field-group label,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer small,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .description {
+        color: var(--zpp-builder-muted-text) !important;
+    }
+
+    /* Cards inside the inspector follow the Accordion Tab row (03) */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-section,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-card,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-repeater-item,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-logic-rule-row,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-inline-style-row,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-input-mask-row {
+        background: var(--zpp-builder-accordion-bg) !important;
+        background-color: var(--zpp-builder-accordion-bg) !important;
+        border-color: var(--zpp-builder-accordion-border) !important;
+        color: var(--zpp-builder-accordion-text) !important;
+    }
+
+    /* Form fields follow the Form Field row (04) */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="text"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="number"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="url"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="email"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="search"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="password"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="tel"],
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input:not([type]),
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer select,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer textarea,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-input,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .widefat,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-select {
+        background-color: var(--zpp-builder-field-bg) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-field-text) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer select,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-select {
+        background-image: var(--zpp-builder-select-chevron) !important;
+        background-repeat: no-repeat !important;
+        background-position: right 10px center !important;
+        background-size: 12px 12px !important;
+        padding-right: 28px !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input::placeholder,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer textarea::placeholder {
+        color: var(--zpp-builder-muted-text) !important;
+        opacity: 0.8 !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="color"] {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="range"] {
+        accent-color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input:focus,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer select:focus,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer textarea:focus {
+        border-color: var(--zpp-builder-accent-color) !important;
+        box-shadow: 0 0 0 2px var(--zpp-builder-accent-ring) !important;
+        outline: none !important;
+    }
+
+    /* Buttons, icon / alignment / preset pickers: Form Field + Icon + Hover/Active rows */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .button:not(.zappoppop-remove-inline-style):not(.btn-remove-logic-rule):not(.zappoppop-gp-btn-remove),
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-checker-btn,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-grid-btn,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-preset,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-icon-preset,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-align-btn,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-submit-align-btn,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-label-align-btn,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-icon-btn:not(#zappoppop-inspector-header-icon) {
+        background: var(--zpp-builder-field-bg) !important;
+        background-color: var(--zpp-builder-field-bg) !important;
+        border-color: var(--zpp-builder-field-border) !important;
+        color: var(--zpp-builder-field-text) !important;
+        box-shadow: none !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .button:not(.zappoppop-remove-inline-style):not(.btn-remove-logic-rule):not(.zappoppop-gp-btn-remove):hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-checker-btn:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-grid-btn:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-preset:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-icon-preset:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-align-btn:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-submit-align-btn:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-label-align-btn:hover,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-icon-btn:not(#zappoppop-inspector-header-icon):hover {
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .button:not(.zappoppop-remove-inline-style):not(.btn-remove-logic-rule):not(.zappoppop-gp-btn-remove).active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .button:not(.zappoppop-remove-inline-style):not(.btn-remove-logic-rule):not(.zappoppop-gp-btn-remove).is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-checker-btn.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-checker-btn.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-grid-btn.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-grid-btn.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-preset.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-preset.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-icon-preset.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-icon-preset.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-align-btn.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-form-align-btn.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-submit-align-btn.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-submit-align-btn.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-label-align-btn.active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-label-align-btn.is-active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-icon-btn:not(#zappoppop-inspector-header-icon).active,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-icon-btn:not(#zappoppop-inspector-header-icon).is-active {
+        background: var(--zpp-builder-accent-soft) !important;
+        background-color: var(--zpp-builder-accent-soft) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+        color: var(--zpp-builder-accent-color) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-icon-btn .dashicons,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-icon-grid-btn .dashicons {
+        color: inherit !important;
+    }
+
+    /* Toggle switches: off = Divider & Toggle Off (09), on = Hover / Active / Toggle On (08) */
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch .zappoppop-insp-slider,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-slider {
+        background: var(--zpp-builder-toggle-off-bg) !important;
+        background-color: var(--zpp-builder-toggle-off-bg) !important;
+    }
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch input:checked + .zappoppop-insp-slider,
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-switch input:checked + .zappoppop-gp-slider {
+        background: var(--zpp-builder-accent-color) !important;
+        background-color: var(--zpp-builder-accent-color) !important;
+    }

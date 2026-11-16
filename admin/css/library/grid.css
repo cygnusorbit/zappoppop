@@ -1,0 +1,203 @@
+/* ==========================================================================
+   ZapPopPop Popups Library: Template Cards Grid
+   Compatible with Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+
+.zappoppop-library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+/* Template Card Item */
+.zappoppop-template-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    box-sizing: border-box;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.zappoppop-template-card:hover {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+}
+
+/* Visual Gradient Preview Thumbnail */
+.zappoppop-tpl-thumb {
+    height: 160px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.zappoppop-tpl-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.zappoppop-tpl-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #0f172a;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.zappoppop-tpl-inner-preview {
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    padding: 12px 16px;
+    text-align: center;
+    width: 85%;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.zappoppop-tpl-inner-preview h4 {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.zappoppop-tpl-inner-preview p {
+    margin: 0;
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Card Body & Metadata */
+.zappoppop-tpl-body {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.zappoppop-tpl-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.zappoppop-tpl-info p {
+    margin: 0 0 14px 0;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Card Action Buttons */
+.zappoppop-tpl-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.zappoppop-tpl-preview-btn,
+.zappoppop-tpl-import-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    box-sizing: border-box;
+}
+
+.zappoppop-tpl-preview-btn::-moz-focus-inner,
+.zappoppop-tpl-import-btn::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.zappoppop-tpl-preview-btn {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+}
+
+.zappoppop-tpl-preview-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+.zappoppop-tpl-import-btn {
+    background: #2563eb;
+    border: 1px solid #1d4ed8;
+    color: #ffffff;
+}
+
+.zappoppop-tpl-import-btn:hover {
+    background: #1d4ed8;
+}
+
+.zappoppop-tpl-import-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Empty Filter Fallback Notice */
+.zappoppop-library-empty {
+    grid-column: 1 / -1;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+}

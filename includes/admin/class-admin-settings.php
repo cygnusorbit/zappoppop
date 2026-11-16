@@ -1,0 +1,364 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * ZapPopPop WordPress Core Settings API Registrar
+ * Registers option groups, schema sanitization, and settings validation rules.
+ */
+class ZapPopPop_Admin_Settings {
+
+    public function __construct() {
+        add_action('admin_init', [$this, 'register_settings']);
+    }
+
+    public function register_settings() {
+        register_setting(
+            'zappoppop_settings_group',
+            'zappoppop_settings',
+            [
+                'type'              => 'array',
+                'description'       => __('Global configuration options for ZapPopPop.', 'zappoppop'),
+                'sanitize_callback' => [__CLASS__, 'sanitize_settings'],
+                'show_in_rest'      => false,
+                'default'           => self::get_defaults(),
+            ]
+        );
+    }
+
+    /** Popup Settings accordions that are listed in Settings > Module (key = acc-*.php basename). */
+    public static function get_modules() {
+        return class_exists('ZapPopPop_Modules') ? ZapPopPop_Modules::labels() : [];
+    }
+
+    /** Modules that are always on and cannot be switched off. */
+    public static function get_locked_modules() {
+        return class_exists('ZapPopPop_Modules') ? ZapPopPop_Modules::locked() : [];
+    }
+
+    public static function get_default_module_order() {
+        return array_keys(self::get_modules());
+    }
+
+    /** Whitelist + de-duplicate an order; modules missing from it are appended in default order. */
+    public static function normalize_module_order($order) {
+        $known = self::get_default_module_order();
+        $out   = [];
+        if (is_array($order)) {
+            foreach ($order as $k) {
+                if (is_string($k) && in_array($k, $known, true) && !in_array($k, $out, true)) {
+                    $out[] = $k;
+                }
+            }
+        }
+        foreach ($known as $k) {
+            if (!in_array($k, $out, true)) {
+                $out[] = $k;
+            }
+        }
+        return $out;
+    }
+
+    /** Global Popup Settings module order (Settings > Module). */
+    public static function get_module_order() {
+        $s = get_option('zappoppop_settings', []);
+        return self::normalize_module_order((is_array($s) && isset($s['module_order'])) ? $s['module_order'] : []);
+    }
+
+    public static function get_module_defaults() {
+        return class_exists('ZapPopPop_Modules') ? ZapPopPop_Modules::defaults() : [];
+    }
+
+    public static function get_builder_defaults() {
+        return [
+            'builder_alignment_tool' => 0,
+            'builder_viewport_toggle' => 0,
+            'builder_zoom_select' => 0,
+            'builder_save_template' => 0,
+            'builder_extra_elements' => 0,
+            'builder_click_canvas_settings' => 0,
+            'builder_click_element_settings' => 0,
+        ];
+    }
+
+    public static function get_default_menu_pages() {
+        return [
+            'zappoppop-log'             => ['hidden' => 1],
+            'zappoppop-field-analytics' => ['hidden' => 1],
+            'zappoppop-payments'       => ['hidden' => 1],
+        ];
+    }
+
+    /** Use the saved value when present; otherwise use the current module default. */
+    public static function module_enabled($key) {
+        if (in_array($key, self::get_locked_modules(), true)) {
+            return true;
+        }
+        if (class_exists('ZapPopPop_Modules') && ZapPopPop_Modules::get($key) && !ZapPopPop_Modules::is_installed($key)) {
+            return false;
+        }
+        $s = get_option('zappoppop_settings', []);
+        /* ZAPPOPPOP_MODULE_LEGACY_KEYS: keep toggles saved under the pre-renumber keys */
+        $legacy = ['acc-17-double-optin' => ['acc-16-double-optin'], 'acc-popup-overlay' => ['acc-16-popup-overlay', 'acc-17-popup-overlay'], 'acc-notifications' => ['acc-18-notifications'], 'acc-double-optin' => ['acc-17-double-optin', 'acc-16-double-optin'], 'acc-targeting-triggers' => ['acc-22-targeting-triggers'], 'acc-success-celebration' => ['acc-19-success-celebration'], 'acc-autoresponder' => ['acc-08-autoresponder'], 'acc-side-tabs' => ['acc-04-side-tabs'], 'acc-webhooks' => ['acc-09-webhooks'], 'acc-woocommerce' => ['acc-13-woocommerce'], 'acc-downloads' => ['acc-06-downloads'], 'logic-math' => ['acc-03-logic-math'], 'logic-payments' => ['acc-05-payments'], 'acc-video' => ['acc-07-video'], 'acc-sms' => ['acc-10-sms'], 'acc-targeting' => ['acc-11-targeting'], 'acc-quiz' => ['acc-15-quiz'], 'acc-frequency' => ['acc-12-frequency'], 'acc-custom-code' => ['acc-14-custom-code']];
+        if (is_array($s) && isset($s['modules']) && is_array($s['modules']) && !array_key_exists($key, $s['modules']) && isset($legacy[$key])) {
+            foreach ($legacy[$key] as $old_key) {
+                if (array_key_exists($old_key, $s['modules'])) {
+                    return !empty($s['modules'][$old_key]);
+                }
+            }
+        }
+        $defaults = self::get_module_defaults();
+        if (!is_array($s) || !isset($s['modules']) || !is_array($s['modules']) || !array_key_exists($key, $s['modules'])) {
+            return !empty($defaults[$key]);
+        }
+        return !empty($s['modules'][$key]);
+    }
+
+    /** Effective defaults: the built-in ones with the site's Saved Defaults (Tools > Saved Defaults) on top. */
+    public static function get_defaults() {
+        $d = self::get_factory_defaults();
+        return class_exists('ZapPopPop_Saved_Defaults') ? ZapPopPop_Saved_Defaults::apply_settings($d) : $d;
+    }
+
+    public static function get_factory_defaults() {
+        $admin = get_option('admin_email');
+        $defaults = [
+            'sender_name' => 'ZapPopPop', 'sender_email' => $admin, 'admin_email' => $admin,
+            'csv_separator' => ',', 'user_uploads' => 'keep', 'powered_by_badge' => 0, 'test_mode' => 0,
+            'preload_popups' => 0, 'preload_events' => 0, 'minify_css' => 0, 'cache_busting' => 0,
+            'render_delay' => 0,
+            'default_embed_type' => 'inline',
+            'default_font' => 'inherit', 'default_font_weight' => 'inherit', 'default_font_size' => 0, 'default_text_align' => 'inherit', 'default_font_italic' => 0, 'default_font_underline' => 0, 'default_font_color' => '', /* ZAPPOPPOP_DEFAULT_TYPO */ 'google_fonts' => 0, 'disable_google_fonts' => 0,
+            'font_awesome' => 0, 'custom_fonts' => '',
+            'air_datepicker' => 0, 'jquery_mask' => 0,
+            'range_slider' => 0,
+            'modules' => self::get_module_defaults(),
+            'module_order' => self::get_default_module_order(),
+            'builder_alignment_tool' => 0,
+            'builder_viewport_toggle' => 0,
+            'builder_zoom_select' => 0,
+            'builder_save_template' => 0,
+            'builder_extra_elements' => 0,
+            'builder_click_canvas_settings' => 0,
+            'builder_click_element_settings' => 0,
+            'builder_guide' => 1,
+            'builder_guide_steps_on' => 1,
+            'builder_guide_steps' => [],
+            'builder_layer_settings' => [],
+            'menu_pages' => self::get_default_menu_pages(),
+            'clean_on_uninstall' => 0,
+        ] + self::tracking_defaults();
+        return (array) apply_filters('zappoppop_factory_defaults', $defaults);
+    }
+
+    /** Option keys now owned by the Pro add-on. Kept in storage while Pro is off so nothing is lost. */
+    public static function extension_keys() {
+        return ['ga_tracking', 'adblock_detector', 'load_canvas_confetti', 'load_canvas_fireworks',
+                'signature_pad', 'load_signature_pad', 'js_parser', 'load_math_parser',
+                'email_validation', 'enable_recaptcha', 'recaptcha_site_key', 'recaptcha_secret_key', 'recaptcha_threshold',
+                'max_submissions_per_ip', 'ip_geotargeting', 'geoip_service', 'geoip_api_service'];
+    }
+
+    protected static function tracking_defaults() {
+        if (!class_exists('ZapPopPop_Tracking')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-tracking.php'; }
+        return ZapPopPop_Tracking::defaults();
+    }
+
+    /**
+     * Idempotent: safe to run on already-clean data (it runs on every update_option).
+     * Input is expected to be already unslashed.
+     */
+    public static function sanitize_settings($input) {
+        if (!is_array($input)) {
+            return self::get_defaults();
+        }
+        $in  = $input;
+        $b   = function ($k) use ($in) { return !empty($in[$k]) ? 1 : 0; };
+        $any = function ($a, $b2) use ($in) { return (!empty($in[$a]) || !empty($in[$b2])) ? 1 : 0; };
+        $enum = function ($k, $allowed, $def) use ($in) {
+            return (isset($in[$k]) && in_array($in[$k], $allowed, true)) ? $in[$k] : $def;
+        };
+        $admin = get_option('admin_email');
+        $o = [];
+        $o['builder_save_template'] = (array_key_exists('builder_save_template', $in) && empty($in['builder_save_template'])) ? 0 : 1;
+
+        // 1. General & Mailing
+        $name = !empty($in['sender_name']) ? $in['sender_name'] : (!empty($in['from_name']) ? $in['from_name'] : '');
+        $o['sender_name'] = $name !== '' ? sanitize_text_field($name) : 'ZapPopPop';
+        $o['from_name']   = $o['sender_name'];
+
+        $raw = !empty($in['sender_email']) ? $in['sender_email'] : (!empty($in['from_email']) ? $in['from_email'] : '');
+        $raw = sanitize_email($raw);
+        if (is_email($raw)) {
+            $o['sender_email'] = $raw;
+        } else {
+            $o['sender_email'] = $admin;
+            if (!empty($in['sender_email'])) {
+                add_settings_error('zappoppop_settings', 'invalid_sender_email',
+                    __('Invalid sender email address provided. Reverted to site administrator email.', 'zappoppop'), 'error');
+            }
+        }
+        $o['from_email']  = $o['sender_email'];
+        $adm = !empty($in['admin_email']) ? sanitize_email($in['admin_email']) : '';
+        $o['admin_email'] = is_email($adm) ? $adm : $admin;
+        $o['csv_separator']    = $enum('csv_separator', [',', ';', 'tab'], ',');
+        $o['user_uploads']     = $enum('user_uploads', ['keep', 'delete'], 'keep');
+        $o['powered_by_badge'] = $b('powered_by_badge');
+        $o['test_mode']        = $b('test_mode');
+
+        // 2. Performance & Preload
+        $o['preload_popups']   = $b('preload_popups');
+        $o['preload_events']   = $b('preload_events');
+        $o['minify_css']       = $b('minify_css');
+        $o['cache_busting']    = $b('cache_busting');
+        $o['render_delay']     = isset($in['render_delay']) ? min(10000, max(0, (int) $in['render_delay'])) : 0;
+        $o['default_embed_type'] = $enum('default_embed_type', ['inline', 'onload'], 'inline');
+
+        // 3. Typography & Libraries
+        $o['default_font']          = !empty($in['default_font']) ? sanitize_text_field($in['default_font']) : 'inherit';
+        /* ZAPPOPPOP_DEFAULT_TYPO_SAVE */
+        $o['default_font_weight']    = $enum('default_font_weight', ['inherit', '300', '400', '500', '600', '700'], 'inherit');
+        $o['default_font_size']      = isset($in['default_font_size']) ? min(200, max(0, (int) $in['default_font_size'])) : 0;
+        $o['default_text_align']     = $enum('default_text_align', ['inherit', 'left', 'center', 'right'], 'inherit');
+        $o['default_font_italic']    = $b('default_font_italic');
+        $o['default_font_underline'] = $b('default_font_underline');
+        $o['default_font_color']     = (!empty($in['default_font_color']) && sanitize_hex_color(trim((string) $in['default_font_color']))) ? sanitize_hex_color(trim((string) $in['default_font_color'])) : '';
+        $o['google_fonts']          = $b('google_fonts');
+        $o['disable_google_fonts']  = $b('disable_google_fonts');
+        $o['font_awesome']          = $b('font_awesome');
+        $o['custom_fonts']          = isset($in['custom_fonts']) ? sanitize_textarea_field($in['custom_fonts']) : '';
+        $o['air_datepicker']  = $any('air_datepicker', 'load_air_datepicker');  $o['load_air_datepicker'] = $o['air_datepicker'];
+        $o['jquery_mask']     = $any('jquery_mask', 'load_jquery_mask');        $o['load_jquery_mask']    = $o['jquery_mask'];
+        $o['range_slider']    = $any('range_slider', 'load_range_slider');      $o['load_range_slider']   = $o['range_slider'];
+
+        // 5. Arbitrary custom CSS / JS / head / footer HTML is not supported (WordPress.org guideline).
+
+        // 5b. Popup Settings modules (whitelist; missing = current default)
+        $module_defaults = self::get_module_defaults();
+        $o['modules'] = [];
+        foreach (array_keys(self::get_modules()) as $__mk) {
+            if (in_array($__mk, self::get_locked_modules(), true)) {
+                $o['modules'][$__mk] = 1;
+                continue;
+            }
+            $__mk_def = $module_defaults[$__mk];
+            /* ZAPPOPPOP_MODULE_HIDDEN: no switch is rendered for a hidden module, so keep what is stored */
+            $__mk_m = ZapPopPop_Modules::get($__mk);
+            if ($__mk_m && !empty($__mk_m['hidden'])) {
+                $__mk_prev = get_option('zappoppop_settings', []);
+                if (is_array($__mk_prev) && isset($__mk_prev['modules']) && is_array($__mk_prev['modules']) && array_key_exists($__mk, $__mk_prev['modules'])) {
+                    $__mk_def = !empty($__mk_prev['modules'][$__mk]) ? 1 : 0;
+                }
+            }
+            $o['modules'][$__mk] = (isset($in['modules']) && is_array($in['modules']) && array_key_exists($__mk, $in['modules']))
+                ? (!empty($in['modules'][$__mk]) ? 1 : 0)
+                : $__mk_def;
+        }
+
+        // 5b1. Keep stored toggles of known-but-not-installed modules so a reinstall restores them
+        if (class_exists('ZapPopPop_Modules')) {
+            $__mt_prev = get_option('zappoppop_settings', []);
+            if (is_array($__mt_prev) && isset($__mt_prev['modules']) && is_array($__mt_prev['modules'])) {
+                foreach (ZapPopPop_Modules::not_installed() as $__ni) {
+                    if (!array_key_exists($__ni, $o['modules']) && array_key_exists($__ni, $__mt_prev['modules'])) {
+                        $o['modules'][$__ni] = !empty($__mt_prev['modules'][$__ni]) ? 1 : 0;
+                    }
+                }
+            }
+        }
+
+        // 5b2. Module order (whitelist; missing key = keep the stored order)
+        $__mo_prev = get_option('zappoppop_settings', []);
+        $__mo_src  = isset($in['module_order'])
+            ? $in['module_order']
+            : ((is_array($__mo_prev) && isset($__mo_prev['module_order'])) ? $__mo_prev['module_order'] : []);
+        $o['module_order'] = self::normalize_module_order($__mo_src);
+
+        // 5c. Builder tools (missing = disabled by default)
+        $builder_defaults = self::get_builder_defaults();
+        foreach ($builder_defaults as $__bk => $__bv) {
+            $o[$__bk] = (array_key_exists($__bk, $in) && !empty($in[$__bk])) ? 1 : $__bv;
+        }
+
+        // 5c1. Builder guide: on by default; a missing key keeps the stored value.
+        $__bg_prev = get_option('zappoppop_settings', []);
+        if (array_key_exists('builder_guide', $in)) {
+            $o['builder_guide'] = !empty($in['builder_guide']) ? 1 : 0;
+        } elseif (is_array($__bg_prev) && array_key_exists('builder_guide', $__bg_prev)) {
+            $o['builder_guide'] = !empty($__bg_prev['builder_guide']) ? 1 : 0;
+        } else {
+            $o['builder_guide'] = 1;
+        }
+
+        // 5c1a. Guide Steps master switch: on by default; a missing key keeps the stored value.
+        $__gm_prev = get_option('zappoppop_settings', []);
+        if (array_key_exists('builder_guide_steps_on', $in)) {
+            $o['builder_guide_steps_on'] = !empty($in['builder_guide_steps_on']) ? 1 : 0;
+        } elseif (is_array($__gm_prev) && array_key_exists('builder_guide_steps_on', $__gm_prev)) {
+            $o['builder_guide_steps_on'] = !empty($__gm_prev['builder_guide_steps_on']) ? 1 : 0;
+        } else {
+            $o['builder_guide_steps_on'] = 1;
+        }
+
+        // 5c1b. Guide step editor rows. Missing key = keep the stored rows; [] = built-in steps.
+        $__gs_prev = get_option('zappoppop_settings', []);
+        $__gs_src  = array_key_exists('builder_guide_steps', $in)
+            ? $in['builder_guide_steps']
+            : ((is_array($__gs_prev) && isset($__gs_prev['builder_guide_steps'])) ? $__gs_prev['builder_guide_steps'] : []);
+        $o['builder_guide_steps'] = ZapPopPop_Admin_Guide::sanitize_custom_steps($__gs_src);
+
+        // 5c2. Layer Settings: per-element enable / disable of Inspector settings (JSON or array). Missing key = keep what is stored.
+        $__ls_prev = get_option('zappoppop_settings', []);
+        $__ls_src  = array_key_exists('builder_layer_settings', $in)
+            ? $in['builder_layer_settings']
+            : ((is_array($__ls_prev) && isset($__ls_prev['builder_layer_settings'])) ? $__ls_prev['builder_layer_settings'] : []);
+        $o['builder_layer_settings'] = ZapPopPop_Layer_Settings::sanitize($__ls_src);
+
+        // 5d. Admin menu pages (rename / reorder / hide). Whitelist: zappoppop* slugs only.
+        // Missing key = keep what is stored, so unrelated saves never reset it.
+        $__mp_prev = get_option('zappoppop_settings', []);
+        $__mp_defaults = self::get_default_menu_pages();
+        $__mp_src  = (isset($in['menu_pages']) && is_array($in['menu_pages']))
+            ? $in['menu_pages']
+            : ((is_array($__mp_prev) && isset($__mp_prev['menu_pages']) && is_array($__mp_prev['menu_pages'])) ? $__mp_prev['menu_pages'] : $__mp_defaults);
+        $__mp_pin  = ['zappoppop-dashboard', 'zappoppop-settings'];
+        $o['menu_pages'] = [];
+        foreach ($__mp_src as $__mp_slug => $__mp_row) {
+            $__mp_slug = sanitize_key($__mp_slug);
+            if ($__mp_slug === '' || strpos($__mp_slug, 'zappoppop') !== 0 || !is_array($__mp_row)) {
+                continue;
+            }
+            $__mp_label = isset($__mp_row['label']) ? sanitize_text_field($__mp_row['label']) : '';
+            if (function_exists('mb_substr')) {
+                $__mp_label = mb_substr($__mp_label, 0, 60);
+            } else {
+                $__mp_label = substr($__mp_label, 0, 60);
+            }
+            $o['menu_pages'][$__mp_slug] = [
+                'label'  => $__mp_label,
+                'hidden' => (!empty($__mp_row['hidden']) && !in_array($__mp_slug, $__mp_pin, true)) ? 1 : 0,
+                'order'  => isset($__mp_row['order']) ? max(0, min(999, (int) $__mp_row['order'])) : 0,
+            ];
+        }
+
+        // 5e. Tracking, A/B, privacy, rate limits, reporting
+        if (!class_exists('ZapPopPop_Tracking')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-tracking.php'; }
+        $o = array_merge($o, ZapPopPop_Tracking::sanitize_input($in));
+
+        // 6. System state
+        $o['clean_on_uninstall'] = $b('clean_on_uninstall');
+        $o['cookie_epoch'] = isset($in['cookie_epoch']) ? (int) $in['cookie_epoch'] : (int) get_option('zappoppop_cookie_epoch', 1);
+
+        // 7. Add-on owned keys: keep the stored value, then let the add-on validate what it owns
+        $kept = get_option('zappoppop_settings', []);
+        if (is_array($kept)) {
+            foreach (self::extension_keys() as $ek) {
+                if (!array_key_exists($ek, $o) && array_key_exists($ek, $kept)) {
+                    $o[$ek] = $kept[$ek];
+                }
+            }
+        }
+        return (array) apply_filters('zappoppop_sanitize_global_settings', $o, $in);
+    }
+}

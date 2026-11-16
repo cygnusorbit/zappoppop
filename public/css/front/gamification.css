@@ -1,0 +1,56 @@
+/* ==========================================================================
+   ZapPopPop Public Frontend: Gamification (Wheel, Scratch, Countdown)
+   Compatible with Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+
+.zappoppop-wheel-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.zappoppop-wheel-canvas {
+    border-radius: 50%;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.zappoppop-scratch-wrapper {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.zappoppop-scratch-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    border-radius: inherit;
+    touch-action: none;
+}
+
+.zappoppop-sig-canvas {
+    touch-action: none;
+    background: #ffffff;
+    cursor: crosshair;
+}
+
+.zappoppop-countdown-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 700;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}

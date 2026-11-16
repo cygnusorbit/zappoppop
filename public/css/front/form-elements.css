@@ -1,0 +1,209 @@
+/* ZAPPOPPOP_FORM_HARMONY_V1
+ * Unified styling for every front form element (live + Live Preview).
+ * Loaded by ZapPopPop_Front_Display::enqueue_assets().
+ */
+.zappoppop-layer-item .zappoppop-form-input {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    letter-spacing: inherit;
+    line-height: 1.3;
+    color: inherit;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.zappoppop-layer-item textarea.zappoppop-form-input {
+    resize: none;
+    padding: 8px 12px;
+    line-height: 1.4;
+}
+.zappoppop-layer-item .zappoppop-form-input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+.zappoppop-layer-item .zappoppop-form-input::-moz-placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+.zappoppop-layer-item .zappoppop-form-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Select: real dropdown arrow (appearance:none removes the native one) */
+.zappoppop-layer-item select.zappoppop-input-select,
+.zappoppop-layer-item select.zappoppop-front-select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 14px 14px !important;
+    padding-right: 36px !important;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+.zappoppop-layer-item select.zappoppop-input-select::-ms-expand,
+.zappoppop-layer-item select.zappoppop-front-select::-ms-expand {
+    display: none;
+}
+
+/* Date / Time: custom pickers replace the inconsistent native UI */
+.zappoppop-layer-item .zappoppop-input-time::-webkit-calendar-picker-indicator {
+    display: none;
+}
+.zappoppop-layer-item .zappoppop-input-time::-webkit-datetime-edit {
+    padding: 0;
+}
+.zappoppop-layer-item .zappoppop-front-date,
+.zappoppop-layer-item .zappoppop-input-time {
+    cursor: pointer;
+}
+
+/* Radio / checkbox labels follow the layer font */
+.zappoppop-layer-item .zappoppop-tf-wrap label,
+.zappoppop-layer-item .zappoppop-input-radio,
+.zappoppop-layer-item .zappoppop-input-checkbox {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+/* Buttons follow the layer font too */
+.zappoppop-layer-item button {
+    font-family: inherit;
+}
+
+/* Picker popups (calendar + time slots) */
+.zappoppop-pk {
+    position: fixed;
+    z-index: 2147483600;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+    font-size: 13px;
+    line-height: 1.3;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.zappoppop-pk * {
+    box-sizing: border-box;
+}
+.zappoppop-pk button {
+    -webkit-appearance: none;
+    appearance: none;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+.zappoppop-pk-cal {
+    width: 260px;
+    padding: 10px;
+}
+.zappoppop-pk-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.zappoppop-pk-title {
+    font-weight: 600;
+}
+.zappoppop-pk .zappoppop-pk-nav {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+}
+.zappoppop-pk .zappoppop-pk-nav:hover,
+.zappoppop-pk .zappoppop-pk-day:hover:not(:disabled),
+.zappoppop-pk .zappoppop-pk-slot:hover,
+.zappoppop-pk .zappoppop-pk-foot button:hover {
+    background: #eff6ff;
+}
+.zappoppop-pk-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    text-align: center;
+}
+.zappoppop-pk-dow {
+    color: #94a3b8;
+    font-size: 11px;
+    padding: 4px 0;
+}
+.zappoppop-pk .zappoppop-pk-day {
+    height: 32px;
+    border-radius: 6px;
+}
+.zappoppop-pk .zappoppop-pk-day.is-today {
+    box-shadow: inset 0 0 0 1px #94a3b8;
+}
+.zappoppop-pk .zappoppop-pk-day.is-sel,
+.zappoppop-pk .zappoppop-pk-slot.is-sel {
+    background: #2563eb;
+    color: #ffffff;
+}
+.zappoppop-pk .zappoppop-pk-day:disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+}
+.zappoppop-pk-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+}
+.zappoppop-pk .zappoppop-pk-foot button {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #2563eb;
+    font-weight: 600;
+}
+.zappoppop-pk-time {
+    min-width: 110px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+.zappoppop-pk .zappoppop-pk-slot {
+    display: block;
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-align: left;
+}
+
+/* === ZAPPOPPOP_FORM_BORDER_FIX === */
+/* The layer wrapper owns border + radius; the inner box follows it so no sharp square edge shows through. */
+[style*="--zappoppop-ibr"] .zappoppop-form-input:not(.zappoppop-input-checkbox):not(.zappoppop-input-radio),
+[style*="--zappoppop-ibr"] .zappoppop-ms-wrap,
+[style*="--zappoppop-ibr"] .zappoppop-upload-dropzone,
+[style*="--zappoppop-ibr"] > [data-zpp-ibox] {
+    border-radius: var(--zappoppop-ibr, 0px) !important;
+}
+[style*="--zappoppop-wb"] .zappoppop-form-input:not(.zappoppop-input-checkbox):not(.zappoppop-input-radio),
+[style*="--zappoppop-wb"] .zappoppop-ms-wrap,
+[style*="--zappoppop-wb"] .zappoppop-upload-dropzone,
+[style*="--zappoppop-wb"] > [data-zpp-ibox] {
+    border-width: 0 !important;
+    border-style: none !important;
+}
+/* === /ZAPPOPPOP_FORM_BORDER_FIX === */

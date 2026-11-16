@@ -1,0 +1,1842 @@
+/**
+ * ZapPopPop Visual Builder: Canvas Stage Engine
+ * Direct-Pointer Corner Drag Resizing, 26 Elements, SVG Vector Shapes & Adaptive Element Padding
+ */
+(function($) {
+    'use strict';
+
+    window.ZapPopPopBuilderCanvas = {
+        parseVideoEmbed: function(url, autoplay, mute, controls) {
+            if (!url) return '';
+            var ap = autoplay ? '1' : '0';
+            var mu = mute ? '1' : '0';
+            var ct = (controls !== false && controls !== '0' && controls !== 0) ? '1' : '0';
+            var ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            if (ytMatch) {
+                return 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=' + ap + '&mute=' + mu + '&controls=' + ct;
+            }
+            var vimMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/);
+            if (vimMatch) {
+                return 'https://player.vimeo.com/video/' + vimMatch[3] + '?autoplay=' + ap + '&muted=' + mu;
+            }
+            return url;
+        },
+
+        isPreview: false,
+
+        setZoom: function(level) {
+        if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.setZoom === "function") { return window.ZapPopPopBuilderCore.setZoom(level); }
+        var $box = $('#zappoppop-canvas-box');
+        var $workspace = $('.zappoppop-builder-workspace, #zappoppop-canvas-workspace');
+        if (!$box.length) return;
+
+        if (level === 'fit') {
+            if (!$workspace.length) {
+                level = 1;
+            } else {
+                var availW = $workspace.width() - 80;
+                var availH = $workspace.height() - 80;
+                var boxW = $box.outerWidth() || 640;
+                var boxH = $box.outerHeight() || 400;
+                var scaleX = availW / boxW;
+                var scaleY = availH / boxH;
+                level = Math.min(scaleX, scaleY, 1);
+                if (level < 0.25) level = 0.25;
+            }
+        } else {
+            level = parseFloat(level) || 1;
+        }
+
+        $box.css({
+            '-webkit-transform': 'scale(' + level + ')',
+            'transform': 'scale(' + level + ')',
+            'transform-origin': 'center center',
+            'transition': 'transform 0.15s ease'
+        });
+        this.currentZoom = level;
+    },
+
+    bindZoomControls: function() {
+        var self = this;
+        $(document).off('change.zappoppop_zoom', '#zappoppop-zoom-select').on('change.zappoppop_zoom', '#zappoppop-zoom-select', function() {
+            var val = $(this).val();
+            self.setZoom(val);
+        });
+    },
+
+    smartSnapGuides: function(ui, el, $box) {
+        if (!ui || !ui.position || !$box || !$box.length) return;
+        var boxW = $box.outerWidth() || 640;
+        var boxH = $box.outerHeight() || 400;
+        var $node = $('#zappoppop-el-' + el.id);
+        var elW = $node.outerWidth() || el.width || 100;
+        var elH = $node.outerHeight() || el.height || 40;
+
+        var threshold = 6;
+        var posX = ui.position.left;
+        var posY = ui.position.top;
+        var centerX = posX + elW / 2;
+        var centerY = posY + elH / 2;
+        var rightX = posX + elW;
+        var bottomY = posY + elH;
+
+        var curCanvas = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state) ? window.ZapPopPopBuilderCore.state.currentCanvas || 1 : 1;
+        var elements = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state && window.ZapPopPopBuilderCore.state.canvases) ? window.ZapPopPopBuilderCore.state.canvases[curCanvas] : [];
+
+        var snapTargetsX = [0, Math.round(boxW / 2), boxW];
+        var snapTargetsY = [0, Math.round(boxH / 2), boxH];
+
+        elements.forEach(function(other) {
+            if (other.id === el.id) return;
+            var oL = parseInt(other.left, 10) || 0;
+            var oT = parseInt(other.top, 10) || 0;
+            var oW = parseInt(other.width, 10) || 100;
+            var oH = parseInt(other.height, 10) || 40;
+            snapTargetsX.push(oL, oL + Math.round(oW / 2), oL + oW);
+            snapTargetsY.push(oT, oT + Math.round(oH / 2), oT + oH);
+        });
+
+        var snappedX = null;
+        var snappedY = null;
+
+        for (var i = 0; i < snapTargetsX.length; i++) {
+            var tx = snapTargetsX[i];
+            if (Math.abs(posX - tx) <= threshold) {
+                ui.position.left = tx;
+                snappedX = tx;
+                break;
+            } else if (Math.abs(centerX - tx) <= threshold) {
+                ui.position.left = tx - Math.round(elW / 2);
+                snappedX = tx;
+                break;
+            } else if (Math.abs(rightX - tx) <= threshold) {
+                ui.position.left = tx - elW;
+                snappedX = tx;
+                break;
+            }
+        }
+
+        for (var j = 0; j < snapTargetsY.length; j++) {
+            var ty = snapTargetsY[j];
+            if (Math.abs(posY - ty) <= threshold) {
+                ui.position.top = ty;
+                snappedY = ty;
+                break;
+            } else if (Math.abs(centerY - ty) <= threshold) {
+                ui.position.top = ty - Math.round(elH / 2);
+                snappedY = ty;
+                break;
+            } else if (Math.abs(bottomY - ty) <= threshold) {
+                ui.position.top = ty - elH;
+                snappedY = ty;
+                break;
+            }
+        }
+
+        var $guideV = $('#zappoppop-guide-v');
+        var $guideH = $('#zappoppop-guide-h');
+        if (snappedX !== null) {
+            $guideV.css({ left: snappedX + 'px', display: 'block' });
+        } else {
+            $guideV.hide();
+        }
+        if (snappedY !== null) {
+            $guideH.css({ top: snappedY + 'px', display: 'block' });
+        } else {
+            $guideH.hide();
+        }
+    },
+
+    alignSelectedElements: function(type) {
+        var self = this;
+        var activeId = self.activeId || (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state ? window.ZapPopPopBuilderCore.state.activeId : null);
+        var curCanvas = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state) ? window.ZapPopPopBuilderCore.state.currentCanvas || 1 : 1;
+        var elements = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state && window.ZapPopPopBuilderCore.state.canvases) ? window.ZapPopPopBuilderCore.state.canvases[curCanvas] : [];
+        if (!elements || !elements.length) return;
+
+        var $box = $('#zappoppop-canvas-box');
+        var boxW = $box.outerWidth() || 640;
+        var boxH = $box.outerHeight() || 400;
+
+        if (type === 'distribute_h' || type === 'distribute_v') {
+            if (elements.length < 3) return;
+            var sorted = elements.slice();
+            if (type === 'distribute_h') {
+                sorted.sort(function(a, b) { return (parseInt(a.left, 10) || 0) - (parseInt(b.left, 10) || 0); });
+                var minL = parseInt(sorted[0].left, 10) || 0;
+                var maxL = parseInt(sorted[sorted.length - 1].left, 10) || 0;
+                var stepL = (maxL - minL) / (sorted.length - 1);
+                sorted.forEach(function(el, idx) {
+                    if (idx > 0 && idx < sorted.length - 1) {
+                        el.left = Math.round(minL + idx * stepL);
+                        $('#zappoppop-el-' + el.id).css('left', el.left + 'px');
+                    }
+                });
+            } else {
+                sorted.sort(function(a, b) { return (parseInt(a.top, 10) || 0) - (parseInt(b.top, 10) || 0); });
+                var minT = parseInt(sorted[0].top, 10) || 0;
+                var maxT = parseInt(sorted[sorted.length - 1].top, 10) || 0;
+                var stepT = (maxT - minT) / (sorted.length - 1);
+                sorted.forEach(function(el, idx) {
+                    if (idx > 0 && idx < sorted.length - 1) {
+                        el.top = Math.round(minT + idx * stepT);
+                        $('#zappoppop-el-' + el.id).css('top', el.top + 'px');
+                    }
+                });
+            }
+            if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') {
+                window.ZapPopPopBuilderCore.pushHistory();
+            }
+            return;
+        }
+
+        if (!activeId) return;
+        var activeEl = null;
+        for (var eIdx = 0; eIdx < elements.length; eIdx++) {
+            if (elements[eIdx].id === activeId) {
+                activeEl = elements[eIdx];
+                break;
+            }
+        }
+        if (!activeEl) return;
+
+        var $node = $('#zappoppop-el-' + activeId);
+        var elW = $node.outerWidth() || activeEl.width || 100;
+        var elH = $node.outerHeight() || activeEl.height || 40;
+
+        switch (type) {
+            case 'left':
+                activeEl.left = 0;
+                break;
+            case 'center':
+                activeEl.left = Math.round((boxW - elW) / 2);
+                break;
+            case 'right':
+                activeEl.left = Math.max(0, boxW - elW);
+                break;
+            case 'top':
+                activeEl.top = 0;
+                break;
+            case 'middle':
+                activeEl.top = Math.round((boxH - elH) / 2);
+                break;
+            case 'bottom':
+                activeEl.top = Math.max(0, boxH - elH);
+                break;
+        }
+
+        $node.css({ left: activeEl.left + 'px', top: activeEl.top + 'px' });
+        $('#prop-left').val(activeEl.left);
+        $('#prop-top').val(activeEl.top);
+
+        if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') {
+            window.ZapPopPopBuilderCore.pushHistory();
+        }
+    },
+
+    bindKeyboardNudge: function() {
+        var self = this;
+        $(document).off('keydown.zappoppop_nudge').on('keydown.zappoppop_nudge', function(e) {
+            var tag = (e.target.tagName || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) {
+                return;
+            }
+
+            var arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+            if (arrowKeys.indexOf(e.key) === -1) return;
+
+            var activeId = self.activeId || (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state ? window.ZapPopPopBuilderCore.state.activeId : null);
+            if (!activeId) return;
+
+            var curCanvas = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state) ? window.ZapPopPopBuilderCore.state.currentCanvas || 1 : 1;
+            var elements = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state && window.ZapPopPopBuilderCore.state.canvases) ? window.ZapPopPopBuilderCore.state.canvases[curCanvas] : [];
+            var activeEl = null;
+            for (var idx = 0; idx < elements.length; idx++) {
+                if (elements[idx].id === activeId) {
+                    activeEl = elements[idx];
+                    break;
+                }
+            }
+            if (!activeEl) return;
+
+            e.preventDefault();
+            var step = e.shiftKey ? 10 : 1;
+            var $node = $('#zappoppop-el-' + activeId);
+            var left = parseInt(activeEl.left, 10) || 0;
+            var top = parseInt(activeEl.top, 10) || 0;
+
+            if (e.key === 'ArrowUp') top -= step;
+            if (e.key === 'ArrowDown') top += step;
+            if (e.key === 'ArrowLeft') left -= step;
+            if (e.key === 'ArrowRight') left += step;
+
+            activeEl.left = left;
+            activeEl.top = top;
+            $node.css({ left: left + 'px', top: top + 'px' });
+
+            $('#prop-left').val(left);
+            $('#prop-top').val(top);
+
+            clearTimeout(self._nudgeHistTimer);
+            self._nudgeHistTimer = setTimeout(function() {
+                if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') {
+                    window.ZapPopPopBuilderCore.pushHistory();
+                }
+            }, 300);
+        });
+    },
+
+    bindAlignmentToolbar: function() {
+        var self = this;
+        $(document).off('click.zappoppop_align', '.zappoppop-align-btn').on('click.zappoppop_align', '.zappoppop-align-btn', function(e) {
+            e.preventDefault();
+            var alignType = $(this).data('align');
+            self.alignSelectedElements(alignType);
+        });
+    },
+
+    playAnimation: function(id, effect, duration, delay) {
+        if (!effect || effect === 'none') return;
+        if (window.ZapPopPopBuilderAnimation && typeof window.ZapPopPopBuilderAnimation.playElement === 'function') {
+            return window.ZapPopPopBuilderAnimation.playElement(id, effect, duration, delay);
+        }
+        duration = parseInt(duration, 10) || 1000;
+        delay = parseInt(delay, 10) || 0;
+
+        var $node = $('#zappoppop-el-' + id + ', #el-' + id + ', [data-id="' + id + '"]');
+        if (!$node.length) return;
+
+        var cleanEffect = effect.replace(/^animate__/, '').replace(/^zappoppop-anim-/, '').replace(/^anim-/, '');
+
+        // 1. Remove existing animation classes
+        $node.removeClass(function(index, className) {
+            return (className.match(/\b(anim-\S+|zappoppop-anim-\S+|animate__\S+)/g) || []).join(' ');
+        });
+
+        // 2. Clear inline animation styles
+        $node.css({
+            '-webkit-animation-duration': '',
+            'animation-duration': '',
+            '-webkit-animation-delay': '',
+            'animation-delay': '',
+            '-webkit-animation-fill-mode': '',
+            'animation-fill-mode': ''
+        });
+
+        // 3. Force browser layout reflow
+        if ($node[0]) {
+            void $node[0].offsetWidth;
+        }
+
+        // 4. Re-apply hardware-accelerated timing styles
+        $node.css({
+            '-webkit-animation-duration': duration + 'ms',
+            'animation-duration': duration + 'ms',
+            '-webkit-animation-delay': delay + 'ms',
+            'animation-delay': delay + 'ms',
+            '-webkit-animation-fill-mode': 'both',
+            'animation-fill-mode': 'both'
+        });
+
+        // 5. Add dual-contract keyframe classes
+        $node.addClass('animate__animated animate__' + cleanEffect);
+
+        // 6. Reset styles after playback to keep element interactive
+        clearTimeout($node.data('zappoppop_anim_cleanup_timer'));
+        var timer = setTimeout(function() {
+            $node.removeClass(function(index, className) {
+                return (className.match(/\b(anim-\S+|zappoppop-anim-\S+|animate__\S+)/g) || []).join(' ');
+            });
+            $node.css({
+                '-webkit-animation-duration': '',
+                'animation-duration': '',
+                '-webkit-animation-delay': '',
+                'animation-delay': '',
+                '-webkit-animation-fill-mode': '',
+                'animation-fill-mode': ''
+            });
+        }, duration + delay + 100);
+        $node.data('zappoppop_anim_cleanup_timer', timer);
+    },
+
+    alignActiveElement: function(alignment) {
+        var self = this;
+        var selId = self.selectedId || (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state ? window.ZapPopPopBuilderCore.state.activeId : null);
+        if (!selId) return;
+        self.selectedId = selId;
+
+        var curCanvas = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state) ? (window.ZapPopPopBuilderCore.state.currentCanvas || 1) : 1;
+        var elements = window.ZapPopPopBuilderCore.state.canvases[curCanvas] || [];
+        var el = elements.find(function(item) { return item.id === self.selectedId; });
+        if (!el) return;
+
+        var $box = $('#zappoppop-canvas-box');
+        var $node = $('#' + self.selectedId);
+        if (!$node.length) return;
+
+        var boxW = $box.outerWidth() || 640;
+        var boxH = $box.outerHeight() || 400;
+        var elW = $node.outerWidth() || parseInt(el.width, 10) || 120;
+        var elH = $node.outerHeight() || parseInt(el.height, 10) || 40;
+
+        var newX = parseInt(el.x !== undefined ? el.x : el.left, 10) || 0;
+        var newY = parseInt(el.y !== undefined ? el.y : el.top, 10) || 0;
+
+        switch (alignment) {
+            case 'left':
+                newX = 0;
+                break;
+            case 'center-h':
+                newX = Math.round((boxW - elW) / 2);
+                break;
+            case 'right':
+                newX = Math.max(0, boxW - elW);
+                break;
+            case 'top':
+                newY = 0;
+                break;
+            case 'middle-v':
+                newY = Math.round((boxH - elH) / 2);
+                break;
+            case 'bottom':
+                newY = Math.max(0, boxH - elH);
+                break;
+        }
+
+        // Commit coordinates
+        if (el.x !== undefined) el.x = newX;
+        if (el.left !== undefined) el.left = newX;
+        if (el.y !== undefined) el.y = newY;
+        if (el.top !== undefined) el.top = newY;
+
+        $node.css({ left: newX + 'px', top: newY + 'px' });
+
+        // Sync Inspector inputs if open
+        $('#prop-x, #prop-left').val(newX);
+        $('#prop-y, #prop-top').val(newY);
+
+        if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') {
+            window.ZapPopPopBuilderCore.pushHistory('Align Element ' + alignment);
+        }
+    },
+
+    smartSnapGuides: function(ui, $node) {
+        var $box = $('#zappoppop-canvas-box');
+        var $guideV = $('#zappoppop-guide-v');
+        var $guideH = $('#zappoppop-guide-h');
+        if (!$box.length) return;
+
+        var boxW = $box.outerWidth() || 640;
+        var boxH = $box.outerHeight() || 400;
+        var elW = $node.outerWidth() || 100;
+        var elH = $node.outerHeight() || 40;
+
+        var threshold = 7;
+        var centerX = Math.round(boxW / 2);
+        var centerY = Math.round(boxH / 2);
+
+        var curCenterX = ui.position.left + Math.round(elW / 2);
+        var curCenterY = ui.position.top + Math.round(elH / 2);
+
+        // Vertical Center Snap (X-axis)
+        if (Math.abs(curCenterX - centerX) <= threshold) {
+            ui.position.left = centerX - Math.round(elW / 2);
+            if ($guideV.length) {
+                $guideV.css({ left: centerX + 'px', display: 'block' });
+            }
+        } else {
+            if ($guideV.length) $guideV.hide();
+        }
+
+        // Horizontal Center Snap (Y-axis)
+        if (Math.abs(curCenterY - centerY) <= threshold) {
+            ui.position.top = centerY - Math.round(elH / 2);
+            if ($guideH.length) {
+                $guideH.css({ top: centerY + 'px', display: 'block' });
+            }
+        } else {
+            if ($guideH.length) $guideH.hide();
+        }
+    },
+
+    bindKeyboardNudge: function() {
+        var self = this;
+        $(document).off('keydown.zappoppop_nudge').on('keydown.zappoppop_nudge', function(e) {
+            if (!self.selectedId) return;
+            if ($(e.target).is('input, textarea, select')) return;
+
+            var key = e.which;
+            if (key < 37 || key > 40) return;
+
+            e.preventDefault();
+            var step = e.shiftKey ? 10 : 1;
+
+            var curCanvas = (window.ZapPopPopBuilderCore && window.ZapPopPopBuilderCore.state) ? (window.ZapPopPopBuilderCore.state.currentCanvas || 1) : 1;
+            var elements = window.ZapPopPopBuilderCore.state.canvases[curCanvas] || [];
+            var el = elements.find(function(item) { return item.id === self.selectedId; });
+            if (!el) return;
+
+            var $node = $('#' + self.selectedId);
+            var x = parseInt(el.x !== undefined ? el.x : el.left, 10) || 0;
+            var y = parseInt(el.y !== undefined ? el.y : el.top, 10) || 0;
+
+            if (key === 37) x -= step; // Left
+            if (key === 38) y -= step; // Up
+            if (key === 39) x += step; // Right
+            if (key === 40) y += step; // Down
+
+            if (el.x !== undefined) el.x = x;
+            if (el.left !== undefined) el.left = x;
+            if (el.y !== undefined) el.y = y;
+            if (el.top !== undefined) el.top = y;
+
+            $node.css({ left: x + 'px', top: y + 'px' });
+            $('#prop-x, #prop-left').val(x);
+            $('#prop-y, #prop-top').val(y);
+        });
+    },
+
+    bindAlignmentToolbar: function() {
+        var self = this;
+        $('#zappoppop-alignment-toolbar').off('click.zappoppop_align', '.zappoppop-align-btn').on('click.zappoppop_align', '.zappoppop-align-btn', function(e) {
+            e.preventDefault();
+            var alignMode = $(this).data('align');
+            if (alignMode) {
+                self.alignActiveElement(alignMode);
+            }
+        });
+    },
+
+    init: function() {
+        this.bindKeyboardNudge();
+        this.bindAlignmentToolbar();
+            this.bindCanvasCornerResize();
+            this.bindRibbonTools();
+            this.bindCanvasSelection();
+            this.bindSnapControls();
+            this.bindPreviewModeControls();
+        },
+
+        bindPreviewModeControls: function() {
+            var self = this;
+
+            $('#zappoppop-btn-preview').off('click.zappoppop_preview_toggle').on('click.zappoppop_preview_toggle', function(e) {
+                e.preventDefault();
+                if (self.isPreview) {
+                    self.exitPreviewMode();
+                } else {
+                    self.enterPreviewMode();
+                }
+            });
+
+            $(document).on('click', '#zappoppop-preview-exit-btn', function(e) {
+                e.preventDefault();
+                self.exitPreviewMode();
+            });
+
+            $(document).on('click', '#zappoppop-preview-replay-btn', function(e) {
+                e.preventDefault();
+                self.playCanvasEntranceAnimation();
+            });
+        },
+
+        enterPreviewMode: function() {
+            this.isPreview = true;
+            $('.zappoppop-builder-workspace').addClass('is-preview-mode');
+            $('#zappoppop-btn-preview').addClass('active').html('<span class="dashicons dashicons-no" style="font-size:16px;width:16px;height:16px;margin-top:2px;"></span> Exit Preview');
+
+            if (window.ZapPopPopBuilderInspector) window.ZapPopPopBuilderInspector.close();
+            if (window.ZapPopPopBuilderSettings) window.ZapPopPopBuilderSettings.closeDrawer();
+
+            if ($('#zappoppop-workspace-preview-bar').length === 0) {
+                var $bar = $('<div id="zappoppop-workspace-preview-bar" style="position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#0f172a;border:1px solid #334155;border-radius:0px;padding:6px 14px;display:flex;align-items:center;gap:10px;z-index:999999;box-shadow:0 10px 25px rgba(0,0,0,0.5);color:#f8fafc;font-size:12px;font-weight:700;">' +
+                    '<span style="color:#10b981;display:flex;align-items:center;gap:4px;">● LIVE PREVIEW</span>' +
+                    '<button type="button" id="zappoppop-preview-replay-btn" style="background:#1e293b;border:1px solid #475569;color:#e2e8f0;padding:3px 10px;border-radius:0px;font-size:11px;cursor:pointer;">Replay Animation</button>' +
+                    '<button type="button" id="zappoppop-preview-exit-btn" style="background:#dc2626;border:none;color:#ffffff;padding:3px 10px;border-radius:0px;font-size:11px;cursor:pointer;">Exit Preview</button>' +
+                    '</div>');
+                $('body').append($bar);
+            } else {
+                $('#zappoppop-workspace-preview-bar').show();
+            }
+
+            this.playCanvasEntranceAnimation();
+            this.playAllElementsEntranceAnimation();
+            this.initActivePreviewWidgets();
+        },
+
+        exitPreviewMode: function() {
+            this.isPreview = false;
+            $('.zappoppop-builder-workspace').removeClass('is-preview-mode');
+            $('#zappoppop-btn-preview').removeClass('active').html('<span class="dashicons dashicons-visibility" style="font-size:16px;width:16px;height:16px;margin-top:2px;"></span> Preview');
+            $('#zappoppop-workspace-preview-bar').hide();
+
+            var $box = $('#zappoppop-canvas-box');
+            $box.removeClass('anim-fade anim-slideDown anim-slideUp anim-slideLeft anim-slideRight anim-zoomIn anim-bounceIn');
+
+            if (window.ZapPopPopBuilderSettings) {
+                window.ZapPopPopBuilderSettings.applyActiveCanvasBackground();
+            }
+            this.renderCanvas();
+        },
+
+        playCanvasEntranceAnimation: function() {
+            if (window.ZapPopPopBuilderAnimation) { return window.ZapPopPopBuilderAnimation.playCanvas(); }
+            var core = window.ZapPopPopBuilderCore;
+            if (!core) return;
+            var cur = core.state.currentCanvas || 1;
+            var meta = core.state.canvasMeta[cur] || {};
+            var $box = $('#zappoppop-canvas-box');
+
+            var anim = meta.anim_appearance || 'fade';
+            var dur = (meta.anim_duration !== undefined ? meta.anim_duration : 1000) / 1000;
+            var del = (meta.anim_delay !== undefined ? meta.anim_delay : 0) / 1000;
+
+            $box.removeClass('anim-fade anim-slideDown anim-slideUp anim-slideLeft anim-slideRight anim-zoomIn anim-bounceIn');
+
+            if (anim !== 'none') {
+                $box.css({
+                    animationDuration: dur + 's',
+                    animationDelay: del + 's',
+                    animationFillMode: 'both'
+                }).addClass('anim-' + anim);
+            }
+        },
+
+        playAllElementsEntranceAnimation: function() {
+            if (window.ZapPopPopBuilderAnimation) { window.ZapPopPopBuilderAnimation.playAllElements(); }
+        },
+
+        playElementAnimation: function(id, anim) {
+            if (window.ZapPopPopBuilderAnimation) { return window.ZapPopPopBuilderAnimation.playElement(id, anim); }
+            if (!anim || anim === 'none') return;
+            var $el = $('#el-' + id);
+            $el.removeClass('anim-fade anim-bounce anim-tada anim-rubberBand anim-slideDown anim-slideUp anim-zoomIn');
+            setTimeout(function() {
+                $el.addClass('anim-' + anim);
+            }, 15);
+        },
+
+        initActivePreviewWidgets: function() {
+            var self = this;
+            var core = window.ZapPopPopBuilderCore;
+
+            $('#zappoppop-canvas-elements-root').off('click.previewStep').on('click.previewStep', '.zappoppop-next-canvas-btn, .zappoppop-next-screen-btn, .zappoppop-next-step, [data-type="step_btn"]', function(e) {
+                if (!self.isPreview) return;
+                e.preventDefault();
+                e.stopPropagation();
+
+                var target = parseInt($(this).data('goto-canvas') || $(this).data('goto-screen') || $(this).data('goto'), 10) || 2;
+                if (core) {
+                    core.switchCanvas(target);
+                    self.playCanvasEntranceAnimation();
+                    self.playAllElementsEntranceAnimation();
+                }
+            });
+        },
+
+        bindCanvasCornerResize: function() {
+            var self = this;
+            var $box = $('#zappoppop-canvas-box');
+            var $handle = $('#zappoppop-canvas-corner-handle');
+
+            if (!$handle.length || !$box.length) return;
+            $handle.off('mousedown.canvasCorner pointerdown.canvasCorner').on('mousedown.canvasCorner pointerdown.canvasCorner', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var startX = e.clientX;
+                var startY = e.clientY;
+                var startW = $box.outerWidth();
+                var startH = $box.outerHeight();
+                var core = window.ZapPopPopBuilderCore;
+                var cur = core ? (core.state.currentCanvas || 1) : 1;
+
+                $('body').addClass('zappoppop-resizing-canvas');
+                self.updateSizeBadge(startW, startH);
+
+                $(document).on('mousemove.canvasCorner pointermove.canvasCorner', function(moveEvent) {
+                    moveEvent.preventDefault();
+                    var dx = moveEvent.clientX - startX;
+                    var dy = moveEvent.clientY - startY;
+
+                    var newW = Math.max(200, Math.min(1600, Math.round(startW + dx)));
+                    var newH = Math.max(150, Math.min(1200, Math.round(startH + dy)));
+
+                    $box.css({ width: newW + 'px', height: newH + 'px' });
+                    self.updateSizeBadge(newW, newH);
+
+                    if (core && core.state.canvasMeta && core.state.canvasMeta[cur]) {
+                        core.state.canvasMeta[cur].width = newW;
+                        core.state.canvasMeta[cur].height = newH;
+                    }
+
+                    $('#set-canvas-width, #quick-box-width').val(newW);
+                    $('#set-canvas-height, #quick-box-height').val(newH);
+                });
+
+                $(document).one('mouseup.canvasCorner pointerup.canvasCorner', function() {
+                    $(document).off('mousemove.canvasCorner pointermove.canvasCorner');
+                    $('body').removeClass('zappoppop-resizing-canvas');
+                    $('#zappoppop-canvas-size-badge').fadeOut(200);
+
+                    if (core) {
+                        core.pushHistory();
+                    }
+                });
+            });
+        },
+
+        updateSizeBadge: function(w, h) {
+            $('#zappoppop-canvas-size-badge').text(w + ' × ' + h + ' px').show();
+        },
+
+        getActiveElements: function() {
+            var core = window.ZapPopPopBuilderCore;
+            if (!core || !core.state.canvases) return [];
+            var cur = core.state.currentCanvas || 1;
+            if (!core.state.canvases[cur]) {
+                core.state.canvases[cur] = [];
+            }
+            return core.state.canvases[cur];
+        },
+
+        renderCanvas: function() {
+            var self = this;
+            var $root = $('#zappoppop-canvas-elements-root');
+            $root.empty();
+
+            var elements = this.getActiveElements();
+            elements.forEach(function(el) {
+                var $node = self.buildElementNode(el);
+                $root.append($node);
+                if (!self.isPreview) {
+                    self.attachInteractions($node, el);
+                }
+            });
+        },
+
+        buildElementNode: function(el) {
+
+            var pad = el.padding !== undefined ? parseInt(el.padding, 10) : 0;
+            var isFormOrBtn = ['shape', 'step_btn', 'submit', 'pay', 'link_btn', 'textfield', 'email', 'number', 'select', 'date'].indexOf(el.type) !== -1;
+
+            var $div = $('<div>')
+                .addClass('zappoppop-canvas-item')
+                .attr('id', 'el-' + el.id)
+                .attr('data-id', el.id)
+                .css({
+                    top: ((el.top === undefined || el.top === null || el.top === '' || isNaN(parseFloat(el.top))) ? 20 : parseFloat(el.top)) + 'px',
+                    left: ((el.left === undefined || el.left === null || el.left === '' || isNaN(parseFloat(el.left))) ? 20 : parseFloat(el.left)) + 'px',
+                    width: (el.width || 180) + 'px',
+                    height: (el.height || 42) + 'px',
+                    zIndex: el.zIndex || 10,
+                    borderRadius: (el.borderRadius || 0) + 'px',
+                    opacity: el.opacity || 1,
+                    display: el.hidden ? 'none' : 'block',
+                    boxSizing: 'border-box'
+                });
+
+            // Container elements receive wrapper padding; form/button controls maintain 0 outer padding
+            if (!isFormOrBtn && pad > 0) {
+                $div.css('padding', pad + 'px');
+            } else {
+                $div.css('padding', '0px');
+            }
+
+            if (el.fontFamily && el.fontFamily !== 'inherit') $div.css('fontFamily', el.fontFamily);
+            if (el.fontSize) $div.css('fontSize', el.fontSize + 'px');
+            if (el.fontWeight) $div.css('fontWeight', el.fontWeight);
+            if (el.lineHeight) $div.css('lineHeight', el.lineHeight);
+            if (el.letterSpacing) $div.css('letterSpacing', el.letterSpacing + 'px');
+            if (el.textAlign) $div.css('textAlign', el.textAlign);
+            if (el.color) $div.css('color', el.color);
+            if (el.bgColor && !el.transparentFill) $div.css('backgroundColor', el.bgColor);
+
+            $div.html(this.getInnerMarkup(el));
+
+            if (!this.isPreview && window.ZapPopPopBuilderCore.state.activeId === el.id) {
+                $div.addClass('zappoppop-selected');
+            }
+
+            return $div;
+        },
+
+        renderShapeSvg: function(preset, fill, stroke, strokeWidth, rotate) {
+            preset = preset || 'square';
+            fill = fill || '#3b82f6';
+            stroke = stroke || '#1d4ed8';
+            var sw = (strokeWidth !== undefined) ? (parseInt(strokeWidth, 10) || 0) : 0;
+            var rot = parseInt(rotate, 10) || 0;
+
+            var sAttr = (sw > 0 && stroke !== 'transparent') ? 'stroke="' + stroke + '" stroke-width="' + sw + '" vector-effect="non-scaling-stroke"' : 'stroke="none"';
+            var fAttr = (fill !== 'transparent') ? 'fill="' + fill + '"' : 'fill="transparent"';
+            var transformAttr = rot ? ' transform="rotate(' + rot + ' 50 50)"' : '';
+
+            var geom = '';
+            switch(preset) {
+                case 'square':
+                    geom = '<rect x="0" y="0" width="100" height="100" ' + fAttr + ' ' + sAttr + transformAttr + ' />';
+                    break;
+                case 'rounded_rect':
+                case 'rounded_rectangle':
+                    geom = '<rect x="0" y="0" width="100" height="100" rx="15" ry="15" ' + fAttr + ' ' + sAttr + transformAttr + ' />';
+                    break;
+                case 'star':
+                    geom = '<polygon points="50,5 64,36 98,36 70,57 81,91 50,70 19,91 30,57 2,36 36,36" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'triangle':
+                    geom = '<polygon points="50,8 92,90 8,90" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'diamond':
+                    geom = '<polygon points="50,5 92,50 50,95 8,50" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'heart':
+                    geom = '<path d="M50 82 C50 82 12 58 12 33 C12 18 24 10 36 10 C44 10 48 15 50 18 C52 15 56 10 64 10 C76 10 88 18 88 33 C88 58 50 82 50 82 Z" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'hexagon':
+                    geom = '<polygon points="50,5 89,27 89,73 50,95 11,73 11,27" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'octagon':
+                    geom = '<polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'shield':
+                    geom = '<path d="M50 5 L88 18 V50 C88 72 70 88 50 95 C30 88 12 72 12 50 V18 Z" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'cross':
+                    geom = '<polygon points="35,5 65,5 65,35 95,35 95,65 65,65 65,95 35,95 35,65 5,65 5,35 35,35" ' + fAttr + ' ' + sAttr + transformAttr + ' stroke-linejoin="round" />';
+                    break;
+                case 'circle':
+                default:
+                    geom = '<circle cx="50" cy="50" r="45" ' + fAttr + ' ' + sAttr + transformAttr + ' />';
+                    break;
+            }
+
+            return '<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block;overflow:visible;">' + geom + '</svg>';
+        },
+
+        getInnerMarkup: function(el) {
+            var label = el.content || el.name || 'Element';
+            var align = el.textAlign || 'left';
+            var jAlign = (align === 'center' ? 'center' : (align === 'right' ? 'flex-end' : 'flex-start'));
+            var padVal = (el.padding !== undefined && el.padding !== null) ? parseInt(el.padding, 10) : 0;
+
+            switch (el.type) {
+                case 'shape':
+                    return this.renderShapeSvg(el.shapePreset, el.shapeNoFill ? 'none' : el.shapeFill, el.strokeColor || el.shapeStroke, (el.strokeWidth !== undefined ? el.strokeWidth : el.shapeStrokeWidth), el.shapeRotate);
+                case 'title':
+            case 'heading':
+                var tTag = el.titleTag || el.htmlTag || 'h2';
+                var tText = el.text !== undefined ? el.text : (el.content || 'Headline Title');
+                return '<' + tTag + ' class="zappoppop-stage-title" style="margin:0;padding:0;width:100%;height:100%;font-family:inherit;font-size:inherit;font-weight:inherit;color:inherit;text-align:inherit;line-height:inherit;letter-spacing:inherit;display:flex;align-items:center;word-break:break-word;">' + tText + '</' + tTag + '>';
+            case 'paragraph':
+                case 'text':
+                    return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:' + jAlign + ';text-align:' + align + ';font-size:inherit;color:inherit;line-height:inherit;">' + (el.content || 'Headline or Text') + '</div>';
+                case 'textfield':
+                    return '<input type="text" placeholder="' + (el.content || 'Enter text...') + '" style="width:100%;height:100%;padding:0 ' + (padVal > 0 ? padVal : 10) + 'px;border:1px solid #cbd5e1;border-radius:inherit;text-align:' + align + ';box-sizing:border-box;">';
+                case 'image':
+                    var imgSrc = el.imageUrl || el.src || el.url || (el.content && String(el.content).indexOf('http') === 0 ? el.content : '');
+                    var imgFit = el.objectFit || el.imageFit || 'contain';
+                    var imgAlt = el.imageAlt || el.alt || 'Popup Image';
+                    if (imgSrc) {
+                        return '<img src="' + imgSrc + '" alt="' + imgAlt.replace(/"/g, '&quot;') + '" style="width:100%;height:100%;object-fit:' + imgFit + ';display:block;border-radius:inherit;pointer-events:none;" />';
+                    }
+                    return '<div style="width:100%;height:100%;background:#e2e8f0;border:1px dashed #94a3b8;display:flex;align-items:center;justify-content:center;color:#475569;font-size:12px;font-weight:600;border-radius:inherit;"><span class="dashicons dashicons-format-image" style="font-size:20px;width:20px;height:20px;margin-right:6px;"></span>Image</div>';
+                case 'video':
+                var vUrl = el.videoUrl || el.url || '';
+                var embedSrc = self.parseVideoEmbed ? self.parseVideoEmbed(vUrl, el.videoAutoplay, el.videoMute, el.videoControls) : vUrl;
+                if (embedSrc) {
+                    return '<iframe src="' + embedSrc + '" style="width:100%;height:100%;border:0;pointer-events:none;border-radius:inherit;" allow="autoplay; encrypted-media"></iframe>';
+                }
+                return '<div class="zappoppop-video-placeholder" style="width:100%;height:100%;background:#1e293b;color:#94a3b8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;border-radius:inherit;"><span class="dashicons dashicons-video-alt3" style="font-size:32px;width:32px;height:32px;margin-bottom:8px;"></span><span>Video Embed</span></div>';
+                            case 'html':
+                    var rawHtml = (el.content !== undefined && el.content !== '') ? el.content : (el.htmlCode || '');
+                    if (!rawHtml || !rawHtml.trim()) {
+                        return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1e293b;border:1px dashed #475569;color:#94a3b8;font-size:11px;font-family:monospace;padding:8px;box-sizing:border-box;text-align:center;">&lt;/&gt; Empty HTML Element (Click to Edit)</div>';
+                    }
+                    return '<div class="zappoppop-custom-html-stage" style="width:100%;height:100%;overflow:auto;box-sizing:border-box;">' + rawHtml + '</div>';
+
+                case 'button':
+                case 'link':
+                case 'link_btn':
+                    var btLabel = (el.content !== undefined && el.content !== null && String(el.content).replace(/\s+/g, '') !== '') ? el.content : 'Click Here';
+                    return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font:inherit;color:inherit;letter-spacing:inherit;pointer-events:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 12px;box-sizing:border-box;">' + String(btLabel).replace(/</g, '&lt;') + '</div>';
+
+                case 'divider':
+                    var dStyle = el.dividerStyle || 'solid';
+                    var dWeight = parseInt(el.dividerWeight || 2, 10);
+                    if (dStyle === 'double' && dWeight < 3) dWeight = 4;
+                    var dColor = el.dividerColor || el.color || '#94a3b8';
+                    var dPct = parseInt(el.dividerWidthPct || 100, 10);
+                    var dAlign = el.dividerAlign || 'center';
+                    var marginStyle = 'margin: 0 auto;';
+                    if (dAlign === 'left') marginStyle = 'margin: 0 auto 0 0;';
+                    if (dAlign === 'right') marginStyle = 'margin: 0 0 0 auto;';
+                    return '<div style="width:100%;height:100%;display:flex;align-items:center;box-sizing:border-box;padding:0 4px;">' +
+                           '<hr style="width:' + dPct + '%;border:none;border-top:' + dWeight + 'px ' + dStyle + ' ' + dColor + ';' + marginStyle + 'padding:0;" />' +
+                           '</div>';
+
+                case 'icon':
+                    var iClass = el.iconClass || el.content || 'fas fa-star';
+                    if (iClass.indexOf('fa') === 0 && iClass.indexOf(' ') === -1) {
+                        iClass = 'fas ' + iClass;
+                    }
+                    var iColor = el.iconColor || el.color || '#38bdf8';
+                    var iSize = parseInt(el.iconSize || 36, 10);
+                    return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:' + iColor + ';font-size:' + iSize + 'px;"><i class="' + iClass + '"></i></div>';
+
+                default:
+                    return '<div style="padding:6px;font-size:12px;">' + label + '</div>';
+            }
+        },
+
+        // ZAPPOPPOP_OVERFLOW_CONTAINMENT: per-canvas overflow aware containment
+        isOverflowAllowed: function() {
+            var core = window.ZapPopPopBuilderCore;
+            if (!core || !core.state) return false;
+            var cur = core.state.currentCanvas || 1;
+            var m = (core.state.canvasMeta && core.state.canvasMeta[cur]) || {};
+            var yes = function(v) { return v === true || v === 1 || v === '1' || v === 'true'; };
+            return yes(m.allow_overflow) || yes(m.allow_overflow_edit); // ZAPPOPPOP_OVERFLOW_EDIT_ONLY
+        },
+
+        getContainment: function() {
+            return this.isOverflowAllowed() ? false : '#zappoppop-canvas-elements-root';
+        },
+
+        refreshInteractionContainment: function() {
+            var c = this.getContainment();
+            $('#zappoppop-canvas-elements-root').children().each(function() {
+                var $n = $(this);
+                if ($n.data('ui-draggable') || $n.data('uiDraggable')) { try { $n.draggable('option', 'containment', c); } catch (e) {} }
+                if ($n.data('ui-resizable') || $n.data('uiResizable')) { try { $n.resizable('option', 'containment', c); } catch (e) {} }
+            });
+        },
+
+        // ZAPPOPPOP_EDGE_SNAP: magnetic snap to the canvas edges (hold Alt to disable)
+        snapToCanvasEdges: function(event, ui, $node) {
+            var $box = $('#zappoppop-canvas-box');
+            var boxEl = $box[0];
+            if (!boxEl || !ui || !ui.position || !$node || !$node[0]) return;
+            var $gv = $('#zappoppop-guide-v');
+            var $gh = $('#zappoppop-guide-h');
+            if (event && event.altKey) { $gv.hide(); $gh.hide(); return; }
+
+            var boxW = boxEl.clientWidth;
+            var boxH = boxEl.clientHeight;
+            var elW = $node[0].offsetWidth;
+            var elH = $node[0].offsetHeight;
+            var T = 10;
+
+            var x = Math.round(ui.position.left);
+            var y = Math.round(ui.position.top);
+            var gx = null, gy = null;
+
+            if (Math.abs(x) <= T) { x = 0; gx = 0; }
+            else if (Math.abs((x + elW) - boxW) <= T) { x = boxW - elW; gx = boxW; }
+
+            if (Math.abs(y) <= T) { y = 0; gy = 0; }
+            else if (Math.abs((y + elH) - boxH) <= T) { y = boxH - elH; gy = boxH; }
+
+            ui.position.left = x;
+            ui.position.top = y;
+
+            if (gx !== null) { $gv.css({ left: gx + 'px', display: 'block' }); } else { $gv.hide(); }
+            if (gy !== null) { $gh.css({ top: gy + 'px', display: 'block' }); } else { $gh.hide(); }
+        },
+
+        // ZAPPOPPOP_SNAP_OBJECTS: snap-to-object toggle (hold Alt to bypass)
+        snapObjects: true,
+
+        setSnapObjects: function(on) {
+            this.snapObjects = !!on;
+            try { window.localStorage.setItem('zappoppop_snap_objects', on ? '1' : '0'); } catch (e) {}
+            this.syncSnapUI();
+        },
+
+        syncSnapUI: function() {
+            $('#zappoppop-snap-object').prop('checked', !!this.snapObjects);
+        },
+
+        bindSnapControls: function() {
+            var self = this;
+            var o = '0';
+            try { o = window.localStorage.getItem('zappoppop_snap_objects'); } catch (e) {}
+            self.snapObjects = (o !== '0'); /* ZAPPOPPOP_SNAP_DEFAULT_ON */
+            self.syncSnapUI();
+            $(document).off('change.zappoppop_snap', '.zappoppop-snap-toggle')
+                .on('change.zappoppop_snap', '.zappoppop-snap-toggle', function() {
+                    self.setSnapObjects(this.checked);
+                });
+        },
+
+        snapToObjects: function(event, ui, $node, el) {
+            if (!this.snapObjects || !ui || !ui.position || !$node || !$node[0]) return;
+            if (event && event.altKey) return;
+            var boxEl = $('#zappoppop-canvas-box')[0];
+            if (!boxEl) return;
+            var $gv = $('#zappoppop-guide-v');
+            var $gh = $('#zappoppop-guide-h');
+            var boxW = boxEl.clientWidth;
+            var boxH = boxEl.clientHeight;
+            var elW = $node[0].offsetWidth;
+            var elH = $node[0].offsetHeight;
+            var T = 6;
+            var x = Math.round(ui.position.left);
+            var y = Math.round(ui.position.top);
+
+            // canvas-edge snap has priority: leave those axes alone
+            var lockX = (x === 0) || (x + elW === boxW);
+            var lockY = (y === 0) || (y + elH === boxH);
+
+            var tx = [], ty = [];
+            var others = this.getActiveElements();
+            for (var i = 0; i < others.length; i++) {
+                var o = others[i];
+                if (!o || o.id === el.id || o.hidden) continue;
+                var n = document.getElementById('el-' + o.id);
+                var oL = parseFloat(o.left); if (isNaN(oL)) oL = 0;
+                var oT = parseFloat(o.top);  if (isNaN(oT)) oT = 0;
+                var oW = n ? n.offsetWidth : (parseFloat(o.width) || 0);
+                var oH = n ? n.offsetHeight : (parseFloat(o.height) || 0);
+                tx.push(oL, Math.round(oL + oW / 2), oL + oW);
+                ty.push(oT, Math.round(oT + oH / 2), oT + oH);
+            }
+
+            var best = function(pos, size, targets) {
+                var out = null, bestD = T + 1;
+                var pts = [[pos, 0], [pos + Math.round(size / 2), Math.round(size / 2)], [pos + size, size]];
+                for (var a = 0; a < pts.length; a++) {
+                    for (var b = 0; b < targets.length; b++) {
+                        var d = Math.abs(pts[a][0] - targets[b]);
+                        if (d < bestD) { bestD = d; out = { pos: targets[b] - pts[a][1], guide: targets[b] }; }
+                    }
+                }
+                return out;
+            };
+
+            var gx = null, gy = null;
+            if (!lockX) {
+                var rx = best(x, elW, tx);
+                if (rx) { ui.position.left = rx.pos; gx = rx.guide; }
+            }
+            if (!lockY) {
+                var ry = best(y, elH, ty);
+                if (ry) { ui.position.top = ry.pos; gy = ry.guide; }
+            }
+            if (gx !== null) { $gv.css({ left: gx + 'px', display: 'block' }); }
+            if (gy !== null) { $gh.css({ top: gy + 'px', display: 'block' }); }
+        },
+
+        // ZAPPOPPOP_RESIZE_EDGE_FIT: whole-pixel sizes; a bottom/right edge within 2px of the canvas edge lands exactly on it (0 gap)
+        fitSizeToCanvasEdges: function($node, ui) {
+            var boxEl = $('#zappoppop-canvas-box')[0];
+            if (!boxEl || !ui || !ui.size || !$node || !$node[0]) return;
+            var w = Math.round(ui.size.width);
+            var h = Math.round(ui.size.height);
+            var top = Math.round(parseFloat($node.css('top')) || 0);
+            var left = Math.round(parseFloat($node.css('left')) || 0);
+            var boxW = Math.round(boxEl.clientWidth);
+            var boxH = Math.round(boxEl.clientHeight);
+            if (boxH > 0 && Math.abs((top + h) - boxH) <= 2) { h = boxH - top; }
+            if (boxW > 0 && Math.abs((left + w) - boxW) <= 2) { w = boxW - left; }
+            ui.size.width = w;
+            ui.size.height = h;
+        },
+
+        attachInteractions: function($node, el) {
+            var self = this;
+            if (el.locked) {
+                $node.addClass('zappoppop-locked');
+                return;
+            }
+
+            $node.draggable({
+                containment: self.getContainment(),
+                drag: function(event, ui) {
+                    self.snapToCanvasEdges(event, ui, $node);
+                    self.snapToObjects(event, ui, $node, el);
+                    el.top = ui.position.top;
+                    el.left = ui.position.left;
+                    if (window.ZapPopPopBuilderInspector) {
+                        window.ZapPopPopBuilderInspector.syncCoordinates(el);
+                    }
+                },
+                stop: function(event, ui) {
+                    el.top = ui.position.top;
+                    el.left = ui.position.left;
+                    if (window.ZapPopPopBuilderInspector) {
+                        window.ZapPopPopBuilderInspector.syncCoordinates(el);
+                    }
+                    window.ZapPopPopBuilderCore.pushHistory();
+                }
+            });
+
+            $node.on('dragstop.zappoppopSnap', function() {
+                $('#zappoppop-guide-v, #zappoppop-guide-h').hide();
+            });
+
+            $node.resizable({
+                containment: self.getContainment(),
+                handles: 'se',
+                resize: function(event, ui) {
+                    self.fitSizeToCanvasEdges($node, ui);
+                    el.width = ui.size.width;
+                    el.height = ui.size.height;
+                    if (window.ZapPopPopBuilderInspector) {
+                        window.ZapPopPopBuilderInspector.syncCoordinates(el);
+                    }
+                },
+                stop: function(event, ui) {
+                    self.fitSizeToCanvasEdges($node, ui);
+                    el.width = ui.size.width;
+                    el.height = ui.size.height;
+                    $node.css({ width: el.width + 'px', height: el.height + 'px' });
+                    if (window.ZapPopPopBuilderInspector) {
+                        window.ZapPopPopBuilderInspector.syncCoordinates(el);
+                    }
+                    window.ZapPopPopBuilderCore.pushHistory();
+                }
+            });
+        },
+
+        bindRibbonTools: function() {
+        var self = this;
+        var $ribbonBtns = $('.zappoppop-ribbon-btn, .zappoppop-ribbon-tool, .zappoppop-tool-btn');
+
+        var normalizeType = function(rawType) {
+            var map = {
+                'step': 'step_btn',
+                'link': 'link_btn',
+                'close': 'close_icon',
+                'dropdown': 'select',
+                'radio': 'radios',
+                'checkbox': 'checkboxes',
+                'text': 'text'
+            };
+            return map[rawType] || rawType;
+        };
+
+        // 1-Click Spawning directly onto canvas center
+        $ribbonBtns.off('click.zappoppop_add').on('click.zappoppop_add', function(e) {
+            e.preventDefault();
+            var rawType = $(this).data('type');
+            if (!rawType) return;
+            var type = normalizeType(rawType);
+
+            var $box = $('#zappoppop-canvas-box');
+            var boxW = $box.outerWidth() || 640;
+            var boxH = $box.outerHeight() || 400;
+
+            var spawnX = Math.max(20, Math.round((boxW / 2) - 100));
+            var spawnY = Math.max(20, Math.round((boxH / 2) - 30));
+
+            self.addElement(type, spawnX, spawnY);
+        });
+
+        // Tactile Drag Ghost & Droppable
+        if ($.fn.draggable) {
+            $ribbonBtns.draggable({
+                helper: function() {
+                    var label = $(this).find('.btn-label').text() || $(this).data('type') || 'Element';
+                    var iconHtml = $(this).find('.dashicons').prop('outerHTML') || '<span class="dashicons dashicons-plus"></span>';
+                    return $('<div class="zappoppop-drag-ghost">' + iconHtml + '<span>' + label + '</span></div>');
+                },
+                appendTo: 'body',
+                cursor: 'grabbing',
+                cursorAt: { left: 40, top: 18 },
+                zIndex: 999999,
+                revert: 'invalid'
+            });
+        }
+
+        // Droppable on Canvas Box with Zoom Normalization
+        var $box = $('#zappoppop-canvas-box');
+        if ($.fn.droppable && $box.length) {
+            $box.droppable({
+                accept: '.zappoppop-ribbon-btn, .zappoppop-ribbon-tool, .zappoppop-tool-btn',
+                tolerance: 'pointer',
+                drop: function(e, ui) {
+                    var rawType = ui.draggable.data('type');
+                    if (!rawType) return;
+                    var type = normalizeType(rawType);
+
+                    var boxOffset = $box.offset();
+                    var scale = self.currentZoom || 1.0;
+
+                    var dropX = Math.round((e.pageX - boxOffset.left) / scale);
+                    var dropY = Math.round((e.pageY - boxOffset.top) / scale);
+
+                    if (!self.isOverflowAllowed()) {
+                        dropX = Math.max(0, Math.min(dropX, $box.outerWidth() - 50));
+                        dropY = Math.max(0, Math.min(dropY, $box.outerHeight() - 30));
+                    }
+
+                    self.addElement(type, dropX, dropY);
+                }
+            });
+        }
+    },
+
+    addElement: function(type, spawnX, spawnY) {
+            var elements = this.getActiveElements();
+            var id = 'layer_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 4);
+            var nextZ = elements.length ? Math.max.apply(null, elements.map(function(e) { return e.zIndex || 10; })) + 1 : 10;
+
+            var newEl = {
+                id: id,
+                type: type,
+                name: type.toUpperCase() + ' ' + (elements.length + 1),
+                top: (typeof spawnY === 'number' && !isNaN(spawnY)) ? spawnY : (50 + (elements.length * 15) % 150),
+                left: (typeof spawnX === 'number' && !isNaN(spawnX)) ? spawnX : (50 + (elements.length * 15) % 200),
+                width: (type === 'close' || type === 'close_icon') ? 35 : (type === 'video') ? 200 /* ZAPPOPPOP_VIDEO_SPAWN_200x150 */ : (type === 'shape' || type === 'image') ? 120 : ((type === 'text' || type === 'textfield') ? 200 : (type === 'html') ? 240 : 200),
+                height: (type === 'image') ? 150 /* ZAPPOPPOP_IMAGE_SPAWN_120x150 */ : (type === 'video') ? 150 : (type === 'close' || type === 'close_icon') ? 35 : (type === 'shape') ? 120 : ((type === 'signature') ? 60 : 42),
+                zIndex: nextZ, /* ZAPPOPPOP_CLOSE_SPAWN_35 */
+                sizePresetApplied: (type === 'close' || type === 'close_icon'),
+                borderRadius: 0,
+                opacity: 1,
+                fontSize: 14,
+                fontWeight: '400',
+                lineHeight: 1.4,
+                letterSpacing: 0,
+                textAlign: 'left',
+                padding: (type === 'text' || type === 'paragraph' || type === 'title') ? 8 : 0,
+                animation: 'none',
+                content: this.getDefaultContent(type),
+                goto_canvas: 2,
+                goto_screen: 2,
+                locked: false,
+                hidden: false,
+                custom_settings: {}
+            };
+
+            if (type === 'button' || type === 'link' || type === 'link_btn') { /* ZAPPOPPOP_BUTTON_DEFAULTS */
+                newEl.bgColor = '#2563eb';
+                newEl.color = '#ffffff';
+                newEl.fontWeight = '600';
+                newEl.fontSize = 14;
+                newEl.borderRadius = 6;
+                newEl.textAlign = 'center';
+                newEl.buttonAction = 'link';
+                newEl.linkBlank = false;
+                newEl.nofollow = false;
+                newEl.hoverBgColor = '#1d4ed8';
+                newEl.hoverTextColor = '#ffffff';
+                newEl.hoverBorderColor = '#1d4ed8';
+            }
+
+            if (type === 'label') { newEl.padding = 0; newEl.paddingTop = 0; newEl.paddingRight = 0; newEl.paddingBottom = 0; newEl.paddingLeft = 0; newEl.lineHeight = 1; } /* ZAPPOPPOP_LABEL_ZERO_GAP */
+            if (type === 'phone' || type === 'tel') { newEl.autocomplete = 'tel'; } /* ZAPPOPPOP_PHONE_AC_DEFAULT */
+            if (type === 'shape') {
+                newEl.shapePreset = 'square';
+                newEl.shapeFill = '#3b82f6';
+                newEl.shapeStroke = '#1d4ed8';
+                newEl.shapeStrokeWidth = 0;
+                newEl.strokeWidth = 0;
+                newEl.shapeRotate = 0;
+            }
+
+            if (type === 'image') { newEl.objectFit = 'contain'; newEl.imageFit = 'contain'; newEl.linkTarget = '_self'; newEl.targetBlank = false; newEl.linkBlank = false; newEl.sizePresetApplied = true; } /* ZAPPOPPOP_IMAGE_DEFAULTS */
+            if (type === 'textarea') { newEl.height = 100; newEl.h = 100; if (!newEl.rows) { newEl.rows = 4; } } /* ZAPPOPPOP_TEXTAREA_H100 */
+            if (type === 'checkbox' || type === 'checkboxes') { newEl.width = 300; newEl.w = 300; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_CHECKBOX_DEFAULTS */
+            if (type === 'radio' || type === 'radios') { newEl.width = 100; newEl.w = 100; newEl.height = 100; newEl.h = 100; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_RADIO_DEFAULTS */
+            if (type === 'checkboxgroup') { newEl.width = 100; newEl.w = 100; newEl.height = 100; newEl.h = 100; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_CBGROUP_DEFAULTS */
+            if (type === 'multiselect') { newEl.width = 125; newEl.w = 125; newEl.height = 125; newEl.h = 125; } /* ZAPPOPPOP_MULTISELECT_SIZE */
+            if (window.ZapPopPopElementExt) { window.ZapPopPopElementExt.call(type, 'spawn', [newEl]); } /* ZAPPOPPOP_EXT_SPAWN */
+            if (type === 'icon' || type === 'fontawesome') { /* ZAPPOPPOP_ICON_DEFAULTS_V1 */
+                newEl.iconClass = 'fas fa-star';
+                newEl.content = 'fas fa-star';
+                newEl.iconSize = 36;
+                newEl.iconColor = '#38bdf8';
+                newEl.color = '#38bdf8';
+                newEl.rotate = 0;
+                newEl.width = 40; newEl.w = 40;
+                newEl.height = 40; newEl.h = 40;
+                newEl.borderRadius = 0;
+                newEl.padding = 0;
+                newEl.bgColor = 'transparent';
+                newEl.transparentFill = true;
+                newEl.textAlign = 'center';
+            }
+            if (type === 'submit') { newEl.textAlign = 'center'; newEl.blockEmptySubmit = true; } /* ZAPPOPPOP_SUBMIT_ALIGN_DEFAULT + ZAPPOPPOP_BLOCK_EMPTY_SUBMIT */
+            if (type === 'email') { newEl.required = true; } /* ZAPPOPPOP_EMAIL_REQ_DEFAULT */
+            if (window.ZapPopPopSpawnPlace) { window.ZapPopPopSpawnPlace.place(newEl, elements); } /* ZAPPOPPOP_SPAWN_PLACE */
+            elements.push(newEl);
+            window.ZapPopPopBuilderCore.state.activeId = id;
+            this.renderCanvas();
+
+            if (window.ZapPopPopBuilderLayers) {
+                window.ZapPopPopBuilderLayers.renderLayers();
+            }
+            if (window.ZapPopPopBuilderInspector) {
+                window.ZapPopPopBuilderInspector.open(id);
+            }
+
+            window.ZapPopPopBuilderCore.pushHistory();
+        },
+
+        getDefaultContent: function(type) {
+            switch(type) {
+                case 'label': return 'Hello World';
+                case 'title': return 'Headline Title';
+                case 'paragraph':
+                case 'text': return 'Click to edit your text headline...';
+                case 'textfield': return 'Enter your text...';
+                case 'email': return 'Enter your best email...';
+                case 'number': return '1';
+                case 'dropdown':
+                case 'select': return 'First Option, Second Option';
+                case 'radio':
+                case 'radios':
+                case 'checkboxgroup': return 'Option A, Option B';
+                case 'checkbox':
+                case 'checkboxes': return 'I agree to the terms';
+                case 'date': return '2026-10-10';
+                case 'step':
+                case 'step_btn': return 'Next Canvas &rarr;';
+                case 'button':
+                case 'link':
+                case 'link_btn': return 'Click Here';
+                case 'submit': return 'Claim Offer Now';
+                case 'pay': return 'Complete Checkout ($19.99)';
+                case 'html': return '<p>Custom <strong>HTML block</strong></p>';
+                default: return '';
+            }
+        },
+
+        bindCanvasSelection: function() {
+
+            var self = this;
+
+            // Primary click handler (keeps existing click behavior)
+            $(document).off('click.zappoppop_canvas_select', '.zappoppop-canvas-item')
+                .on('click.zappoppop_canvas_select', '.zappoppop-canvas-item', function(e) {
+                    if (self.isPreview) return;
+                    e.stopPropagation();
+                    var id = $(this).data('id') || $(this).attr('id') || '';
+                    if (id && String(id).indexOf('el-') === 0) id = String(id).replace(/^el-/, '');
+                    self.selectElement(id, true);
+                });
+
+            // Pointer / touch / mousedown for improved cross-browser selection and to work around draggable click suppression
+            $(document).off('pointerdown.zappoppop_canvas_select touchstart.zappoppop_canvas_select mousedown.zappoppop_canvas_select', '.zappoppop-canvas-item')
+                .on('pointerdown.zappoppop_canvas_select touchstart.zappoppop_canvas_select mousedown.zappoppop_canvas_select', '.zappoppop-canvas-item', function(e) {
+                    if (self.isPreview) return;
+                    e.stopPropagation();
+                    var $el = $(this);
+                    var id = $el.data('id') || $el.attr('id') || '';
+                    if (id && String(id).indexOf('el-') === 0) id = String(id).replace(/^el-/, '');
+                    // allow UI events (drag) to settle; immediate selection still occurs
+                    setTimeout(function() { self.selectElement(id, true); }, 0);
+                });
+
+            // Deselect handlers (preserve original behavior)
+            $('#zappoppop-canvas-box').off('click.zappoppop_deselect').on('click.zappoppop_deselect', function(e) {
+                if (self.isPreview) return;
+                if ($(e.target).closest('.zappoppop-canvas-item, #zappoppop-canvas-corner-handle, #zappoppop-canvas-stage-bar').length === 0) {
+                    self.deselect();
+                    /* ZAPPOPPOP_CLICK_OPEN: canvas click opens Popup Settings only when enabled */
+                    if (window.ZapPopPopBuilderSettings && (!window.ZapPopPopClickOpen || window.ZapPopPopClickOpen.canvas())) {
+                        window.ZapPopPopBuilderSettings.openDrawer();
+                    }
+                }
+            });
+
+            $('.zappoppop-builder-workspace').off('click.zappoppop_deselect').on('click.zappoppop_deselect', function(e) {
+                if (self.isPreview) return;
+                if ($(e.target).closest('.zappoppop-canvas-item, #zappoppop-inspector-drawer, #zappoppop-floating-layers-panel, #zappoppop-canvas-corner-handle, .zappoppop-ribbon-bar, .zappoppop-builder-header, #zappoppop-settings-drawer, #zappoppop-canvas-box').length === 0) {
+                    self.deselect();
+                }
+            });
+
+        },
+
+        selectElement: function(id, fromStage) {
+
+            if (!id) return;
+            /* ZAPPOPPOP_CLICK_OPEN: element click opens Layer Settings only when enabled */
+            var zppSkipOpen = fromStage === true && !!window.ZapPopPopClickOpen && !window.ZapPopPopClickOpen.element();
+            // Normalize many possible id shapes: '#el-xxx', 'el-xxx', 'zappoppop-el-xxx', or raw id
+            var raw = String(id || '');
+            raw = raw.replace(/^#/, '').replace(/^zappoppop-el-/, '').replace(/^el-/, '');
+            this.selectedId = raw;
+            if ($("#zappoppop-alignment-toolbar").length) {
+                $("#zappoppop-alignment-toolbar").fadeIn(120);
+            }
+            if (window.ZapPopPopBuilderCore) {
+                window.ZapPopPopBuilderCore.state.activeId = raw;
+            }
+            $('.zappoppop-canvas-item').removeClass('zappoppop-selected');
+            $('#el-' + raw).addClass('zappoppop-selected');
+
+            if (!zppSkipOpen && window.ZapPopPopBuilderSettings && typeof window.ZapPopPopBuilderSettings.closeDrawer === 'function') {
+                window.ZapPopPopBuilderSettings.closeDrawer();
+            }
+            if (window.ZapPopPopBuilderLayers && typeof window.ZapPopPopBuilderLayers.highlightLayer === 'function') {
+                window.ZapPopPopBuilderLayers.highlightLayer(raw);
+            }
+            if (!zppSkipOpen && window.ZapPopPopBuilderInspector && typeof window.ZapPopPopBuilderInspector.open === 'function') {
+                window.ZapPopPopBuilderInspector.open(raw);
+            }
+
+    },
+
+    deselect: function() {
+        this.selectedId = null;
+        if ($("#zappoppop-alignment-toolbar").length) {
+            $("#zappoppop-alignment-toolbar").fadeOut(120);
+        }
+        $("#zappoppop-guide-v, #zappoppop-guide-h").hide();
+        if (window.ZapPopPopBuilderCore) {
+            window.ZapPopPopBuilderCore.state.activeId = null;
+        }
+        $('.zappoppop-canvas-item').removeClass('zappoppop-selected');
+        if (window.ZapPopPopBuilderInspector && typeof window.ZapPopPopBuilderInspector.close === 'function') {
+            window.ZapPopPopBuilderInspector.close();
+        }
+        if (window.ZapPopPopBuilderLayers) {
+            $('.zappoppop-layer-item').removeClass('active');
+        }
+    },
+
+    deleteActiveElement: function() {
+        var core = window.ZapPopPopBuilderCore;
+        if (!core || !core.state || !core.state.activeId) return;
+        if (typeof this.deleteElement === 'function') {
+            this.deleteElement(core.state.activeId);
+        }
+    }
+};
+
+// Global namespace aliases
+window.ZapPopPopCanvas = window.ZapPopPopBuilderCanvas;
+window.ZapPopPopBuilder = window.ZapPopPopBuilder || {};
+window.ZapPopPopBuilder.Canvas = window.ZapPopPopBuilderCanvas;
+})(jQuery);
+
+/* ZAPPOPPOP_CANVAS_SIZE_GUIDE_V1: live "width x height" label (cross-browser) */
+(function ($) {
+    function sync() {
+        var box = document.getElementById('zappoppop-canvas-box');
+        var g = document.getElementById('zappoppop-canvas-size-guide');
+        if (!box || !g) return;
+        g.textContent = Math.round(box.offsetWidth) + ' x ' + Math.round(box.offsetHeight);
+    }
+    $(function () {
+        sync();
+        var box = document.getElementById('zappoppop-canvas-box');
+        if (box && window.ResizeObserver) {
+            new ResizeObserver(sync).observe(box);
+        } else {
+            $(window).on('resize', sync);
+            setInterval(sync, 300);
+        }
+    });
+})(jQuery);
+
+/* === ZAPPOPPOP_ALIGN_TOOLBAR_FIX_START === */
+/* Stage alignment toolbar: working align (6) + distribute (2) + no accidental deselect. */
+(function(window, $) {
+    'use strict';
+    var Cv = window.ZapPopPopBuilderCanvas;
+    if (!Cv) return;
+
+    function cid(r) { return String(r == null ? '' : r).replace(/^#/, '').replace(/^zappoppop-el-/, '').replace(/^el-/, '').trim(); }
+    function num(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+    function list() {
+        var c = window.ZapPopPopBuilderCore;
+        return (c && c.state && c.state.canvases && c.state.canvases[c.state.currentCanvas || 1]) || [];
+    }
+    function findEl(id) {
+        var k = cid(id), l = list();
+        for (var i = 0; i < l.length; i++) { if (l[i] && cid(l[i].id) === k) return l[i]; }
+        return null;
+    }
+    function nodeOf(el) { return document.getElementById('el-' + cid(el.id)); }
+    function dims(el, n) {
+        return { w: n ? n.offsetWidth : (num(el.width) || 100), h: n ? n.offsetHeight : (num(el.height) || 40) };
+    }
+    function place(el, n, left, top) {
+        if (left !== null) { el.left = left; if (el.x !== undefined) { el.x = left; } if (n) { n.style.left = left + 'px'; } }
+        if (top !== null)  { el.top = top;   if (el.y !== undefined) { el.y = top; }  if (n) { n.style.top = top + 'px'; } }
+    }
+    function syncInputs(el) {
+        $('#prop-left, #prop-pos-left, #prop-x').val(Math.round(num(el.left)));
+        $('#prop-top, #prop-pos-top, #prop-y').val(Math.round(num(el.top)));
+        var I = window.ZapPopPopBuilderInspector;
+        if (I && typeof I.syncCoordinates === 'function') { try { I.syncCoordinates(el); } catch (e) {} }
+    }
+    function commit(label) {
+        var c = window.ZapPopPopBuilderCore;
+        if (c && typeof c.pushHistory === 'function') { c.pushHistory(label); }
+    }
+
+    Cv.alignActiveElement = function(mode) {
+        var core = window.ZapPopPopBuilderCore;
+        var box = document.getElementById('zappoppop-canvas-box');
+        if (!core || !core.state || !box) return;
+        var bw = box.clientWidth || 640, bh = box.clientHeight || 400;
+        var m = String(mode || '').toLowerCase().replace(/_/g, '-');
+
+        /* ---- Distribute (needs 3+ visible layers) ---- */
+        if (m === 'distribute-h' || m === 'distribute-v') {
+            var horiz = (m === 'distribute-h');
+            var items = [];
+            var all = list();
+            for (var i = 0; i < all.length; i++) {
+                var e = all[i];
+                if (!e || e.hidden) continue;
+                var n = nodeOf(e), d = dims(e, n);
+                items.push({ el: e, n: n, size: horiz ? d.w : d.h, pos: horiz ? num(e.left) : num(e.top) });
+            }
+            if (items.length < 3) return;
+            items.sort(function(a, b) { return a.pos - b.pos; });
+            var start = items[0].pos, end = start, sum = 0, k;
+            for (k = 0; k < items.length; k++) {
+                end = Math.max(end, items[k].pos + items[k].size);
+                sum += items[k].size;
+            }
+            var gap = (end - start - sum) / (items.length - 1);
+            var cursor = start;
+            for (k = 0; k < items.length; k++) {
+                var it = items[k];
+                if (!it.el.locked) {
+                    var v = Math.round(cursor);
+                    if (horiz) { place(it.el, it.n, v, null); } else { place(it.el, it.n, null, v); }
+                }
+                cursor += it.size + gap;
+            }
+            var act = findEl(core.state.activeId);
+            if (act) { syncInputs(act); }
+            commit(horiz ? 'Distribute Horizontally' : 'Distribute Vertically');
+            return;
+        }
+
+        /* ---- Single-layer align ---- */
+        var el = findEl(core.state.activeId || Cv.selectedId);
+        if (!el || el.locked) return;
+        var node = nodeOf(el), sz = dims(el, node);
+        var left = null, top = null;
+        switch (m) {
+            case 'left':                       left = 0; break;
+            case 'center': case 'center-h':    left = Math.round((bw - sz.w) / 2); break;
+            case 'right':                      left = Math.max(0, bw - sz.w); break;
+            case 'top':                        top = 0; break;
+            case 'middle': case 'middle-v':    top = Math.round((bh - sz.h) / 2); break;
+            case 'bottom':                     top = Math.max(0, bh - sz.h); break;
+            default: return;
+        }
+        place(el, node, left, top);
+        syncInputs(el);
+        commit('Align ' + m);
+    };
+
+    /* Toolbar clicks must not bubble to the workspace deselect handler */
+    function bindStop() {
+        $('#zappoppop-alignment-toolbar')
+            .off('click.zppAlignStop mousedown.zppAlignStop')
+            .on('click.zppAlignStop mousedown.zppAlignStop', function(e) { e.stopPropagation(); });
+    }
+    $(function() { bindStop(); setTimeout(bindStop, 200); });
+})(window, jQuery);
+/* === ZAPPOPPOP_ALIGN_TOOLBAR_FIX_END === */
+
+/* === ZAPPOPPOP_ALIGN_TOOL_GATE_START === */
+/* Settings > Builder > Alignment Tool = off  ->  toolbar hidden, align actions disabled. */
+(function(window, $) {
+    'use strict';
+    var v = window.zappoppop_vars || {};
+    var flag = v.alignment_tool;
+    var off = (flag === 0 || flag === false || String(flag) === '0');
+    if (!off) return;
+
+    var st = document.createElement('style');
+    st.id = 'zappoppop-align-tool-off';
+    st.textContent = '#zappoppop-alignment-toolbar{display:none !important;}';
+    (document.head || document.documentElement).appendChild(st);
+
+    var Cv = window.ZapPopPopBuilderCanvas;
+    if (Cv) {
+        Cv.alignActiveElement = function() {};
+        Cv.alignSelectedElements = function() {};
+    }
+    $(function() { $('#zappoppop-alignment-toolbar').hide(); });
+})(window, jQuery);
+/* === ZAPPOPPOP_ALIGN_TOOL_GATE_END === */
+
+/* === ZAPPOPPOP_SHAPE_INTERACTION_ENGINE_START === */
+(function() {
+    'use strict';
+
+    // 1. Toggle-Slide Click Handler & Sync
+    document.addEventListener('click', function(e) {
+        var toggle = e.target.closest('.zappoppop-toggle-switch, .zappoppop-switch, .zappoppop-toggle-slide');
+        if (!toggle) return;
+
+        var checkbox = toggle.querySelector('input[type="checkbox"]');
+        if (!checkbox) return;
+
+        // If click was directly on the input, allow natural browser state change
+        if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+            var changeEvt = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvt);
+        }
+
+        if (checkbox.checked) {
+            toggle.classList.add('is-active', 'active');
+        } else {
+            toggle.classList.remove('is-active', 'active');
+        }
+    }, true);
+
+    // 2. Shape Background Color Field Suppression on Layer Selection
+    function updateShapeInspectorView() {
+        var inspector = document.querySelector('.zappoppop-inspector, #zappoppop-inspector, .zappoppop-layer-settings');
+        if (!inspector) return;
+
+        var activeLayer = document.querySelector('.zappoppop-layer.is-selected, .zappoppop-layer.active, [data-layer-id].active');
+        var layerType = activeLayer ? (activeLayer.getAttribute('data-type') || activeLayer.getAttribute('data-element-type') || '') : '';
+
+        if (!layerType) {
+            var typeInp = inspector.querySelector('input[name="type"], input[data-prop="type"]');
+            if (typeInp) layerType = typeInp.value;
+        }
+
+        if (layerType === 'shape') {
+            inspector.setAttribute('data-element', 'shape');
+            inspector.setAttribute('data-element-type', 'shape');
+
+            // Hide background color controls dynamically
+            var bgControls = inspector.querySelectorAll(
+                '.zappoppop-control-background, .zappoppop-control-bg-color, [data-prop="background"], [data-prop="background_color"], [data-prop="backgroundColor"]'
+            );
+            bgControls.forEach(function(el) {
+                el.style.setProperty('display', 'none', 'important');
+            });
+
+            // Ensure Stroke default shows 0 if empty
+            var strokeInp = inspector.querySelector('input[name="stroke_width"], input[data-prop="stroke_width"], input[data-prop="stroke"]');
+            if (strokeInp && (strokeInp.value === '' || strokeInp.value === undefined)) {
+                strokeInp.value = '0';
+            }
+
+            // Ensure Border & Corner Radius default show 0 if empty
+            var borderInp = inspector.querySelector('input[name="border_width"], input[data-prop="border_width"], input[data-prop="borderRadius"]');
+            if (borderInp && (borderInp.value === '' || borderInp.value === undefined)) {
+                borderInp.value = '0';
+            }
+        } else {
+            if (inspector.getAttribute('data-element') === 'shape') {
+                inspector.removeAttribute('data-element');
+                inspector.removeAttribute('data-element-type');
+            }
+        }
+    }
+
+    document.addEventListener('click', function() {
+        setTimeout(updateShapeInspectorView, 50);
+    });
+    window.addEventListener('load', function() {
+        setTimeout(updateShapeInspectorView, 100);
+    });
+})();
+/* === ZAPPOPPOP_SHAPE_INTERACTION_ENGINE_END === */
+
+/* === ZAPPOPPOP_SHAPE_DEFAULTS_ENFORCER_START === */
+(function() {
+    'use strict';
+
+    var ZERO_PROPS = [
+        'stroke', 'stroke_width', 'strokeWidth', 'stroke-width',
+        'border_width', 'borderWidth', 'border-width',
+        'border_radius', 'borderRadius', 'border-radius', 'corner_radius', 'cornerRadius', 'radius',
+        'shadow_x', 'shadow_y', 'shadow_blur', 'shadow_spread',
+        'shadowX', 'shadowY', 'shadowBlur', 'shadowSpread',
+        'box_shadow_x', 'box_shadow_y', 'box_shadow_blur', 'box_shadow_spread'
+    ];
+
+    function sanitizeShapeModel(element) {
+        if (!element) return;
+        var type = element.type || element.element_type || element.elementType || '';
+        if (type !== 'shape') return;
+
+        // Force stroke to 0 if undefined, null, empty string, or non-explicit
+        if (element.stroke_width === undefined || element.stroke_width === null || element.stroke_width === '' || element.stroke_width === 1 || element.stroke_width === '1' || element.stroke_width === '1px') {
+            element.stroke_width = 0;
+        }
+        if (element.stroke === undefined || element.stroke === null || element.stroke === '' || element.stroke === 1 || element.stroke === '1') {
+            element.stroke = 0;
+        }
+
+        // Force border and corner radius to 0
+        if (element.border_width === undefined || element.border_width === null || element.border_width === '') {
+            element.border_width = 0;
+        }
+        if (element.border_radius === undefined || element.border_radius === null || element.border_radius === '') {
+            element.border_radius = 0;
+        }
+        if (element.borderRadius === undefined || element.borderRadius === null || element.borderRadius === '') {
+            element.borderRadius = 0;
+        }
+
+        // Force all box shadow fields to 0
+        ['shadow_x', 'shadow_y', 'shadow_blur', 'shadow_spread'].forEach(function(sp) {
+            if (element[sp] === undefined || element[sp] === null || element[sp] === '') {
+                element[sp] = 0;
+            }
+        });
+    }
+
+    function syncInspectorInputs() {
+        var inspector = document.querySelector('.zappoppop-inspector, #zappoppop-inspector, .zappoppop-sidebar-settings, .zappoppop-layer-settings');
+        if (!inspector) return;
+
+        var activeLayer = document.querySelector('.zappoppop-layer.is-selected, .zappoppop-layer.active, [data-layer-id].active, .zappoppop-layer-item.active');
+        var layerType = activeLayer ? (activeLayer.getAttribute('data-type') || activeLayer.getAttribute('data-element-type') || activeLayer.getAttribute('data-element') || '') : '';
+
+        if (!layerType) {
+            var typeInp = inspector.querySelector('input[name="type"], input[data-prop="type"], [data-setting="type"]');
+            if (typeInp) layerType = typeInp.value;
+        }
+
+        if (layerType === 'shape') {
+            inspector.setAttribute('data-element', 'shape');
+            inspector.setAttribute('data-element-type', 'shape');
+
+            // Hide background color controls
+            var bgControls = inspector.querySelectorAll(
+                '.zappoppop-control-background, .zappoppop-control-bg-color, [data-prop="background"], [data-prop="background_color"], [data-prop="backgroundColor"], .control-background-color'
+            );
+            bgControls.forEach(function(el) {
+                el.style.setProperty('display', 'none', 'important');
+            });
+
+            // Enforce "0" on empty or uninitialized target fields in inspector DOM
+            var inputs = inspector.querySelectorAll('input, select');
+            inputs.forEach(function(inp) {
+                var prop = (inp.getAttribute('data-prop') || inp.getAttribute('data-setting') || inp.getAttribute('data-key') || inp.name || inp.id || '').toLowerCase();
+                for (var i = 0; i < ZERO_PROPS.length; i++) {
+                    var zp = ZERO_PROPS[i].toLowerCase();
+                    if (prop === zp || prop.endsWith('_' + zp) || prop.endsWith('-' + zp)) {
+                        if (inp.value === '' || inp.value === undefined || inp.value === null || inp.value === '1' && (prop.indexOf('stroke') !== -1 || prop.indexOf('border') !== -1)) {
+                            // If it defaulted to 1 or empty on a brand new shape, reset to 0
+                            if (!activeLayer.getAttribute('data-has-custom-style')) {
+                                inp.value = '0';
+                                var evt = new Event('input', { bubbles: true });
+                                inp.dispatchEvent(evt);
+                            }
+                        }
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    // Intercept builder element addition
+    if (typeof window.ZapPopPop !== 'undefined' && window.ZapPopPop.registerElement) {
+        var origReg = window.ZapPopPop.registerElement;
+        window.ZapPopPop.registerElement = function(type, config) {
+            if (type === 'shape' && config && config.defaults) {
+                config.defaults.stroke = 0;
+                config.defaults.stroke_width = 0;
+                config.defaults.strokeWidth = 0;
+                config.defaults.border_width = 0;
+                config.defaults.border_radius = 0;
+                config.defaults.borderRadius = 0;
+                config.defaults.shadow_x = 0;
+                config.defaults.shadow_y = 0;
+                config.defaults.shadow_blur = 0;
+                config.defaults.shadow_spread = 0;
+            }
+            return origReg.apply(this, arguments);
+        };
+    }
+
+    // Bind DOM events
+    document.addEventListener('click', function() {
+        setTimeout(syncInspectorInputs, 40);
+    }, true);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(syncInspectorInputs, 80);
+    });
+
+    window.addEventListener('load', function() {
+        setTimeout(syncInspectorInputs, 150);
+    });
+})();
+/* === ZAPPOPPOP_SHAPE_DEFAULTS_ENFORCER_END === */
+
+/* === ZAPPOPPOP_SHAPE_STROKE_ZERO_ENGINE_START === */
+(function() {
+    'use strict';
+
+    function enforceShapeStrokeZero() {
+        var inspector = document.querySelector('.zappoppop-inspector, #zappoppop-inspector, .zappoppop-layer-settings');
+        if (!inspector) return;
+
+        var activeLayer = document.querySelector('.zappoppop-layer.is-selected, .zappoppop-layer.active, [data-layer-id].active, .zappoppop-layer-item.active');
+        var layerType = activeLayer ? (activeLayer.getAttribute('data-type') || activeLayer.getAttribute('data-element-type') || activeLayer.getAttribute('data-element') || '') : '';
+
+        if (!layerType) {
+            var typeInp = inspector.querySelector('input[name="type"], input[data-prop="type"], [data-setting="type"]');
+            if (typeInp) layerType = typeInp.value;
+        }
+
+        if (layerType === 'shape') {
+            // Find STROKE WIDTH (PX) inputs in inspector
+            var strokeInputs = inspector.querySelectorAll(
+                'input[name="stroke_width"], input[name="strokeWidth"], input[name="stroke"], ' +
+                'input[data-prop="stroke_width"], input[data-prop="strokeWidth"], input[data-prop="stroke"], ' +
+                'input[data-setting="stroke_width"], input[data-key="stroke_width"], #stroke_width'
+            );
+
+            strokeInputs.forEach(function(inp) {
+                // If input is empty, undefined, or defaulted to 1 on initial load, lock it to 0
+                if (inp.value === '' || inp.value === undefined || inp.value === null || (inp.value === '1' && !activeLayer.hasAttribute('data-stroke-user-set'))) {
+                    inp.value = '0';
+                    inp.setAttribute('value', '0');
+                    var evt = new Event('input', { bubbles: true });
+                    inp.dispatchEvent(evt);
+                }
+            });
+
+            // Mark when user explicitly changes stroke
+            strokeInputs.forEach(function(inp) {
+                if (!inp._strokeTrackerAttached) {
+                    inp._strokeTrackerAttached = true;
+                    inp.addEventListener('change', function() {
+                        if (activeLayer) activeLayer.setAttribute('data-stroke-user-set', 'true');
+                    });
+                }
+            });
+        }
+    }
+
+    // Intercept builder element registration to force default 0
+    if (typeof window.ZapPopPop !== 'undefined' && window.ZapPopPop.registerElement) {
+        var origRegister = window.ZapPopPop.registerElement;
+        window.ZapPopPop.registerElement = function(type, config) {
+            if (type === 'shape' && config && config.defaults) {
+                config.defaults.stroke_width = 0;
+                config.defaults.strokeWidth = 0;
+                config.defaults.stroke = 0;
+            }
+            return origRegister.apply(this, arguments);
+        };
+    }
+
+    document.addEventListener('click', function() {
+        setTimeout(enforceShapeStrokeZero, 40);
+    }, true);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(enforceShapeStrokeZero, 80);
+    });
+
+    window.addEventListener('load', function() {
+        setTimeout(enforceShapeStrokeZero, 120);
+    });
+})();
+/* === ZAPPOPPOP_SHAPE_STROKE_ZERO_ENGINE_END === */

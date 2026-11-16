@@ -1,0 +1,156 @@
+/* ZAPPOPPOP_SAVE_MENU: split Save button + dropdown (Save Draft / Save as Template). Matches the builder header + zappoppop-theme palette. */
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex: none !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    position: relative;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save {
+    margin: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save-menu {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    box-sizing: border-box !important;
+    height: var(--zpp-ctl-h, 32px) !important;
+    min-height: 0 !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    background: var(--zpp-builder-save-bg, #2563eb) !important;
+    background-image: none !important;
+    border: 1px solid var(--zpp-builder-save-border, #1d4ed8) !important;
+    border-left-color: rgba(255, 255, 255, .35) !important;
+    border-radius: 0 6px 6px 0 !important;
+    color: var(--zpp-builder-save-text, #ffffff) !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    vertical-align: middle !important;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save.is-dirty + #zappoppop-btn-save-menu {
+    background: var(--zpp-builder-update-bg, #f97316) !important;
+    border-color: var(--zpp-builder-update-border, #ea580c) !important;
+    border-left-color: rgba(255, 255, 255, .35) !important;
+    color: var(--zpp-builder-update-text, #ffffff) !important;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save-menu:hover:not(:disabled),
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save-menu[aria-expanded="true"] {
+    filter: brightness(0.92) !important;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save-menu:focus-visible {
+    outline: 2px solid #93c5fd !important;
+    outline-offset: 1px !important;
+}
+html body .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-save-split > #zappoppop-btn-save-menu:disabled {
+    opacity: .6 !important;
+    cursor: not-allowed !important;
+}
+#zappoppop-btn-save-menu svg {
+    display: block;
+    transition: transform .15s ease;
+}
+#zappoppop-btn-save-menu[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+/* Dropdown: fixed-position (the builder header scrolls horizontally, so an absolute menu would be clipped) */
+.zappoppop-save-menu {
+    display: none;
+    position: fixed;
+    z-index: 100001;
+    min-width: 210px;
+    box-sizing: border-box;
+    padding: 6px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .45);
+}
+.zappoppop-save-menu.is-open {
+    display: block;
+}
+body.theme-light .zappoppop-save-menu {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, .18);
+}
+.zappoppop-save-menu .zappoppop-save-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 9px 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    box-shadow: none;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.zappoppop-save-menu .zappoppop-save-menu-item:hover,
+.zappoppop-save-menu .zappoppop-save-menu-item:focus {
+    background: rgba(37, 99, 235, .22);
+    color: #ffffff;
+    outline: none;
+}
+body.theme-light .zappoppop-save-menu .zappoppop-save-menu-item {
+    color: #1e293b;
+}
+body.theme-light .zappoppop-save-menu .zappoppop-save-menu-item:hover,
+body.theme-light .zappoppop-save-menu .zappoppop-save-menu-item:focus {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+.zappoppop-save-menu .zappoppop-save-menu-item .dashicons {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+}
+.zappoppop-save-menu .zappoppop-save-menu-item:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+.zappoppop-save-menu .zappoppop-save-menu-state {
+    display: none;
+    margin-left: auto;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    background: rgba(148, 163, 184, .2);
+    color: #94a3b8;
+}
+.zappoppop-save-menu .zappoppop-save-menu-state.is-draft {
+    display: inline-block;
+    background: rgba(249, 115, 22, .18);
+    color: #fb923c;
+}
+.zappoppop-save-menu .zappoppop-save-menu-state.is-publish {
+    display: inline-block;
+    background: rgba(34, 197, 94, .18);
+    color: #4ade80;
+}
+body.theme-light .zappoppop-save-menu .zappoppop-save-menu-state.is-draft { color: #c2410c; }
+body.theme-light .zappoppop-save-menu .zappoppop-save-menu-state.is-publish { color: #15803d; }

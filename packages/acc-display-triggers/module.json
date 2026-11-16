@@ -1,0 +1,24 @@
+{
+    "schema": 1,
+    "slug": "acc-display-triggers",
+    "name": "Display Triggers",
+    "version": "1.1.2",
+    "author": "ZapPopPop",
+    "description": "Page load, always-on, repeat, exit intent and scroll depth triggers.",
+    "category": "all-modules",
+    "default_active": true,
+    "order": 30,
+    "on_missing": "skip",
+    "requires": [],
+    "accordion": "accordion.html",
+    "allow_edit": true,
+	"allow_delete": false,
+    "data_keys": [
+        "triggers",
+        "exit_intent_sensitivity",
+        "scroll_depth"
+    ],
+    "in_use": [],
+    "min_version": "",
+    "deprecated": false
+}

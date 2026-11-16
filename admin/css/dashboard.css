@@ -1,0 +1,417 @@
+/* ==========================================================================
+   ZapPopPop Admin Dashboard Stylesheet: Cross-Browser Compatibility Engine
+   Compatible with Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+
+.zappoppop-dashboard-wrap {
+    margin: 20px 20px 0 2px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    box-sizing: border-box;
+    color: #1e293b;
+}
+
+/* Header & Action Bar */
+.zappoppop-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.zappoppop-dashboard-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zappoppop-dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Cross-Browser Button Normalization */
+.zappoppop-dashboard-wrap .button,
+.zappoppop-dashboard-wrap button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    height: 34px;
+    line-height: 1;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.zappoppop-dashboard-wrap button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* KPI Summary Cards Grid */
+.zappoppop-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.zappoppop-kpi-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-sizing: border-box;
+}
+
+.zappoppop-kpi-card .kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.zappoppop-kpi-card .kpi-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Table Toolbar Filters & Search */
+.zappoppop-table-toolbar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+.zappoppop-table-toolbar .toolbar-left,
+.zappoppop-table-toolbar .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.zappoppop-table-toolbar input[type="search"],
+.zappoppop-table-toolbar select {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #1e293b;
+    background: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.zappoppop-table-toolbar input[type="search"]:focus,
+.zappoppop-table-toolbar select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* Native List Table Wrapper & Responsive Scrollbar */
+.zappoppop-table-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.zappoppop-table-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.zappoppop-table-container::-webkit-scrollbar-track {
+    background: #f8fafc;
+}
+
+.zappoppop-table-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.zappoppop-table-container table.wp-list-table {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    width: 100%;
+}
+
+.zappoppop-table-container table.wp-list-table th,
+.zappoppop-table-container table.wp-list-table td {
+    padding: 10px 14px;
+    vertical-align: middle;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+/* Status Badges */
+.zappoppop-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.zappoppop-status-badge.status-publish {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.zappoppop-status-badge.status-draft {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* Copyable Shortcode Chip */
+.zappoppop-shortcode-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.zappoppop-shortcode-chip:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.zappoppop-shortcode-chip .dashicons {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    color: #64748b;
+}
+
+/* Modals (Embed Snippets & Bulk Import Dialogs) */
+.zappoppop-dashboard-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.zappoppop-dashboard-modal-card {
+    background: #ffffff;
+    border-radius: 8px;
+    width: 520px;
+    max-width: 92vw;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.zappoppop-dashboard-modal-header {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.zappoppop-dashboard-modal-header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.zappoppop-dashboard-modal-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.15s ease;
+}
+
+.zappoppop-dashboard-modal-close:hover {
+    color: #ffffff;
+}
+
+.zappoppop-dashboard-modal-body {
+    padding: 18px;
+    overflow-y: auto;
+    max-height: 75vh;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #ffffff;
+}
+
+.zappoppop-dashboard-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.zappoppop-dashboard-modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.zappoppop-dashboard-modal-body label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.zappoppop-dashboard-modal-body input[type="text"],
+.zappoppop-dashboard-modal-body textarea {
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #1e293b;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+
+/* ZAPPOPPOP_LIST_TOOLBAR: status filter (left) + search box (right) on one row */
+.zappoppop-list-toolbar {
+    display: -webkit-box; display: -ms-flexbox; display: flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between;
+    -ms-flex-wrap: wrap; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 8px;
+}
+.zappoppop-list-toolbar .subsubsub { float: none; margin: 0; padding: 0; -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; }
+.zappoppop-list-toolbar .search-box {
+    float: none; position: static; margin: 0; padding: 0; width: auto; max-width: 100%;
+    display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 6px;
+    -webkit-box-flex: 0; -ms-flex: 0 0 auto; flex: 0 0 auto;
+}
+.zappoppop-list-toolbar .search-box input[type="search"] { float: none; margin: 0; min-width: 200px; }
+.zappoppop-list-toolbar .search-box .button { float: none; margin: 0; }
+@media (max-width: 782px) {
+    .zappoppop-list-toolbar .search-box { width: 100%; }
+    .zappoppop-list-toolbar .search-box input[type="search"] { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; }
+}
+
+/* ZPP_LIST_CONTROLS: search, dropdowns and buttons share one height; select arrow restored (Chrome, Safari, Firefox, Edge) */
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box input[type="search"],
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .actions .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .actions input[type="submit"],
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box input[type="search"],
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .actions .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .actions input[type="submit"] {
+    height: var(--zpp-h-button, 34px); min-height: var(--zpp-h-button, 34px); box-sizing: border-box; margin: 0; float: none; vertical-align: middle; line-height: 1;
+}
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav select,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none; cursor: pointer;
+    padding: 0 30px 0 10px; max-width: 12.5rem; text-overflow: ellipsis;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%2350575e%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 8px center; background-size: 16px 16px;
+}
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav select::-ms-expand,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box select::-ms-expand,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav select::-ms-expand,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box select::-ms-expand { display: none; }
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .actions .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .search-box .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .actions input[type="submit"],
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .actions .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .search-box .button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .actions input[type="submit"] { padding: 0 14px; }
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav a.button,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav a.button {
+    display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+}
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav {
+    display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -ms-flex-wrap: wrap; flex-wrap: wrap; gap: 6px 8px; height: auto; min-height: var(--zpp-h-button, 34px);
+}
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .actions,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .actions {
+    float: none; margin: 0; padding: 0; display: -webkit-box; display: -ms-flexbox; display: flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 6px;
+}
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav .tablenav-pages,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav .tablenav-pages { float: none; margin: 0 0 0 auto; height: auto; }
+body.zappoppop-admin-themed #wpbody-content .zappoppop-table-wrap .tablenav br.clear,
+body.zappoppop-admin-themed #wpbody-content .zappoppop-list-toolbar .tablenav br.clear { display: none; }

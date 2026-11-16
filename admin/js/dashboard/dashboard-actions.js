@@ -1,0 +1,155 @@
+/**
+ * ZapPopPop Dashboard: Actions Engine (Duplicate, Delete, Export)
+ * Cross-Browser Compatibility: Safari, Firefox, Chrome, Edge
+ */
+(function(window, $) {
+    'use strict';
+    window.ZapPopPopDashboardActions = window.ZapPopPopDashboardActions || {};
+
+    var Actions = {
+        init: function() {
+            this.bindDuplicate();
+            this.bindDelete();
+            this.bindExport();
+        },
+
+        getVars: function() {
+            return window.zappoppop_vars || {
+                ajax_url: typeof ajaxurl !== 'undefined' ? ajaxurl : '/wp-admin/admin-ajax.php',
+                nonce: ''
+            };
+        },
+
+        bindDuplicate: function() {
+            var self = this;
+            $(document).on('click', '.btn-duplicate-popup, .zappoppop-action-duplicate', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var uid = $btn.data('uid') || $btn.closest('tr').find('input[name="popup_id[]"]').val();
+                if (!uid) return;
+
+                if (!window.confirm(wp.i18n.__('Duplicate this popup campaign?', 'zappoppop'))) return;
+
+                var vars = self.getVars();
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: vars.ajax_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'zappoppop_duplicate_popup',
+                        nonce: vars.nonce,
+                        uid: uid
+                    },
+                    success: function(res) {
+                        if (res && res.success) {
+                            window.location.reload();
+                        } else {
+                            alert((res && res.data && res.data.message) || wp.i18n.__('Duplication failed.', 'zappoppop'));
+                            $btn.prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        alert(wp.i18n.__('Server error while duplicating popup.', 'zappoppop'));
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
+        },
+
+        bindDelete: function() {
+            var self = this;
+            $(document).on('click', '.btn-delete-popup, .zappoppop-action-delete', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var uid = $btn.data('uid') || $btn.closest('tr').find('input[name="popup_id[]"]').val();
+                if (!uid) return;
+
+                if (!window.confirm(wp.i18n.__('Are you sure you want to delete this popup? This cannot be undone.', 'zappoppop'))) return;
+
+                var vars = self.getVars();
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: vars.ajax_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'zappoppop_delete_popup',
+                        nonce: vars.nonce,
+                        uid: uid
+                    },
+                    success: function(res) {
+                        if (res && res.success) {
+                            $btn.closest('tr').fadeOut(200, function() {
+                                $(this).remove();
+                            });
+                        } else {
+                            alert((res && res.data && res.data.message) || wp.i18n.__('Deletion failed.', 'zappoppop'));
+                            $btn.prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        alert(wp.i18n.__('Server error while deleting popup.', 'zappoppop'));
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
+        },
+
+        bindExport: function() {
+            var self = this;
+            $(document).on('click', '.btn-export-popup, .zappoppop-action-export', function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var uid = $btn.data('uid') || $btn.closest('tr').find('input[name="popup_id[]"]').val();
+                if (!uid) return;
+
+                var vars = self.getVars();
+
+                $.ajax({
+                    url: vars.ajax_url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        action: 'zappoppop_export_popup',
+                        nonce: vars.nonce,
+                        uid: uid
+                    },
+                    success: function(res) {
+                        if (res && res.success && res.data) {
+                            var filename = res.data.filename || ('popup-' + uid + '.json');
+                            var payloadStr = typeof res.data.payload === 'string' ? res.data.payload : JSON.stringify(res.data.payload, null, 2);
+
+                            // Safari-Safe Cross-Browser Blob File Download
+                            var blob = new Blob([payloadStr], { type: 'application/json;charset=utf-8' });
+                            var blobUrl = window.URL.createObjectURL(blob);
+                            var downloadLink = document.createElement('a');
+
+                            downloadLink.href = blobUrl;
+                            downloadLink.download = filename;
+                            downloadLink.style.display = 'none';
+                            document.body.appendChild(downloadLink);
+
+                            downloadLink.click();
+
+                            // Delayed revocation to ensure Safari completes stream write
+                            setTimeout(function() {
+                                document.body.removeChild(downloadLink);
+                                window.URL.revokeObjectURL(blobUrl);
+                            }, 1500);
+                        } else {
+                            alert((res && res.data && res.data.message) || wp.i18n.__('Export failed.', 'zappoppop'));
+                        }
+                    },
+                    error: function() {
+                        alert(wp.i18n.__('Server error while exporting popup.', 'zappoppop'));
+                    }
+                });
+            });
+        }
+    };
+
+    window.ZapPopPopDashboardActions = Actions;
+})(window, jQuery);

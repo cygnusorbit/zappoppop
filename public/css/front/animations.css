@@ -1,0 +1,221 @@
+/* ==========================================================================
+   ZapPopPop Public Frontend: CSS3 Keyframe Animations
+   Cross-Browser Hardware Accelerated (Chrome, Safari, Firefox, Edge, iOS)
+   ========================================================================== */
+
+/* 1. Fade In */
+@-webkit-keyframes zappoppopFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes zappoppopFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.anim-fade {
+    -webkit-animation: zappoppopFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: zappoppopFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 2. Slide Down */
+@-webkit-keyframes zappoppopSlideDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -35px, 0);
+        transform: translate3d(0, -35px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes zappoppopSlideDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -35px, 0);
+        transform: translate3d(0, -35px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+.anim-slideDown {
+    -webkit-animation: zappoppopSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: zappoppopSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 3. Slide Up */
+@-webkit-keyframes zappoppopSlideUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 35px, 0);
+        transform: translate3d(0, 35px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes zappoppopSlideUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 35px, 0);
+        transform: translate3d(0, 35px, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+.anim-slideUp {
+    -webkit-animation: zappoppopSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: zappoppopSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 4. Bounce In */
+@-webkit-keyframes zappoppopBounceIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    50% {
+        opacity: 0.9;
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    70% {
+        -webkit-transform: scale3d(0.97, 0.97, 0.97);
+        transform: scale3d(0.97, 0.97, 0.97);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zappoppopBounceIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    50% {
+        opacity: 0.9;
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    70% {
+        -webkit-transform: scale3d(0.97, 0.97, 0.97);
+        transform: scale3d(0.97, 0.97, 0.97);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+.anim-bounceIn {
+    -webkit-animation: zappoppopBounceIn 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+    animation: zappoppopBounceIn 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+/* 5. Zoom In */
+@-webkit-keyframes zappoppopZoomIn {
+    from {
+        opacity: 0;
+        -webkit-transform: scale3d(0.85, 0.85, 0.85);
+        transform: scale3d(0.85, 0.85, 0.85);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zappoppopZoomIn {
+    from {
+        opacity: 0;
+        -webkit-transform: scale3d(0.85, 0.85, 0.85);
+        transform: scale3d(0.85, 0.85, 0.85);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+.anim-zoomIn {
+    -webkit-animation: zappoppopZoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: zappoppopZoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 6. Pulse (Attention Seeker) */
+@-webkit-keyframes zappoppopPulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.04, 1.04, 1.04);
+        transform: scale3d(1.04, 1.04, 1.04);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes zappoppopPulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.04, 1.04, 1.04);
+        transform: scale3d(1.04, 1.04, 1.04);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+.anim-pulse {
+    -webkit-animation: zappoppopPulse 1.8s infinite ease-in-out;
+    animation: zappoppopPulse 1.8s infinite ease-in-out;
+}
+
+/* === ZAPPOPPOP_LAYER_ANIM_SET_START === */
+@-webkit-keyframes zappoppopLfadeIn{from{opacity:0;}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLfadeIn{from{opacity:0;}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-fadeIn{-webkit-animation:zappoppopLfadeIn 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLfadeIn 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLfadeInUp{from{opacity:0;-webkit-transform:translate3d(0px,30px,0);transform:translate3d(0px,30px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLfadeInUp{from{opacity:0;-webkit-transform:translate3d(0px,30px,0);transform:translate3d(0px,30px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-fadeInUp{-webkit-animation:zappoppopLfadeInUp 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLfadeInUp 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLfadeInDown{from{opacity:0;-webkit-transform:translate3d(0px,-30px,0);transform:translate3d(0px,-30px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLfadeInDown{from{opacity:0;-webkit-transform:translate3d(0px,-30px,0);transform:translate3d(0px,-30px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-fadeInDown{-webkit-animation:zappoppopLfadeInDown 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLfadeInDown 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLfadeInLeft{from{opacity:0;-webkit-transform:translate3d(-30px,0px,0);transform:translate3d(-30px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLfadeInLeft{from{opacity:0;-webkit-transform:translate3d(-30px,0px,0);transform:translate3d(-30px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-fadeInLeft{-webkit-animation:zappoppopLfadeInLeft 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLfadeInLeft 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLfadeInRight{from{opacity:0;-webkit-transform:translate3d(30px,0px,0);transform:translate3d(30px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLfadeInRight{from{opacity:0;-webkit-transform:translate3d(30px,0px,0);transform:translate3d(30px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-fadeInRight{-webkit-animation:zappoppopLfadeInRight 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLfadeInRight 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLslideInUp{from{opacity:0;-webkit-transform:translate3d(0px,40px,0);transform:translate3d(0px,40px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLslideInUp{from{opacity:0;-webkit-transform:translate3d(0px,40px,0);transform:translate3d(0px,40px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-slideInUp{-webkit-animation:zappoppopLslideInUp 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLslideInUp 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLslideInDown{from{opacity:0;-webkit-transform:translate3d(0px,-40px,0);transform:translate3d(0px,-40px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLslideInDown{from{opacity:0;-webkit-transform:translate3d(0px,-40px,0);transform:translate3d(0px,-40px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-slideInDown{-webkit-animation:zappoppopLslideInDown 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLslideInDown 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLslideInLeft{from{opacity:0;-webkit-transform:translate3d(-60px,0px,0);transform:translate3d(-60px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLslideInLeft{from{opacity:0;-webkit-transform:translate3d(-60px,0px,0);transform:translate3d(-60px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-slideInLeft{-webkit-animation:zappoppopLslideInLeft 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLslideInLeft 1s cubic-bezier(0.16,1,0.3,1) both;}
+@-webkit-keyframes zappoppopLslideInRight{from{opacity:0;-webkit-transform:translate3d(60px,0px,0);transform:translate3d(60px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+@keyframes zappoppopLslideInRight{from{opacity:0;-webkit-transform:translate3d(60px,0px,0);transform:translate3d(60px,0px,0);}to{opacity:1;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);}}
+.anim-slideInRight{-webkit-animation:zappoppopLslideInRight 1s cubic-bezier(0.16,1,0.3,1) both;animation:zappoppopLslideInRight 1s cubic-bezier(0.16,1,0.3,1) both;}
+@media (prefers-reduced-motion:reduce){[class*="anim-"]{-webkit-animation:none !important;animation:none !important;}}
+/* === ZAPPOPPOP_LAYER_ANIM_SET_END === */

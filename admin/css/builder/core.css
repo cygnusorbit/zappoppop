@@ -1,0 +1,2237 @@
+/* ==========================================================================
+   ZapPopPop Visual Builder: Core Workspace & Cross-Browser Responsive Engine
+   Compatible with Chrome, Safari, Firefox, Edge, iPadOS, iOS, Android
+   ========================================================================== */
+
+.zappoppop-builder-wrap {
+    position: fixed;
+    top: 32px;
+    left: 160px;
+    right: 0;
+    bottom: 0;
+    background: #0f172a;
+    z-index: 9990;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    box-sizing: border-box;
+    transition: left 0.15s ease;
+}
+
+body.folded .zappoppop-builder-wrap {
+    left: 36px;
+}
+
+@media screen and (max-width: 962px) {
+    .zappoppop-builder-wrap {
+        top: 32px;
+        left: 30px;
+    }
+}
+@media screen and (max-width: 782px) {
+    .zappoppop-builder-wrap {
+        top: 46px;
+        left: 0;
+    }
+}
+
+/* Top Control Header */
+.zappoppop-builder-header {
+    background: #111827;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    color: #ffffff;
+    border-bottom: 1px solid #1f2937;
+    z-index: 9999;
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.zappoppop-builder-header::-webkit-scrollbar {
+    display: none;
+}
+
+.zappoppop-hdr-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.zappoppop-hdr-left {
+    flex-shrink: 1;
+}
+
+.zappoppop-hdr-group .button {
+    background: #1f2937;
+    color: #f3f4f6;
+    border-color: #374151;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.zappoppop-hdr-group .button:hover {
+    background: #374151;
+    color: #ffffff;
+    border-color: #4b5563;
+}
+
+#zappoppop-btn-preview.preview-active {
+    background: #2563eb !important;
+    border-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+#zappoppop-builder-title {
+    background: #1f2937;
+    border: 1px solid #374151;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 4px;
+    padding: 4px 10px;
+    width: 180px;
+    min-width: 110px;
+    max-width: 220px;
+    height: 32px;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+#zappoppop-builder-title:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+/* Canvas Sequence Tabs */
+.zappoppop-canvas-tabs,
+.zappoppop-screen-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #1f2937;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #374151;
+}
+
+.zappoppop-canvas-tab-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    transition: background 0.15s ease;
+}
+
+.zappoppop-canvas-tab-wrapper.active {
+    background: #2563eb;
+}
+
+.zappoppop-canvas-tab,
+.zappoppop-screen-tab {
+    background: transparent;
+    color: #9ca3af;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+}
+
+.zappoppop-canvas-tab-wrapper.active .zappoppop-canvas-tab {
+    color: #ffffff;
+}
+
+.zappoppop-tab-delete-canvas {
+    color: #fca5a5;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0 2px;
+    font-weight: 700;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.zappoppop-tab-delete-canvas:hover {
+    color: #ffffff;
+    background: #ef4444;
+}
+
+.zappoppop-canvas-add-btn {
+    background: #374151;
+    color: #10b981;
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
+    margin-left: 2px;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.zappoppop-canvas-add-btn:hover {
+    background: #475569 !important;
+    color: #34d399 !important;
+}
+
+/* Quick Dimension Display */
+.zappoppop-quick-dimensions-wrap {
+    display: flex;
+    align-items: center;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    padding: 2px 8px;
+    gap: 6px;
+    font-size: 11px;
+    color: #9ca3af;
+    box-sizing: border-box;
+}
+
+.zappoppop-quick-dimensions-wrap input {
+    width: 50px;
+    height: 24px;
+    background: #111827;
+    border: 1px solid #374151;
+    color: #ffffff;
+    font-size: 11px;
+    padding: 0 4px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+/* Viewport Toggles */
+.zappoppop-viewport-toggles {
+    display: flex;
+    background: #1f2937;
+    border-radius: 6px;
+    border: 1px solid #374151;
+    overflow: hidden;
+}
+
+.zappoppop-viewport-btn {
+    background: transparent;
+    color: #9ca3af;
+    border: none;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zappoppop-viewport-btn.active {
+    background: #374151;
+    color: #ffffff;
+}
+
+#zappoppop-btn-save {
+    background: #c2185b !important;
+    border-color: #ad1457 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+#zappoppop-btn-save:hover {
+    background: #ad1457 !important;
+}
+
+/* Workspace Frame & Canvas Resizing */
+.zappoppop-main-frame {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    transition: margin-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zappoppop-builder-workspace {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    background-image: 
+        linear-gradient(45deg, #1e293b 25%, transparent 25%), 
+        linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #1e293b 75%), 
+        linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    padding: 0;
+    min-height: calc(100vh - 100px);
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 #0f172a;
+    -webkit-overflow-scrolling: touch;
+    transition: margin-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zappoppop-builder-workspace::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.zappoppop-builder-workspace::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+.zappoppop-builder-workspace::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 4px;
+}
+
+@media screen and (min-width: 993px) {
+    .panel-open .zappoppop-builder-workspace {
+        margin-right: 0px !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .panel-open .zappoppop-builder-workspace {
+        margin-right: 0 !important;
+    }
+}
+
+/* Floating Workspace Preview Control Bar */
+.zappoppop-workspace-preview-bar {
+    display: none;
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 30px;
+    padding: 4px 10px;
+    gap: 8px;
+    align-items: center;
+    z-index: 999999;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    user-select: none;
+}
+
+.zappoppop-preview-badge {
+    color: #38bdf8;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.5px;
+    padding: 0 6px;
+}
+
+.zappoppop-preview-bar-btn {
+    height: 28px !important;
+    padding: 0 10px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* Canvas Box Stage */
+#zappoppop-canvas-box {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: none !important;
+    box-sizing: border-box;
+}
+
+#zappoppop-canvas-elements-root {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+/* ZAPPOPPOP_DEFAULT_CLOSE_EDIT: visual only, never selectable or draggable */
+#zappoppop-canvas-box .zappoppop-canvas-default-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0 4px;
+    color: #64748b;
+    font-size: 22px;
+    line-height: 1;
+    cursor: default;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    z-index: 50;
+}
+
+/* Live Resize Dimension Tooltip Badge */
+#zappoppop-canvas-size-badge {
+    display: none;
+    position: absolute;
+    bottom: -28px;
+    right: 0;
+    background: #1e293b;
+    color: #38bdf8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #334155;
+    pointer-events: none;
+    z-index: 999999;
+}
+
+/* Dedicated Bottom-Right Corner Drag Handle */
+#zappoppop-canvas-corner-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    background: #c2185b;
+    border-top-left-radius: 6px;
+    border-bottom-right-radius: 8px;
+    border-left: 2px solid #ffffff;
+    border-top: 2px solid #ffffff;
+    cursor: se-resize;
+    z-index: 9995 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    user-select: none;
+    touch-action: none;
+}
+
+/* Body state during corner dragging */
+body.zappoppop-resizing-canvas {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    cursor: se-resize !important;
+}
+
+/* Canvas Element Layers Selection & Dragging */
+.zappoppop-canvas-item {
+    position: absolute;
+    cursor: move;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    touch-action: none;
+}
+
+.zappoppop-canvas-item * {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+}
+
+/* Selected layer: primary-color guide line, keeps its own stacking order (no bring-to-front) */
+.zappoppop-canvas-item.zappoppop-selected {
+    outline: 1px solid #2563eb !important;
+    outline-offset: 0 !important;
+}
+
+/* Workspace Element Hover: dotted guide line only (no select look, no z-index change) */
+.zappoppop-canvas-item:hover:not(.zappoppop-selected) {
+    outline: 1px dotted #2563eb !important;
+    outline-offset: 0 !important;
+}
+
+
+.zappoppop-canvas-item.zappoppop-locked {
+    cursor: not-allowed !important;
+}
+
+/* Hide unselected handles */
+.zappoppop-canvas-item:not(.zappoppop-selected) .ui-resizable-handle {
+    display: none !important;
+}
+
+/* Layer Resizable Handles: Hide 2 edge handles, preserve corner draggable only */
+.zappoppop-canvas-item .ui-resizable-handle {
+    position: absolute;
+    z-index: 9992 !important;
+    pointer-events: auto !important;
+    touch-action: none;
+}
+
+.zappoppop-canvas-item .ui-resizable-e,
+.zappoppop-canvas-item .ui-resizable-s {
+    display: none !important;
+}
+
+/* Corner Draggable Handle: Inset diagonal gray grip icon */
+.zappoppop-canvas-item.zappoppop-selected .ui-resizable-se,
+.zappoppop-canvas-item .ui-resizable-se {
+    width: 14px !important;
+    height: 14px !important;
+    right: 2px !important;
+    bottom: 2px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    cursor: se-resize !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none'%3E%3Cline x1='8.5' y1='2.5' x2='2.5' y2='8.5' stroke='%23777777' stroke-width='1.2' stroke-linecap='round'/%3E%3Cline x1='8.5' y1='6' x2='6' y2='8.5' stroke='%23777777' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right bottom !important;
+    background-size: 10px 10px !important;
+}
+
+/* On-Canvas Status Overlay */
+.zappoppop-stage-status-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.96);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px;
+    text-align: center;
+    border-radius: inherit;
+    box-sizing: border-box;
+}
+
+.zappoppop-stage-status-overlay.active {
+    display: flex !important;
+}
+
+.zappoppop-status-icon {
+    font-size: 44px;
+    width: 44px;
+    height: 44px;
+    color: #10b981;
+    margin-bottom: 8px;
+}
+
+.zappoppop-status-heading {
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.zappoppop-status-subtext {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   LIVE WORKSPACE PREVIEW MODE RULES
+   -------------------------------------------------------------------------- */
+.is-preview-mode #zappoppop-workspace-preview-bar {
+    display: flex !important;
+}
+
+.is-preview-mode #zappoppop-canvas-corner-handle,
+.is-preview-mode .ui-resizable-handle,
+.is-preview-mode #zappoppop-canvas-size-badge,
+.is-preview-mode #zappoppop-floating-layers-panel {
+    display: none !important;
+}
+
+.is-preview-mode .zappoppop-canvas-item {
+    cursor: default !important;
+    outline: none !important;
+}
+
+/* Restore interactive events on all elements in preview mode */
+.is-preview-mode .zappoppop-canvas-item * {
+    pointer-events: auto !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+    -moz-user-select: auto !important;
+}
+
+.is-preview-mode #zappoppop-canvas-elements-root {
+    overflow: hidden;
+}
+
+.is-preview-mode .zappoppop-field-rating {
+    cursor: pointer !important;
+}
+
+/* Transparent Canvas State: Dotted boundary outline as workspace guide in edit mode, no dark box-shadow */
+#zappoppop-canvas-box.zappoppop-canvas-transparent {
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: 2px dotted rgba(56, 189, 248, 0.75) !important;
+    outline-offset: -1px;
+}
+
+/* Live Preview Mode: Hide dotted guide outline cleanly */
+.zappoppop-builder-workspace.is-preview-mode #zappoppop-canvas-box.zappoppop-canvas-transparent {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Visual Builder: Elements Toolbar Icon-Only Normalization
+   Cross-Browser Centered across Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+.zappoppop-ribbon-bar .zappoppop-tool-item,
+.zappoppop-ribbon-bar .zappoppop-ribbon-tool,
+.zappoppop-tool-item,
+.zappoppop-ribbon-tool {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    position: relative !important;
+}
+
+.zappoppop-ribbon-bar .zappoppop-tool-item .dashicons,
+.zappoppop-ribbon-bar .zappoppop-ribbon-tool .dashicons,
+.zappoppop-tool-item .dashicons,
+.zappoppop-ribbon-tool .dashicons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    pointer-events: none !important;
+}
+
+.zappoppop-ribbon-bar .zappoppop-tool-item .dashicons::before,
+.zappoppop-ribbon-bar .zappoppop-ribbon-tool .dashicons::before,
+.zappoppop-tool-item .dashicons::before,
+.zappoppop-ribbon-tool .dashicons::before {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+    line-height: 18px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Guard against residual text labels rendering in toolbar */
+.zappoppop-ribbon-bar .zappoppop-tool-item span:not(.dashicons),
+.zappoppop-ribbon-bar .zappoppop-ribbon-tool span:not(.dashicons),
+.zappoppop-tool-item span:not(.dashicons),
+.zappoppop-ribbon-tool span:not(.dashicons) {
+    display: none !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Visual Builder: Clean Text-Only Preview & Replay Controls
+   Cross-Browser Centered across Chrome, Safari, Firefox, Edge
+   ========================================================================== */
+#zappoppop-btn-preview,
+#zappoppop-btn-replay-anim,
+#zappoppop-btn-exit-preview,
+#zappoppop-preview-replay,
+#zappoppop-preview-exit,
+.zappoppop-btn-preview,
+.zappoppop-btn-replay-anim,
+.zappoppop-btn-exit-preview {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 14px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    cursor: pointer !important;
+}
+
+/* Guard against residual icon elements rendering inside these controls */
+#zappoppop-btn-preview .dashicons,
+#zappoppop-btn-preview .dashicons::before,
+#zappoppop-btn-replay-anim .dashicons,
+#zappoppop-btn-replay-anim .dashicons::before,
+#zappoppop-btn-exit-preview .dashicons,
+#zappoppop-btn-exit-preview .dashicons::before,
+#zappoppop-preview-replay .dashicons,
+#zappoppop-preview-replay .dashicons::before,
+#zappoppop-preview-exit .dashicons,
+#zappoppop-preview-exit .dashicons::before,
+.zappoppop-btn-preview .dashicons,
+.zappoppop-btn-replay-anim .dashicons,
+.zappoppop-btn-exit-preview .dashicons {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Builder: Universal Preview Animation Keyframes & Classes
+   Cross-Browser Hardware Accelerated across Blink, WebKit, Gecko
+   ========================================================================== */
+
+@keyframes zappoppopFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@-webkit-keyframes zappoppopFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes zappoppopSlideDown {
+    from { opacity: 0; transform: translate3d(0, -80px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@-webkit-keyframes zappoppopSlideDown {
+    from { opacity: 0; -webkit-transform: translate3d(0, -80px, 0); }
+    to { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes zappoppopSlideUp {
+    from { opacity: 0; transform: translate3d(0, 80px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@-webkit-keyframes zappoppopSlideUp {
+    from { opacity: 0; -webkit-transform: translate3d(0, 80px, 0); }
+    to { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes zappoppopSlideLeft {
+    from { opacity: 0; transform: translate3d(80px, 0, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@-webkit-keyframes zappoppopSlideLeft {
+    from { opacity: 0; -webkit-transform: translate3d(80px, 0, 0); }
+    to { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes zappoppopSlideRight {
+    from { opacity: 0; transform: translate3d(-80px, 0, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@-webkit-keyframes zappoppopSlideRight {
+    from { opacity: 0; -webkit-transform: translate3d(-80px, 0, 0); }
+    to { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes zappoppopZoomIn {
+    from { opacity: 0; transform: scale3d(0.5, 0.5, 0.5); }
+    to { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+@-webkit-keyframes zappoppopZoomIn {
+    from { opacity: 0; -webkit-transform: scale3d(0.5, 0.5, 0.5); }
+    to { opacity: 1; -webkit-transform: scale3d(1, 1, 1); }
+}
+
+@keyframes zappoppopBounceIn {
+    from, 20%, 40%, 60%, 80%, to { animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
+    0% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+    20% { transform: scale3d(1.1, 1.1, 1.1); }
+    40% { transform: scale3d(0.9, 0.9, 0.9); }
+    60% { opacity: 1; transform: scale3d(1.03, 1.03, 1.03); }
+    80% { transform: scale3d(0.97, 0.97, 0.97); }
+    to { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+@-webkit-keyframes zappoppopBounceIn {
+    from, 20%, 40%, 60%, 80%, to { -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
+    0% { opacity: 0; -webkit-transform: scale3d(0.3, 0.3, 0.3); }
+    20% { -webkit-transform: scale3d(1.1, 1.1, 1.1); }
+    40% { -webkit-transform: scale3d(0.9, 0.9, 0.9); }
+    60% { opacity: 1; -webkit-transform: scale3d(1.03, 1.03, 1.03); }
+    80% { -webkit-transform: scale3d(0.97, 0.97, 0.97); }
+    to { opacity: 1; -webkit-transform: scale3d(1, 1, 1); }
+}
+
+@keyframes zappoppopFlipIn {
+    from { transform: perspective(400px) rotate3d(1, 0, 0, 90deg); opacity: 0; }
+    to { transform: perspective(400px); opacity: 1; }
+}
+
+@keyframes zappoppopPulse {
+    from, to { transform: scale3d(1, 1, 1); }
+    50% { transform: scale3d(1.08, 1.08, 1.08); }
+}
+
+@keyframes zappoppopTada {
+    from, to { transform: scale3d(1, 1, 1); }
+    10%, 20% { transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg); }
+    30%, 50%, 70%, 90% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg); }
+    40%, 60%, 80% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg); }
+}
+
+@keyframes zappoppopRubberBand {
+    from, to { transform: scale3d(1, 1, 1); }
+    30% { transform: scale3d(1.25, 0.75, 1); }
+    40% { transform: scale3d(0.75, 1.25, 1); }
+    50% { transform: scale3d(1.15, 0.85, 1); }
+    65% { transform: scale3d(0.95, 1.05, 1); }
+    75% { transform: scale3d(1.05, 0.95, 1); }
+}
+
+/* Dual-contract utility classes */
+.anim-fadeIn, .anim-fade, .zappoppop-anim-fadeIn, .zappoppop-anim-fade, .animate__fadeIn {
+    animation-name: zappoppopFadeIn !important;
+    -webkit-animation-name: zappoppopFadeIn !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-slideDown, .anim-slideInDown, .zappoppop-anim-slideDown, .zappoppop-anim-slideInDown, .animate__slideInDown, .animate__slideDown {
+    animation-name: zappoppopSlideDown !important;
+    -webkit-animation-name: zappoppopSlideDown !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-slideUp, .anim-slideInUp, .zappoppop-anim-slideUp, .zappoppop-anim-slideInUp, .animate__slideInUp, .animate__slideUp {
+    animation-name: zappoppopSlideUp !important;
+    -webkit-animation-name: zappoppopSlideUp !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-slideLeft, .zappoppop-anim-slideLeft, .animate__slideInLeft, .animate__slideLeft {
+    animation-name: zappoppopSlideLeft !important;
+    -webkit-animation-name: zappoppopSlideLeft !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-slideRight, .zappoppop-anim-slideRight, .animate__slideInRight, .animate__slideRight {
+    animation-name: zappoppopSlideRight !important;
+    -webkit-animation-name: zappoppopSlideRight !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-zoomIn, .zappoppop-anim-zoomIn, .animate__zoomIn {
+    animation-name: zappoppopZoomIn !important;
+    -webkit-animation-name: zappoppopZoomIn !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-bounceIn, .zappoppop-anim-bounceIn, .animate__bounceIn {
+    animation-name: zappoppopBounceIn !important;
+    -webkit-animation-name: zappoppopBounceIn !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-flipIn, .zappoppop-anim-flipIn, .animate__flipIn {
+    animation-name: zappoppopFlipIn !important;
+    -webkit-animation-name: zappoppopFlipIn !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-pulse, .zappoppop-anim-pulse, .animate__pulse {
+    animation-name: zappoppopPulse !important;
+    -webkit-animation-name: zappoppopPulse !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-tada, .zappoppop-anim-tada, .animate__tada {
+    animation-name: zappoppopTada !important;
+    -webkit-animation-name: zappoppopTada !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.anim-rubberBand, .zappoppop-anim-rubberBand, .animate__rubberBand {
+    animation-name: zappoppopRubberBand !important;
+    -webkit-animation-name: zappoppopRubberBand !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.animate__animated {
+    animation-duration: var(--animate-duration, 1s);
+    -webkit-animation-duration: var(--animate-duration, 1s);
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Builder: Directional Bounce Keyframes & Animate.css Classes
+   Cross-Browser Hardware Accelerated across Blink, WebKit, Gecko
+   ========================================================================== */
+
+@keyframes zappoppopBounceInLeft {
+    from, 60%, 75%, 90%, to {
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    0% {
+        opacity: 0;
+        transform: translate3d(-300px, 0, 0);
+        -webkit-transform: translate3d(-300px, 0, 0);
+    }
+    60% {
+        opacity: 1;
+        transform: translate3d(20px, 0, 0);
+        -webkit-transform: translate3d(20px, 0, 0);
+    }
+    75% {
+        transform: translate3d(-8px, 0, 0);
+        -webkit-transform: translate3d(-8px, 0, 0);
+    }
+    90% {
+        transform: translate3d(3px, 0, 0);
+        -webkit-transform: translate3d(3px, 0, 0);
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+@-webkit-keyframes zappoppopBounceInLeft {
+    from, 60%, 75%, 90%, to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(-300px, 0, 0);
+    }
+    60% {
+        opacity: 1;
+        -webkit-transform: translate3d(20px, 0, 0);
+    }
+    75% {
+        -webkit-transform: translate3d(-8px, 0, 0);
+    }
+    90% {
+        -webkit-transform: translate3d(3px, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+.anim-bounceInLeft, .zappoppop-anim-bounceInLeft, .animate__bounceInLeft, .bounceInLeft {
+    animation-name: zappoppopBounceInLeft !important;
+    -webkit-animation-name: zappoppopBounceInLeft !important;
+    animation-fill-mode: both !important;
+    -webkit-animation-fill-mode: both !important;
+}
+
+.zappoppop-anim-badge-link:hover {
+    background: #dbeafe !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Visual Builder: Play Button for Canvas & Element Animation
+   Cross-Browser Hardware Accelerated across Blink, WebKit, Gecko
+   ========================================================================== */
+
+.zappoppop-anim-play-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 2px 8px !important;
+    height: 24px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    color: #334155 !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.05s ease !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.zappoppop-anim-play-btn:hover {
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+    color: #2563eb !important;
+}
+
+.zappoppop-anim-play-btn:active {
+    transform: scale(0.96) !important;
+    background: #cbd5e1 !important;
+}
+
+.zappoppop-anim-play-btn svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    color: currentColor !important;
+}
+
+/* ZAPPOPPOP_INSPECTOR_CHECKER_SLIDE_IN */
+/* Checkerboard Workspace: Retain 100% full width without contracting */
+.zappoppop-builder-workspace {
+    position: relative !important;
+    overflow: hidden !important;
+    margin-right: 0 !important;
+}
+
+.panel-open .zappoppop-builder-workspace,
+.inspector-open .zappoppop-builder-workspace,
+.zappoppop-builder-wrap.panel-open .zappoppop-builder-workspace {
+    margin-right: 0 !important;
+    width: 100% !important;
+}
+
+/* Layer Setting Inspector Drawer: Slides in strictly within checker area */
+#zappoppop-inspector-drawer.zappoppop-inspector-drawer,
+#zappoppop-inspector-drawer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 360px !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    background: #ffffff !important;
+    border-left: 1px solid #cbd5e1 !important;
+    box-shadow: -4px 0 24px rgba(15, 23, 42, 0.15) !important;
+    z-index: 99990 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    transform: translate3d(100%, 0, 0) !important;
+    -webkit-transform: translate3d(100%, 0, 0) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease !important;
+    -webkit-transition: -webkit-transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+#zappoppop-inspector-drawer.is-open,
+.panel-open #zappoppop-inspector-drawer,
+.inspector-open #zappoppop-inspector-drawer {
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Synchronized Floating Layers Push Transition */
+#zappoppop-floating-layers-panel {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px;
+    z-index: 100000 !important;
+    transition: right 0.28s cubic-bezier(0.16, 1, 0.3, 1), left 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    -webkit-transition: right 0.28s cubic-bezier(0.16, 1, 0.3, 1), left 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.panel-open #zappoppop-floating-layers-panel.docked-default,
+.panel-open #zappoppop-floating-layers-panel.docked-right,
+.panel-open #zappoppop-floating-layers-panel:not(.is-dragged):not([style*="left:"]),
+.inspector-open #zappoppop-floating-layers-panel:not(.is-dragged):not([style*="left:"]) {
+    right: 376px !important; /* 360px drawer + 16px gutter */
+    left: auto !important;
+}
+
+
+/* Phase 1: Header History, Duplicate Canvas & Viewport Zoom */
+.zappoppop-header-history-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 8px;
+}
+#zappoppop-btn-undo,
+#zappoppop-btn-redo,
+#zappoppop-canvas-duplicate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+#zappoppop-btn-undo:hover:not(:disabled),
+#zappoppop-btn-redo:hover:not(:disabled),
+#zappoppop-canvas-duplicate-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.32);
+}
+#zappoppop-btn-undo:disabled,
+#zappoppop-btn-redo:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+#zappoppop-zoom-select {
+    height: 30px;
+    line-height: 28px;
+    padding: 0 8px;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f1f5f9;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+#zappoppop-zoom-select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px #38bdf8;
+}
+
+
+/* Phase 2: Button Hover & Custom Class Styling */
+.zappoppop-element[style*="--zappoppop-hover-bg"]:hover button,
+.zappoppop-element[style*="--zappoppop-hover-bg"]:hover a,
+.zappoppop-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-submit-btn,
+.zappoppop-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-link-btn,
+.zappoppop-element[style*="--zappoppop-hover-bg"]:hover .zappoppop-next-canvas-btn {
+    background: var(--zappoppop-hover-bg) !important;
+}
+.zappoppop-element[style*="--zappoppop-hover-color"]:hover button,
+.zappoppop-element[style*="--zappoppop-hover-color"]:hover a,
+.zappoppop-element[style*="--zappoppop-hover-color"]:hover .zappoppop-submit-btn,
+.zappoppop-element[style*="--zappoppop-hover-color"]:hover .zappoppop-link-btn,
+.zappoppop-element[style*="--zappoppop-hover-color"]:hover .zappoppop-next-canvas-btn {
+    color: var(--zappoppop-hover-color) !important;
+}
+.zappoppop-element[style*="--zappoppop-hover-border"]:hover button,
+.zappoppop-element[style*="--zappoppop-hover-border"]:hover a,
+.zappoppop-element[style*="--zappoppop-hover-border"]:hover .zappoppop-submit-btn,
+.zappoppop-element[style*="--zappoppop-hover-border"]:hover .zappoppop-link-btn,
+.zappoppop-element[style*="--zappoppop-hover-border"]:hover .zappoppop-next-canvas-btn {
+    border-color: var(--zappoppop-hover-border) !important;
+}
+
+
+/* Phase 3: Stage Physics, Alignment Toolbar & Smart Snap Guides */
+.zappoppop-alignment-toolbar {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 6px;
+    padding: 3px 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    z-index: 60;
+    user-select: none;
+}
+.zappoppop-align-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.zappoppop-align-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+.zappoppop-align-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.35);
+}
+.zappoppop-align-separator {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 3px;
+}
+.zappoppop-smart-guide {
+    position: absolute;
+    z-index: 9999;
+    pointer-events: none;
+}
+.zappoppop-guide-v {
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    border-left: 1.5px dashed #38bdf8;
+}
+.zappoppop-guide-h {
+    left: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1.5px dashed #38bdf8;
+}
+
+
+/* Phase 5: Floating Layers Panel Toolbar, Search & Inline Rename */
+.zappoppop-layers-panel-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    background: #111827;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 6px;
+}
+.zappoppop-layers-search-wrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 4px;
+    padding: 0 6px;
+}
+.zappoppop-layers-search-wrap .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #64748b;
+    margin-right: 4px;
+}
+.zappoppop-layers-search {
+    width: 100%;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #f1f5f9 !important;
+    font-size: 11px !important;
+    padding: 3px 0 !important;
+    height: 22px !important;
+}
+.zappoppop-layers-search::placeholder {
+    color: #64748b;
+}
+.zappoppop-layers-bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.zappoppop-layers-bulk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.zappoppop-layers-bulk-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+.zappoppop-layers-bulk-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.35);
+}
+.zappoppop-layer-title-editable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s ease;
+}
+.zappoppop-layer-title-editable:hover {
+    color: #38bdf8;
+}
+
+
+/* Hardware-Accelerated Cross-Browser Animation Suite */
+@keyframes anim-bounce {
+    0%, 20%, 53%, 80%, 100% { transform: translate3d(0, 0, 0); }
+    40%, 43% { transform: translate3d(0, -25px, 0); }
+    70% { transform: translate3d(0, -12px, 0); }
+    90% { transform: translate3d(0, -4px, 0); }
+}
+@-webkit-keyframes anim-bounce {
+    0%, 20%, 53%, 80%, 100% { -webkit-transform: translate3d(0, 0, 0); }
+    40%, 43% { -webkit-transform: translate3d(0, -25px, 0); }
+    70% { -webkit-transform: translate3d(0, -12px, 0); }
+    90% { -webkit-transform: translate3d(0, -4px, 0); }
+}
+.anim-bounce, .zappoppop-anim-bounce, .animate__bounce {
+    animation-name: anim-bounce !important;
+    -webkit-animation-name: anim-bounce !important;
+}
+
+@keyframes anim-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@-webkit-keyframes anim-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.anim-fadeIn, .zappoppop-anim-fadeIn, .animate__fadeIn {
+    animation-name: anim-fadeIn !important;
+    -webkit-animation-name: anim-fadeIn !important;
+}
+
+@keyframes anim-slideDown {
+    from { transform: translate3d(0, -100%, 0); opacity: 0; }
+    to { transform: translate3d(0, 0, 0); opacity: 1; }
+}
+@-webkit-keyframes anim-slideDown {
+    from { -webkit-transform: translate3d(0, -100%, 0); opacity: 0; }
+    to { -webkit-transform: translate3d(0, 0, 0); opacity: 1; }
+}
+.anim-slideDown, .zappoppop-anim-slideDown, .animate__slideDown {
+    animation-name: anim-slideDown !important;
+    -webkit-animation-name: anim-slideDown !important;
+}
+
+@keyframes anim-zoomIn {
+    from { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+    50% { opacity: 1; }
+    to { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+@-webkit-keyframes anim-zoomIn {
+    from { opacity: 0; -webkit-transform: scale3d(0.3, 0.3, 0.3); }
+    50% { opacity: 1; }
+    to { opacity: 1; -webkit-transform: scale3d(1, 1, 1); }
+}
+.anim-zoomIn, .zappoppop-anim-zoomIn, .animate__zoomIn {
+    animation-name: anim-zoomIn !important;
+    -webkit-animation-name: anim-zoomIn !important;
+}
+
+@keyframes anim-pulse {
+    from { transform: scale3d(1, 1, 1); }
+    50% { transform: scale3d(1.08, 1.08, 1.08); }
+    to { transform: scale3d(1, 1, 1); }
+}
+@-webkit-keyframes anim-pulse {
+    from { -webkit-transform: scale3d(1, 1, 1); }
+    50% { -webkit-transform: scale3d(1.08, 1.08, 1.08); }
+    to { -webkit-transform: scale3d(1, 1, 1); }
+}
+.anim-pulse, .zappoppop-anim-pulse, .animate__pulse {
+    animation-name: anim-pulse !important;
+    -webkit-animation-name: anim-pulse !important;
+}
+
+@keyframes anim-tada {
+    from { transform: scale3d(1, 1, 1); }
+    10%, 20% { transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg); }
+    30%, 50%, 70%, 90% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg); }
+    40%, 60%, 80% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg); }
+    to { transform: scale3d(1, 1, 1); }
+}
+@-webkit-keyframes anim-tada {
+    from { -webkit-transform: scale3d(1, 1, 1); }
+    10%, 20% { -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg); }
+    30%, 50%, 70%, 90% { -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg); }
+    40%, 60%, 80% { -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg); }
+    to { -webkit-transform: scale3d(1, 1, 1); }
+}
+.anim-tada, .zappoppop-anim-tada, .animate__tada {
+    animation-name: anim-tada !important;
+    -webkit-animation-name: anim-tada !important;
+}
+
+
+/* Guaranteed Hardware-Accelerated Absolute Slide-In within Checkerboard Area */
+.zappoppop-builder-workspace {
+    position: relative !important;
+    overflow: hidden !important;
+    margin-right: 0 !important;
+}
+
+body.panel-open .zappoppop-builder-workspace,
+.panel-open .zappoppop-builder-workspace,
+.inspector-open .zappoppop-builder-workspace,
+.zappoppop-builder-wrap.panel-open .zappoppop-builder-workspace {
+    margin-right: 0 !important;
+    width: 100% !important;
+}
+
+#zappoppop-inspector-drawer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 360px !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    background: #ffffff !important;
+    border-left: 1px solid #cbd5e1 !important;
+    box-shadow: -4px 0 24px rgba(15, 23, 42, 0.15) !important;
+    z-index: 99990 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    transform: translate3d(100%, 0, 0) !important;
+    -webkit-transform: translate3d(100%, 0, 0) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease !important;
+    -webkit-transition: -webkit-transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+#zappoppop-inspector-drawer.is-open,
+.panel-open #zappoppop-inspector-drawer,
+.inspector-open #zappoppop-inspector-drawer {
+    display: flex !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+#zappoppop-inspector-drawer.is-closed {
+    transform: translate3d(100%, 0, 0) !important;
+    -webkit-transform: translate3d(100%, 0, 0) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+#zappoppop-floating-layers-panel {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px;
+    z-index: 100000 !important;
+    transition: right 0.28s cubic-bezier(0.16, 1, 0.3, 1), left 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    -webkit-transition: right 0.28s cubic-bezier(0.16, 1, 0.3, 1), left 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.panel-open #zappoppop-floating-layers-panel.docked-default,
+.panel-open #zappoppop-floating-layers-panel.docked-right,
+.panel-open #zappoppop-floating-layers-panel:not(.is-dragged):not([style*="left:"]),
+.inspector-open #zappoppop-floating-layers-panel:not(.is-dragged):not([style*="left:"]) {
+    right: 376px !important;
+    left: auto !important;
+}
+
+
+/* Floating Layers Panel - Active Colors for Lock & Hide */
+.zappoppop-layer-btn-lock,
+.zappoppop-layer-btn-vis,
+.zappoppop-layers-bulk-btn {
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+/* Active Locked State (Amber Accent) */
+.zappoppop-layer-btn-lock.active,
+.zappoppop-layer-btn-lock.is-active,
+.zappoppop-layer-item.is-locked .zappoppop-layer-btn-lock,
+#zappoppop-layers-bulk-lock.active,
+#zappoppop-layers-bulk-lock.is-active {
+    color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.18) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.25) !important;
+}
+
+.zappoppop-layer-btn-lock.active .dashicons,
+.zappoppop-layer-btn-lock.is-active .dashicons,
+.zappoppop-layer-item.is-locked .zappoppop-layer-btn-lock .dashicons,
+#zappoppop-layers-bulk-lock.active .dashicons,
+#zappoppop-layers-bulk-lock.is-active .dashicons {
+    color: #f59e0b !important;
+}
+
+/* Active Hidden State (Red/Rose Accent) */
+.zappoppop-layer-btn-vis.active,
+.zappoppop-layer-btn-vis.is-active,
+.zappoppop-layer-item.is-hidden .zappoppop-layer-btn-vis,
+#zappoppop-layers-bulk-vis.active,
+#zappoppop-layers-bulk-vis.is-active {
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.25) !important;
+}
+
+.zappoppop-layer-btn-vis.active .dashicons,
+.zappoppop-layer-btn-vis.is-active .dashicons,
+.zappoppop-layer-item.is-hidden .zappoppop-layer-btn-vis .dashicons,
+#zappoppop-layers-bulk-vis.active .dashicons,
+#zappoppop-layers-bulk-vis.is-active .dashicons {
+    color: #ef4444 !important;
+}
+
+/* Dim row title when layer is hidden */
+.zappoppop-layer-item.is-hidden .zappoppop-layer-title {
+    opacity: 0.55 !important;
+    font-style: italic !important;
+}
+
+
+/* --- Parity Phase 2: Live Hover Transitions --- */
+.zappoppop-element[data-has-hover="true"] {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.zappoppop-element[data-has-hover="true"]:hover {
+    background-color: var(--zappoppop-hover-bg) !important;
+    color: var(--zappoppop-hover-color) !important;
+    border-color: var(--zappoppop-hover-border) !important;
+}
+
+
+/* --- Parity: Title Semantic Element Harmonization --- */
+.zappoppop-title-inner {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    text-align: inherit !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+/* --- Parity: Header Workflow & Zoom Controls --- */
+.zappoppop-header-workflow-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.zappoppop-header-workflow-tools .zappoppop-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.zappoppop-header-workflow-tools .zappoppop-btn-icon:hover:not(:disabled) {
+    background: #334155;
+    color: #f8fafc;
+    border-color: #475569;
+}
+.zappoppop-header-workflow-tools .zappoppop-btn-icon:disabled,
+.zappoppop-header-workflow-tools .zappoppop-btn-icon.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.zappoppop-zoom-select:focus {
+    outline: none;
+    border-color: #38bdf8 !important;
+}
+
+/* ==========================================================================
+   Header Action Buttons & Strict 2D Flexbox Centering Normalization
+   ========================================================================== */
+.zappoppop-header-actions,
+.zappoppop-header-workflow-tools {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+/* 32px Icon-Only Buttons */
+.zappoppop-btn-icon,
+#zappoppop-btn-settings,
+#zappoppop-btn-undo,
+#zappoppop-btn-redo,
+#zappoppop-canvas-duplicate-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+    color: #94a3b8 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    transition: all 0.15s ease !important;
+}
+
+.zappoppop-btn-icon:hover,
+#zappoppop-btn-settings:hover,
+#zappoppop-btn-undo:hover:not(:disabled),
+#zappoppop-btn-redo:hover:not(:disabled),
+#zappoppop-canvas-duplicate-btn:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* Strict Dashicon 2D Glyph Box Normalization */
+.zappoppop-btn-icon .dashicons,
+#zappoppop-btn-settings .dashicons,
+#zappoppop-btn-undo .dashicons,
+#zappoppop-btn-redo .dashicons,
+#zappoppop-canvas-duplicate-btn .dashicons {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+    line-height: 18px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+.zappoppop-btn-icon .dashicons::before,
+#zappoppop-btn-settings .dashicons::before,
+#zappoppop-btn-undo .dashicons::before,
+#zappoppop-btn-redo .dashicons::before,
+#zappoppop-canvas-duplicate-btn .dashicons::before {
+    display: inline-block !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+    line-height: 18px !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+/* Zoom Dropdown Normalization */
+#zappoppop-zoom-select {
+    height: 32px !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+    color: #f8fafc !important;
+    font-size: 12px !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+}
+
+/* Primary Save Button (Clean Text-Only) */
+#zappoppop-btn-save,
+.zappoppop-btn-save {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 32px !important;
+    padding: 0 14px !important;
+    background: #0284c7 !important;
+    border: 1px solid #0284c7 !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    transition: all 0.15s ease !important;
+}
+#zappoppop-btn-save:hover,
+.zappoppop-btn-save:hover {
+    background: #0369a1 !important;
+    border-color: #0369a1 !important;
+}
+#zappoppop-btn-save .dashicons,
+.zappoppop-btn-save .dashicons {
+    display: none !important;
+}
+
+/* Secondary Action Buttons (Preview, Embed) */
+.zappoppop-btn-secondary,
+#zappoppop-btn-preview,
+#zappoppop-btn-embed,
+#zappoppop-btn-shortcode {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 32px !important;
+    padding: 0 12px !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+    color: #f8fafc !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    transition: all 0.15s ease !important;
+}
+.zappoppop-btn-secondary:hover,
+#zappoppop-btn-preview:hover,
+#zappoppop-btn-embed:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+    border-color: #38bdf8 !important;
+}
+/* Ensure #zappoppop-btn-settings is never blocked by layout containers */
+#zappoppop-btn-settings,
+.zappoppop-btn-settings {
+    position: relative !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+#zappoppop-btn-settings * {
+    pointer-events: none !important;
+}
+/* ==========================================================================
+   ZapPopPop Visual Builder: Day (Light) & Night (Dark) Mode Styles
+   ========================================================================== */
+
+/* Toggle Button Icon Switching */
+.zappoppop-btn-theme {
+    position: relative !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+body.theme-light .zappoppop-icon-sun,
+.zappoppop-builder-wrap.theme-light .zappoppop-icon-sun {
+    display: inline-block !important;
+    color: #f59e0b !important;
+}
+
+body.theme-light .zappoppop-icon-moon,
+.zappoppop-builder-wrap.theme-light .zappoppop-icon-moon {
+    display: none !important;
+}
+
+body:not(.theme-light) .zappoppop-icon-sun,
+.zappoppop-builder-wrap:not(.theme-light) .zappoppop-icon-sun {
+    display: none !important;
+}
+
+body:not(.theme-light) .zappoppop-icon-moon,
+.zappoppop-builder-wrap:not(.theme-light) .zappoppop-icon-moon {
+    display: inline-block !important;
+    color: #38bdf8 !important;
+}
+
+/* Day Mode: Light Checkerboard Workspace */
+body.theme-light .zappoppop-builder-workspace,
+.zappoppop-builder-wrap.theme-light .zappoppop-builder-workspace {
+    background-color: #f8fafc !important;
+    background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%) !important;
+    background-size: 20px 20px !important;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px !important;
+}
+
+/* Day Mode: Canvas Box Outer Elevation & Framing */
+body.theme-light #zappoppop-canvas-box,
+.zappoppop-builder-wrap.theme-light #zappoppop-canvas-box {
+    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Smooth Workspace Background Transition */
+.zappoppop-builder-workspace {
+    transition: background-color 0.25s ease !important;
+}
+
+/* ==========================================================================
+   ZapPopPop Default Workspace & Canvas Box (Transparent Dashed Blueprint)
+   ========================================================================== */
+.zappoppop-builder-workspace {
+    background-color: #ffffff !important;
+    background-image: 
+        linear-gradient(45deg, #efefef 25%, transparent 25%), 
+        linear-gradient(-45deg, #efefef 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #efefef 75%), 
+        linear-gradient(-45deg, transparent 75%, #efefef 75%) !important;
+    background-size: 20px 20px !important; /* ZAPPOPPOP_CHECKER_FIXED_SIZE: single fixed size, never 16px */
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px !important;
+    background-repeat: repeat !important;
+    background-attachment: scroll !important;
+    background-origin: padding-box !important;
+}
+
+#zappoppop-canvas-box {
+    border: 1px dashed #777777 !important;
+    border-radius: var(--zappoppop-canvas-radius, 0px) !important; /* ZAPPOPPOP_CANVAS_RADIUS_LIVE */
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+
+#zappoppop-canvas-elements-root {
+    border-radius: inherit !important;
+}
+
+#zappoppop-canvas-corner-handle {
+    width: 14px !important;
+    height: 14px !important;
+    right: 2px !important;
+    bottom: 2px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    cursor: se-resize !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    user-select: none !important;
+}
+
+/* ==========================================================================
+   Spacebar Pan / Hand Tool Engine (Workspace Freeform Movement)
+   ========================================================================== */
+
+/* Space key held: Hand icon (grab) across entire workspace and stage */
+body.zappoppop-space-held,
+body.zappoppop-space-held .zappoppop-builder-workspace,
+body.zappoppop-space-held .zappoppop-builder-workspace *,
+body.zappoppop-space-held #zappoppop-canvas-box,
+body.zappoppop-space-held #zappoppop-canvas-box * {
+    cursor: grab !important;
+    cursor: -webkit-grab !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+/* While space is held, shield layer drag/resize interactions so workspace pans cleanly */
+body.zappoppop-space-held .zappoppop-canvas-item,
+body.zappoppop-space-held .ui-resizable-handle,
+body.zappoppop-space-held #zappoppop-canvas-corner-handle {
+    pointer-events: none !important;
+}
+
+/* Mouse down active panning: Hand grabbing icon */
+body.zappoppop-is-panning,
+body.zappoppop-is-panning .zappoppop-builder-workspace,
+body.zappoppop-is-panning .zappoppop-builder-workspace *,
+body.zappoppop-is-panning #zappoppop-canvas-box,
+body.zappoppop-is-panning #zappoppop-canvas-box * {
+    cursor: grabbing !important;
+    cursor: -webkit-grabbing !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+
+/* Phase 1: 5-Tab Family Inspector & Advanced Tag Badges */
+.zappoppop-inspector-tabs {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #181824;
+}
+.zappoppop-inspector-tabs .zappoppop-insp-tab {
+    flex: 1 1 auto;
+    padding: 9px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.zappoppop-inspector-tabs .zappoppop-insp-tab.active {
+    color: #ffffff;
+    border-bottom-color: #c2185b;
+    background: rgba(194, 24, 91, 0.12);
+}
+.zappoppop-adv-badge-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 26px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+}
+.zappoppop-adv-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: #c2185b;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.zappoppop-adv-add-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    color: #e5e7eb;
+    background: #2a2a3c;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 4px;
+    cursor: pointer;
+}
+.zappoppop-adv-add-btn:hover {
+    background: #c2185b;
+    border-color: #c2185b;
+    color: #fff;
+}
+
+/* Hardware-Accelerated Checker Area Slide-In & Layer Push Rules */
+.zappoppop-builder-workspace,
+#zappoppop-builder-workspace {
+    position: relative !important;
+    overflow: hidden !important;
+    margin-right: 0 !important;
+}
+#zappoppop-inspector-drawer,
+#zappoppop-drawer-inspector,
+.zappoppop-inspector-drawer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 360px !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    z-index: 99996 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: translate3d(100%, 0, 0) !important;
+    -webkit-transform: translate3d(100%, 0, 0) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s !important;
+    -webkit-transition: -webkit-transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s !important;
+}
+#zappoppop-inspector-drawer.is-open,
+#zappoppop-inspector-drawer.open,
+#zappoppop-drawer-inspector.is-open,
+.zappoppop-inspector-drawer.is-open,
+.zappoppop-builder-workspace.inspector-open #zappoppop-inspector-drawer,
+.zappoppop-builder-workspace.zappoppop-inspector-open #zappoppop-inspector-drawer {
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+
+/* ZAPPOPPOP_GUARANTEED_SLIDEIN_CSS */
+.zappoppop-builder-workspace, #zappoppop-builder-workspace {
+    position: relative !important;
+    overflow: hidden !important;
+}
+#zappoppop-inspector-drawer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 360px !important;
+    max-width: 360px !important;
+    height: 100% !important;
+    z-index: 99990 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: translate3d(100%, 0, 0) !important;
+    -webkit-transform: translate3d(100%, 0, 0) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s !important;
+    -webkit-transition: -webkit-transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s !important;
+}
+#zappoppop-inspector-drawer.is-open,
+#zappoppop-inspector-drawer.open,
+.panel-open #zappoppop-inspector-drawer,
+.inspector-open #zappoppop-inspector-drawer {
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ZAPPOPPOP_MEDIA_MODAL_ZINDEX_FIX */
+.media-modal {
+    z-index: 999999 !important;
+}
+.media-modal-backdrop {
+    z-index: 999998 !important;
+}
+.zappoppop-ribbon-btn .dashicons,
+.zappoppop-ribbon-tool .dashicons {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    margin: 0 auto 2px auto !important;
+}
+
+
+
+/* ZAPPOPPOP_CANVAS_OVERFLOW: clip layers to canvas unless overflow is allowed */
+#zappoppop-canvas-elements-root.zappoppop-canvas-clip {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    overflow: hidden;
+}
+#zappoppop-canvas-box.zappoppop-canvas-overflow-on { overflow: visible; }
+
+
+/* ZAPPOPPOP_OVERFLOW_VISIBLE_V2 */
+#zappoppop-canvas-box.zappoppop-canvas-overflow-on,
+#zappoppop-canvas-box.zappoppop-canvas-overflow-on #zappoppop-canvas-elements-root {
+    overflow: visible !important;
+}
+.zappoppop-builder-workspace { overflow: visible; }
+
+/* ZAPPOPPOP_ALWAYS_DOTTED: dotted element outline always visible in the editor, hidden in preview */
+.zappoppop-canvas-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px dotted rgba(100, 116, 139, 0.9);
+    pointer-events: none;
+    box-sizing: border-box;
+    border-radius: inherit;
+    z-index: 5;
+}
+.zappoppop-canvas-item.zappoppop-selected::after {
+    border-color: rgba(37, 99, 235, 0.95);
+}
+.is-preview-mode .zappoppop-canvas-item::after,
+.zappoppop-builder-workspace.is-preview-mode .zappoppop-canvas-item::after,
+body.zappoppop-preview-locked .zappoppop-canvas-item::after {
+    display: none !important;
+    content: none !important;
+    border: 0 !important;
+}
+
+/* === ZAPPOPPOP_CLOSE_HOVER_CSS === */
+.zappoppop-canvas-item[data-has-hover="true"][data-type="close"],
+.zappoppop-canvas-item[data-has-hover="true"][data-type="close_icon"] {
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.zappoppop-canvas-item[data-has-hover="true"][data-type="close"]:hover,
+.zappoppop-canvas-item[data-has-hover="true"][data-type="close_icon"]:hover {
+    background-color: var(--zappoppop-hover-bg) !important;
+    color: var(--zappoppop-hover-color) !important;
+    border-color: var(--zappoppop-hover-border) !important;
+}
+.zappoppop-front-element[style*="--zappoppop-hover-bg"]:hover { background-color: var(--zappoppop-hover-bg) !important; }
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover,
+.zappoppop-front-element[style*="--zappoppop-hover-color"]:hover * { color: var(--zappoppop-hover-color) !important; }
+.zappoppop-front-element[style*="--zappoppop-hover-border"]:hover { border-color: var(--zappoppop-hover-border) !important; }
+/* === /ZAPPOPPOP_CLOSE_HOVER_CSS === */
+
+
+/* === ZAPPOPPOP_CANVAS_CORNER_BELOW_LAYERS === */
+/* Canvas corner resize grip sits BELOW all layers; layers (z-index >= 10) always cover it */
+#zappoppop-canvas-box #zappoppop-canvas-corner-handle {
+    z-index: 1 !important;
+}
+#zappoppop-canvas-box #zappoppop-canvas-elements-root {
+    z-index: auto !important;
+}
+#zappoppop-canvas-box .zappoppop-canvas-item {
+    z-index: auto;
+}
+/* === /ZAPPOPPOP_CANVAS_CORNER_BELOW_LAYERS === */
+
+
+/* === ZAPPOPPOP_HOVER_GUIDE_ONLY === */
+.zappoppop-canvas-item:hover:not(.zappoppop-selected) {
+    outline: 1px dotted #2563eb !important;
+    outline-offset: 0 !important;
+}
+.zappoppop-canvas-item:hover:not(.zappoppop-selected) .ui-resizable-handle {
+    display: none !important;
+}
+/* === /ZAPPOPPOP_HOVER_GUIDE_ONLY === */
+
+
+/* === ZAPPOPPOP_SELECTED_PRIMARY_GUIDE === */
+.zappoppop-canvas-item.zappoppop-selected {
+    outline: 1px solid #2563eb !important;
+    outline-offset: 0 !important;
+}
+/* === /ZAPPOPPOP_SELECTED_PRIMARY_GUIDE === */
+
+/* ZAPPOPPOP_CANVAS_SIZE_GUIDE_V1 */
+#zappoppop-canvas-box {
+    border: 0 !important;
+    outline: 1px dashed #777777 !important;
+    outline-offset: 0 !important;
+    overflow: visible;
+}
+#zappoppop-canvas-size-guide {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1;
+    color: #64748b;
+    white-space: nowrap;
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    z-index: 1;
+}
+body.zappoppop-preview-locked #zappoppop-canvas-size-guide { display: none; }
+
+/* === ZAPPOPPOP_NUDGE_START === */
+.zappoppop-nudge-btn .dashicons { font-size: 18px; width: 18px; height: 18px; }
+.zappoppop-nudge-btn:active { background: rgba(56, 189, 248, 0.25); color: #e0f2fe; }
+/* === ZAPPOPPOP_NUDGE_END === */
+
+/* === ZAPPOPPOP_ALIGN_DOCK_START === */
+/* Alignment Tool is docked under the canvas; exact top/left are set by builder-align-dock.js */
+.zappoppop-alignment-toolbar {
+    top: auto;
+    bottom: 24px;
+    white-space: nowrap;
+}
+/* === ZAPPOPPOP_ALIGN_DOCK_END === */
+
+/* === ZAPPOPPOP_ALIGN_SVG_START === */
+.zappoppop-align-btn .zappoppop-align-svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    pointer-events: none;
+}
+/* === ZAPPOPPOP_ALIGN_SVG_END === */
+
+/* === ZAPPOPPOP_GUIDE_INSIDE_START === */
+/* Element guide lines (hover dotted / selected solid) sit on the element's own edge, never outside it */
+#zappoppop-canvas-box .zappoppop-canvas-item:hover:not(.zappoppop-selected),
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-selected {
+    outline-offset: -1px !important;
+}
+/* === ZAPPOPPOP_GUIDE_INSIDE_END === */
+
+/* === ZAPPOPPOP_GUIDE_THEME === */
+/* Selected element guide line: colour + size come from Theme > Builder (light blue default) */
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-selected {
+    outline: var(--zpp-guide-width, 1px) solid var(--zpp-guide-color, #7dd3fc) !important;
+    outline-offset: calc(-1 * var(--zpp-guide-width, 1px)) !important;
+}
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-selected::after {
+    border-width: var(--zpp-guide-width, 1px);
+    border-color: var(--zpp-guide-color, #7dd3fc);
+}
+.is-preview-mode #zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-selected {
+    outline: none !important;
+}
+/* === /ZAPPOPPOP_GUIDE_THEME === */
+
+/* === ZAPPOPPOP_FORM_BORDER_FIX === */
+/* The layer wrapper owns border + radius; the inner box follows it so no sharp square edge shows through. */
+[style*="--zappoppop-ibr"] .zappoppop-form-input:not(.zappoppop-input-checkbox):not(.zappoppop-input-radio),
+[style*="--zappoppop-ibr"] .zappoppop-ms-wrap,
+[style*="--zappoppop-ibr"] .zappoppop-upload-dropzone,
+[style*="--zappoppop-ibr"] > [data-zpp-ibox] {
+    border-radius: var(--zappoppop-ibr, 0px) !important;
+}
+[style*="--zappoppop-wb"] .zappoppop-form-input:not(.zappoppop-input-checkbox):not(.zappoppop-input-radio),
+[style*="--zappoppop-wb"] .zappoppop-ms-wrap,
+[style*="--zappoppop-wb"] .zappoppop-upload-dropzone,
+[style*="--zappoppop-wb"] > [data-zpp-ibox] {
+    border-width: 0 !important;
+    border-style: none !important;
+}
+/* === /ZAPPOPPOP_FORM_BORDER_FIX === */

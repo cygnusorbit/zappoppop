@@ -1,0 +1,57 @@
+/* ==========================================================================
+   ZapPopPop Settings: Tab Navigation Bar & Active Highlights
+   Compatible with Chrome, Safari, Firefox, Edge & Responsive Viewports
+   ========================================================================== */
+
+.zappoppop-settings-wrap {
+    max-width: 1100px;
+}
+
+.zappoppop-settings-tabs-nav {
+    display: flex;
+    gap: 6px;
+    margin: 20px 0 24px 0;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0;
+    flex-wrap: wrap;
+}
+
+.zappoppop-tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    margin-bottom: -2px;
+}
+
+.zappoppop-tab-btn:hover {
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+.zappoppop-tab-btn.active {
+    color: #2563eb;
+    border-bottom: 2px solid #2563eb;
+    font-weight: 700;
+}
+
+/* Inactive tabs must be hidden unconditionally */
+.zappoppop-tab-content {
+    display: none !important;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 24px 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+/* Active tab display */
+.zappoppop-tab-content.active {
+    display: block !important;
+}

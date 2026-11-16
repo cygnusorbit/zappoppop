@@ -1,0 +1,191 @@
+<?php
+/**
+ * ZapPopPop Database Backup and Restore Engine
+ * Self-contained isolated handler.
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class ZapPopPop_Backup {
+
+    public static function init() {
+        add_action('admin_menu', [__CLASS__, 'register_admin_menu'], 30);
+        add_action('admin_post_zappoppop_export_db', [__CLASS__, 'handle_export_db']);
+        add_action('admin_post_zappoppop_restore_db', [__CLASS__, 'handle_restore_db']);
+    }
+
+    public static function register_admin_menu() {
+        add_submenu_page(
+            'zappoppop',
+            __('Database Backup & Restore', 'zappoppop'),
+            __('DB Backup / Restore', 'zappoppop'),
+            'manage_options',
+            'zappoppop-db-backup',
+            [__CLASS__, 'render_backup_page']
+        );
+    }
+
+    private static function get_target_tables() {
+        global $wpdb;
+        $prefix = $wpdb->prefix . 'zappoppop_';
+        $results = /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching */ $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'zappoppop_' ) . '%' ) );
+        return !empty($results) ? $results : [$wpdb->prefix . 'zappoppop_items'];
+    }
+
+    public static function handle_export_db() {
+        if (!current_user_can('manage_options')) {
+            wp_die( esc_html__( 'Unauthorized action', "zappoppop" ) );
+        }
+        check_admin_referer('zappoppop_export_db_nonce');
+
+        global $wpdb;
+        $tables = self::get_target_tables();
+        $backup = [
+            'generator'  => 'ZapPopPop Database Backup Engine',
+            'version'    => get_option('zappoppop_db_version', '1.0.0'),
+            'created_at' => current_time('mysql'),
+            'tables'     => [],
+            'options'    => [
+                'zappoppop_settings'   => get_option('zappoppop_settings', []),
+                'zappoppop_db_version' => get_option('zappoppop_db_version', '1.0.0'),
+            ]
+        ];
+
+        foreach ($tables as $table) {
+            $short_name = str_replace($wpdb->prefix, '', $table);
+            $rows = /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching */ $wpdb->get_results("SELECT * FROM `{$table}`", ARRAY_A);
+            $backup['tables'][$short_name] = $rows ?: [];
+        }
+
+        $filename = 'zappoppop-backup-' . gmdate('Y-m-d-His') . '.json';
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo wp_json_encode($backup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
+    public static function handle_restore_db() {
+        if (!current_user_can('manage_options')) {
+            wp_die( esc_html__( 'Unauthorized action', "zappoppop" ) );
+        }
+        check_admin_referer('zappoppop_restore_db_nonce');
+
+        $redirect_url = admin_url('admin.php?page=zappoppop-db-backup');
+
+        $tmp_file = isset($_FILES['backup_file']['tmp_name']) ? sanitize_text_field(wp_unslash($_FILES['backup_file']['tmp_name'])) : '';
+        $up_error = isset($_FILES['backup_file']['error']) ? (int) $_FILES['backup_file']['error'] : UPLOAD_ERR_NO_FILE;
+
+        if ($tmp_file === '' || $up_error !== UPLOAD_ERR_OK || !is_uploaded_file($tmp_file)) {
+            wp_safe_redirect( add_query_arg('error', 'no_file', $redirect_url) ); exit;
+        }
+
+        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $content = file_get_contents($tmp_file);
+        $data = json_decode($content, true);
+
+        if (!$data || !isset($data['tables']) || !is_array($data['tables'])) {
+            wp_safe_redirect( add_query_arg('error', 'invalid_format', $redirect_url) ); exit;
+            exit;
+        }
+
+        global $wpdb;
+
+        // Restore Options
+        if (!empty($data['options']) && is_array($data['options'])) {
+            foreach ($data['options'] as $key => $val) {
+                if (strpos($key, 'zappoppop_') === 0) {
+                    update_option($key, $val);
+                }
+            }
+        }
+
+        // Restore Tables
+        foreach ($data['tables'] as $short_name => $rows) {
+            if (strpos($short_name, 'zappoppop_') !== 0) {
+                continue;
+            }
+            $table_name = $wpdb->prefix . $short_name;
+            $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
+            if (!$table_exists) {
+                continue;
+            }
+
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                    $wpdb->query("TRUNCATE TABLE `{$table_name}`");
+            if (!empty($rows) && is_array($rows)) {
+                foreach ($rows as $row) {$wpdb->insert($table_name,$row);
+                }
+            }
+        }
+
+        wp_safe_redirect( add_query_arg('status', 'restored', $redirect_url) ); exit;
+        exit;
+    }
+
+    public static function render_backup_page() {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+        global $wpdb;
+        $tables = self::get_target_tables();
+        $status = sanitize_text_field(wp_unslash($_GET['status'] ?? ''));
+        $error  = sanitize_text_field(wp_unslash($_GET['error'] ?? ''));
+        ?>
+        <div class="wrap" style="max-width: 900px;">
+            <h1><?php esc_html_e('ZapPopPop Database Backup & Restore', 'zappoppop'); ?></h1>
+            <p><?php esc_html_e('Create a standalone snapshot of all ZapPopPop database tables and options, or restore a prior backup.', 'zappoppop'); ?></p>
+
+            <?php if ($status === 'restored'): ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><strong><?php esc_html_e('Database restored successfully! All items, popups, and settings have been restored.', 'zappoppop'); ?></strong></p>
+                </div>
+            <?php elseif ($error): ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><strong><?php esc_html_e('Restore failed: Please verify the backup file format.', 'zappoppop'); ?></strong></p>
+                </div>
+            <?php endif; ?>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div style="background: #fff; padding: 24px; border: 1px solid #ccd0d4; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h2><?php esc_html_e('1. Export Database', 'zappoppop'); ?></h2>
+                    <p><?php esc_html_e('Generates a clean JSON file containing all data from the following tables:', 'zappoppop'); ?></p>
+                    <ul style="list-style: disc; margin-left: 20px; color: #555;">
+                        <?php foreach ($tables as$tbl): ?>
+                            <li><code><?php echo esc_html($tbl); ?></code></li>
+                        <?php endforeach; ?>
+                        <li><code>wp_options (zappoppop_*)</code></li>
+                    </ul>
+                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top: 20px;">
+                        <input type="hidden" name="action" value="zappoppop_export_db">
+                        <?php wp_nonce_field('zappoppop_export_db_nonce'); ?>
+                        <button type="submit" class="button button-primary button-hero">
+                            <?php esc_html_e('Download DB Backup (.json)', 'zappoppop'); ?>
+                        </button>
+                    </form>
+                </div>
+
+                <div style="background: #fff; padding: 24px; border: 1px solid #ccd0d4; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h2><?php esc_html_e('2. Restore Database', 'zappoppop'); ?></h2>
+                    <p style="color: #d63638;"><strong><?php esc_html_e('Warning:', 'zappoppop'); ?></strong> <?php esc_html_e('Restoring will replace the current ZapPopPop database contents with the uploaded snapshot. WordPress posts and users remain untouched.', 'zappoppop'); ?></p>
+                    <form method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('Are you sure you want to restore? Current ZapPopPop database records will be overwritten.');" style="margin-top: 20px;">
+                        <input type="hidden" name="action" value="zappoppop_restore_db">
+                        <?php wp_nonce_field('zappoppop_restore_db_nonce'); ?>
+                        <div style="margin-bottom: 15px;">
+                            <input type="file" name="backup_file" accept=".json" required>
+                        </div>
+                        <button type="submit" class="button button-secondary button-hero">
+                            <?php esc_html_e('Restore from JSON', 'zappoppop'); ?>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+}
+
+ZapPopPop_Backup::init();

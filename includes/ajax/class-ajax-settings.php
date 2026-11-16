@@ -1,0 +1,114 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class ZapPopPop_Ajax_Settings {
+    public function __construct() {
+        add_action('wp_ajax_zappoppop_save_settings', [$this, 'save_settings']);
+        add_action('wp_ajax_zappoppop_reset_cookies', [$this, 'reset_cookies']);
+    }
+
+    private function verify_security() {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => __('Unauthorized capability.', 'zappoppop')]);
+        }
+        $nonce = isset($_REQUEST['nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['nonce'])) : '';
+        if (!wp_verify_nonce($nonce, 'zappoppop_settings_nonce') && !wp_verify_nonce($nonce, 'zappoppop_admin_nonce')) {
+            wp_send_json_error(['message' => __('Security verification failed. Please reload the page.', 'zappoppop')]);
+        }
+    }
+
+    public function save_settings() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
+            wp_die();
+        }
+        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
+            || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_nonce', 'security', false )
+            || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
+        if ( ! $zpp_verified ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
+            wp_die();
+        }
+
+        $this->verify_security();
+
+        // Support both nested 'settings' array and flattened POST payload
+        $raw = [];
+        if (isset($_POST['settings']) && is_array($_POST['settings'])) {
+            /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by sanitize_settings() */ $raw = wp_unslash($_POST['settings']);
+        } elseif (isset($_POST['data'])) {
+            /* phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised key by key by sanitize_settings() */ parse_str(wp_unslash($_POST['data']), $parsed);
+            $raw = isset($parsed['settings']) && is_array($parsed['settings']) ? $parsed['settings'] : $parsed;
+        } else {
+            $raw = wp_unslash($_POST);
+        }
+
+        $existing = get_option('zappoppop_settings', []);
+        if (!is_array($existing)) {
+            $existing = [];
+        }
+
+        if (!class_exists('ZapPopPop_Admin_Settings')) {
+            require_once ZAPPOPPOP_PATH . 'includes/admin/class-admin-settings.php';
+        }
+
+        // Cookie epoch is server-owned: never trust the client value.
+        $raw['cookie_epoch'] = isset($existing['cookie_epoch'])
+            ? (int) $existing['cookie_epoch']
+            : (int) get_option('zappoppop_cookie_epoch', 1);
+
+        $clean = ZapPopPop_Admin_Settings::sanitize_settings($raw);
+
+        update_option('zappoppop_settings', $clean);
+        if (function_exists('zappoppop_flush_settings_cache')) {
+            zappoppop_flush_settings_cache();
+        }
+        $clean = get_option('zappoppop_settings', $clean);
+
+        wp_send_json_success([
+            'message'  => __('Settings saved successfully!', 'zappoppop'),
+            'settings' => $clean
+        ]);
+    }
+
+    public function reset_cookies() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
+            wp_die();
+        }
+        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
+            || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_nonce', 'security', false )
+            || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
+            || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
+        if ( ! $zpp_verified ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
+            wp_die();
+        }
+
+        $this->verify_security();
+
+        $settings = get_option('zappoppop_settings', []);
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        $epoch = time();
+        $settings['cookie_epoch'] = $epoch;
+        update_option('zappoppop_settings', $settings);
+        update_option('zappoppop_cookie_epoch', $epoch);
+
+        wp_send_json_success([
+            'message' => __('Cookie epoch reset successfully! All visitor popups will re-trigger.', 'zappoppop'),
+            'epoch'   => $epoch
+        ]);
+    }
+}

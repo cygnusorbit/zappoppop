@@ -1,0 +1,27 @@
+/* ZapPopPop Submissions page: bar buttons + filter row. Chrome/Safari/Firefox/Edge safe. */
+.zappoppop-submissions-wrap .zappoppop-dash-bar .cell.actions { gap: 8px; padding: 0 12px; border-right: 0; border-left: 1px solid #e5e5e5; margin-left: auto; }
+.zappoppop-submissions-wrap .zpp-bar-btn {
+    display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+    gap: 6px; height: 30px; min-height: 30px; padding: 0 12px; margin: 0;
+    border: 1px solid var(--zpp-c-secondary-border, #c3c4c7); border-radius: var(--zpp-r-button, 3px);
+    background: var(--zpp-c-secondary-bg, #fff); color: var(--zpp-c-secondary-text, #1d2327);
+    font-family: inherit; font-size: var(--zpp-fs-button, 12px); font-weight: var(--zpp-fw-button, 600); line-height: 1;
+    cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-sizing: border-box; text-decoration: none;
+}
+.zappoppop-submissions-wrap .zpp-bar-btn:hover,
+.zappoppop-submissions-wrap .zpp-bar-btn:focus { background: var(--zpp-c-secondary-hover, #f6f7f7); color: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); outline: 0; box-shadow: none; }
+.zappoppop-submissions-wrap .zpp-bar-btn.is-primary { background: var(--zpp-c-primary, #c1272d); border-color: var(--zpp-c-primary, #c1272d); color: var(--zpp-c-primary-text, #fff); }
+.zappoppop-submissions-wrap .zpp-bar-btn.is-primary:hover,
+.zappoppop-submissions-wrap .zpp-bar-btn.is-primary:focus { background: var(--zpp-c-primary-hover, #a51f25); border-color: var(--zpp-c-primary-hover, #a51f25); color: var(--zpp-c-primary-text, #fff); }
+.zappoppop-submissions-wrap .zpp-bar-btn.is-icon { width: 30px; padding: 0; }
+.zappoppop-submissions-wrap .zpp-bar-btn .dashicons { display: block; width: 16px; height: 16px; font-size: 16px; line-height: 1; margin: 0; padding: 0; text-align: center; }
+.zappoppop-submissions-wrap .zpp-bar-btn::-moz-focus-inner { border: 0; padding: 0; }
+.zappoppop-submissions-wrap .zappoppop-dash-bar .cell.subs-filter { display: -webkit-box; display: -ms-flexbox; display: flex; align-items: center; padding: 0 12px; border-right: 0; }
+.zappoppop-submissions-wrap .zappoppop-dash-bar .cell.subs-filter select { height: 30px; min-height: 30px; max-width: 240px; margin: 0; padding: 0 24px 0 8px; font-size: var(--zpp-fs-input, 12px); line-height: 28px; box-sizing: border-box; }
+
+/* ZAPPOPPOP_SUB_STATUS_BADGE: Status column (Pending = warning, Confirmed = success) */
+.zappoppop-sub-status { display: inline-block; padding: 2px 8px; border-radius: var(--zpp-r-badge, 12px); font-size: var(--zpp-fs-badge, 11px); font-weight: 700; line-height: 1.5; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap; color: #fff; background: var(--zpp-c-warning, #d97706); }
+.zappoppop-sub-status.is-pending { background: var(--zpp-c-warning, #d97706); }
+.zappoppop-sub-status.is-confirmed { background: var(--zpp-c-success, #16a34a); }

@@ -1,0 +1,688 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+if (!class_exists('WP_List_Table')) {
+    require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+}
+
+if (!class_exists('ZapPopPop_Installer')) {
+    require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-installer.php';
+}
+
+class ZapPopPop_List_Table extends WP_List_Table {
+    protected $entry_counts = null;
+
+    public function __construct() {
+        parent::__construct([
+            'singular' => __('Campaign', 'zappoppop'),
+            'plural'   => __('Campaigns', 'zappoppop'),
+            'ajax'     => false,
+        ]);
+    }
+
+    public function get_columns() {
+        return [
+            'cb'        => '<input type="checkbox" />',
+            'title'     => __('Name', 'zappoppop'),
+            'shortcode' => '',
+            'entries'   => __('Entries', 'zappoppop'),
+            'active'    => __('Active', 'zappoppop'),
+            'modified'  => __('Last modified', 'zappoppop'),
+        ];
+    }
+
+    protected function get_sortable_columns() {
+        return [
+            'title'     => ['title', false],
+            'shortcode' => ['uid', false],
+            'entries'   => ['submissions', false],
+            'active'    => ['status', false],
+            'modified'  => ['updated_at', true],
+        ];
+    }
+
+    public function get_bulk_actions() {
+        $actions = [];
+        $status = isset($_REQUEST['status']) ? sanitize_key($_REQUEST['status']) : 'all';
+
+        if ($status === 'trash') {
+            if (current_user_can('edit_zappoppop_campaigns')) {
+                $actions['untrash'] = __('Restore', 'zappoppop');
+            }
+            if (current_user_can('purge_zappoppop_campaigns')) {
+                $actions['delete'] = __('Delete Permanently', 'zappoppop');
+            }
+            return $actions;
+        }
+
+        if (current_user_can('delete_zappoppop_campaigns')) {
+            $actions['trash'] = __('Move to Trash', 'zappoppop');
+        }
+        if (current_user_can('publish_zappoppop_campaigns')) {
+            $actions['publish'] = __('Set Status: Published', 'zappoppop');
+            $actions['draft']   = __('Set Status: Draft', 'zappoppop');
+        }
+        if (current_user_can('edit_zappoppop_campaigns')) {
+            $actions['duplicate'] = __('Duplicate Selected', 'zappoppop');
+        }
+
+        return $actions;
+    }
+
+    protected function get_views() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'zappoppop_items';
+        $rows = /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching */ $wpdb->get_results( "SELECT status FROM {$wpdb->prefix}zappoppop_items" );
+
+        $all = 0; $active = 0; $inactive = 0; $trash = 0;
+        foreach ((array) $rows as $row) {
+            if ($row->status === 'trash') {
+                $trash++;
+                continue;
+            }
+            $all++;
+            if ($row->status === 'publish' || $row->status === 'published') {
+                $active++;
+            } else {
+                $inactive++;
+            }
+        }
+
+        $current = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
+        if ($current === 'publish' || $current === 'published') { $current = 'active'; }
+        if ($current === 'draft') { $current = 'inactive'; }
+
+        $make = function ($key, $label, $count) use ($current) {
+            $url = ($key === 'all')
+                ? remove_query_arg(['status', 'paged'])
+                : add_query_arg(['status' => $key, 'paged' => 1]);
+            return sprintf(
+                '<a href="%s" class="zappoppop-view-btn%s"%s>%s <span class="count">(%d)</span></a>',
+                esc_url($url),
+                $current === $key ? ' current' : '',
+                $current === $key ? ' aria-current="page"' : '',
+                esc_html($label),
+                (int) $count
+            );
+        };
+
+        return [
+            'all'      => $make('all', __('All', 'zappoppop'), $all),
+            'active'   => $make('active', __('Active', 'zappoppop'), $active),
+            'inactive' => $make('inactive', __('Inactive', 'zappoppop'), $inactive),
+            'trash'    => $make('trash', __('Trash', 'zappoppop'), $trash),
+        ];
+    }
+
+    protected function get_views_legacy() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'zappoppop_items';
+        $all_rows   = /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching */ $wpdb->get_results( "SELECT id, status, impressions, submissions FROM {$wpdb->prefix}zappoppop_items" );
+
+        $all_count     = 0;
+        $pub_count     = 0;
+        $draft_count   = 0;
+        $high_cr_count = 0;
+        $trash_count   = 0;
+
+        if (!empty($all_rows)) {
+            foreach ($all_rows as $row) {
+                if ($row->status === 'trash') {
+                    $trash_count++;
+                    continue;
+                }
+
+                $all_count++;
+                if ($row->status === 'publish' || $row->status === 'published') {
+                    $pub_count++;
+                } else {
+                    $draft_count++;
+                }
+
+                $imp = intval($row->impressions);
+                $sub = intval($row->submissions);
+                $cr  = ($imp > 0) ? round(($sub / $imp) * 100, 1) : 0;
+                if ($cr >= 10.0) {
+                    $high_cr_count++;
+                }
+            }
+        }
+
+        $current = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
+
+        $views = [
+            'all'     => sprintf(
+                '<a href="%s" class="%s">%s <span class="count">(<span class="zappoppop-count-all">%d</span>)</span></a>',
+                esc_url(remove_query_arg(['status', 'paged'])),
+                $current === 'all' ? 'current' : '',
+                __('All', 'zappoppop'),
+                $all_count
+            ),
+            'publish' => sprintf(
+                '<a href="%s" class="%s">%s <span class="count">(<span class="zappoppop-count-publish">%d</span>)</span></a>',
+                esc_url(add_query_arg(['status' => 'publish', 'paged' => 1])),
+                $current === 'publish' ? 'current' : '',
+                __('Published', 'zappoppop'),
+                $pub_count
+            ),
+            'draft'   => sprintf(
+                '<a href="%s" class="%s">%s <span class="count">(<span class="zappoppop-count-draft">%d</span>)</span></a>',
+                esc_url(add_query_arg(['status' => 'draft', 'paged' => 1])),
+                $current === 'draft' ? 'current' : '',
+                __('Drafts', 'zappoppop'),
+                $draft_count
+            ),
+            'high-cr' => sprintf(
+                '<a href="%s" class="%s">%s <span class="count">(<span class="zappoppop-count-high-cr">%d</span>)</span></a>',
+                esc_url(add_query_arg(['status' => 'high-cr', 'paged' => 1])),
+                $current === 'high-cr' ? 'current' : '',
+                __('High Converting (&ge;10%)', 'zappoppop'),
+                $high_cr_count
+            ),
+        ];
+
+        if ($trash_count > 0 || $current === 'trash') {
+            $views['trash'] = sprintf(
+                '<a href="%s" class="%s">%s <span class="count">(<span class="zappoppop-count-trash">%d</span>)</span></a>',
+                esc_url(add_query_arg(['status' => 'trash', 'paged' => 1])),
+                $current === 'trash' ? 'current' : '',
+                __('Trash', 'zappoppop'),
+                $trash_count
+            );
+        }
+
+        return $views;
+    }
+
+    protected function extra_tablenav($which) {
+        $status = isset($_REQUEST['status']) ? sanitize_key($_REQUEST['status']) : 'all';
+        if ($which === 'top' && $status === 'trash' && current_user_can('purge_zappoppop_campaigns')) {
+            $empty_trash_url = wp_nonce_url(
+                admin_url('admin.php?page=zappoppop&action=empty_trash'),
+                'zappoppop_empty_trash'
+            );
+            $empty_prompt = esc_attr(wp_json_encode(__('Are you sure you want to permanently empty the trash? This cannot be undone.', 'zappoppop')));
+            ?>
+            <div class="alignleft actions">
+                <a href="<?php echo esc_url($empty_trash_url); ?>" class="button button-secondary apply" onclick="return confirm(<?php echo wp_kses_post( $empty_prompt ); ?>);">
+                    <?php esc_html_e('Empty Trash', 'zappoppop'); ?>
+                </a>
+            </div>
+            <?php
+        }
+    }
+
+    protected function column_cb($item) {
+        $uid = is_array($item) ? $item['uid'] : $item->uid;
+        return sprintf(
+            '<input type="checkbox" name="bulk_ids[]" value="%s" class="zappoppop-select-row" />',
+            esc_attr($uid)
+        );
+    }
+
+    public function column_title($item) {
+        $uid      = is_array($item) ? $item['uid'] : $item->uid;
+        $title    = is_array($item) ? $item['title'] : $item->title;
+        $status   = is_array($item) ? $item['status'] : $item->status;
+        $is_trash = ($status === 'trash');
+
+        $can_edit  = current_user_can('edit_zappoppop_campaign', $uid);
+        $can_trash = current_user_can('delete_zappoppop_campaign', $uid);
+        $can_purge = current_user_can('purge_zappoppop_campaign', $uid);
+
+        $edit_url = admin_url('admin.php?page=zappoppop-builder&uid=' . esc_attr($uid));
+
+        if ($is_trash) {
+            $actions = [];
+            if ($can_edit) {
+                $untrash_url = wp_nonce_url(
+                    admin_url('admin.php?page=zappoppop&action=untrash&uid=' . rawurlencode($uid)),
+                    'zappoppop_untrash_' . $uid
+                );
+                $actions['untrash'] = sprintf('<a href="%s">%s</a>', esc_url($untrash_url), __('Restore', 'zappoppop'));
+            }
+
+            if ($can_purge) {
+                $delete_url = wp_nonce_url(
+                    admin_url('admin.php?page=zappoppop&action=delete&uid=' . rawurlencode($uid)),
+                    'zappoppop_delete_' . $uid
+                );
+                $confirm_prompt = /* translators: popup title. */ sprintf(__('Are you sure you want to permanently delete "%s"? This action cannot be undone.', 'zappoppop'), $title);
+                $actions['delete'] = sprintf(
+                    '<a href="%s" class="submitdelete" onclick="return confirm(%s);">%s</a>',
+                    esc_url($delete_url),
+                    esc_attr(wp_json_encode($confirm_prompt)),
+                    __('Delete Permanently', 'zappoppop')
+                );
+            }
+
+            return sprintf('<strong>%s</strong>%s', esc_html($title), $this->row_actions($actions));
+        }
+
+        $actions = [];
+
+        if ($can_edit) {
+            $actions['edit'] = sprintf('<a href="%s">%s</a>', esc_url($edit_url), __('Edit', 'zappoppop'));
+            $actions['inline hide-if-no-js'] = sprintf(
+                '<button type="button" class="button-link editinline zappoppop-quick-edit-btn" data-uid="%s" data-title="%s" data-status="%s">%s</button>',
+                esc_attr($uid),
+                esc_attr($title),
+                esc_attr($status),
+                __('Quick Edit', 'zappoppop')
+            );
+            $actions['duplicate'] = sprintf(
+                '<a href="javascript:void(0);" role="button" class="zappoppop-duplicate-btn zappoppop-action-duplicate" data-uid="%s">%s</a>',
+                esc_attr($uid),
+                __('Duplicate', 'zappoppop')
+            );
+        }
+
+        $actions['embed'] = sprintf(
+            '<a href="javascript:void(0);" role="button" class="zappoppop-action-embed" data-uid="%s" data-status="%s">%s</a>',
+            esc_attr($uid),
+            esc_attr($status),
+            __('Embed', 'zappoppop')
+        );
+
+        if ($can_trash) {
+            $trash_url = wp_nonce_url(
+                admin_url('admin.php?page=zappoppop&action=trash&uid=' . rawurlencode($uid)),
+                'zappoppop_trash_' . $uid
+            );
+            $actions['trash'] = sprintf('<a href="%s" class="submitdelete">%s</a>', esc_url($trash_url), __('Trash', 'zappoppop'));
+        }
+
+        $post_state = in_array($status, ['publish', 'published'], true)
+            ? ' <span class="zappoppop-active-badge">' . esc_html__('ACTIVE', 'zappoppop') . '</span>'
+            : ' <span class="zappoppop-inactive-badge">' . esc_html__('INACTIVE', 'zappoppop') . '</span>';
+
+        $title_link = $can_edit
+            ? sprintf('<a class="row-title" href="%s">%s</a>', esc_url($edit_url), esc_html($title))
+            : esc_html($title);
+
+        return sprintf('<strong>%s%s</strong>%s', $title_link, $post_state, $this->row_actions($actions));
+    }
+
+    public function column_status($item) {
+        $status = is_array($item) ? $item['status'] : $item->status;
+        if ($status === 'trash') {
+            return '<span class="zappoppop-badge" style="background:#fce8e6;color:#c92a2a;font-weight:600;padding:2px 8px;border-radius:3px;">' . esc_html__('Trash', 'zappoppop') . '</span>';
+        }
+
+        $is_published = ($status === 'publish' || $status === 'published');
+        $badge_class  = $is_published ? 'zappoppop-badge-success' : 'zappoppop-badge-draft';
+        $label        = $is_published ? __('Published', 'zappoppop') : __('Draft', 'zappoppop');
+
+        return sprintf('<span class="zappoppop-badge %s">%s</span>', esc_attr($badge_class), esc_html($label));
+    }
+
+    public function column_impressions($item) {
+        $val = is_array($item) ? $item['impressions'] : $item->impressions;
+        return number_format_i18n(intval($val));
+    }
+
+    public function column_submissions($item) {
+        $val = is_array($item) ? $item['submissions'] : $item->submissions;
+        return number_format_i18n(intval($val));
+    }
+
+    public function column_conversion($item) {
+        $imp  = intval(is_array($item) ? $item['impressions'] : $item->impressions);
+        $sub  = intval(is_array($item) ? $item['submissions'] : $item->submissions);
+        $rate = ($imp > 0) ? round(($sub / $imp) * 100, 1) : 0;
+        return $rate . '%';
+    }
+
+    public function column_created_at($item) {
+        $val = is_array($item) ? $item['created_at'] : $item->created_at;
+        return esc_html(date_i18n(get_option('date_format'), strtotime($val)));
+    }
+
+    protected function get_entry_counts() {
+        if ($this->entry_counts !== null) {
+            return $this->entry_counts;
+        }
+        global $wpdb;
+        ZapPopPop_Installer::ensure_schema();
+        $subs = $wpdb->prefix . 'zappoppop_submissions';
+        // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix and the query takes no user input
+        $rows = $wpdb->get_results(
+            /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix and the query takes no user input */ "SELECT popup_uid, COUNT(*) AS total, SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END) AS unread FROM {$subs} GROUP BY popup_uid",
+            ARRAY_A
+        );
+        $this->entry_counts = [];
+        foreach ((array) $rows as $r) {
+            $this->entry_counts[$r['popup_uid']] = [
+                'total'  => (int) $r['total'],
+                'unread' => (int) $r['unread'],
+            ];
+        }
+        return $this->entry_counts;
+    }
+
+    public function column_shortcode($item) {
+        $uid = is_array($item) ? $item['uid'] : $item->uid;
+        $sc  = '[zappoppop uid="' . $uid . '"]';
+        $preview_url = add_query_arg('zappoppop_preview', rawurlencode($uid), home_url('/'));
+        $chip = '<code class="zappoppop-shortcode-chip" title="' . esc_attr__('Click to copy', 'zappoppop') . '">' . esc_html($sc) . '</code>';
+        $icon = '<a href="' . esc_url($preview_url) . '" class="zappoppop-preview-screen" target="_blank" rel="noopener noreferrer" title="' . esc_attr__('Live preview on homepage', 'zappoppop') . '" aria-label="' . esc_attr__('Live preview on homepage', 'zappoppop') . '"><span class="dashicons dashicons-desktop" aria-hidden="true"></span></a>';
+        return '<div class="zappoppop-shortcode-wrap">' . $chip . $icon . '</div>';
+    }
+
+    public function column_entries($item) {
+        $uid    = is_array($item) ? $item['uid'] : $item->uid;
+        $counts = $this->get_entry_counts();
+        $total  = isset($counts[$uid]) ? $counts[$uid]['total'] : 0;
+        $unread = isset($counts[$uid]) ? $counts[$uid]['unread'] : 0;
+        $url    = admin_url('admin.php?page=zappoppop-submissions&popup_uid=' . rawurlencode($uid));
+        $label  = sprintf(
+            /* translators: 1: number of unread submissions, 2: total number of submissions. */ __('%1$s unread (%2$s entries)', 'zappoppop'),
+            number_format_i18n($unread),
+            number_format_i18n($total)
+        );
+        return '<a href="' . esc_url($url) . '"><strong>' . esc_html($label) . '</strong></a>';
+    }
+
+    public function column_active($item) {
+        $uid    = is_array($item) ? $item['uid'] : $item->uid;
+        $status = is_array($item) ? $item['status'] : $item->status;
+        if ($status === 'trash') {
+            return '<span aria-hidden="true">&mdash;</span>';
+        }
+        $is_on    = ($status === 'publish' || $status === 'published');
+        $can      = current_user_can('manage_options') || current_user_can('publish_zappoppop_campaigns');
+        $label    = $is_on ? __('Active', 'zappoppop') : __('Inactive', 'zappoppop');
+        return sprintf(
+            '<label class="zappoppop-switch" title="%1$s"><input type="checkbox" class="zappoppop-status-toggle-input" data-uid="%2$s" role="switch" aria-label="%1$s"%3$s%4$s /><span class="zappoppop-switch-slider" aria-hidden="true"></span></label>',
+            esc_attr($label),
+            esc_attr($uid),
+            $is_on ? ' checked="checked"' : '',
+            $can ? '' : ' disabled="disabled"'
+        );
+    }
+
+    public function column_modified($item) {
+        $val = is_array($item) ? ($item['updated_at'] ?? '') : ($item->updated_at ?? '');
+        if (empty($val) || $val === '0000-00-00 00:00:00') {
+            $val = is_array($item) ? ($item['created_at'] ?? '') : ($item->created_at ?? '');
+        }
+        if (empty($val)) {
+            return '—';
+        }
+        return esc_html(mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $val));
+    }
+
+    public function column_default($item, $column_name) {
+        if (is_array($item)) {
+            return isset($item[$column_name]) ? esc_html($item[$column_name]) : '';
+        }
+        return isset($item->$column_name) ? esc_html($item->$column_name) : '';
+    }
+
+    public function single_row($item) {
+        $uid    = is_array($item) ? $item['uid'] : $item->uid;
+        $title  = is_array($item) ? $item['title'] : $item->title;
+        $status = is_array($item) ? $item['status'] : $item->status;
+
+        echo '<tr id="zappoppop-row-' . esc_attr($uid) . '" class="zappoppop-table-row" data-uid="' . esc_attr($uid) . '" data-raw-title="' . esc_attr($title) . '" data-status="' . esc_attr($status) . '">';
+        $this->single_row_columns($item);
+        echo '</tr>';
+    }
+
+    /**
+     * Header-safe redirect mechanism to handle actions whether executed
+     * before admin-header.php or inside template rendering.
+     *
+     * @param string $url The destination URL.
+     */
+    protected function safe_redirect($url) {
+        if (!headers_sent()) {
+            wp_safe_redirect($url);
+            exit;
+        }
+
+        wp_print_inline_script_tag('window.location.replace(' . wp_json_encode($url) . ');');
+        echo '<noscript><meta http-equiv="refresh" content="0;url=' . esc_url($url) . '"></noscript>';
+        exit;
+    }
+
+    public function process_actions() {
+        global $wpdb;
+        $items_table = $wpdb->prefix . 'zappoppop_items';
+        $subs_table  = $wpdb->prefix . 'zappoppop_submissions';
+
+        // 1. Move to Trash
+        if (isset($_GET['action']) && $_GET['action'] === 'trash' && !empty($_GET['uid'])) {
+            $uid = sanitize_text_field(wp_unslash($_GET['uid']));
+            check_admin_referer('zappoppop_trash_' . $uid);
+
+            if (!current_user_can('delete_zappoppop_campaign', $uid)) {
+                wp_die(esc_html__('You do not have permission to trash this campaign.', 'zappoppop'));
+            }
+
+            $wpdb->update($items_table, ['status' => 'trash'], ['uid' => $uid]);
+
+            $redirect = remove_query_arg(['action', 'uid', '_wpnonce']);
+            $redirect = add_query_arg(['trashed' => 1, 'trashed_uid' => $uid], $redirect);
+            $this->safe_redirect($redirect);
+        }
+
+        // 2. Restore from Trash
+        if (isset($_GET['action']) && $_GET['action'] === 'untrash' && !empty($_GET['uid'])) {
+            $uid = sanitize_text_field(wp_unslash($_GET['uid']));
+            check_admin_referer('zappoppop_untrash_' . $uid);
+
+            if (!current_user_can('edit_zappoppop_campaign', $uid)) {
+                wp_die(esc_html__('You do not have permission to restore this campaign.', 'zappoppop'));
+            }
+
+            $wpdb->update($items_table, ['status' => 'draft'], ['uid' => $uid]);
+
+            $redirect = remove_query_arg(['action', 'uid', '_wpnonce']);
+            $redirect = add_query_arg('untrashed', 1, $redirect);
+            $this->safe_redirect($redirect);
+        }
+
+        // 3. Permanent Purge
+        if (isset($_GET['action']) && $_GET['action'] === 'delete' && !empty($_GET['uid'])) {
+            $uid = sanitize_text_field(wp_unslash($_GET['uid']));
+            check_admin_referer('zappoppop_delete_' . $uid);
+
+            if (!current_user_can('purge_zappoppop_campaign', $uid)) {
+                wp_die(esc_html__('You do not have permission to permanently delete this campaign.', 'zappoppop'));
+            }
+
+            $wpdb->delete($items_table, ['uid' => $uid]);
+            if (// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'zappoppop_submissions' ) ) ) === $subs_table) {
+                $wpdb->delete($subs_table, ['popup_uid' => $uid]);
+            }
+
+            $redirect = remove_query_arg(['action', 'uid', '_wpnonce']);
+            $redirect = add_query_arg('deleted', 1, $redirect);
+            $this->safe_redirect($redirect);
+        }
+
+        // 4. Empty Trash
+        if (isset($_GET['action']) && $_GET['action'] === 'empty_trash') {
+            check_admin_referer('zappoppop_empty_trash');
+
+            if (!current_user_can('purge_zappoppop_campaigns')) {
+                wp_die(esc_html__('You do not have permission to empty the trash.', 'zappoppop'));
+            }
+
+            $trashed_uids = /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching */ $wpdb->get_col( "SELECT uid FROM {$wpdb->prefix}zappoppop_items WHERE status = 'trash'" );
+            if (!empty($trashed_uids)) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}zappoppop_items WHERE status = 'trash'" );
+                if (// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'zappoppop_submissions' ) ) ) === $subs_table) {
+                    $placeholders = implode(',', array_fill(0, count($trashed_uids), '%s'));
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared
+        $wpdb->query($wpdb->prepare("DELETE FROM {$subs_table} WHERE popup_uid IN ($placeholders)", $trashed_uids));
+                }
+            }
+
+            $redirect = remove_query_arg(['action', '_wpnonce']);
+            $redirect = add_query_arg('deleted', count($trashed_uids), $redirect);
+            $this->safe_redirect($redirect);
+        }
+
+        // 5. Bulk Actions Handler
+        $action = $this->current_action();
+        if ($action && in_array($action, ['trash', 'untrash', 'delete', 'publish', 'draft', 'duplicate'], true)) {
+            $nonce = !empty($_REQUEST['_wpnonce']) ? sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])) : '';
+            $valid = wp_verify_nonce($nonce, 'bulk-' . $this->_args['plural']) || 
+                     wp_verify_nonce($nonce, 'bulk-popups') || 
+                     wp_verify_nonce($nonce, 'zappoppop_admin_nonce');
+
+            if (!$valid) {
+                wp_die(esc_html__('Security verification failed. Please try again.', 'zappoppop'));
+            }
+
+            $uids = [];
+            if (!empty($_REQUEST['bulk_ids']) && is_array($_REQUEST['bulk_ids'])) {
+                $uids = array_map('sanitize_text_field', wp_unslash($_REQUEST['bulk_ids']));
+            }
+
+            if (!empty($uids)) {
+                $count = count($uids);
+                $placeholders = implode(',', array_fill(0, count($uids), '%s'));
+
+                if ($action === 'trash') {
+                    if (!current_user_can('delete_zappoppop_campaigns')) {
+                        wp_die(esc_html__('You do not have permission to move campaigns to the trash.', 'zappoppop'));
+                    }
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared
+        $wpdb->query($wpdb->prepare("UPDATE {$items_table} SET status = 'trash' WHERE uid IN ($placeholders)", $uids));
+                    $arg = ['trashed' => $count];
+                } elseif ($action === 'untrash') {
+                    if (!current_user_can('edit_zappoppop_campaigns')) {
+                        wp_die(esc_html__('You do not have permission to restore campaigns.', 'zappoppop'));
+                    }
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared
+        $wpdb->query($wpdb->prepare("UPDATE {$items_table} SET status = 'draft' WHERE uid IN ($placeholders)", $uids));
+                    $arg = ['untrashed' => $count];
+                } elseif ($action === 'delete') {
+                    if (!current_user_can('purge_zappoppop_campaigns')) {
+                        wp_die(esc_html__('You do not have permission to permanently delete campaigns.', 'zappoppop'));
+                    }
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared
+        $wpdb->query($wpdb->prepare("DELETE FROM {$items_table} WHERE uid IN ($placeholders)", $uids));
+                    if (// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'zappoppop_submissions' ) ) ) === $subs_table) {
+                        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared
+        $wpdb->query($wpdb->prepare("DELETE FROM {$subs_table} WHERE popup_uid IN ($placeholders)", $uids));
+                    }
+                    $arg = ['deleted' => $count];
+                } elseif ($action === 'duplicate') {
+                    if (!current_user_can('edit_zappoppop_campaigns')) {
+                        wp_die(esc_html__('You do not have permission to duplicate campaigns.', 'zappoppop'));
+                    }
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared */ $src = $wpdb->get_results($wpdb->prepare("SELECT title, data FROM {$items_table} WHERE uid IN ($placeholders) AND status != 'trash'", $uids), ARRAY_A);
+                    $made = 0;
+                    foreach ((array) $src as $r) {
+                        $ok = $wpdb->insert($items_table, [
+                            'uid'           => wp_generate_uuid4(),
+                            'title'         => $r['title'] . ' (Copy)',
+                            'data'          => $r['data'],
+                            'status'        => 'draft',
+                            'impressions'   => 0,
+                            'submissions'   => 0,
+                            'confirmations' => 0,
+                        ], ['%s', '%s', '%s', '%s', '%d', '%d', '%d']);
+                        if ($ok) { $made++; }
+                    }
+                    $arg = ['duplicated' => $made];
+                } elseif ($action === 'publish' || $action === 'draft') {
+                    if (!current_user_can('publish_zappoppop_campaigns')) {
+                        wp_die(esc_html__('You do not have permission to modify campaign statuses.', 'zappoppop'));
+                    }
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix, the IN() placeholders are generated and the values are prepared */ $wpdb->query($wpdb->prepare("UPDATE {$items_table} SET status = %s WHERE uid IN ($placeholders)", array_merge([$action], $uids)));
+                    $arg = ['updated' => $count];
+                }
+
+                $redirect = remove_query_arg(['action', 'action2', 'bulk_ids', '_wpnonce']);
+                $redirect = add_query_arg($arg, $redirect);
+                $this->safe_redirect($redirect);
+            }
+        }
+    }
+
+    public function prepare_items() {
+        $this->process_actions();
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'zappoppop_items';
+
+        $columns  = $this->get_columns();
+        $hidden   = [];
+        $sortable = $this->get_sortable_columns();
+        $this->_column_headers = [$columns, $hidden, $sortable];
+
+        $status = isset($_GET['status']) ? sanitize_key($_GET['status']) : 'all';
+        $search = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+
+        $query  = "SELECT * FROM {$table_name} WHERE 1=1";
+        $params = [];
+
+        if ($status === 'trash') {
+            $query .= " AND status = 'trash'";
+        } elseif ($status === 'published' || $status === 'publish' || $status === 'active') {
+            $query .= " AND status IN ('publish', 'published')";
+        } elseif ($status === 'draft' || $status === 'inactive') {
+            $query .= " AND status NOT IN ('publish', 'published', 'trash')";
+        } else {
+            $query .= " AND status != 'trash'";
+        }
+
+        if (!empty($search)) {
+            $query .= " AND (title LIKE %s OR uid LIKE %s)";
+            $wildcard = '%' . $wpdb->esc_like($search) . '%';
+            $params[] = $wildcard;
+            $params[] = $wildcard;
+        }
+
+        $orderby = isset($_GET['orderby']) ? sanitize_key($_GET['orderby']) : 'updated_at';
+        $order   = isset($_GET['order']) && strtolower(sanitize_text_field(wp_unslash($_GET['order']))) === 'asc' ? 'ASC' : 'DESC';
+
+        $allowed_orderby = ['title', 'uid', 'status', 'impressions', 'submissions', 'created_at', 'updated_at'];
+        if (!in_array($orderby, $allowed_orderby, true)) {
+            $orderby = 'updated_at';
+        }
+
+        $query .= " ORDER BY {$orderby} {$order}";
+
+        if (!empty($params)) {
+            /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- only a whitelisted column and direction are appended to the query and the values are prepared */ $results = $wpdb->get_results($wpdb->prepare($query, $params), ARRAY_A);
+        } else {
+            /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- only a whitelisted column and direction are appended to the query, there is no other input */ $results = $wpdb->get_results($query, ARRAY_A);
+        }
+
+        $data = $results ?: [];
+
+        if ($status === 'high-cr') {
+            $data = array_filter($data, function($item) {
+                $imp = intval($item['impressions']);
+                $sub = intval($item['submissions']);
+                $cr  = ($imp > 0) ? round(($sub / $imp) * 100, 1) : 0;
+                return $cr >= 10.0;
+            });
+        }
+
+        $total_items   = count($data);
+        $user_per_page = (int) get_user_meta(get_current_user_id(), 'zappoppop_campaigns_per_page', true);
+        $per_page      = ($user_per_page > 0) ? $user_per_page : 25;
+        $current_page  = $this->get_pagenum();
+
+        $this->items = array_slice($data, (($current_page - 1) * $per_page), $per_page);
+
+        $this->set_pagination_args([
+            'total_items' => $total_items,
+            'per_page'    => $per_page,
+            'total_pages' => ceil($total_items / $per_page) ?: 1,
+        ]);
+    }
+}

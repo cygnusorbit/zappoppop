@@ -1,0 +1,5 @@
+#panel-elem-upload .zappoppop-up-slider{position:absolute;inset:0;background:#475569;border-radius:20px;transition:background .15s ease;cursor:pointer;}
+    #panel-elem-upload .zappoppop-up-slider::before{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .15s ease;}
+    #panel-elem-upload #prop-upload-multiple:checked + .zappoppop-up-slider{background:#0284c7;}
+    #panel-elem-upload #prop-upload-multiple:checked + .zappoppop-up-slider::before{transform:translateX(16px);}
+    #panel-elem-upload #prop-upload-multiple:focus + .zappoppop-up-slider{box-shadow:0 0 0 2px rgba(56,189,248,.5);}

@@ -1,0 +1,37 @@
+/**
+ * ZapPopPop Visual Builder: Workspace Area Styling
+ */
+.zappoppop-builder-workspace {
+    position: relative !important;
+    flex: 1;
+    height: 100%;
+    overflow: hidden !important;
+    background-color: #f1f5f9;
+    background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    margin-right: 0 !important;
+}
+
+.panel-open .zappoppop-builder-workspace,
+.zappoppop-builder-wrap.panel-open .zappoppop-builder-workspace {
+    margin-right: 0 !important;
+    width: 100% !important;
+}
+
+
+/* Snap-to-grid slide switches */
+.zappoppop-snap-group { display: inline-flex; align-items: center; gap: 10px; margin-right: 8px; }
+.zappoppop-snap-switch { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; margin: 0; font-size: 11px; font-weight: 600; user-select: none; -webkit-user-select: none; }
+.zappoppop-snap-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.zappoppop-snap-slider { position: relative; width: 28px; height: 16px; border-radius: 16px; background: #94a3b8; transition: background 0.15s ease; flex-shrink: 0; }
+.zappoppop-snap-slider::before { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ffffff; -webkit-transition: -webkit-transform 0.15s ease; transition: transform 0.15s ease; }
+.zappoppop-snap-switch input:checked + .zappoppop-snap-slider { background: #2563eb; }
+.zappoppop-snap-switch input:checked + .zappoppop-snap-slider::before { -webkit-transform: translateX(12px); transform: translateX(12px); }
+.zappoppop-snap-switch input:focus + .zappoppop-snap-slider { box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.35); }
+body.zappoppop-preview-locked .zappoppop-snap-group { pointer-events: none; opacity: 0.45; }
+.zappoppop-snap-text { white-space: nowrap; }

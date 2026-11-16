@@ -1,0 +1,137 @@
+/* Global Theme sync for Library cards, Library modals and the builder Save As Template modal.
+   Every var() has a fallback equal to the previous hard-coded look. Chrome / Safari / Firefox / Edge safe. */
+
+/* ---- Backdrops ---- */
+#zappoppop-lib-cats-modal, #zappoppop-lib-preview-modal, #zappoppop-te-modal, #zappoppop-modal-save-template {
+    background: var(--zpp-c-modal-backdrop, rgba(15,23,42,.7)) !important;
+}
+/* ---- Dialogs ---- */
+#zappoppop-lib-cats-modal .lc-dlg, #zappoppop-lib-preview-modal .lp-dlg,
+#zappoppop-te-modal .te-dlg, #zappoppop-modal-save-template .wpt-dlg {
+    background: var(--zpp-c-modal-bg, #fff) !important;
+    color: var(--zpp-c-text, #1e293b) !important;
+    border-radius: var(--zpp-r-card, 12px) !important;
+    box-shadow: var(--zpp-shadow-modal, 0 25px 50px -12px rgba(0,0,0,.5)) !important;
+    font-family: var(--zpp-font-base, inherit);
+}
+/* ---- Headers ---- */
+#zappoppop-lib-cats-modal .lc-hd, #zappoppop-lib-preview-modal .lp-hd,
+#zappoppop-te-modal .te-hd, #zappoppop-modal-save-template .wpt-hd {
+    background: var(--zpp-c-modal-head-bg, #0f172a) !important;
+}
+body #zappoppop-lib-cats-modal .lc-hd h3, body #zappoppop-lib-preview-modal .lp-hd h3,
+body #zappoppop-te-modal .te-hd h3, body #zappoppop-modal-save-template .wpt-hd h3 {
+    color: var(--zpp-c-modal-head-text, #fff) !important;
+    font-family: var(--zpp-font-heading, inherit) !important;
+    font-size: var(--zpp-fs-modal-title, 18px) !important;
+    font-weight: var(--zpp-fw-heading, 600) !important;
+}
+#zappoppop-lib-cats-modal .lc-x, #zappoppop-lib-preview-modal .lp-x,
+#zappoppop-te-modal .te-x, #zappoppop-modal-save-template .wpt-x {
+    color: var(--zpp-c-modal-close, #e2e8f0) !important;
+}
+/* ---- Footers / dividers ---- */
+#zappoppop-lib-cats-modal .lc-ft, #zappoppop-lib-preview-modal .lp-ft,
+#zappoppop-te-modal .te-ft, #zappoppop-modal-save-template .wpt-ft,
+#zappoppop-lib-preview-modal .lp-bar {
+    border-color: var(--zpp-c-border, #cbd5e1) !important;
+    background: var(--zpp-c-modal-bg, #fff) !important;
+}
+/* ---- Labels / helper text ---- */
+#zappoppop-modal-save-template .wpt-l, #zappoppop-te-modal .te-l {
+    color: var(--zpp-c-heading, #334155) !important;
+    font-size: var(--zpp-fs-label, 11px) !important;
+    font-weight: var(--zpp-fw-label, 700) !important;
+    letter-spacing: var(--zpp-ls-label, .4px) !important;
+    text-transform: var(--zpp-tt-label, uppercase) !important;
+}
+#zappoppop-lib-cats-modal .lc-note, #zappoppop-lib-preview-modal .lp-bar,
+#zappoppop-lib-preview-modal .lp-ft, #zappoppop-lib-cats-modal .lc-lock { color: var(--zpp-c-muted, #64748b) !important; }
+/* ---- Inputs ---- */
+#zappoppop-modal-save-template .wpt-in, #zappoppop-te-modal .te-in,
+#zappoppop-lib-cats-modal .lc-row input[type=text], #zappoppop-lib-cats-modal .lc-add input {
+    background: var(--zpp-c-input-bg, #fff) !important;
+    color: var(--zpp-c-input-text, #1e293b) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-input-border, #94a3b8) !important;
+    border-radius: var(--zpp-r-input, 6px) !important;
+    font-family: var(--zpp-font-base, inherit) !important;
+    font-size: var(--zpp-fs-input, 13px) !important;
+}
+#zappoppop-modal-save-template .wpt-in:focus, #zappoppop-te-modal .te-in:focus,
+#zappoppop-lib-cats-modal .lc-row input[type=text]:focus, #zappoppop-lib-cats-modal .lc-add input:focus {
+    border-color: var(--zpp-c-input-focus, #2563eb) !important;
+    box-shadow: 0 0 0 1px var(--zpp-c-input-focus, #2563eb) !important;
+}
+/* ---- Read-only boxes / rows ---- */
+#zappoppop-modal-save-template .wpt-ro, #zappoppop-modal-save-template .wpt-box,
+#zappoppop-te-modal .te-ro, #zappoppop-te-modal .te-box, #zappoppop-lib-cats-modal .lc-row {
+    background: var(--zpp-c-bg-page, #f8fafc) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1) !important;
+    color: var(--zpp-c-text, #334155) !important;
+    border-radius: var(--zpp-r-input, 6px) !important;
+}
+#zappoppop-modal-save-template .wpt-prev, #zappoppop-te-modal .te-prev { border-color: var(--zpp-c-input-border, #94a3b8) !important; border-radius: var(--zpp-r-card, 8px) !important; }
+#zappoppop-lib-preview-modal .lp-stage { background: var(--zpp-c-bg-page, #f1f5f9) !important; }
+#zappoppop-lib-cats-modal .lc-btn { background: var(--zpp-c-secondary-bg, #fff) !important; border-color: var(--zpp-c-secondary-border, #cbd5e1) !important; color: var(--zpp-c-secondary-text, #475569) !important; }
+#zappoppop-lib-cats-modal .lc-btn:hover { background: var(--zpp-c-secondary-hover, #f1f5f9) !important; }
+#zappoppop-lib-cats-modal .lc-del { color: var(--zpp-c-danger, #b32d2e) !important; }
+#zappoppop-lib-cats-modal .lc-ph { border-color: var(--zpp-c-primary, #2563eb) !important; }
+/* ---- Modal buttons ---- */
+#zappoppop-modal-save-template .wpt-btn, #zappoppop-te-modal .te-btn { border-radius: var(--zpp-r-button, 6px) !important; font-family: var(--zpp-font-base, inherit) !important; }
+#zappoppop-modal-save-template .wpt-btn-ghost, #zappoppop-te-modal .te-ghost {
+    background: var(--zpp-c-secondary-bg, #fff) !important; color: var(--zpp-c-secondary-text, #1e293b) !important; border-color: var(--zpp-c-secondary-border, #94a3b8) !important;
+}
+#zappoppop-modal-save-template .wpt-btn-ghost:hover, #zappoppop-te-modal .te-ghost:hover { background: var(--zpp-c-secondary-hover, #f1f5f9) !important; }
+#zappoppop-modal-save-template .wpt-btn-blue, #zappoppop-te-modal .te-blue {
+    background: var(--zpp-c-primary, #0a6bb5) !important; color: var(--zpp-c-primary-text, #fff) !important; border-color: var(--zpp-c-primary, #085a99) !important;
+}
+#zappoppop-modal-save-template .wpt-btn-blue:hover, #zappoppop-te-modal .te-blue:hover { background: var(--zpp-c-primary-hover, #085a99) !important; border-color: var(--zpp-c-primary-hover, #085a99) !important; }
+#zappoppop-modal-save-template .wpt-btn-green { background: var(--zpp-c-success, #00a32a) !important; border-color: var(--zpp-c-success, #008a20) !important; color: #fff !important; }
+#zappoppop-modal-save-template .wpt-btn-green:hover { background: var(--zpp-c-success, #008a20) !important; -webkit-filter: brightness(.92); filter: brightness(.92); }
+#zappoppop-te-modal .te-orange { background: var(--zpp-c-warning, #f97316) !important; border-color: var(--zpp-c-warning, #ea580c) !important; color: #fff !important; }
+#zappoppop-te-modal .te-orange:hover { background: var(--zpp-c-warning, #ea580c) !important; -webkit-filter: brightness(.92); filter: brightness(.92); }
+#zappoppop-lib-preview-modal .lp-bar .button.is-on { background: var(--zpp-c-primary, #2563eb) !important; border-color: var(--zpp-c-primary, #1d4ed8) !important; color: var(--zpp-c-primary-text, #fff) !important; }
+
+/* ---- Library cards ---- */
+.zappoppop-library-wrap .zappoppop-tpl-card {
+    background: var(--zpp-c-bg-card, #fff) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #e2e8f0) !important;
+    border-radius: var(--zpp-r-card, 10px) !important;
+    box-shadow: var(--zpp-shadow-card, 0 1px 3px rgba(0,0,0,.05)) !important;
+}
+.zappoppop-library-wrap .zappoppop-tpl-card .zpp-tpl-title { color: var(--zpp-c-heading, #1e293b) !important; font-family: var(--zpp-font-heading, inherit) !important; font-weight: var(--zpp-fw-heading, 700) !important; font-size: var(--zpp-fs-h3, 15px) !important; }
+.zappoppop-library-wrap .zappoppop-tpl-card .zpp-tpl-desc { color: var(--zpp-c-muted, #64748b) !important; font-size: var(--zpp-fs-small, 12px) !important; }
+.zappoppop-library-wrap .zappoppop-tpl-card .zpp-tpl-meta { color: var(--zpp-c-muted, #94a3b8) !important; font-size: var(--zpp-fs-small, 11px) !important; }
+.zappoppop-library-wrap .zappoppop-tpl-card .zpp-tpl-foot { border-top-color: var(--zpp-c-row-border, #f1f5f9) !important; }
+/* ---- Card icon buttons ---- */
+.zappoppop-tpl-card .zappoppop-tpl-preview-btn, .zappoppop-tpl-card .zappoppop-usertpl-dl,
+.zappoppop-tpl-card .zappoppop-usertpl-edit, .zappoppop-tpl-card .zappoppop-usertpl-del {
+    background: var(--zpp-c-secondary-bg, #fff) !important; border-color: var(--zpp-c-secondary-border, #cbd5e1) !important;
+    color: var(--zpp-c-secondary-text, #334155) !important; border-radius: var(--zpp-r-button, 6px) !important;
+}
+.zappoppop-tpl-card .zappoppop-tpl-preview-btn:hover, .zappoppop-tpl-card .zappoppop-usertpl-dl:hover {
+    background: var(--zpp-c-secondary-hover, #eff6ff) !important; border-color: var(--zpp-c-primary, #2563eb) !important; color: var(--zpp-c-primary, #2563eb) !important;
+}
+.zappoppop-tpl-card .zappoppop-tpl-import-btn, .zappoppop-tpl-card .zappoppop-usertpl-use {
+    background: var(--zpp-c-primary, #2563eb) !important; border-color: var(--zpp-c-primary, #1d4ed8) !important;
+    color: var(--zpp-c-primary-text, #fff) !important; border-radius: var(--zpp-r-button, 6px) !important;
+}
+.zappoppop-tpl-card .zappoppop-tpl-import-btn:hover, .zappoppop-tpl-card .zappoppop-usertpl-use:hover { background: var(--zpp-c-primary-hover, #1d4ed8) !important; border-color: var(--zpp-c-primary-hover, #1d4ed8) !important; }
+.zappoppop-tpl-card .zappoppop-usertpl-edit { color: var(--zpp-c-warning, #ea580c) !important; }
+.zappoppop-tpl-card .zappoppop-usertpl-del { color: var(--zpp-c-danger, #b32d2e) !important; }
+.zappoppop-tpl-card .zappoppop-usertpl-dl::before { font-family: "Font Awesome 6 Free","Font Awesome 5 Free" !important; font-weight: 900 !important; content: "\f019"; font-size: 14px !important; line-height: 1 !important; display: inline-block; }
+.zappoppop-tpl-card .zappoppop-usertpl-dl {
+    display: inline-flex !important; align-items: center; justify-content: center;
+    width: 32px !important; height: 32px !important; min-width: 32px !important; min-height: 0 !important;
+    padding: 0 !important; margin: 0 !important; font-size: 0 !important; line-height: 0 !important; cursor: pointer;
+    box-shadow: none !important; -webkit-appearance: none; appearance: none;
+}
+
+/* ---- Builder: green Save As Template follows the theme success colour ---- */
+body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template {
+    background: var(--zpp-c-success, #00a32a) !important; border-color: var(--zpp-c-success, #008a20) !important; border-radius: var(--zpp-r-button, 6px) !important;
+}
+body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:hover,
+body .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save-template:focus {
+    background: var(--zpp-c-success, #008a20) !important; -webkit-filter: brightness(.9); filter: brightness(.9);
+}

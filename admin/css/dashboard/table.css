@@ -1,0 +1,298 @@
+/* ==========================================================================
+   ZapPopPop Dashboard: Native WordPress List Table Styles
+   ========================================================================== */
+
+.zappoppop-table-wrap {
+    width: 100% !important;
+}
+
+/* Subsubsub Filters */
+.zappoppop-table-wrap .subsubsub {
+    float: left;
+    margin: 8px 0 0;
+    color: #646970;
+    font-size: 13px;
+}
+
+.zappoppop-table-wrap .subsubsub a.current {
+    font-weight: 600;
+    color: #000;
+}
+
+/* Tablenav & Search */
+.zappoppop-table-wrap .search-box {
+    float: right;
+    margin: 0 0 8px;
+}
+
+.zappoppop-table-wrap .tablenav {
+    clear: both;
+    height: 32px;
+    margin: 6px 0 4px;
+    vertical-align: middle;
+}
+
+.zappoppop-table-wrap .tablenav.top {
+    margin: 10px 0 6px;
+}
+
+.zappoppop-table-wrap .tablenav.bottom {
+    margin: 8px 0 16px;
+}
+
+.zappoppop-table-wrap .tablenav .actions {
+    padding: 0 8px 0 0;
+}
+
+.zappoppop-table-wrap .tablenav .tablenav-pages {
+    float: right;
+    height: 28px;
+    color: #50575e;
+}
+
+.zappoppop-table-wrap .tablenav .displaying-num {
+    margin-right: 7px;
+    font-size: 12px;
+}
+
+.zappoppop-table-wrap .tablenav .pagination-links button {
+    min-width: 30px;
+    height: 28px;
+    line-height: 26px;
+    padding: 0 6px;
+    font-size: 14px;
+}
+
+.zappoppop-table-wrap .tablenav .paging-input {
+    margin: 0 6px;
+    font-size: 12px;
+}
+
+/* Table Design & Column Sizing (Referring to WordPress Pages Table edit.php?post_type=page) */
+.zappoppop-campaigns-table {
+    border: 1px solid #c3c4c7 !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04) !important;
+    background: #ffffff !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.zappoppop-campaigns-table thead th,
+.zappoppop-campaigns-table tfoot th {
+    font-weight: 400;
+    font-size: 14px;
+    color: #2c3338;
+}
+
+.zappoppop-campaigns-table tbody td,
+.zappoppop-campaigns-table tbody th {
+    font-size: 13px;
+    vertical-align: top;
+    padding: 8px 10px;
+}
+
+/* Checkbox Column */
+.zappoppop-campaigns-table .check-column,
+.zappoppop-campaigns-table .col-cb {
+    width: 38px !important;
+    max-width: 38px !important;
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+
+/* Primary Column: Campaign Title claims all remaining fluid space like WordPress Pages Table */
+.zappoppop-campaigns-table .column-title,
+.zappoppop-campaigns-table .col-title {
+    width: auto !important;
+    min-width: 280px !important;
+}
+
+.zappoppop-campaigns-table .column-shortcode,
+.zappoppop-campaigns-table .col-shortcode {
+    width: 150px !important;
+}
+
+.zappoppop-campaigns-table .column-status,
+.zappoppop-campaigns-table .col-status {
+    width: 95px !important;
+}
+
+.zappoppop-campaigns-table .column-impressions,
+.zappoppop-campaigns-table .col-impressions {
+    width: 80px !important;
+    text-align: right;
+}
+
+.zappoppop-campaigns-table .column-submissions,
+.zappoppop-campaigns-table .col-submissions {
+    width: 80px !important;
+    text-align: right;
+}
+
+.zappoppop-campaigns-table .column-cr,
+.zappoppop-campaigns-table .col-cr {
+    width: 75px !important;
+    text-align: right;
+}
+
+.zappoppop-campaigns-table .column-actions,
+.zappoppop-campaigns-table .col-actions {
+    width: 180px !important;
+    text-align: right;
+}
+
+.zappoppop-campaigns-table .column-title strong a.row-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2271b1;
+    text-decoration: none;
+}
+
+.zappoppop-campaigns-table .column-title strong a.row-title:hover {
+    color: #135e96;
+}
+
+.zappoppop-campaigns-table .post-state {
+    color: #50575e;
+    font-weight: 400;
+}
+
+/* Row Actions (Revealed on hover) */
+.zappoppop-campaigns-table .row-actions {
+    color: #a7aaad;
+    font-size: 13px;
+    padding: 2px 0 0;
+    position: relative;
+    left: -9999em;
+}
+
+.zappoppop-campaigns-table tr:hover .row-actions,
+.zappoppop-campaigns-table tr:focus-within .row-actions {
+    left: 0;
+}
+
+.zappoppop-campaigns-table .row-actions span a,
+.zappoppop-campaigns-table .row-actions span button {
+    display: inline;
+    padding: 0;
+    font-size: 13px;
+}
+
+/* Status Badges */
+.zappoppop-status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.zappoppop-status-badge.badge-active {
+    background: #edfaef;
+    color: #007017;
+    border: 1px solid #c2ecc6;
+}
+
+.zappoppop-status-badge.badge-inactive {
+    background: #f0f0f1;
+    color: #646970;
+    border: 1px solid #dcdcde;
+}
+
+/* Shortcode Code Chip */
+.zappoppop-shortcode-chip {
+    cursor: pointer;
+    background: #f6f7f7;
+    padding: 3px 6px;
+    border-radius: 3px;
+    border: 1px solid #dcdcde;
+    font-size: 11px;
+    display: inline-block;
+}
+
+.zappoppop-shortcode-chip:hover {
+    background: #f0f0f1;
+    border-color: #c3c4c7;
+}
+
+/* Button Group in Action Column */
+.zappoppop-row-action-buttons {
+    display: inline-flex;
+    gap: 3px;
+    justify-content: flex-end;
+}
+
+/* Quick Edit Inline Styles */
+.inline-edit-row {
+    background: #f0f0f1 !important;
+}
+
+.inline-edit-row .colspanchange {
+    padding: 12px 14px !important;
+}
+
+.inline-edit-row fieldset {
+    float: left;
+    margin: 0;
+    padding: 0 12px 0 0;
+    box-sizing: border-box;
+}
+
+.inline-edit-row .inline-edit-col-left {
+    width: 50%;
+}
+
+.inline-edit-row .inline-edit-col-right {
+    width: 50%;
+}
+
+.inline-edit-row .inline-edit-legend {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+    margin-bottom: 8px;
+}
+
+.inline-edit-row label {
+    display: block;
+    margin: 4px 0;
+}
+
+.inline-edit-row .title {
+    display: block;
+    float: left;
+    width: 5em;
+    line-height: 2.5;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c3338;
+}
+
+.inline-edit-row .input-text-wrap {
+    display: block;
+    margin-left: 5em;
+}
+
+.inline-edit-row input[type="text"],
+.inline-edit-row select {
+    width: 100%;
+    height: 30px;
+}
+
+.inline-edit-row .submit {
+    clear: both;
+    padding: 10px 0 4px;
+    margin: 0;
+    border-top: 1px solid #dcdcde;
+    margin-top: 8px;
+}
+
+@keyframes zappoppop-pulse-highlight {
+    0% { background-color: #fcf9e8 !important; }
+    100% { background-color: transparent; }
+}
+
+.zappoppop-row-updated {
+    animation: zappoppop-pulse-highlight 1.5s ease-out;
+}

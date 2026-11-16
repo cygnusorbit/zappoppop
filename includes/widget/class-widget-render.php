@@ -1,0 +1,43 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class ZapPopPop_Widget_Render {
+    public function render_widget($widget, $args, $instance) {
+        $popup_uid   = !empty($instance['popup_uid']) ? sanitize_key($instance['popup_uid']) : '';
+        $mode        = !empty($instance['mode']) ? $instance['mode'] : 'inline';
+        $button_text = !empty($instance['button_text']) ? $instance['button_text'] : __('Open Popup', 'zappoppop');
+
+        if (empty($popup_uid)) {
+            return;
+        }
+
+        echo wp_kses_post( $args['before_widget'] );
+
+        if (!empty($instance['title'])) {
+            echo wp_kses_post( $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'] );
+        }
+
+        if ($mode === 'button') {
+            /* Legacy click-trigger mode (kept so previously saved widgets keep working) */
+            ?>
+            <div class="zappoppop-widget-trigger-wrap" style="text-align:center;padding:8px 0;">
+                <button type="button" class="button button-primary zappoppop-open-btn zappoppop-trigger-btn" data-target-uid="<?php echo esc_attr($popup_uid); ?>">
+                    <?php echo esc_html($button_text); ?>
+                </button>
+            </div>
+            <?php
+        } elseif ($mode === 'onload') {
+            /* Onload Popup: footer renderer prints the popup once and forces the load trigger */
+            if (class_exists('ZapPopPop_Front_Shortcode')) {
+                ZapPopPop_Front_Shortcode::register_onload($popup_uid, isset($instance['onload_delay']) ? (int) $instance['onload_delay'] : 0);
+            }
+        } else {
+            /* Inline Popup: shortcode handler owns lookup, aliases, test-mode and duplicate protection */
+            echo do_shortcode('[zappoppop uid="' . esc_attr($popup_uid) . '" mode="inline"]');
+        }
+
+        echo wp_kses_post( $args['after_widget'] );
+    }
+}

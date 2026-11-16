@@ -1,0 +1,179 @@
+/* ==========================================================================
+   ZapPopPop Public Modal Runtime Stylesheet
+   Cross-Browser Compatible (Chrome, Safari, Firefox, Edge, Mobile)
+   ========================================================================== */
+
+.zappoppop-popup-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.zappoppop-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.65);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+.zappoppop-box-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 95vw;
+    max-height: 95vh;
+}
+
+.zappoppop-canvas-stage {
+    position: relative;
+    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.zappoppop-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    color: #64748b;
+    cursor: pointer;
+    z-index: 10;
+    padding: 4px;
+    transition: color 0.15s ease;
+}
+
+.zappoppop-close-btn:hover {
+    color: #0f172a;
+}
+
+/* Watermark Badge */
+.zappoppop-watermark-badge {
+    /* ZAPPOPPOP_WATERMARK_OUTSIDE: outside the canvas, bottom center, 10px below it */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-top: 10px;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 5;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+/* Inline embeds reserve room so the badge never overlaps the content below */
+.zappoppop-popup-wrap[data-inline="1"][data-zpp-wm="1"] {
+    margin-bottom: 34px;
+}
+
+.zappoppop-watermark-badge a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: #64748b;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
+}
+
+.zappoppop-watermark-badge a:hover {
+    background: #ffffff;
+    color: #2563eb;
+    border-color: #cbd5e1;
+}
+
+.zappoppop-watermark-badge strong {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+/* ZAPPOPPOP_DATE_ZINDEX: Air Datepicker calendar must render above the popup overlay (z-index 999999) */
+.air-datepicker-global-container,
+.air-datepicker {
+    z-index: 2147483000 !important;
+}
+.air-datepicker.-inline- { z-index: auto !important; }
+
+/* ZAPPOPPOP_FIT_STAGE: canvas + all layers scale together as one unified group (see front-scale.js) */
+.zappoppop-fit-stage {
+    position: relative;
+    z-index: 2;
+    display: block;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+}
+
+.zappoppop-fit-stage > .zappoppop-box,
+.zappoppop-fit-stage > .zappoppop-box-container {
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.zappoppop-fit-stage .zappoppop-canvas-container {
+    max-width: none !important;
+}
+/* ZAPPOPPOP_INLINE_COLUMN_FIT: inline shortcode embeds never exceed the post/page column */
+.zappoppop-popup-wrap[data-inline="1"] {
+    box-sizing: border-box;
+}
+/* Until front-scale.js has fitted the embed, clip it to the column so nothing overflows */
+.zappoppop-popup-wrap[data-inline="1"]:not([data-zpp-fit-key]) {
+    overflow: hidden;
+}
+/* /ZAPPOPPOP_FIT_STAGE */
+
+
+/* Auto-close countdown badge (top right of the canvas) */
+.zappoppop-autoclose-timer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 50;
+    min-width: 28px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
+    color: #ffffff;
+    font: 600 11px/18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    text-align: center;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+/* ZAPPOPPOP_PROTECT_NOSCROLL: Security & Protections > Disable page scrollbar */
+html.zappoppop-no-scroll,
+html.zappoppop-no-scroll body { overflow: hidden !important; }

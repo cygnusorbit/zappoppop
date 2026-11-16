@@ -1,0 +1,51 @@
+/* ZapPopPop Settings: dash-bar search */
+.zappoppop-settings-search { position: relative; display: inline-flex; align-items: center; margin-right: 10px; vertical-align: middle; }
+.zappoppop-settings-search .dashicons-search { position: absolute; left: 9px; top: 50%; margin-top: -8px; width: 16px; height: 16px; font-size: 16px; line-height: 16px; color: #64748b; pointer-events: none; }
+.zappoppop-settings-search-input { box-sizing: border-box; width: 220px; height: 32px; margin: 0; padding: 0 70px 0 30px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 13px; line-height: 30px; box-shadow: none; -webkit-appearance: none; appearance: none; transition: width .2s ease, border-color .15s ease, box-shadow .15s ease; }
+.zappoppop-settings-search-input:focus { width: 300px; outline: 0; border-color: var(--zpp-c-primary, #2563eb); box-shadow: 0 0 0 2px rgba(37, 99, 235, .18); }
+.zappoppop-settings-search-input::-webkit-search-cancel-button { display: none; }
+.zappoppop-settings-search .zpp-s-count { position: absolute; right: 28px; top: 50%; margin-top: -8px; font-size: 11px; line-height: 16px; color: #64748b; pointer-events: none; white-space: nowrap; }
+.zappoppop-settings-search .zpp-s-count.is-empty { color: #dc2626; }
+.zappoppop-settings-search .zpp-s-clear { position: absolute; right: 6px; top: 50%; margin-top: -10px; width: 20px; height: 20px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #64748b; font-size: 16px; line-height: 20px; text-align: center; cursor: pointer; }
+.zappoppop-settings-search .zpp-s-clear[hidden] { display: none; }
+.zappoppop-settings-search .zpp-s-clear:hover { background: #e2e8f0; color: #0f172a; }
+
+.zappoppop-settings-wrap .zpp-s-hide { display: none !important; }
+.zappoppop-settings-wrap tr.zpp-s-hit > th, .zappoppop-settings-wrap tr.zpp-s-hit > td, .zappoppop-settings-wrap li.zpp-s-hit { background: rgba(250, 204, 21, .16); }
+.zappoppop-tab-btn.zpp-s-dim { opacity: .45; }
+.zappoppop-tab-btn .zpp-s-badge { display: inline-block; min-width: 16px; margin-left: 6px; padding: 0 5px; border-radius: 8px; background: var(--zpp-c-primary, #2563eb); color: #fff; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; }
+
+@media (max-width: 782px) {
+    .zappoppop-settings-search-input { width: 140px; }
+    .zappoppop-settings-search-input:focus { width: 180px; }
+}
+
+/* ZPP_SEARCH_ICON_FIX: beat theme / dash-bar input rules so text never sits under the icon */
+.zappoppop-dash-bar .zappoppop-settings-search,
+.zappoppop-settings-wrap .zappoppop-settings-search { position: relative !important; display: inline-flex !important; align-items: center !important; }
+.zappoppop-dash-bar .zappoppop-settings-search .zappoppop-settings-search-input,
+.zappoppop-settings-wrap .zappoppop-settings-search .zappoppop-settings-search-input {
+    padding-left: 34px !important;
+    padding-right: 74px !important;
+    text-indent: 0 !important;
+    background-image: none !important;
+    box-sizing: border-box !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    line-height: 30px !important;
+}
+.zappoppop-dash-bar .zappoppop-settings-search .dashicons-search,
+.zappoppop-settings-wrap .zappoppop-settings-search .dashicons-search {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    margin: -8px 0 0 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 16px !important;
+    line-height: 16px !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+}
+.zappoppop-dash-bar .zappoppop-settings-search .zpp-s-count,
+.zappoppop-dash-bar .zappoppop-settings-search .zpp-s-clear { z-index: 2; }

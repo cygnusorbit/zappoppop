@@ -1,0 +1,105 @@
+/* Tools page: matches Theme page, driven by global --zpp-* variables.
+   Phase 1 overrides legacy inline styles with !important; phase 2 should move them to classes. */
+body.wp-admin #wpcontent .zappoppop-dash.zappoppop-tools-wrap { box-sizing: border-box; width: auto; max-width: none; margin: 0 0 0 2px; padding: 0 20px 40px 0; }
+body.wp-admin #wpcontent .zappoppop-tools-wrap .zappoppop-dash-bar { box-sizing: border-box; max-width: 100%; }
+.zappoppop-tools-wrap .zappoppop-dash-bar { position: -webkit-sticky; position: sticky; top: 32px; z-index: 30; }
+#wpbody-content .zappoppop-tools-wrap .notice { margin: 0 0 16px !important; }
+
+/* Cards */
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box {
+    background: var(--zpp-c-bg-card, #fff) !important;
+    border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde) !important;
+    border-radius: var(--zpp-r-card, 3px) !important;
+    box-shadow: var(--zpp-shadow-card, 0 1px 1px rgba(0,0,0,.04)) !important;
+    padding: var(--zpp-p-card, 20px) !important;
+    margin: 0 0 16px !important;
+    box-sizing: border-box;
+}
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box h3 {
+    font-family: var(--zpp-font-heading, inherit) !important; font-size: var(--zpp-fs-h2, 15px) !important;
+    font-weight: var(--zpp-fw-heading, 600) !important; color: var(--zpp-c-heading, #1d2327) !important;
+}
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box h4 { color: var(--zpp-c-heading, #1d2327) !important; font-family: var(--zpp-font-heading, inherit) !important; }
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box > div:first-child { border-bottom-color: var(--zpp-c-row-border, #eee) !important; }
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box .dashicons { color: var(--zpp-c-primary, #c1272d) !important; }
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box .button .dashicons { color: inherit !important; }#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box strong { color: var(--zpp-c-text, #1d2327) !important; }
+
+/* Buttons */
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box .button-primary {
+    background: var(--zpp-c-primary, #c1272d) !important; border-color: var(--zpp-c-primary, #c1272d) !important; color: var(--zpp-c-primary-text, #fff) !important;
+}
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box .button-primary:hover,
+#wpbody-content .zappoppop-tools-wrap .zappoppop-card-box .button-primary:focus { background: var(--zpp-c-primary-hover, #a51f25) !important; border-color: var(--zpp-c-primary-hover, #a51f25) !important; }/* Table health grid */
+#wpbody-content .zappoppop-tools-wrap table.widefat { border-color: var(--zpp-c-row-border, #f0f0f1) !important; }
+#wpbody-content .zappoppop-tools-wrap table.widefat thead tr,
+#wpbody-content .zappoppop-tools-wrap table.widefat thead th { background: var(--zpp-c-th-bg, #f6f7f7) !important; color: var(--zpp-c-th-text, #1d2327) !important; }
+
+/* Responsive: fixed 2-col inline grids collapse on small screens */
+@media (max-width: 960px) {}
+@media (max-width: 782px) {
+    body.wp-admin #wpcontent .zappoppop-dash.zappoppop-tools-wrap { padding-right: 10px; }
+    .zappoppop-tools-wrap .zappoppop-dash-bar { top: 46px; height: auto; flex-wrap: wrap; }
+}
+
+/* Phase 2: maintenance partial (class-based, theme variables) */
+.zpp-tools-card-head { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; padding: 0 0 12px; border-bottom: var(--zpp-bw, 1px) solid var(--zpp-c-row-border, #eee); }
+.zpp-tools-card-head h3 { margin: 0; }
+.zpp-tools-card-head { flex-wrap: wrap; }
+.zpp-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--zpp-gap, 16px); }
+.zpp-tools-panel { background: var(--zpp-c-bg-page, #f0f0f1); border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde); border-radius: var(--zpp-r-card, 3px); padding: 16px; box-sizing: border-box; }
+.zpp-tools-panel h4 { margin: 0 0 6px; font-size: var(--zpp-fs-base, 13px); }
+.zpp-tools-help { margin: 0 0 12px; font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #787c82); line-height: 1.4; }
+.zpp-tools-row { display: flex; align-items: center; gap: 8px; }
+.zpp-tools-check { display: block; margin: 0 0 8px; text-transform: none; letter-spacing: 0; font-weight: 600; }
+.zpp-tools-notice { margin: 0 0 14px; padding: 10px 14px; border-left: 4px solid var(--zpp-c-info, #0284c7); background: var(--zpp-c-bg-page, #f0f0f1); border-radius: var(--zpp-r-button, 3px); font-size: var(--zpp-fs-small, 12px); }
+.zpp-tools-notice.is-success { border-left-color: var(--zpp-c-success, #16a34a); }
+.zpp-tools-notice.is-error { border-left-color: var(--zpp-c-danger, #b32d2e); }
+.zpp-tools-notice[hidden] { display: none; }
+
+/* Phase 3: class-based Tools markup */
+.zpp-tools-head-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.zpp-tools-btn { display: -webkit-inline-box; display: inline-flex; align-items: center; gap: 6px; }
+.zpp-tools-btn .dashicons { font-size: 16px; width: 16px; height: 16px; }
+.zpp-tools-hidden { display: none; }
+.zpp-tools-grid { margin-top: 0; }
+.zpp-tools-card .zpp-tools-table { margin: 0 0 16px; }
+.zpp-tools-grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.zpp-tools-panel.is-danger { border-color: var(--zpp-c-danger, #b32d2e); background: var(--zpp-c-bg-card, #fff); }
+.zpp-tools-panel.is-danger h4 { color: var(--zpp-c-danger, #b32d2e); }
+.zpp-btn-danger { background: var(--zpp-c-danger, #b32d2e) !important; border-color: var(--zpp-c-danger, #b32d2e) !important; color: var(--zpp-c-danger-text, #fff) !important; }
+.zpp-tools-file { display: block; width: 100%; max-width: 100%; margin: 0 0 12px; font-size: var(--zpp-fs-small, 12px); }
+.zpp-tools-status { font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #787c82); }
+.zpp-tools-status[hidden] { display: none; }
+.zpp-kv { display: flex; flex-direction: column; gap: 6px; font-size: var(--zpp-fs-small, 12px); }
+.zpp-kv-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.zpp-kv-label { color: var(--zpp-c-muted, #787c82); }
+.zpp-kv-value { display: flex; align-items: center; gap: 6px; text-align: right; }
+.zpp-pill { display: inline-block; padding: 1px 8px; border-radius: var(--zpp-r-badge, 12px); font-size: var(--zpp-fs-badge, 11px); font-weight: 600; line-height: 1.6; text-transform: var(--zpp-tt-badge, none); }
+.zpp-pill.is-ok { background: var(--zpp-c-badge-pub-bg, #dcfce7); color: var(--zpp-c-badge-pub-text, #15803d); }
+.zpp-pill.is-warn { background: #fef3c7; color: #92400e; }
+.zpp-pill.is-bad { background: #fee2e2; color: #b91c1c; }
+.zpp-tools-table th, .zpp-tools-table td { padding: 10px 14px; }
+.zpp-tools-table .num { text-align: right; }
+.zpp-tools-table .zpp-strong { font-weight: 600; }
+.zpp-tools-table .zpp-mono { font-family: var(--zpp-font-mono, ui-monospace, monospace); font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #787c82); }
+@-webkit-keyframes rotation { from { -webkit-transform: rotate(0deg); } to { -webkit-transform: rotate(359deg); } }
+@keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(359deg); } }
+
+/* ZPP_BTN_ICON_ALIGN: one explicit box for icon + label buttons (Chrome/Safari/Firefox/Edge) */
+#wpbody-content .zappoppop-tools-wrap .zpp-tools-btn,
+#wpbody-content .zappoppop-tools-wrap .zpp-tools-card .button {
+    display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+    -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+    gap: 6px; box-sizing: border-box;
+    height: var(--zpp-h-button, 34px); min-height: var(--zpp-h-button, 34px);
+    padding: 0 14px; line-height: 1; vertical-align: middle;
+}
+#wpbody-content .zappoppop-tools-wrap .zpp-tools-card .button .dashicons {
+    -webkit-box-flex: 0; -ms-flex: 0 0 auto; flex: 0 0 auto;
+    display: block; width: 16px; height: 16px; margin: 0; padding: 0;
+    font-size: 16px; line-height: 16px; vertical-align: baseline; text-align: center;
+}
+#wpbody-content .zappoppop-tools-wrap .zpp-tools-card .button .dashicons:before {
+    display: block; width: 16px; height: 16px; font-size: 16px; line-height: 16px;
+}

@@ -1,0 +1,13 @@
+#zappoppop-export-modal{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:100050;background:rgba(15,23,42,.6);align-items:center;justify-content:center;}
+#zappoppop-export-modal.is-open{display:-webkit-flex;display:flex;}
+#zappoppop-export-modal .wex-box{background:#fff;width:460px;max-width:94vw;max-height:86vh;border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;overflow:hidden;}
+#zappoppop-export-modal .wex-head{padding:16px 20px;border-bottom:1px solid #e2e8f0;}
+#zappoppop-export-modal .wex-head h2{margin:0;font-size:16px;}
+#zappoppop-export-modal .wex-sub{margin:4px 0 0;color:#64748b;font-size:12px;}
+#zappoppop-export-modal .wex-tools{padding:8px 20px;border-bottom:1px solid #f1f5f9;display:-webkit-flex;display:flex;gap:8px;}
+#zappoppop-export-modal .wex-body{padding:8px 20px;overflow:auto;-webkit-flex:1 1 auto;flex:1 1 auto;min-height:120px;}
+#zappoppop-export-modal .wex-group{margin:10px 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;color:#64748b;}
+#zappoppop-export-modal .wex-item{display:block;padding:4px 0;font-size:13px;cursor:pointer;}
+#zappoppop-export-modal .wex-item input{margin-right:8px;}
+#zappoppop-export-modal .wex-foot{padding:12px 20px;border-top:1px solid #e2e8f0;display:-webkit-flex;display:flex;justify-content:flex-end;gap:8px;}
+#zappoppop-export-modal .wex-msg{color:#64748b;font-size:13px;padding:14px 0;}
