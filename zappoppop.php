@@ -3,7 +3,7 @@
  * Plugin Name: ZapPopPop
  * Plugin URI: https://zappoppop.com
  * Description: The ultimate, high-converting WordPress visual popup builder and lead capture platform.
- * Version: 1.0.00
+ * Version: 1.0.01
  * Author: ZapPopPop
  * Author URI: 
  * Requires at least: 5.8
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define Core Plugin Constants
-define('ZAPPOPPOP_VERSION', '1.0.00');
+define('ZAPPOPPOP_VERSION', '1.0.01');
 define('ZAPPOPPOP_PATH', plugin_dir_path(__FILE__));
 define('ZAPPOPPOP_URL', plugin_dir_url(__FILE__));
 define('ZAPPOPPOP_BASENAME', plugin_basename(__FILE__));
@@ -63,7 +63,7 @@ final class ZapPopPop {
 
         if (is_admin()) {
             new ZapPopPop_Admin();
-            add_action('admin_init', ['ZapPopPop_Modules_Installer', 'seed_bundled']);
+            add_action('admin_init', ['ZapPopPop_Modules_Installer', 'migrate_legacy']);
             add_action('admin_init', 'zappoppop_purge_legacy_code_fields');
         }
         if (class_exists('ZapPopPop_Addons')) {

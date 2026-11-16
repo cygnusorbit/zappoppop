@@ -17,7 +17,6 @@ class ZapPopPop_Modules_Installer {
     const MAX_FILE     = 2097152;
     const MAX_UNPACKED = 10485760;
     const MAX_DEPTH    = 4;
-    const SEED_OPT     = 'zappoppop_modules_seeded';
     const RENAMED      = ['acc-20-animation' => 'acc-animation', 'acc-16-popup-overlay' => 'acc-popup-overlay', 'acc-17-popup-overlay' => 'acc-popup-overlay', 'acc-21-popup-positions' => 'acc-popup-positions', 'acc-18-notifications' => 'acc-notifications', 'acc-17-double-optin' => 'acc-double-optin', 'acc-22-targeting-triggers' => 'acc-targeting-triggers', 'acc-19-success-celebration' => 'acc-success-celebration', 'acc-08-autoresponder' => 'acc-autoresponder', 'acc-04-side-tabs' => 'acc-side-tabs', 'acc-09-webhooks' => 'acc-webhooks', 'acc-13-woocommerce' => 'acc-woocommerce', 'acc-06-downloads' => 'acc-downloads', 'acc-03-logic-math' => 'logic-math', 'acc-05-payments' => 'logic-payments', 'acc-07-video' => 'acc-video', 'acc-10-sms' => 'acc-sms', 'acc-11-targeting' => 'acc-targeting', 'acc-15-quiz' => 'acc-quiz', 'acc-12-frequency' => 'acc-frequency', 'acc-14-custom-code' => 'acc-custom-code'];
     const ALLOWED_EXT  = ['json', 'css', 'js', 'html', 'txt', 'md', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'woff', 'woff2'];
     const BAD_SEGMENT  = '/^(php\d*|phtml|pht|phps|phar|cgi|pl|py|rb|sh|bash|asp|aspx|jsp|exe|dll|so|htaccess|htpasswd)$/i';
@@ -459,96 +458,6 @@ class ZapPopPop_Modules_Installer {
         return ['slug' => $slug, 'message' => __('Module deleted.', 'zappoppop')];
     }
 
-    /* ------------------------------------------------------ bundled packages */
-
-    protected static function copy_tree($src, $dst, $depth = 0) {
-        if ($depth > self::MAX_DEPTH || (!wp_mkdir_p($dst) && !is_dir($dst))) {
-            return false;
-        }
-        $items = scandir($src);
-        if (!is_array($items)) {
-            return false;
-        }
-        foreach ($items as $i) {
-            if ($i === '.' || $i === '..') {
-                continue;
-            }
-            $s = $src . '/' . $i;
-            $d = $dst . '/' . $i;
-            if (is_link($s)) {
-                continue;
-            }
-            if (is_dir($s)) {
-                if (!self::copy_tree($s, $d, $depth + 1)) {
-                    return false;
-                }
-                continue;
-            }
-            if (!in_array(strtolower(pathinfo($i, PATHINFO_EXTENSION)), self::ALLOWED_EXT, true)) {
-                continue;
-            }
-            if (/* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- the result is checked and reported */ !@copy($s, $d)) {
-                return false;
-            }
-        }
-        if ($depth === 0) {
-            /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort index.php guard; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($dst . '/index.php', "<?php\n// Silence is golden.\n");
-        }
-        return true;
-    }
-
-    protected static function manifest_version($dir) {
-        $f = $dir . '/module.json';
-        if (!is_file($f) || is_link($f) || filesize($f) > ZapPopPop_Modules::MAX_JSON) {
-            return '';
-        }
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $j = json_decode((string) file_get_contents($f), true);
-        return (is_array($j) && isset($j['version']) && is_string($j['version'])) ? $j['version'] : '';
-    }
-
-    /**
-     * Refreshes an already seeded module when the plugin ships a newer version of its package.
-     * State and saved data are untouched; a module the user deleted is never recreated.
-     * Returns the version to remember, or false when nothing was done.
-     */
-    protected static function upgrade_bundled($slug, $dir, $seeded) {
-        $new = self::manifest_version($dir);
-        $was = (is_string($seeded) && $seeded !== '') ? $seeded : '1.0.0';
-        if ($new === '' || version_compare($new, $was, '<=')) {
-            return false;
-        }
-        $base = ZapPopPop_Modules::uploads_dir();
-        $dest = $base . '/' . $slug;
-        if ($base === '' || is_link($dest) || !is_dir($dest)) {
-            return false;
-        }
-        $cur = self::manifest_version($dest);
-        if ($cur !== '' && version_compare($cur, $new, '>=')) {
-            return $new;
-        }
-        if (!self::prepare_root($base)) {
-            return false;
-        }
-        $tmp = $base . '/' . self::rand_name('.tmp-');
-        if (!self::copy_tree($dir, $tmp)) {
-            self::rrmdir($tmp);
-            return false;
-        }
-        $old = $base . '/' . self::rand_name('.old-');
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ if (!@rename($dest, $old)) {
-            self::rrmdir($tmp);
-            return false;
-        }
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ if (!@rename($tmp, $dest)) {
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @rename($old, $dest);
-            self::rrmdir($tmp);
-            return false;
-        }
-        self::rrmdir($old);
-        ZapPopPop_Modules::flush();
-        return $new;
-    }
-
     /** Installed/uninstalled/deleted state follows a renamed slug (runs before seeding, so nothing is reinstalled by mistake). */
     protected static function migrate_renamed_state() {
         $st    = ZapPopPop_Modules::states();
@@ -606,68 +515,14 @@ class ZapPopPop_Modules_Installer {
     }
 
     /**
-     * One-time copy of the plugin's packages/<slug>/ folders into uploads/zappoppop-modules/, so they show up
-     * on the Extend page as normal Uploaded modules. A module removed later is never copied back.
+     * Carries state and settings of renamed modules over to their new slugs.
+     * Bundled modules live in the plugin's modules/ folder, so nothing is copied into uploads any more.
      */
-    public static function seed_bundled() {
+    public static function migrate_legacy() {
         if (!current_user_can('manage_options')) {
             return;
         }
         self::migrate_renamed_state();
-        $src = ZAPPOPPOP_PATH . 'packages';
-        if (!is_dir($src)) {
-            return;
-        }
-        $dirs = glob($src . '/*', GLOB_ONLYDIR);
-        if (!is_array($dirs) || !$dirs) {
-            return;
-        }
-        $done  = get_option(self::SEED_OPT, []);
-        $done  = is_array($done) ? $done : [];
-        $dirty = false;
-        foreach ($dirs as $dir) {
-            $slug = basename($dir);
-            if (is_link($dir) || !ZapPopPop_Modules::slug_valid($slug) || !is_file($dir . '/module.json')) {
-                continue;
-            }
-            if (isset($done[$slug])) {
-                $v = self::upgrade_bundled($slug, $dir, $done[$slug]);
-                if ($v !== false) {
-                    $done[$slug] = $v;
-                    $dirty       = true;
-                }
-                continue;
-            }
-            if (is_dir(ZapPopPop_Modules::core_dir() . '/' . $slug)) {
-                $done[$slug] = 1;
-                $dirty       = true;
-                continue;
-            }
-            $base = ZapPopPop_Modules::uploads_dir();
-            if ($base === '' || !self::prepare_root($base)) {
-                break;
-            }
-            $dest = $base . '/' . $slug;
-            if (!is_dir($dest) && !self::copy_tree($dir, $dest)) {
-                self::rrmdir($dest);
-                continue;
-            }
-            ZapPopPop_Modules::flush();
-            $m  = ZapPopPop_Modules::get($slug);
-            $st = ZapPopPop_Modules::states();
-            if (!isset($st[$slug])) {
-                ZapPopPop_Modules::set_state($slug, ($m && $m['default_active']) ? 'installed' : 'available');
-            } elseif ($st[$slug] === 'deleted') {
-                ZapPopPop_Modules::set_state($slug, 'available');
-            }
-            ZapPopPop_Modules::clear_orphan($slug);
-            $v           = self::manifest_version($dir);
-            $done[$slug] = ($v !== '') ? $v : 1;
-            $dirty       = true;
-        }
-        if ($dirty) {
-            update_option(self::SEED_OPT, $done, false);
-        }
         self::migrate_renamed_settings();
     }
 

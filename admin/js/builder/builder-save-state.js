@@ -1,7 +1,9 @@
 /**
  * ZapPopPop Visual Builder: Save / Update button state
- * Clean saved popup -> "Save" (blue). Any change to a saved popup -> "Update" (orange).
- * Compares a live snapshot (canvases, canvas meta, title, settings) against the last saved/loaded baseline.
+ * ZAPPOPPOP_UPDATE_STATE_V2
+ * Clean saved popup -> "Save". Any real user change to a saved popup -> "Update" (colors come from zappoppop-theme row 15).
+ * Dirty = (model snapshot differs from the baseline) OR (the user typed / changed a control in the Inspector, Settings or Title).
+ * The baseline keeps re-syncing until the first genuine user gesture, so async loading / normalisation never fakes a change.
  */
 (function(window, $) {
     'use strict';
@@ -9,22 +11,28 @@
     window.__zappoppopSaveStateBound = true;
 
     var BTN = '#zappoppop-btn-save';
-    var baseline = null, pending = null, busy = false;
+    var UI = '#zappoppop-inspector-drawer, #zappoppop-settings-drawer, #zappoppop-builder-title';
+    var baseline = null, pending = null, busy = false, touched = false, forced = false;
+
+    function json(v) {
+        try { return JSON.stringify(v); } catch (e) {}
+        try {
+            return JSON.stringify(v, function(k, x) { return (typeof x === 'function' || (x && x.nodeType)) ? undefined : x; });
+        } catch (e2) { return null; }
+    }
 
     function snap() {
-        try {
-            var c = window.ZapPopPopBuilderCore;
-            if (!c || !c.state) return null;
-            var o = { c: c.state.canvases, m: c.state.canvasMeta, t: $('#zappoppop-builder-title').val() || '' };
-            var S = window.ZapPopPopBuilderSettings;
-            if (S && typeof S.getSettings === 'function') { try { o.s = S.getSettings(); } catch (e) {} }
-            return JSON.stringify(o);
-        } catch (e) { return null; }
+        var c = window.ZapPopPopBuilderCore;
+        if (!c || !c.state) return null;
+        var s = null, S = window.ZapPopPopBuilderSettings;
+        if (S && typeof S.getSettings === 'function') { try { s = S.getSettings(); } catch (e) {} }
+        return json({ c: c.state.canvases, m: c.state.canvasMeta, t: $('#zappoppop-builder-title').val() || '', s: s });
     }
 
     function hasUid() {
         var io = window.ZapPopPopBuilderIO;
         var u = (io && typeof io.getUid === 'function') ? io.getUid() : $('#zappoppop-builder-uid').val();
+        if (!u) { var c = window.ZapPopPopBuilderCore; u = c && c.state && c.state.id; }
         return !!u;
     }
 
@@ -37,17 +45,39 @@
     }
 
     function check() {
-        if (busy || baseline === null) return;
+        if (busy) return;
         var now = snap();
         if (now === null) return;
-        paint(hasUid() && now !== baseline);
+        if (baseline === null || !touched) { baseline = now; forced = false; paint(false); return; }
+        paint(hasUid() && (forced || now !== baseline));
     }
 
-    function rebase() { baseline = snap(); check(); }
+    function rebase() { touched = false; forced = false; baseline = snap(); check(); }
 
     function isAction(settings, name) {
         return settings && typeof settings.data === 'string' && settings.data.indexOf(name) !== -1;
     }
+
+    /* first genuine gesture: freeze the baseline as it is right now (before the gesture changes anything) */
+    function onGesture(e) {
+        if (!e.isTrusted || touched) return;
+        var s = snap();
+        if (s !== null) { baseline = s; }
+        touched = true;
+    }
+
+    /* typing / changing a control inside the Inspector, Settings drawer or Title always counts, even before the model is flushed */
+    function onEdit(e) {
+        if (!e.isTrusted) return;
+        var t = e.target;
+        if (t && t.closest && t.closest(UI)) { onGesture(e); forced = true; setTimeout(check, 30); }
+    }
+
+    document.addEventListener('mousedown', onGesture, true);
+    document.addEventListener('touchstart', onGesture, true);
+    document.addEventListener('keydown', onGesture, true);
+    document.addEventListener('input', onEdit, true);
+    document.addEventListener('change', onEdit, true);
 
     $(document).ajaxSend(function(e, xhr, settings) {
         if (isAction(settings, 'zappoppop_save_popup')) { busy = true; pending = snap(); }
@@ -56,9 +86,9 @@
     $(document).ajaxSuccess(function(e, xhr, settings, data) {
         if (isAction(settings, 'zappoppop_save_popup')) {
             var ok = !!(data && data.success);
-            if (ok) { baseline = pending; }
+            if (ok) { baseline = pending; forced = false; touched = true; }
             // builder-io restores the button text 1500ms after a successful save
-            setTimeout(function() { busy = false; $(BTN).removeClass('is-dirty'); check(); if (ok) paint(false); }, ok ? 1550 : 50);
+            setTimeout(function() { busy = false; $(BTN).removeClass('is-dirty'); check(); }, ok ? 1550 : 50);
         } else if (isAction(settings, 'zappoppop_load_popup')) {
             setTimeout(rebase, 900);
         }
@@ -68,13 +98,11 @@
         if (isAction(settings, 'zappoppop_save_popup')) { setTimeout(function() { busy = false; check(); }, 50); }
     });
 
+    window.ZapPopPopSaveState = { check: check, rebase: rebase };
+
     $(function() {
-        if (!hasUid()) { setTimeout(rebase, 1200); }
-        setTimeout(function() { if (baseline === null) rebase(); }, 4000); // load-failure fallback
+        setTimeout(check, 1200);
         setInterval(function() { if (!document.hidden) check(); }, 700);
-        $(document).on('input change keyup', '#zappoppop-builder-title, #zappoppop-inspector-drawer, #zappoppop-settings-drawer', function() {
-            setTimeout(check, 30);
-        });
     });
 })(window, jQuery);
 

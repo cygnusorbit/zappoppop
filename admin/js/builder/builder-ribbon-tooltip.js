@@ -4,7 +4,15 @@
     if (window.__zppRibbonTip) { return; }
     window.__zppRibbonTip = true;
 
-    var SEL = '.zappoppop-ribbon-tool, #zappoppop-alignment-toolbar .zappoppop-align-btn';
+    /* ZAPPOPPOP_HDR_TIPS: top-header icon buttons + both canvas (+) buttons reuse this bubble; their title is shown verbatim */
+    var HDR_SEL = '.zappoppop-builder-header .zappoppop-btn-icon, .zappoppop-builder-header .zappoppop-hdr-icon-btn, '
+        + '.zappoppop-builder-header .zappoppop-btn-tool, .zappoppop-builder-header .zappoppop-viewport-btn, '
+        + '.zappoppop-builder-header .zappoppop-save-caret, #zappoppop-add-canvas-btn, #zappoppop-settings-add-canvas-bullet';
+    var SEL = '.zappoppop-ribbon-tool, #zappoppop-alignment-toolbar .zappoppop-align-btn, ' + HDR_SEL;
+
+    function isHdr(btn) {
+        try { return !!(btn.matches && btn.matches(HDR_SEL)); } catch (e) { return false; }
+    }
     var tip = null, current = null;
 
     function titleCase(s) {
@@ -13,6 +21,15 @@
     }
 
     function labelFor(btn) {
+        /* ZAPPOPPOP_THEME_TIP: the visible icon is the sun in light mode and the moon in dark mode; the label names that icon */
+        if (btn.id === 'zappoppop-btn-theme-toggle') {
+            return document.body.classList.contains('theme-light')
+                ? (btn.getAttribute('data-zpp-day') || 'Day Mode')
+                : (btn.getAttribute('data-zpp-night') || 'Night Mode');
+        }
+        if (isHdr(btn)) {
+            return String(btn.getAttribute('data-zpp-title') || btn.getAttribute('title') || btn.getAttribute('aria-label') || '').replace(/^\s+|\s+$/g, '');
+        }
         var raw = btn.getAttribute('data-zpp-title') || btn.getAttribute('title') || '';
         var m = raw.match(/\(([^()]+)\)\s*$/);
         if (m) { return titleCase(m[1]); }
@@ -23,7 +40,11 @@
         var t = btn.getAttribute('title');
         if (t) {
             btn.setAttribute('data-zpp-title', t);
-            btn.setAttribute('aria-label', labelFor(btn));
+            if (isHdr(btn)) {
+                if (!btn.hasAttribute('aria-label')) { btn.setAttribute('aria-label', t); }
+            } else {
+                btn.setAttribute('aria-label', labelFor(btn));
+            }
             btn.removeAttribute('title');
         }
     }
@@ -41,7 +62,9 @@
         prime(btn);
         current = btn;
         var t = ensureTip();
-        t.textContent = labelFor(btn);
+        var lbl = labelFor(btn);
+        t.textContent = lbl;
+        if (btn.id === 'zappoppop-btn-theme-toggle') { btn.setAttribute('aria-label', lbl); }
         t.className = 'zappoppop-ribbon-tip is-on';
         var r = btn.getBoundingClientRect();
         var w = t.offsetWidth, vw = document.documentElement.clientWidth;

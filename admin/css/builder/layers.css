@@ -561,3 +561,27 @@ select.zappoppop-input {
     transform: rotate(-45deg) !important;
 }
 /* === ZAPPOPPOP_DROPDOWN_ARROW_FIX_END === */
+
+/* ZAPPOPPOP_LAYERS_PANEL_BORDER: ONE border on the rounded panel; header + list sit inside it (no square inner border poking at the corners). */
+html body #zappoppop-floating-layers-panel {
+    border: 1px solid var(--zpp-builder-content-border, #e2e8f0) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    isolation: isolate; /* Safari: keep the rounded clip while the list scrolls */
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header {
+    border: 0 !important;
+    border-bottom: 1px solid var(--zpp-builder-accordion-border, rgba(148, 163, 184, .35)) !important;
+    border-radius: 7px 7px 0 0 !important;
+    margin: 0 !important;
+}
+html body #zappoppop-floating-layers-panel.collapsed #zappoppop-layers-header {
+    border-bottom-color: transparent !important;
+    border-radius: 7px !important;
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-list {
+    border: 0 !important;
+    border-radius: 0 0 7px 7px !important;
+}

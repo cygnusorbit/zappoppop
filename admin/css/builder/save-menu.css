@@ -154,3 +154,19 @@ body.theme-light .zappoppop-save-menu .zappoppop-save-menu-item:focus {
 }
 body.theme-light .zappoppop-save-menu .zappoppop-save-menu-state.is-draft { color: #c2410c; }
 body.theme-light .zappoppop-save-menu .zappoppop-save-menu-state.is-publish { color: #15803d; }
+
+/* ZAPPOPPOP_SAVE_MENU_HOVER: clear hover / keyboard highlight on the dropdown rows, theme "Hover / Active" color. Same look for every row, including "Save as Template". */
+html body .zappoppop-save-menu .zappoppop-save-menu-item {
+    -webkit-transition: background-color .12s ease, color .12s ease;
+    transition: background-color .12s ease, color .12s ease;
+}
+html body .zappoppop-save-menu .zappoppop-save-menu-item:hover:not(:disabled),
+html body .zappoppop-save-menu .zappoppop-save-menu-item:focus:not(:disabled) {
+    background: var(--zpp-builder-selection-color, #2563eb) !important;
+    background-color: var(--zpp-builder-selection-color, #2563eb) !important;
+    color: #ffffff !important;
+}
+html body .zappoppop-save-menu .zappoppop-save-menu-item:hover:not(:disabled) .dashicons,
+html body .zappoppop-save-menu .zappoppop-save-menu-item:focus:not(:disabled) .dashicons {
+    color: #ffffff !important;
+}

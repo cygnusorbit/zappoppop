@@ -525,6 +525,8 @@
 
     function setVarImportant(el, prop, cssVarExpr) {
         if (!el || !el.style || isInsideIsolatedCanvas(el) || isCssManaged(el)) return;
+        /* ZAPPOPPOP_MODE_LOCK: builder-mode-sync.js owns the workspace background while a Day / Night override is active */
+        if ((prop === 'background' || prop === 'background-color' || prop === 'background-image') && el.hasAttribute && el.hasAttribute('data-zpp-mode-lock')) return;
         if ((prop === 'background' || prop === 'background-color' || prop === 'background-image') && isCheckerSwatchElement(el)) {
             return;
         }
@@ -1137,6 +1139,7 @@
             var headerBar = null;
             document.querySelectorAll('button, a').forEach(function(btn) {
                 if (isInsideIsolatedCanvas(btn)) return;
+                if (btn.closest && btn.closest('.zappoppop-save-menu')) return; /* ZAPPOPPOP_MENU_SKIP: dropdown rows are styled by save-menu.css */
                 var txt = (btn.textContent || '').trim();
                 if (btn.id === 'zappoppop-btn-save' || btn.id === 'zappoppop-btn-save-template' ||
                     /^(Save|Update|Updated|Saving\.\.\.|Saved!?|Save As Template|Save Popup)$/i.test(txt)) {

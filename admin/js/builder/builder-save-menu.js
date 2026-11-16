@@ -30,6 +30,7 @@
 
     function open() {
         if ($(CARET).prop('disabled') || locked()) { return; }
+        cleanMenu();
         paintState();
         $(MENU).addClass('is-open');
         $(CARET).attr('aria-expanded', 'true');
@@ -50,6 +51,17 @@
         else if (s === 'publish' || s === 'published') { $st.addClass('is-publish').text('Published'); }
     }
 
+    /* ZAPPOPPOP_MENU_CLEAN: while the menu still sat inside the header, the theme script gave its rows inline !important colors and
+       data-zpp-role="toolbar-btn", whose :hover colors are pinned by the theme CSS. Strip both so the hover highlight can show.
+       Every row, including "Save as Template", then shares the same look. */
+    function cleanMenu() {
+        $(MENU).find('.zappoppop-save-menu-item').each(function() {
+            this.removeAttribute('style');
+            this.removeAttribute('data-zpp-role');
+            $(this).find('*').each(function() { this.removeAttribute('style'); this.removeAttribute('data-zpp-role'); });
+        });
+    }
+
     function items() { return $(MENU).find('.zappoppop-save-menu-item:not(:disabled)'); }
 
     function isSaveCall(settings) {
@@ -59,6 +71,7 @@
     $(function() {
         /* the header scrolls horizontally: render the menu at body level so it is never clipped */
         $(MENU).appendTo('body');
+        cleanMenu();
         paintState();
 
         $(document)
