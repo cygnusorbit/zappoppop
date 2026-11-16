@@ -88,7 +88,8 @@
     margin-bottom: 34px;
 }
 
-.zappoppop-watermark-badge a {
+.zappoppop-watermark-badge a,
+.zappoppop-watermark-badge .zappoppop-watermark-text {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -108,6 +109,8 @@
     color: #2563eb;
     border-color: #cbd5e1;
 }
+
+.zappoppop-watermark-badge .zappoppop-watermark-text { cursor: default; }
 
 .zappoppop-watermark-badge strong {
     color: #1e293b;

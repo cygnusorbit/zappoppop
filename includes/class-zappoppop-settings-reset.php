@@ -19,7 +19,7 @@ class ZapPopPop_Settings_Reset {
             require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-tracking.php';
         }
         return (array) apply_filters('zappoppop_settings_tab_keys', [
-            'general'     => ['sender_name', 'from_name', 'sender_email', 'from_email', 'admin_email', 'csv_separator', 'user_uploads', 'powered_by_badge', 'test_mode'],
+            'general'     => ['sender_name', 'from_name', 'sender_email', 'from_email', 'admin_email', 'csv_separator', 'user_uploads', 'powered_by_badge', 'powered_by_badge_nolink', 'test_mode'],
             'performance' => ['preload_popups', 'preload_events', 'minify_css', 'cache_busting', 'render_delay', 'disable_google_fonts', 'default_embed_type'],
             'libraries'   => ['default_font', 'default_font_weight', 'default_font_size', 'default_text_align', 'default_font_italic', 'default_font_underline', 'default_font_color', /* ZAPPOPPOP_DEFAULT_TYPO */ 'google_fonts', 'font_awesome', 'custom_fonts',
                               'air_datepicker', 'load_air_datepicker', 'jquery_mask', 'load_jquery_mask',

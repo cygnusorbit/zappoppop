@@ -137,6 +137,18 @@ if (!defined('ABSPATH')) {
                             </div>
                         </div>
 
+                        <!-- ZAPPOPPOP_SNAP_SETTING: editor snapping toggle (moved here from the ribbon); same id/class so the canvas snap code is untouched -->
+                        <div class="zappoppop-field-group" style="margin-bottom:12px;padding-top:10px;border-top:1px solid #334155;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                                <label for="zappoppop-snap-object" style="font-size:11px;font-weight:700;color:#475569;margin:0;text-transform:uppercase;cursor:pointer;"><?php esc_html_e('Snap to Object', 'zappoppop'); ?></label>
+                                <span class="zappoppop-ovf-switch">
+                                    <input type="checkbox" id="zappoppop-snap-object" class="zappoppop-snap-toggle" value="1" role="switch" checked data-snap="object" aria-label="<?php esc_attr_e('Snap to other objects while dragging (hold Alt to bypass)', 'zappoppop'); ?>">
+                                    <span class="zappoppop-ovf-track"></span>
+                                </span>
+                            </div>
+                            <span style="font-size:10px;color:#64748b;display:block;margin-top:2px;"><?php esc_html_e('Snap to the edges and centers of other objects while dragging (hold Alt to bypass).', 'zappoppop'); ?></span>
+                        </div>
+
                     </div>
 
                     <!-- SUBTAB 2: DEDICATED CANVAS LOGIC (CONDITIONAL LOGIC) -->

@@ -374,6 +374,7 @@ class ZapPopPop_Admin_Theme {
         wp_enqueue_style('zappoppop-theme-css', ZAPPOPPOP_URL . 'admin/css/theme.css', ['zappoppop-dashboard-css', 'zappoppop-overview-css', 'zappoppop-theme-global-css'], $v);
         wp_enqueue_script('zappoppop-overview-js', ZAPPOPPOP_URL . 'admin/js/overview.js', ['jquery'], $v, true);
         wp_enqueue_style('zappoppop-alpha-picker-css', ZAPPOPPOP_URL . 'admin/css/zappoppop-alpha-picker.css', ['zappoppop-theme-css'], $v);
+        wp_enqueue_script('zappoppop-color-throttle-js', ZAPPOPPOP_URL . 'admin/js/zappoppop-color-throttle.js', [], $v, true); /* ZAPPOPPOP_COLOR_THROTTLE */
         wp_enqueue_script('zappoppop-alpha-picker-js', ZAPPOPPOP_URL . 'admin/js/zappoppop-alpha-picker.js', [], $v, true);
         wp_localize_script('zappoppop-alpha-picker-js', 'zappoppop_alpha_vars', ['i18n' => [
             'pick'    => __('Pick colour', 'zappoppop'),

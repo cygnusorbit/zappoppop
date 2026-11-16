@@ -103,6 +103,7 @@ class ZapPopPop_Front_Renderer {
         // Settings Integrations
         $default_font   = function_exists('zappoppop_get_setting') ? zappoppop_get_setting('default_font', 'inherit') : 'inherit';
         $show_watermark = function_exists('zappoppop_get_setting') ? (bool) zappoppop_get_setting('powered_by_badge', false) : false;
+        $watermark_link = function_exists('zappoppop_get_setting') ? !zappoppop_get_setting('powered_by_badge_nolink', false) : true; /* ZAPPOPPOP_BADGE_NOLINK */
         $minify_css     = function_exists('zappoppop_get_setting') ? (bool) zappoppop_get_setting('minify_css', false) : false;
 
         /* ZAPPOPPOP_DEFAULT_TYPO: global fallback text style; layer-level styles still override */
@@ -294,9 +295,15 @@ class ZapPopPop_Front_Renderer {
                 <?php /* ZAPPOPPOP_WATERMARK_OUTSIDE: one badge below the canvas, bottom center, 10px away; scales with the fit stage */ ?>
                 <?php if ($show_watermark): ?>
                     <div class="zappoppop-watermark-badge">
+                        <?php if ($watermark_link): ?>
                         <a href="https://zappoppop.com" target="_blank" rel="noopener noreferrer">
                             <span><?php esc_html_e('Powered by', 'zappoppop'); ?></span> <strong>ZapPopPop</strong>
                         </a>
+                        <?php else: ?>
+                        <span class="zappoppop-watermark-text">
+                            <span><?php esc_html_e('Powered by', 'zappoppop'); ?></span> <strong>ZapPopPop</strong>
+                        </span>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>

@@ -125,7 +125,7 @@ class ZapPopPop_Admin_Settings {
         $admin = get_option('admin_email');
         $defaults = [
             'sender_name' => 'ZapPopPop', 'sender_email' => $admin, 'admin_email' => $admin,
-            'csv_separator' => ',', 'user_uploads' => 'keep', 'powered_by_badge' => 0, 'test_mode' => 0,
+            'csv_separator' => ',', 'user_uploads' => 'keep', 'powered_by_badge' => 0, 'powered_by_badge_nolink' => 0, 'test_mode' => 0,
             'preload_popups' => 0, 'preload_events' => 0, 'minify_css' => 0, 'cache_busting' => 0,
             'render_delay' => 0,
             'default_embed_type' => 'inline',
@@ -205,6 +205,7 @@ class ZapPopPop_Admin_Settings {
         $o['csv_separator']    = $enum('csv_separator', [',', ';', 'tab'], ',');
         $o['user_uploads']     = $enum('user_uploads', ['keep', 'delete'], 'keep');
         $o['powered_by_badge'] = $b('powered_by_badge');
+        $o['powered_by_badge_nolink'] = $b('powered_by_badge_nolink'); /* ZAPPOPPOP_BADGE_NOLINK */
         $o['test_mode']        = $b('test_mode');
 
         // 2. Performance & Preload

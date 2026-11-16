@@ -713,6 +713,7 @@
                     self.attachInteractions($node, el);
                 }
             });
+            if (window.ZapPopPopMultiSelect) { window.ZapPopPopMultiSelect.reapply(); } /* ZAPPOPPOP_MARQUEE_SELECT */
         },
 
         buildElementNode: function(el) {
@@ -1353,6 +1354,11 @@
         selectElement: function(id, fromStage) {
 
             if (!id) return;
+            /* ZAPPOPPOP_MARQUEE_SELECT: keep a multi-selection while pressing on one of its members; any other select clears it */
+            if (window.ZapPopPopMultiSelect) {
+                if (window.ZapPopPopMultiSelect.holdSelect(id)) return;
+                window.ZapPopPopMultiSelect.clear();
+            }
             /* ZAPPOPPOP_CLICK_OPEN: element click opens Layer Settings only when enabled */
             var zppSkipOpen = fromStage === true && !!window.ZapPopPopClickOpen && !window.ZapPopPopClickOpen.element();
             // Normalize many possible id shapes: '#el-xxx', 'el-xxx', 'zappoppop-el-xxx', or raw id
@@ -1382,6 +1388,7 @@
 
     deselect: function() {
         this.selectedId = null;
+        if (window.ZapPopPopMultiSelect) { window.ZapPopPopMultiSelect.clear(); } /* ZAPPOPPOP_MARQUEE_SELECT */
         if ($("#zappoppop-alignment-toolbar").length) {
             $("#zappoppop-alignment-toolbar").fadeOut(120);
         }

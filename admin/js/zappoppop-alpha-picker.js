@@ -216,7 +216,7 @@
             '<div class="zpp-cp-bar zpp-cp-alpha" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-label="' + t('opacity', 'Opacity') + '"><div class="zpp-cp-alpha-fill"></div><div class="zpp-cp-thumb zpp-cp-alpha-t"></div></div>' +
             '<input type="text" class="zpp-cp-pop-hex" spellcheck="false" autocomplete="off" maxlength="40" aria-label="' + t('hex', 'Colour value') + '">' +
             '<div class="zpp-cp-foot"><label class="zpp-cp-pct"><span>' + t('opacity', 'Opacity') + '</span><input type="number" class="zpp-cp-pct-in" min="0" max="100" step="1"><span>%</span></label>' +
-            '<button type="button" class="zpp-cp-clear">' + t('clear', 'Transparent') + '</button></div>';
+            '<button type="button" class="zpp-cp-clear" title="' + t('clear', 'Transparent') + '" aria-label="' + t('clear', 'Transparent') + '">' + t('clear', 'Transparent') + '</button></div>';
         document.body.appendChild(p);
         pop = p;
         R = {

@@ -8,7 +8,7 @@
     var HDR_SEL = '.zappoppop-builder-header .zappoppop-btn-icon, .zappoppop-builder-header .zappoppop-hdr-icon-btn, '
         + '.zappoppop-builder-header .zappoppop-btn-tool, .zappoppop-builder-header .zappoppop-viewport-btn, '
         + '.zappoppop-builder-header .zappoppop-save-caret, #zappoppop-add-canvas-btn, #zappoppop-settings-add-canvas-bullet';
-    var SEL = '.zappoppop-ribbon-tool, #zappoppop-alignment-toolbar .zappoppop-align-btn, ' + HDR_SEL;
+    var SEL = '.zappoppop-ribbon-tool, .zappoppop-ribbon-icon-toggle, #zappoppop-alignment-toolbar .zappoppop-align-btn, ' + HDR_SEL; /* ZAPPOPPOP_RIBBON_ICON_TOGGLES */
 
     function isHdr(btn) {
         try { return !!(btn.matches && btn.matches(HDR_SEL)); } catch (e) { return false; }
@@ -21,6 +21,12 @@
     }
 
     function labelFor(btn) {
+        /* ZAPPOPPOP_RIBBON_ICON_TOGGLES: On/Off + Hide/Unhide toggles carry both texts; the current state picks one */
+        if (btn.hasAttribute('data-zpp-tip-on')) {
+            var tg = btn.querySelector('input[type="checkbox"]'), pr = btn.querySelector('[aria-pressed]');
+            var on = tg ? tg.checked : (pr ? pr.getAttribute('aria-pressed') === 'true' : true);
+            return on ? btn.getAttribute('data-zpp-tip-on') : (btn.getAttribute('data-zpp-tip-off') || btn.getAttribute('data-zpp-tip-on'));
+        }
         /* ZAPPOPPOP_THEME_TIP: the visible icon is the sun in light mode and the moon in dark mode; the label names that icon */
         if (btn.id === 'zappoppop-btn-theme-toggle') {
             return document.body.classList.contains('theme-light')
@@ -99,6 +105,14 @@
     document.addEventListener('dragstart', hide, true);
     window.addEventListener('scroll', hide, true);
     window.addEventListener('resize', hide);
+
+    /* ZAPPOPPOP_RIBBON_ICON_TOGGLES: re-render the bubble after a toggle changed state while the pointer / focus is still on it */
+    window.ZapPopPopRibbonTip = { refresh: function (node) {
+        var b = (node && node.closest) ? node.closest(SEL) : null, over = false;
+        if (!b) { return; }
+        try { over = b.matches(':hover'); } catch (e) { over = false; }
+        if (b === current || over) { show(b); }
+    } };
 
     function init() {
         var list = document.querySelectorAll(SEL);

@@ -10,6 +10,7 @@ $admin_email      = isset($settings['admin_email']) ? $settings['admin_email'] :
 $csv_separator    = isset($settings['csv_separator']) ? $settings['csv_separator'] : ',';
 $user_uploads     = isset($settings['user_uploads']) ? $settings['user_uploads'] : 'keep';
 $powered_by_badge = !empty($settings['powered_by_badge']);
+$powered_by_nolink = !empty($settings['powered_by_badge_nolink']); /* ZAPPOPPOP_BADGE_NOLINK */
 $test_mode        = !empty($settings['test_mode']);
 ?>
 <div class="zappoppop-settings-section">
@@ -63,6 +64,11 @@ $test_mode        = !empty($settings['test_mode']);
                 <label>
                     <input type="checkbox" name="settings[powered_by_badge]" value="1" <?php checked($powered_by_badge); ?>>
                     <?php esc_html_e('Display small "Powered by ZapPopPop" badge on public popups', 'zappoppop'); ?>
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" name="settings[powered_by_badge_nolink]" value="1" <?php checked($powered_by_nolink); ?>>
+                    <?php esc_html_e('Disable hyperlink on the badge (show as plain text, no link to zappoppop.com)', 'zappoppop'); ?>
                 </label>
             </td>
         </tr>

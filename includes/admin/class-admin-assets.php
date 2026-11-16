@@ -89,6 +89,7 @@ class ZapPopPop_Admin_Assets {
             $zappoppop_ap_css = ZAPPOPPOP_PATH . 'admin/css/zappoppop-alpha-picker.css';
             $zappoppop_ap_js  = ZAPPOPPOP_PATH . 'admin/js/zappoppop-alpha-picker.js';
             wp_enqueue_style('zappoppop-alpha-picker-css', ZAPPOPPOP_URL . 'admin/css/zappoppop-alpha-picker.css', ['zappoppop-builder-css'], file_exists($zappoppop_ap_css) ? (string) filemtime($zappoppop_ap_css) : self::ver());
+            wp_enqueue_script('zappoppop-color-throttle-js', ZAPPOPPOP_URL . 'admin/js/zappoppop-color-throttle.js', [], file_exists(ZAPPOPPOP_PATH . 'admin/js/zappoppop-color-throttle.js') ? (string) filemtime(ZAPPOPPOP_PATH . 'admin/js/zappoppop-color-throttle.js') : self::ver(), true); /* ZAPPOPPOP_COLOR_THROTTLE */
             wp_enqueue_script('zappoppop-alpha-picker-js', ZAPPOPPOP_URL . 'admin/js/zappoppop-alpha-picker.js', [], file_exists($zappoppop_ap_js) ? (string) filemtime($zappoppop_ap_js) : self::ver(), true);
             wp_localize_script('zappoppop-alpha-picker-js', 'zappoppop_alpha_vars', ['i18n' => [
                 'pick'    => __('Pick colour', 'zappoppop'),
@@ -157,9 +158,14 @@ class ZapPopPop_Admin_Assets {
             wp_enqueue_script('zappoppop-builder-align-dock-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-align-dock.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-history-fix-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-history-fix.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-settings-js', 'zappoppop-builder-io-js'], self::ver(), true); /* ZAPPOPPOP_HISTORY_FIX */
             wp_enqueue_script('zappoppop-builder-nudge-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-nudge.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
+            wp_enqueue_script('zappoppop-builder-marquee-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-marquee.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true); /* ZAPPOPPOP_MARQUEE_SELECT */
+            wp_enqueue_script('zappoppop-builder-alt-copy-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-alt-copy.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true); /* ZAPPOPPOP_ALT_COPY */
+            wp_enqueue_script('zappoppop-builder-clipboard-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-clipboard.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true); /* ZAPPOPPOP_CLIPBOARD */
             wp_enqueue_script('zappoppop-builder-click-open-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-click-open.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-panel-memory-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-panel-memory.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-inspector-js', 'zappoppop-builder-settings-js', 'zappoppop-builder-io-js'], self::ver(), true); /* ZAPPOPPOP_PANEL_MEMORY */
             wp_enqueue_script('zappoppop-builder-ribbon-tooltip-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-ribbon-tooltip.js', [], self::ver(), true);
+            wp_enqueue_script('zappoppop-builder-ribbon-toggles-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-ribbon-toggles.js', [], self::ver(), true); /* ZAPPOPPOP_RIBBON_ICON_TOGGLES */
+            wp_enqueue_script('zappoppop-builder-zoom-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-zoom.js', ['jquery', 'jquery-ui-draggable', 'jquery-ui-resizable', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true); /* ZAPPOPPOP_STAGE_ZOOM */
 
             $builder_payload = array_merge($shared_payload, [
                 'nonce'        => wp_create_nonce('zappoppop_builder_nonce'),

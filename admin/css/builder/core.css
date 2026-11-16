@@ -2235,3 +2235,58 @@ body.zappoppop-preview-locked #zappoppop-canvas-size-guide { display: none; }
     border-style: none !important;
 }
 /* === /ZAPPOPPOP_FORM_BORDER_FIX === */
+
+
+/* ZAPPOPPOP_MARQUEE_SELECT: rubber-band rectangle + multi-selection outline (uses the Theme page accent) */
+.zappoppop-marquee {
+    position: fixed;
+    z-index: 100000;
+    pointer-events: none;
+    box-sizing: border-box;
+    border: 1px dashed var(--zpp-builder-accent-color, #2563eb);
+}
+.zappoppop-marquee::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: var(--zpp-builder-accent-color, #2563eb);
+    opacity: 0.12;
+}
+body.zappoppop-marquee-active,
+body.zappoppop-marquee-active * {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    cursor: crosshair !important;
+}
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-multi-selected,
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-multi-selected:hover,
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-marquee-hit,
+#zappoppop-canvas-box .zappoppop-canvas-item.zappoppop-marquee-hit:hover {
+    outline: 1px solid var(--zpp-builder-accent-color, #2563eb) !important;
+    outline-offset: 0 !important;
+}
+
+
+/* ZAPPOPPOP_ALT_COPY: copy "+" cursor while Alt is held during a drag, dashed ghost where the original stays */
+body.zappoppop-copy-drag,
+body.zappoppop-copy-drag * {
+    cursor: -webkit-copy !important;
+    cursor: copy !important;
+}
+.zappoppop-copy-ghost {
+    position: absolute;
+    display: none;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 9999;
+    border: 1px dashed var(--zpp-builder-accent-color, #2563eb);
+}
+.zappoppop-copy-ghost::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: var(--zpp-builder-accent-color, #2563eb);
+    opacity: 0.1;
+}

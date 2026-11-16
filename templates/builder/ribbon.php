@@ -30,12 +30,24 @@ if (!defined('ABSPATH')) exit;
         <button type="button" class="zappoppop-ribbon-btn zappoppop-ribbon-tool zappoppop-draggable-tool" data-type="checkbox" title="<?php esc_attr_e('Agreement Checkbox (checkbox)', 'zappoppop'); ?>"><span class="dashicons dashicons-privacy"></span><span class="btn-label"><?php esc_html_e('Agreement', 'zappoppop'); ?></span></button>
         <button type="button" class="zappoppop-ribbon-btn zappoppop-ribbon-tool zappoppop-draggable-tool" data-type="submit" title="<?php esc_attr_e('26. Button Submit (submit)', 'zappoppop'); ?>"><span class="dashicons dashicons-button"></span><span class="btn-label"><?php esc_html_e('Submit', 'zappoppop'); ?></span></button>
         <?php do_action('zappoppop_builder_ribbon_tools'); ?>
-        <div class="zappoppop-snap-group zappoppop-ribbon-snap" role="group" aria-label="<?php esc_attr_e('Snapping', 'zappoppop'); ?>" style="margin-left:auto;flex:0 0 auto;">
-            <label class="zappoppop-snap-switch" title="<?php esc_attr_e('Snap to other objects\' edges and centers (hold Alt to bypass)', 'zappoppop'); ?>">
-                <input type="checkbox" id="zappoppop-snap-object" class="zappoppop-snap-toggle" checked aria-label="<?php esc_attr_e('Snap to objects', 'zappoppop'); ?>" data-snap="object">
-                <span class="zappoppop-snap-slider" aria-hidden="true"></span>
-                <span class="zappoppop-snap-text"><?php esc_html_e('Snap Object', 'zappoppop'); ?></span>
-            </label>
+        <div class="zappoppop-snap-group zappoppop-ribbon-snap" role="group" aria-label="<?php esc_attr_e('Panels', 'zappoppop'); ?>" style="margin-left:auto;flex:0 0 auto;">
+            <?php /* ZAPPOPPOP_STAGE_ZOOM */ ?>
+            <span class="zppz-group" role="group" aria-label="<?php esc_attr_e('Stage zoom', 'zappoppop'); ?>">
+                <span class="zppr-wrap zappoppop-ribbon-icon-toggle" data-zpp-tip-on="<?php esc_attr_e('Zoom Out', 'zappoppop'); ?>" data-zpp-tip-off="<?php esc_attr_e('Zoom Out', 'zappoppop'); ?>">
+                    <button type="button" id="zappoppop-zoom-out" class="zppr-box zppz-btn" aria-label="<?php esc_attr_e('Zoom Out', 'zappoppop'); ?>"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><line x1="6" y1="12" x2="18" y2="12"></line></svg></button>
+                </span>
+                <span class="zppr-wrap zppz-select-wrap zappoppop-ribbon-icon-toggle" data-zpp-tip-on="<?php esc_attr_e('Zoom (Alt + Scroll, Ctrl+0 = 100%)', 'zappoppop'); ?>" data-zpp-tip-off="<?php esc_attr_e('Zoom (Alt + Scroll, Ctrl+0 = 100%)', 'zappoppop'); ?>">
+                    <select id="zappoppop-ribbon-zoom" class="zppz-select" data-fit-label="<?php esc_attr_e('Fit', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Zoom level', 'zappoppop'); ?>"><option value="1" selected>100%</option></select>
+                </span>
+                <span class="zppr-wrap zappoppop-ribbon-icon-toggle" data-zpp-tip-on="<?php esc_attr_e('Zoom In', 'zappoppop'); ?>" data-zpp-tip-off="<?php esc_attr_e('Zoom In', 'zappoppop'); ?>">
+                    <button type="button" id="zappoppop-zoom-in" class="zppr-box zppz-btn" aria-label="<?php esc_attr_e('Zoom In', 'zappoppop'); ?>"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><line x1="6" y1="12" x2="18" y2="12"></line><line x1="12" y1="6" x2="12" y2="18"></line></svg></button>
+                </span>
+            </span>
+            <?php /* ZAPPOPPOP_ZOOM_ORDER */ ?>
+            <span class="zppz-divider" role="separator" aria-orientation="vertical" aria-hidden="true"></span>
+            <span class="zppr-wrap zappoppop-ribbon-icon-toggle" data-zpp-tip-on="<?php esc_attr_e('Hide Layer Panel', 'zappoppop'); ?>" data-zpp-tip-off="<?php esc_attr_e('Unhide Layer Panel', 'zappoppop'); ?>">
+                <button type="button" id="zappoppop-layers-visibility" class="zppr-box" aria-pressed="true" aria-controls="zappoppop-floating-layers-panel" aria-label="<?php esc_attr_e('Hide / Unhide Layer Panel', 'zappoppop'); ?>"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><polygon points="12 3 3 8 12 13 21 8 12 3"></polygon><polyline points="3 12 12 17 21 12"></polyline><polyline points="3 16 12 21 21 16"></polyline></svg></button>
+            </span>
         </div>
     </div>
 </div>

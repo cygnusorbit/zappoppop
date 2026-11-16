@@ -407,3 +407,37 @@ body.zappoppop-preview-locked .zappoppop-ribbon-toggle {
     transform: rotate(45deg);
 }
 /* === ZAPPOPPOP_RIBBON_TOOLTIP_END === */
+
+
+/* ZAPPOPPOP_RIBBON_ICON_TOGGLES: Snap Object + Layer Panel icon toggles (same dark ribbon look as the element tools) */
+.zappoppop-ribbon-bar .zppr-wrap { position: relative; display: inline-flex; margin: 0; padding: 0; line-height: 0; cursor: pointer; }
+.zappoppop-ribbon-bar .zppr-wrap > input { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+.zappoppop-ribbon-bar .zppr-box { position: relative; display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; box-sizing: border-box; width: 31px; height: 29px; margin: 0; padding: 0; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; -webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-transition: background .15s ease, border-color .15s ease, color .15s ease; transition: background .15s ease, border-color .15s ease, color .15s ease; }
+.zappoppop-ribbon-bar .zppr-box svg { display: block; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.zappoppop-ribbon-bar .zppr-box::after { content: ''; position: absolute; top: 50%; left: 6px; right: 6px; height: 2px; margin-top: -1px; border-radius: 1px; background: currentColor; -webkit-transform: rotate(-45deg); transform: rotate(-45deg); opacity: 0; pointer-events: none; }
+.zappoppop-ribbon-bar .zppr-wrap:hover .zppr-box { background: #334155; border-color: #64748b; }
+/* ON */
+.zappoppop-ribbon-bar .zppr-wrap > input:checked + .zppr-box,
+.zappoppop-ribbon-bar .zppr-box[aria-pressed="true"] { color: var(--zpp-builder-accent-color, #38bdf8); border-color: var(--zpp-builder-accent-color, #38bdf8); }
+/* OFF: dimmed icon with a slash */
+.zappoppop-ribbon-bar .zppr-wrap > input:not(:checked) + .zppr-box::after,
+.zappoppop-ribbon-bar .zppr-box[aria-pressed="false"]::after { opacity: 1; }
+.zappoppop-ribbon-bar .zppr-wrap > input:focus-visible + .zppr-box,
+.zappoppop-ribbon-bar .zppr-box:focus-visible { outline: 2px solid var(--zpp-builder-accent-color, #38bdf8); outline-offset: 1px; }
+
+/* Layer Panel hidden from the ribbon (beats the panel's own display rules) */
+html body.zpp-layers-hidden #zappoppop-floating-layers-panel { display: none !important; }
+
+/* ZAPPOPPOP_STAGE_ZOOM: [-] [zoom dropdown] [+] in the ribbon (same dark look as the other ribbon controls) */
+.zappoppop-ribbon-bar .zppz-group { display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 4px; margin-left: 2px; }
+.zappoppop-ribbon-bar .zppz-btn:disabled { opacity: .4; cursor: not-allowed; }
+.zappoppop-ribbon-bar .zppz-btn svg { stroke-width: 2.4; }
+.zappoppop-ribbon-bar .zppz-select-wrap { cursor: pointer; }
+.zappoppop-ribbon-bar .zppz-select { box-sizing: border-box; width: 74px; height: 29px; margin: 0; padding: 0 20px 0 9px; background-color: #0f172a; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; border: 1px solid #334155; border-radius: 6px; color: #e2e8f0; font-size: 12px; font-weight: 600; line-height: 27px; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: none; min-height: 0; -webkit-transition: background-color .15s ease, border-color .15s ease; transition: background-color .15s ease, border-color .15s ease; }
+.zappoppop-ribbon-bar .zppz-select:hover { background-color: #334155; border-color: #64748b; }
+.zappoppop-ribbon-bar .zppz-select:focus { outline: none; border-color: var(--zpp-builder-accent-color, #38bdf8); box-shadow: none; }
+.zappoppop-ribbon-bar .zppz-select:focus-visible { outline: 2px solid var(--zpp-builder-accent-color, #38bdf8); outline-offset: 1px; }
+.zappoppop-ribbon-bar .zppz-select option { background: #0f172a; color: #e2e8f0; }
+
+/* ZAPPOPPOP_ZOOM_ORDER: divider between the zoom group and the Layer Panel button */
+.zappoppop-ribbon-bar .zppz-divider { display: inline-block; flex: 0 0 auto; width: 1px; height: 22px; margin: 0 2px; background: #334155; }
