@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
         <button type="button" id="zappoppop-settings-drawer-close" style="background:transparent;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;">&times;</button>
     </div>
 
-    <div style="flex:1;overflow-y:auto;padding:16px;">
+    <div class="zappoppop-settings-drawer-scroll" style="flex:1;overflow-y:auto;padding:16px;">
         <div class="zappoppop-accordion-group">
             
             <?php

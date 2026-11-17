@@ -1,0 +1,246 @@
+/* ZPP_SETTINGS_SWITCHES: Popup Settings drawer.
+   1) Theme bridge: modules read the light admin-page variables (--zpp-c-*); inside the builder drawer they get the builder theme values on the very first frame, so nothing flashes light then turns dark.
+   2) One slide-toggle look (and no colour animation) for every toggle track of every module.
+   3) Plain check-marks (class .zpp-switch, added by builder-settings-switches.js) are drawn as slide-toggles.
+   Chrome, Safari, Firefox, Edge. */
+html body #zappoppop-settings-drawer {
+    --zpp-c-bg-card: var(--zpp-builder-content-bg);
+    --zpp-c-border: var(--zpp-builder-border-color);
+    --zpp-c-row-border: var(--zpp-builder-border-color);
+    --zpp-c-heading: var(--zpp-builder-content-text);
+    --zpp-c-text: var(--zpp-builder-content-text);
+    --zpp-c-muted: var(--zpp-builder-content-text);
+    --zpp-c-input-bg: var(--zpp-builder-field-bg);
+    --zpp-c-input-text: var(--zpp-builder-field-text);
+    --zpp-c-input-border: var(--zpp-builder-field-border);
+    --zpp-c-input-focus: var(--zpp-builder-accent-color);
+    --zpp-c-success: var(--zpp-builder-accent-color);
+    --zpp-c-th-bg: var(--zpp-builder-accordion-bg);
+    --zpp-c-row-hover: var(--zpp-builder-border-color);
+}
+
+/* Buttons and module headers: final theme colours immediately, no colour transition */
+html body #zappoppop-settings-drawer .zappoppop-acc-item .button:not(.button-primary),
+html body #zappoppop-settings-drawer .zappoppop-acc-item button.button-link {
+    background-color: var(--zpp-builder-field-bg) !important;
+    border-color: var(--zpp-builder-field-border) !important;
+    color: var(--zpp-builder-field-text) !important;
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item .zappoppop-ntf-head {
+    background-color: var(--zpp-builder-accordion-bg) !important;
+    border-color: var(--zpp-builder-accordion-border) !important;
+    color: var(--zpp-builder-accordion-text, var(--zpp-builder-content-text)) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item .zappoppop-ntf-head * {
+    color: inherit !important;
+}
+
+/* Panels and text: same final colours the theme script applies later, so there is no one-time pop */
+html body #zappoppop-settings-drawer .zappoppop-acc-item div:has(input:not([type="hidden"]):not([type="checkbox"]), select, textarea):not([class*="swatch"]):not([class*="checker"]) {
+    background-color: var(--zpp-builder-content-bg) !important;
+    background-image: none !important;
+    border-color: var(--zpp-builder-content-border) !important;
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item p,
+html body #zappoppop-settings-drawer .zappoppop-acc-item small,
+html body #zappoppop-settings-drawer .zappoppop-acc-item em,
+html body #zappoppop-settings-drawer .zappoppop-acc-item h2,
+html body #zappoppop-settings-drawer .zappoppop-acc-item h3,
+html body #zappoppop-settings-drawer .zappoppop-acc-item h4,
+html body #zappoppop-settings-drawer .zappoppop-acc-item .description {
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item [class*="sublabel"] {
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item [class*="suffix"] {
+    color: var(--zpp-builder-muted-text) !important;
+}
+
+/* Existing slide-toggle tracks (any module): theme colours, no colour animation (the thumb keeps its own slide) */
+html body #zappoppop-settings-drawer input[type="checkbox"] + [class*="-track"],
+html body #zappoppop-settings-drawer input[type="checkbox"] + [class*="-trk"],
+html body #zappoppop-settings-drawer input[type="checkbox"] + [class*="-slider"] {
+    background-color: var(--zpp-builder-toggle-off-bg) !important;
+    background-image: none !important;
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"]:checked + [class*="-track"],
+html body #zappoppop-settings-drawer input[type="checkbox"]:checked + [class*="-trk"],
+html body #zappoppop-settings-drawer input[type="checkbox"]:checked + [class*="-slider"],
+html body #zappoppop-settings-drawer .zappoppop-toggle-switch.is-active .zappoppop-toggle-slider {
+    background-color: var(--zpp-builder-accent-color) !important;
+}
+
+/* Plain check-marks drawn as slide-toggles */
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    position: relative !important;
+    display: inline-block !important;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 34px;
+    flex: 0 0 34px;
+    box-sizing: border-box !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 18px !important;
+    margin: 0 8px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 9px !important;
+    background-color: var(--zpp-builder-toggle-off-bg) !important;
+    box-shadow: none !important;
+    float: none !important;
+    line-height: 0 !important;
+    vertical-align: middle;
+    cursor: pointer;
+    outline: 0;
+    -webkit-transition: none;
+    transition: none;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 2px !important;
+    left: 2px !important;
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+    float: none !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    font: 0/0 a !important;
+    -webkit-transition: -webkit-transform .15s ease;
+    transition: transform .15s ease;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch:checked {
+    background-color: var(--zpp-builder-accent-color) !important;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch:checked::before {
+    -webkit-transform: translateX(16px) !important;
+    transform: translateX(16px) !important;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch:focus-visible {
+    box-shadow: 0 0 0 2px var(--zpp-builder-accent-color) !important;
+}
+html body #zappoppop-settings-drawer input[type="checkbox"].zpp-switch:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ZPP_UNIFORM_TOGGLES: every slide-toggle in the drawer = Targeting Triggers size (34x18, 14px thumb, 2px inset, 16px travel) */
+html body #zappoppop-settings-drawer .zappoppop-ovf-switch,
+html body #zappoppop-settings-drawer label.zappoppop-sw,
+html body #zappoppop-settings-drawer .zappoppop-toggle-switch,
+html body #zappoppop-settings-drawer .zappoppop-an-sw,
+html body #zappoppop-settings-drawer .zappoppop-ovm-sw,
+html body #zappoppop-settings-drawer .zappoppop-st-sw {
+    width: 34px !important; min-width: 34px !important; height: 18px !important;
+    -webkit-box-flex: 0; -ms-flex: 0 0 34px; flex: 0 0 34px;
+}
+html body #zappoppop-settings-drawer .zappoppop-ovf-track,
+html body #zappoppop-settings-drawer .zappoppop-sw-track,
+html body #zappoppop-settings-drawer .zappoppop-toggle-slider,
+html body #zappoppop-settings-drawer .zappoppop-an-track,
+html body #zappoppop-settings-drawer .zappoppop-ovm-track,
+html body #zappoppop-settings-drawer .zappoppop-st-track {
+    border-radius: 9px !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-ovf-track::before,
+html body #zappoppop-settings-drawer .zappoppop-sw-track::before,
+html body #zappoppop-settings-drawer .zappoppop-toggle-slider::before,
+html body #zappoppop-settings-drawer .zappoppop-an-track::before,
+html body #zappoppop-settings-drawer .zappoppop-ovm-track::before,
+html body #zappoppop-settings-drawer .zappoppop-st-track::before {
+    width: 14px !important; height: 14px !important; top: 2px !important; left: 2px !important;
+    right: auto !important; bottom: auto !important;
+    -webkit-transform: translateX(0) !important; transform: translateX(0) !important;
+}
+html body #zappoppop-settings-drawer input:checked + .zappoppop-ovf-track::before,
+html body #zappoppop-settings-drawer input:checked + .zappoppop-sw-track::before,
+html body #zappoppop-settings-drawer input:checked + .zappoppop-toggle-slider::before,
+html body #zappoppop-settings-drawer .zappoppop-toggle-switch.is-active .zappoppop-toggle-slider::before,
+html body #zappoppop-settings-drawer input:checked + .zappoppop-an-track::before,
+html body #zappoppop-settings-drawer input:checked + .zappoppop-ovm-track::before,
+html body #zappoppop-settings-drawer input:checked + .zappoppop-st-track::before {
+    -webkit-transform: translateX(16px) !important; transform: translateX(16px) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-sp-trk {
+    width: 34px !important; min-width: 34px !important; height: 18px !important; border-radius: 9px !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-sp-trk::after {
+    width: 14px !important; height: 14px !important; top: 2px !important; left: 2px !important;
+    -webkit-transform: translateX(0) !important; transform: translateX(0) !important;
+}
+html body #zappoppop-settings-drawer input:checked + .zappoppop-sp-trk::after {
+    -webkit-transform: translateX(16px) !important; transform: translateX(16px) !important;
+}
+
+/* ZPP_BORDER_FIRST_PAINT: Popup Overlay / Side Tabs borders carry their final colour from the first paint */
+html body #zappoppop-settings-drawer .zappoppop-ovm-enable,
+html body #zappoppop-settings-drawer .zappoppop-st-enable,
+html body #zappoppop-settings-drawer .zappoppop-ovm-list > div {
+    border-color: var(--zpp-builder-border-color) !important;
+    -webkit-transition: none !important; transition: none !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-ovm-custom { border-top-color: var(--zpp-builder-border-color) !important; }
+html body #zappoppop-settings-drawer .zappoppop-ovm-editor,
+html body #zappoppop-settings-drawer .zappoppop-ovm-preview {
+    border-color: var(--zpp-builder-content-border) !important;
+    background-color: var(--zpp-builder-content-bg) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-ovm-color-row input[type="color"],
+html body #zappoppop-settings-drawer .zappoppop-st-color-row input[type="color"],
+html body #zappoppop-settings-drawer .zappoppop-st-iconbtn {
+    border-color: var(--zpp-builder-field-border) !important;
+    background-color: var(--zpp-builder-field-bg) !important;
+    -webkit-transition: none !important; transition: none !important;
+}
+
+/* ZPP_POSITION_GRID: Popup Positions 3x3 picker follows the builder theme */
+html body #zappoppop-settings-drawer .zappoppop-pp-cell .pp-screen {
+    fill: var(--zpp-builder-field-bg) !important;
+    stroke: var(--zpp-builder-field-border) !important;
+    -webkit-transition: none !important; transition: none !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell .pp-box {
+    fill: var(--zpp-builder-toggle-off-bg) !important;
+    fill-opacity: 1;
+    stroke: var(--zpp-builder-field-border) !important;
+    -webkit-transition: none !important; transition: none !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell:hover .pp-screen,
+html body #zappoppop-settings-drawer .zappoppop-pp-cell:focus .pp-screen {
+    stroke: var(--zpp-builder-accent-color) !important;
+    fill: var(--zpp-builder-field-bg) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell:hover .pp-box,
+html body #zappoppop-settings-drawer .zappoppop-pp-cell:focus .pp-box {
+    stroke: var(--zpp-builder-accent-color) !important;
+    fill: var(--zpp-builder-accent-color) !important;
+    fill-opacity: .45;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell.is-selected .pp-screen {
+    stroke: var(--zpp-builder-accent-color) !important;
+    fill: var(--zpp-builder-field-bg) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell.is-selected .pp-box {
+    stroke: var(--zpp-builder-accent-color) !important;
+    fill: var(--zpp-builder-accent-color) !important;
+    fill-opacity: .9;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-cell:focus-visible {
+    outline: 2px solid var(--zpp-builder-accent-color) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-pp-name { color: var(--zpp-builder-content-text) !important; }
+html body #zappoppop-settings-drawer .zappoppop-ppm-edge-box { border-top-color: var(--zpp-builder-border-color) !important; }
+html body #zappoppop-settings-drawer .zappoppop-pp-pad span,
+html body #zappoppop-settings-drawer .zappoppop-ppm-help { color: var(--zpp-builder-muted-text) !important; }

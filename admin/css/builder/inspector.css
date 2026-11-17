@@ -1387,3 +1387,25 @@ html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer {
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3) !important;
 }
 /* === ZAPPOPPOP_INSPECTOR_EDGE_FIX_END === */
+
+/* ZPP_INSPECTOR_FIT: fields never grow past the drawer; 2-column rows always split into two equal columns */
+#zappoppop-inspector-drawer .zappoppop-gp-2col-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+#zappoppop-inspector-drawer .zappoppop-gp-col { min-width: 0; }
+#zappoppop-inspector-drawer .zappoppop-gp-col > input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="hidden"]),
+#zappoppop-inspector-drawer .zappoppop-gp-col > select,
+#zappoppop-inspector-drawer .zappoppop-gp-col > textarea { width: 100% !important; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box !important; }
+#zappoppop-inspector-body input.zappoppop-input,
+#zappoppop-inspector-body select.zappoppop-select,
+#zappoppop-inspector-body textarea { max-width: 100%; box-sizing: border-box; }
+
+/* ZPP_INSPECTOR_CLIP_FIX: WP gives form fields a 1px side margin; full-width fields then overhang the scrolling tab pane by 1px
+   and its overflow clips their right border. No iframe is involved. */
+#zappoppop-inspector-drawer input.zappoppop-input,
+#zappoppop-inspector-drawer select.zappoppop-select,
+#zappoppop-inspector-drawer textarea.zappoppop-textarea,
+#zappoppop-inspector-drawer .zappoppop-gp-col > input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="hidden"]),
+#zappoppop-inspector-drawer .zappoppop-gp-col > select,
+#zappoppop-inspector-drawer .zappoppop-gp-col > textarea {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

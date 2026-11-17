@@ -84,7 +84,7 @@ class ZapPopPop_Library_Presets {
             $root     = $roots_map[$f];
             $base_dir = $is_dir ? dirname($f) . '/' : $root['path'];
             $base_url = $root['url'] . ($is_dir ? rawurlencode($folder) . '/' : '');
-            if ($is_dir && (!preg_match('/^[A-Za-z0-9._-]+$/', $folder) || is_link(dirname($f)))) { continue; }
+            if ($is_dir && (!preg_match('/^[A-Za-z0-9][A-Za-z0-9._+ -]*$/', $folder) || strpos($folder, '..') !== false || is_link(dirname($f)))) { continue; }
             /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $j = json_decode((string) file_get_contents($f));
             if (!is_object($j)) { continue; }
 
@@ -133,7 +133,7 @@ class ZapPopPop_Library_Presets {
             if (isset($d['canvasMeta'][1]) && is_array($d['canvasMeta'][1])) { $cm = $d['canvasMeta'][1]; }
             elseif (isset($d['canvasMeta']['1']) && is_array($d['canvasMeta']['1'])) { $cm = $d['canvasMeta']['1']; }
 
-            $slug = sanitize_key($is_dir ? $folder : basename($f, '.json'));
+            $slug = sanitize_key(str_replace(array('+', ' '), '-', $is_dir ? $folder : basename($f, '.json')));
             if ($slug === '') { continue; }
 
             $title = isset($meta['title']) ? sanitize_text_field((string) $meta['title']) : '';

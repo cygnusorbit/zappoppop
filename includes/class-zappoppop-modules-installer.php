@@ -371,12 +371,12 @@ class ZapPopPop_Modules_Installer {
                 'error_generic'   => __('Something went wrong. Please try again.', 'zappoppop'),
                 'uninstall_title' => __('Uninstall module', 'zappoppop'),
                 /* translators: %s: module name */
-                'uninstall_msg'   => __('Uninstall "%s"? It stops working in the builder and on the frontend. Its files and saved popup data are kept, and you can reinstall it from Extend.', 'zappoppop'),
+                'uninstall_msg'   => __('Uninstall "%s"? It stops working in the builder and on the frontend. Its files and saved popup data are kept, and you can reinstall it from Modules.', 'zappoppop'),
                 'delete_title'    => __('Delete module', 'zappoppop'),
                 /* translators: %s: module name */
                 'delete_msg_uploaded' => __('Delete "%s"? Its files are removed from the uploads folder. This cannot be undone.', 'zappoppop'),
                 /* translators: %s: module name */
-                'delete_msg_core' => __('Delete "%s"? It is removed from your modules and can be restored from Extend.', 'zappoppop'),
+                'delete_msg_core' => __('Delete "%s"? It is removed from your modules and can be restored from Modules.', 'zappoppop'),
                 'remove_data'     => __('Remove data: also erase this module\'s saved data from all popups', 'zappoppop'),
                 'in_use_title'    => __('Module is in use', 'zappoppop'),
                 'in_use_msg'      => __('Popups that use it will lose this feature until it is installed again. Continue?', 'zappoppop'),
@@ -395,7 +395,7 @@ class ZapPopPop_Modules_Installer {
                 'too_big'         => __('The zip is larger than the %s limit.', 'zappoppop'),
                 'installed_ok'    => __('Module installed.', 'zappoppop'),
                 'manage_link'     => __('Manage in Settings', 'zappoppop'),
-                'extend_link'     => __('Open Extend', 'zappoppop'),
+                'extend_link'     => __('Open Modules', 'zappoppop'),
                 'empty'           => __('No modules match.', 'zappoppop'),
                 'builtin'         => __('Built-in', 'zappoppop'),
                 'uploaded'        => __('Uploaded', 'zappoppop'),

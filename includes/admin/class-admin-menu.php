@@ -26,6 +26,7 @@ class ZapPopPop_Admin_Menu {
         add_action('admin_enqueue_scripts', ['ZapPopPop_Promo', 'enqueue_menu']);
         ZapPopPop_Promo::init_plugin_link();
         add_action('admin_enqueue_scripts', [$this, 'print_hidden_css']);
+        add_action('admin_enqueue_scripts', [$this, 'print_divider_css']);
         add_action('admin_enqueue_scripts', [$this, 'print_unread_pulse_css']);
         add_action('admin_enqueue_scripts', [$this, 'print_hidden_js']);
     }
@@ -66,7 +67,7 @@ class ZapPopPop_Admin_Menu {
         add_submenu_page($parent, __('Transactions', 'zappoppop'), __('Transactions', 'zappoppop'), 'manage_options', 'zappoppop-payments', [$this->pages, 'render_payments']);
         add_submenu_page($parent, __('Popups Library', 'zappoppop'), __('Popups Library', 'zappoppop'), 'manage_options', 'zappoppop-library', [$this->pages, 'render_library']);
         add_submenu_page($parent, __('Settings', 'zappoppop'), __('Settings', 'zappoppop'), 'manage_options', 'zappoppop-settings', [$this->pages, 'render_settings']);
-        add_submenu_page($parent, __('Extend', 'zappoppop'), __('Extend', 'zappoppop'), 'manage_options', 'zappoppop-extend', [$this->pages, 'render_extend']);
+        add_submenu_page($parent, __('Modules', 'zappoppop'), __('Modules', 'zappoppop'), 'manage_options', 'zappoppop-extend', [$this->pages, 'render_extend']);
         add_submenu_page($parent, __('Theme', 'zappoppop'), __('Theme', 'zappoppop'), 'manage_options', 'zappoppop-theme', [$this->pages, 'render_theme']);
         add_submenu_page($parent, __('Tools & Export', 'zappoppop'), __('Tools & Export', 'zappoppop'), 'manage_options', 'zappoppop-tools', [$this->pages, 'render_tools']);
 
@@ -101,6 +102,39 @@ class ZapPopPop_Admin_Menu {
         return $prefs;
     }
 
+    /**
+     * ZAPPOPPOP_MENU_FIXED_ORDER: the one fixed menu sequence. Pro pages are matched by slug only.
+     * Pages listed here always sort in this order; any other page follows, in registration order.
+     * Filter: zappoppop_menu_order.
+     */
+    public static function menu_order() {
+        $order = [
+            'zappoppop-dashboard',
+            'zappoppop',
+            'zappoppop-builder',
+            'zappoppop-submissions',
+            'zappoppop-log',
+            'zappoppop-field-analytics',
+            'zappoppop-payments',
+            'zappoppop-ab',
+            'zappoppop-stats',
+            'zappoppop-library',
+            'zappoppop-theme',
+            'zappoppop-extend',
+            'zappoppop-tools',
+            'zappoppop-settings',
+        ];
+        $filtered = apply_filters('zappoppop_menu_order', $order);
+        return is_array($filtered) ? array_values($filtered) : $order;
+    }
+
+    /** Divider group of a page: 1 = dashboard..submissions, 2 = A/B + statistics, 3 = library and the rest. */
+    public static function menu_group($slug) {
+        if ($slug === 'zappoppop-ab' || $slug === 'zappoppop-stats') { return 2; }
+        if (in_array($slug, ['zappoppop-dashboard', 'zappoppop', 'zappoppop-builder', 'zappoppop-submissions', 'zappoppop-log', 'zappoppop-field-analytics', 'zappoppop-payments'], true)) { return 1; }
+        return 3;
+    }
+
     /** Merge live pages with saved prefs; returns ordered rows. */
     public static function resolve_pages($orig, $prefs) {
         $rows = [];
@@ -117,11 +151,12 @@ class ZapPopPop_Admin_Menu {
                 'idx'     => $i++,
             ];
         }
-        usort($rows, function ($a, $b) {
-            if ($a['order'] === null && $b['order'] === null) { return $a['idx'] - $b['idx']; }
-            if ($a['order'] === null) { return 1; }
-            if ($b['order'] === null) { return -1; }
-            return ($a['order'] === $b['order']) ? ($a['idx'] - $b['idx']) : ($a['order'] - $b['order']);
+        /* ZAPPOPPOP_MENU_FIXED_ORDER: the fixed sequence wins over any saved order; unknown pages follow in registration order */
+        $fixed = array_flip(self::menu_order());
+        usort($rows, function ($a, $b) use ($fixed) {
+            $ra = isset($fixed[$a['slug']]) ? $fixed[$a['slug']] : PHP_INT_MAX;
+            $rb = isset($fixed[$b['slug']]) ? $fixed[$b['slug']] : PHP_INT_MAX;
+            return ($ra === $rb) ? ($a['idx'] - $b['idx']) : ($ra < $rb ? -1 : 1);
         });
         return $rows;
     }
@@ -154,8 +189,17 @@ class ZapPopPop_Admin_Menu {
         $rows = self::resolve_pages(self::$original, self::get_prefs());
         $out = [];
         self::$hidden = [];
+        $prev_group = null;
         foreach ($rows as $r) {
             $it = $items[$r['slug']];
+            if (empty($r['hidden'])) {
+                /* ZAPPOPPOP_MENU_DIVIDER: thin line before the first visible page of the next group */
+                $g = self::menu_group($r['slug']);
+                if ($prev_group !== null && $g !== $prev_group) {
+                    $it[4] = trim((isset($it[4]) ? (string) $it[4] : '') . ' zpp-sep-before');
+                }
+                $prev_group = $g;
+            }
             if (!empty($r['custom'])) {
                 $it[0] = esc_html($r['label']);
                 if (isset($it[3])) { $it[3] = $r['label']; }
@@ -199,6 +243,15 @@ class ZapPopPop_Admin_Menu {
         wp_register_style('zappoppop-unread-pulse', false, array(), ZAPPOPPOP_VERSION);
         wp_enqueue_style('zappoppop-unread-pulse');
         wp_add_inline_style('zappoppop-unread-pulse', $css);
+    }
+
+    /** Thin divider line above the first page of each menu group (works on every WP admin colour scheme). */
+    public function print_divider_css() {
+        if (!current_user_can('manage_options')) { return; }
+        $css = '#adminmenu .wp-submenu a.zpp-sep-before{border-top:1px solid rgba(127,127,127,.4);margin-top:4px;padding-top:9px}';
+        wp_register_style('zappoppop-menu-divider', false, array(), ZAPPOPPOP_VERSION);
+        wp_enqueue_style('zappoppop-menu-divider');
+        wp_add_inline_style('zappoppop-menu-divider', $css);
     }
 
     /* Hidden pages stay registered (direct URLs keep working); only the menu entry is hidden. */

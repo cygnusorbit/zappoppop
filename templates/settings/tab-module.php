@@ -66,6 +66,7 @@ $__total = count($__rows);
                         <input type="hidden" name="settings[module_order][]" value="<?php echo esc_attr($__k); ?>">
                         <span class="mod-num"><?php echo (int) $__i; ?>.</span>
                         <span class="zpp-mod-name"><?php echo esc_html($__r['name']); ?></span>
+                        <?php if ($__r['source'] === 'pro') : ?><span class="zpp-pro-bullet"><?php esc_html_e('PRO', 'zappoppop'); ?></span><?php endif; ?>
                         <?php if ($__lk) : ?><span class="zpp-mod-pill is-lock"><?php esc_html_e('Always enabled', 'zappoppop'); ?></span><?php endif; ?>
                         <?php if ($__r['deprecated']) : ?><span class="zpp-mod-pill is-warn"><?php esc_html_e('Deprecated', 'zappoppop'); ?></span><?php endif; ?>
                     </div>

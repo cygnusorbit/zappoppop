@@ -441,3 +441,7 @@ html body.zpp-layers-hidden #zappoppop-floating-layers-panel { display: none !im
 
 /* ZAPPOPPOP_ZOOM_ORDER: divider between the zoom group and the Layer Panel button */
 .zappoppop-ribbon-bar .zppz-divider { display: inline-block; flex: 0 0 auto; width: 1px; height: 22px; margin: 0 2px; background: #334155; }
+
+/* ZPP_SUBMIT_LAST: Submit is always the last (right-most) element tool; the panel/zoom group follows it */
+.zappoppop-ribbon-bar .zappoppop-ribbon-scroll > .zappoppop-ribbon-tool[data-type="submit"] { -webkit-box-ordinal-group: 91; -ms-flex-order: 90; order: 90; }
+.zappoppop-ribbon-bar .zappoppop-ribbon-scroll > .zappoppop-ribbon-snap { -webkit-box-ordinal-group: 101; -ms-flex-order: 100; order: 100; }

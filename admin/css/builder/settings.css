@@ -521,3 +521,44 @@ body.folded .zappoppop-settings-drawer {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
 }
+
+/* ZPP_DRAWER_SCROLL: one stable thin scrollbar for the Popup Settings drawer and every scroller inside it.
+   Standard properties win in Chrome 121+, Edge, Firefox; the ::-webkit-scrollbar rules only run where scrollbar-width is unsupported (Safari < 18.2). */
+#zappoppop-settings-drawer .zappoppop-settings-drawer-scroll,
+#zappoppop-settings-drawer .zappoppop-settings-drawer-scroll * {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+#zappoppop-settings-drawer .zappoppop-settings-drawer-scroll {
+    min-height: 0;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+}
+@supports not (scrollbar-width: thin) {
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll::-webkit-scrollbar,
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll *::-webkit-scrollbar { width: 8px; height: 8px; }
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll::-webkit-scrollbar-track,
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll *::-webkit-scrollbar-track { background: transparent; }
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll::-webkit-scrollbar-thumb,
+    #zappoppop-settings-drawer .zappoppop-settings-drawer-scroll *::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+}
+
+/* ZPP_PRO_BULLET: PRO bullet (theme primary colour) next to a Pro module's accordion header title */
+.zappoppop-acc-header .zpp-pro-bullet {
+    display: inline-block;
+    flex: none;
+    margin-left: 8px;
+    padding: 0 6px;
+    border-radius: var(--zpp-r-badge, 10px);
+    background: var(--zpp-c-primary, var(--zpp-builder-accent-color, #c1272d));
+    color: var(--zpp-c-primary-text, #ffffff);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-sizing: border-box;
+}

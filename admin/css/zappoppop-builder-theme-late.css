@@ -41,8 +41,8 @@
     }
 
     /* Force ALL inner wrapper divs inside Header & Subtoolbar to never flash black on click */
-    [data-zpp-role="header"] div:not([data-zpp-role="canvas-tab-pill"]):not([data-zpp-role="canvas-tab-pill-active"]),
-    [data-zpp-role="subtoolbar"] div,
+    [data-zpp-role="header"] div:where(:not([data-zpp-role="canvas-tab-pill"]):not([data-zpp-role="canvas-tab-pill-active"]):not(#zappoppop-canvas-box):not(#zappoppop-canvas-box *)),
+    [data-zpp-role="subtoolbar"] div:where(:not(#zappoppop-canvas-box):not(#zappoppop-canvas-box *)),
     [data-zpp-role="header-group"] {
         background: transparent !important;
         background-color: transparent !important;
@@ -884,3 +884,52 @@
         --zpp-builder-stage-bg: transparent;
         background-color: transparent !important;
     }
+
+/* ZPP_SETTINGS_DRAWER_COLOR_MAP: remap hard-coded inline hex colours in Popup Settings modules to the builder theme on the first frame */
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background:#f8fafc" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background: #f8fafc" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background:#f1f5f9" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background: #f1f5f9" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background:#e2e8f0" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background: #e2e8f0" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background:#fff" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background: #fff" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background:#ffffff" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item div[style*="background: #ffffff" i] {
+    background-color: var(--zpp-builder-content-bg) !important;
+    background-image: none !important;
+    border-color: var(--zpp-builder-content-border) !important;
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="border:1px solid #cbd5e1" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="border: 1px solid #cbd5e1" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="border:1px solid #e2e8f0" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="border: 1px solid #e2e8f0" i] {
+    border-color: var(--zpp-builder-content-border) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#475569" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #475569" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#64748b" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #64748b" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#94a3b8" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #94a3b8" i] {
+    color: var(--zpp-builder-muted-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#1e293b" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #1e293b" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#334155" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #334155" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color:#0f172a" i],
+html body #zappoppop-settings-drawer .zappoppop-acc-item [style*="color: #0f172a" i] {
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item label:not(.button),
+html body #zappoppop-settings-drawer .zappoppop-acc-item strong {
+    color: var(--zpp-builder-content-text) !important;
+}
+html body #zappoppop-settings-drawer .zappoppop-acc-item .tt-seg:not(.is-on),
+html body #zappoppop-settings-drawer .zappoppop-acc-item .zappoppop-fa-pick-btn {
+    background-color: var(--zpp-builder-field-bg) !important;
+    border-color: var(--zpp-builder-field-border) !important;
+    color: var(--zpp-builder-field-text) !important;
+}

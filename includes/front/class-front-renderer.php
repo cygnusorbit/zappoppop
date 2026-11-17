@@ -437,7 +437,9 @@ class ZapPopPop_Front_Renderer {
             $path = sprintf('%s fill="%s" %s />', $geom_open['circle'], $fill, $s_attr);
         }
 
-        return sprintf('<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="%s">%s</svg>', esc_attr($svg_style), $path);
+        /* ZPP_SHAPE_CRISP_EDGES: un-rotated, stroke-less rectangles snap to whole pixels, so touching boxes never show an anti-aliased seam (during the appear animation or at rest) */
+        $crisp = (in_array($preset, array('square', 'rectangle', 'rect'), true) && $stroke_width <= 0 && $rotate === 0) ? ' shape-rendering="crispEdges"' : '';
+        return sprintf('<svg viewBox="0 0 100 100" preserveAspectRatio="none"%s style="%s">%s</svg>', $crisp, esc_attr($svg_style), $path);
     }
 
     /* ZAPPOPPOP_SHAPE_EDGE_FIT: a shape ending within 2px of a canvas edge is extended to that edge (+1px bleed when the canvas clips) so no sub-pixel/rounded white line shows */

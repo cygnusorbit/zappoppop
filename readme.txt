@@ -5,7 +5,7 @@ Tags: popup, modal, popup builder, optin, lead generation, form builder
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.04
+Stable tag: 1.0.05
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,7 @@ The plugin is fully internationalized (text domain `zappoppop`, domain path `/la
 Only in `wp-content/uploads/` (resolved with `wp_upload_dir()`): imported template images under `uploads/zappoppop-templates/` and, if you install optional extension modules, `uploads/zappoppop-modules/`. The plugin never writes to its own folder, so updates never remove your data.
 
 = How do I install an extension module? =
-Go to ZapPopPop > Extend > Upload Module and choose a module zip. Only administrators can do this (network administrators on multisite), and it is disabled when `DISALLOW_FILE_MODS` is set. Modules are unpacked into `wp-content/uploads/zappoppop-modules/`, only static files are accepted (PHP is blocked), and the built-in modules are never modified.
+Go to ZapPopPop > Modules > Upload Module and choose a module zip. Only administrators can do this (network administrators on multisite), and it is disabled when `DISALLOW_FILE_MODS` is set. Modules are unpacked into `wp-content/uploads/zappoppop-modules/`, only static files are accepted (PHP is blocked), and the built-in modules are never modified.
 
 == External services ==
 ZapPopPop does not send any data to a third-party service. Nothing is loaded from a CDN: the fonts (Inter, Roboto, Montserrat, Poppins, Open Sans, Lato) and the Font Awesome icons are bundled with the plugin, and no visitor data leaves your site.
@@ -57,5 +57,5 @@ ZapPopPop does not send any data to a third-party service. Nothing is loaded fro
 
 == Changelog ==
 
-= 1.0.04 =
+= 1.0.05 =
 * Initial release of ZapPopPop.

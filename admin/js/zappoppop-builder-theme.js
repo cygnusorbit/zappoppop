@@ -1110,6 +1110,7 @@
 
                 sb.querySelectorAll('label, span, p, small, em, h2, h3, h4').forEach(function(lbl) {
                     if (lbl.children.length > 0 || isInsideIsolatedCanvas(lbl) || isCheckerSwatchElement(lbl)) return;
+                    if (lbl.closest && lbl.closest('button, .button, a.button')) return; /* ZPP_BTN_TEXT_SKIP: button text/icons keep the button's own colour */
                     if (lbl.closest('[data-zpp-role="accordion-header"], [data-zpp-role="active-pill"], [data-zpp-role="subtab-active"], [data-zpp-role="subtab-inactive"], [data-zpp-role="toolbar-btn"], [data-zpp-role="add-canvas-btn"], [data-zpp-role="canvas-pill-bar"]')) return;
                     var tx = (lbl.textContent || '').trim();
                     if (/^(Appearance|Duration \(ms\)|Start delay \(ms\)|Start Animation|px|%|deg|ms|sec \(0 = disabled\)|Automatically dismisses.*)$/i.test(tx)) {
@@ -1121,6 +1122,7 @@
                 });
 
                 sb.querySelectorAll('input[type="checkbox"]').forEach(function(chk) {
+                    if (chk.classList && chk.classList.contains('zpp-switch')) return; /* ZPP_SWITCH_SKIP */
                     var track = chk.nextElementSibling || chk.parentElement;
                     if (!track) return;
                     var tr = track.getBoundingClientRect();
@@ -1174,6 +1176,7 @@
             document.querySelectorAll('button, a').forEach(function(btn) {
                 if (isInsideIsolatedCanvas(btn)) return;
                 if (btn.closest && btn.closest('.zappoppop-save-menu')) return; /* ZAPPOPPOP_MENU_SKIP: dropdown rows are styled by save-menu.css */
+                if (btn.hasAttribute('data-zpp-defaults-save') || btn.hasAttribute('data-zpp-defaults-clear') || (btn.closest && btn.closest('#zappoppop-settings-drawer'))) return; /* ZPP_DEFAULTS_SKIP: "Saved!" label on drawer buttons is not the header Save */
                 var txt = (btn.textContent || '').trim();
                 if (btn.id === 'zappoppop-btn-save' || btn.id === 'zappoppop-btn-save-template' ||
                     /^(Save|Update|Updated|Saving\.\.\.|Saved!?|Save As Template|Save Popup)$/i.test(txt)) {
@@ -1186,7 +1189,9 @@
                         setVarImportant(ch, 'color', 'var(--zpp-builder-save-text)');
                     });
                     var anc = btn.parentElement;
+                    var zppCanvasBox = document.getElementById('zappoppop-canvas-box');
                     while (anc && anc !== document.body) {
+                        if (/^(wpbody-content|wpbody|wpcontent|wpwrap)$/.test(anc.id || '') || (zppCanvasBox && anc.contains(zppCanvasBox))) { break; } /* ZPP_HEADER_GUARD: never tag a wrapper that holds the canvas */
                         var rect = anc.getBoundingClientRect();
                         if (rect.top < 80 && rect.height >= 34 && rect.height <= 80 && rect.width > window.innerWidth * 0.6) {
                             headerBar = anc;

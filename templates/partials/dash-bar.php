@@ -28,10 +28,10 @@ $bar_links = [
     ['zappoppop-field-analytics', __('Field Analytics', 'zappoppop'),  'dashicons-chart-pie'],
     ['zappoppop-payments',        __('Transactions', 'zappoppop'),     'dashicons-money-alt'],
     ['zappoppop-library',         __('Popups Library', 'zappoppop'),   'dashicons-category'],
-    ['zappoppop-settings',        __('Settings', 'zappoppop'),         'dashicons-admin-generic'],
     ['zappoppop-theme',           __('Theme', 'zappoppop'),            'dashicons-art'],
-    ['zappoppop-extend',          __('Extend', 'zappoppop'),           'dashicons-plugins-checked'],
+    ['zappoppop-extend',          __('Modules', 'zappoppop'),          'dashicons-plugins-checked'],
     ['zappoppop-tools',           __('Tools & Export', 'zappoppop'),   'dashicons-admin-tools'],
+    ['zappoppop-settings',        __('Settings', 'zappoppop'),         'dashicons-admin-generic'],
 ];
 $bar_links = apply_filters('zappoppop_bar_links', $bar_links);
 /* ZAPPOPPOP_BAR_MENU_SYNC: Menu dropdown mirrors Settings > Pages (label, order, hidden), live from the registered submenu. */

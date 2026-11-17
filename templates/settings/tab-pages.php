@@ -11,7 +11,7 @@ $__pg_pin = class_exists('ZapPopPop_Admin_Menu') ? ZapPopPop_Admin_Menu::pinned(
 ?>
 <?php ZapPopPop_Inline_Assets::style('settings-tab-pages'); ?><div class="zappoppop-settings-section">
     <h3><?php esc_html_e('Pages', 'zappoppop'); ?></h3>
-    <p class="description"><?php esc_html_e('Rename, reorder or hide ZapPopPop pages in the admin menu. The list syncs automatically with the menu. Hidden pages remain reachable by URL. Save settings, then reload to see the menu update.', 'zappoppop'); ?></p>
+    <p class="description"><?php esc_html_e('Rename or hide ZapPopPop pages in the admin menu (the order is fixed). The list syncs automatically with the menu. Hidden pages remain reachable by URL. Save settings, then reload to see the menu update.', 'zappoppop'); ?></p>
 
     <?php if (empty($__pg_rows)) : ?>
         <p><em><?php esc_html_e('No menu pages detected.', 'zappoppop'); ?></em></p>

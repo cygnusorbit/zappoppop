@@ -8,11 +8,12 @@
 
 /* ZPP_SETTINGS_BOTTOM_TOOLS: Save as Default + Reset Defaults, bottom-right of the form */
 .zappoppop-settings-wrap .zappoppop-settings-submit-bar { -ms-flex-wrap: wrap; flex-wrap: wrap; }
-.zappoppop-settings-wrap .zappoppop-settings-bottom-tools { display: -webkit-box; display: -ms-flexbox; display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.zappoppop-settings-wrap .zappoppop-settings-bottom-tools { display: -webkit-box; display: -ms-flexbox; display: flex; align-items: center; gap: 8px; margin-left: 0; }
+.zappoppop-settings-wrap .zappoppop-settings-save-group { display: -webkit-box; display: -ms-flexbox; display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .zappoppop-settings-bottom-tools .zappoppop-reset-wrap { margin-right: 0; }
-.zappoppop-settings-bottom-tools .zappoppop-reset-menu { top: auto; bottom: calc(100% + 6px); }
+.zappoppop-settings-bottom-tools .zappoppop-reset-menu { top: auto; bottom: calc(100% + 6px); left: 0; right: auto; }
 .zappoppop-settings-bottom-tools .button { min-height: var(--zpp-h-button, 34px); }
 .zappoppop-settings-wrap .zappoppop-settings-bottom-tools .button.zpp-btn-danger { background: var(--zpp-c-danger, #b32d2e); border-color: var(--zpp-c-danger, #b32d2e); color: var(--zpp-c-danger-text, #fff); }
 .zappoppop-settings-wrap .zappoppop-settings-bottom-tools .button.zpp-btn-danger:hover,
 .zappoppop-settings-wrap .zappoppop-settings-bottom-tools .button.zpp-btn-danger:focus { background: var(--zpp-c-danger, #b32d2e); border-color: var(--zpp-c-danger, #b32d2e); color: var(--zpp-c-danger-text, #fff); filter: brightness(.9); }
-@media (max-width: 600px) { .zappoppop-settings-wrap .zappoppop-settings-bottom-tools { width: 100%; justify-content: flex-end; } }
+@media (max-width: 600px) { .zappoppop-settings-wrap .zappoppop-settings-bottom-tools, .zappoppop-settings-wrap .zappoppop-settings-save-group { width: 100%; justify-content: flex-start; } }

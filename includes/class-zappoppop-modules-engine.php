@@ -58,12 +58,20 @@ class ZapPopPop_Modules_Engine {
         ];
     }
 
+    /** PRO bullet shown next to the title of a Pro-add-on module (Popup Settings accordion header). */
+    public static function pro_bullet($m) {
+        if (empty($m['source']) || $m['source'] !== 'pro') {
+            return '';
+        }
+        return '<span class="zpp-pro-bullet">' . esc_html__('PRO', 'zappoppop') . '</span>';
+    }
+
     /** Accordion shell (header + body) around a module's accordion.html. */
     public static function render_html($m) {
         $file = $m['dir'] . '/accordion.html';
         /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $raw  = (is_file($file) && !is_link($file) && is_readable($file) && filesize($file) <= ZapPopPop_Modules::MAX_HTML) ? (string) file_get_contents($file) : '';
         $h    = '<div class="zappoppop-acc-item" data-html-module="' . esc_attr($m['slug']) . '">';
-        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($m['name']) . '</button>';
+        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($m['name']) . self::pro_bullet($m) . '</button>';
         $h   .= '<div class="zappoppop-acc-body" style="display:none;">' . wp_kses($raw, self::html_allowed()) . '</div>';
         return $h . '</div>';
     }
@@ -176,7 +184,7 @@ class ZapPopPop_Modules_Engine {
         $name = ($m['source'] === 'core') ? /* phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction, WordPress.WP.I18n.NonSingularStringLiteralText -- module manifest strings are translated by the module text domain */ translate($m['name'], 'zappoppop') : $m['name'];
         $id   = $m['ext_key'];
         $h    = '<div class="zappoppop-acc-item" data-ext-module="' . esc_attr($id) . '">';
-        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($name) . '</button>';
+        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($name) . self::pro_bullet($m) . '</button>';
         $h   .= '<div class="zappoppop-acc-body" style="display:none;">';
         foreach ($m['fields'] as $f) {
             $fid  = 'set-' . str_replace('_', '-', $id) . '-' . str_replace('_', '-', $f['key']);

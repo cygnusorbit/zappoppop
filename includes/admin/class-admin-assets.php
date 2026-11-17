@@ -130,6 +130,7 @@ class ZapPopPop_Admin_Assets {
         wp_enqueue_script('zappoppop-builder-image-inspector-js', ZAPPOPPOP_URL . 'admin/js/builder/elements/image-inspector.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-elements-registry'], self::ver(), true);
         wp_enqueue_script('zappoppop-builder-shape-inspector-js', ZAPPOPPOP_URL . 'admin/js/builder/elements/shape-inspector.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-elements-registry'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-settings-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-settings.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
+            wp_enqueue_script('zappoppop-builder-settings-switches-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-settings-switches.js', ['zappoppop-builder-settings-js'], self::ver(), true); /* ZPP_SETTINGS_SWITCHES */
             if (class_exists('ZapPopPop_Modules_Engine')) { ZapPopPop_Modules_Engine::enqueue_builder(); }
             wp_enqueue_script('zappoppop-builder-modals-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-modals.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-io-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-io.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);

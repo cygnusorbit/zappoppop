@@ -85,11 +85,6 @@ if (!isset($settings) || !is_array($settings)) {
 
         <!-- Bottom Action Persistence Bar (Clean Text Button - No Misaligned Icons) -->
         <div class="zappoppop-settings-submit-bar">
-            <button type="submit" id="zappoppop-save-settings-btn" class="button button-primary">
-                <?php esc_html_e('Save Settings', 'zappoppop'); ?>
-            </button>
-            <span id="zappoppop-save-settings-spinner" class="spinner" style="float:none;margin:0;"></span>
-            <span id="zappoppop-save-settings-msg" style="font-weight:600;font-size:13px;"></span>
             <div class="zappoppop-settings-bottom-tools">
                 <button type="button" class="button" data-zpp-defaults-save="settings" title="<?php echo esc_attr__('Use the last saved settings as the defaults', 'zappoppop'); ?>"><?php esc_html_e('Save as Default', 'zappoppop'); ?></button>
                 <div class="zappoppop-reset-wrap">
@@ -99,6 +94,13 @@ if (!isset($settings) || !is_array($settings)) {
                         <button type="button" role="menuitem" data-scope="all"><?php esc_html_e('Reset all settings', 'zappoppop'); ?></button>
                     </div>
                 </div>
+            </div>
+            <div class="zappoppop-settings-save-group">
+                <button type="submit" id="zappoppop-save-settings-btn" class="button button-primary">
+                    <?php esc_html_e('Save Settings', 'zappoppop'); ?>
+                </button>
+                <span id="zappoppop-save-settings-spinner" class="spinner" style="float:none;margin:0;"></span>
+                <span id="zappoppop-save-settings-msg" style="font-weight:600;font-size:13px;"></span>
             </div>
         </div>
     </form>

@@ -80,3 +80,25 @@
 @media (prefers-reduced-motion: reduce) {
     .zappoppop-switch-mod .trk, .zappoppop-switch-mod .trk:before { -webkit-transition: none; transition: none; }
 }
+
+/* ZPP_PRO_BULLET: PRO bullet (theme primary colour) next to a Pro module's title; same look as the Popup Settings accordion bullet */
+.zpp-mod-row .zpp-pro-bullet {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0 7px;
+    border-radius: var(--zpp-r-badge, 10px);
+    background: var(--zpp-c-primary, #c1272d);
+    color: var(--zpp-c-primary-text, #ffffff);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}

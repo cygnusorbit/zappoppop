@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
             <button type="button" class="zpp-cat-x" id="zpp-cat-close" aria-label="<?php echo esc_attr__('Close', 'zappoppop'); ?>">&times;</button>
         </div>
         <div class="zpp-cat-bd">
-            <p class="zpp-cat-note"><?php esc_html_e('Add, rename, delete and reorder categories. They appear as filter pills above the module boxes on the Extend page. Deleting a category moves its modules back to All Modules.', 'zappoppop'); ?></p>
+            <p class="zpp-cat-note"><?php esc_html_e('Add, rename, delete and reorder categories. They appear as filter pills above the module boxes on the Modules page. Deleting a category moves its modules back to All Modules.', 'zappoppop'); ?></p>
             <ul class="zpp-cat-list zpp-cat-fixed" id="zpp-cat-fixed"></ul>
             <ul class="zpp-cat-list" id="zpp-cat-list"></ul>
             <div class="zpp-cat-add">

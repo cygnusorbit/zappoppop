@@ -133,7 +133,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 'layers_border_color'      => '#2a78b8',
 
                 // 20. Stage Background Image (URL from the Media Library; opacity = how strongly it shows)
-                'stage_image_url'          => '',
+                'stage_image_url'          => self::builtin_stage_image_url(),
                 'stage_image_opacity'      => 100,
             );
         }
@@ -143,7 +143,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
          */
         public static function builtin_stage_image_url() {
             $base = defined( 'ZAPPOPPOP_URL' ) ? ZAPPOPPOP_URL : plugin_dir_url( dirname( __FILE__ ) );
-            return $base . 'admin/img/space-stars.svg';
+            return $base . 'admin/img/space-stage.jpg';
         }
 
         /**
@@ -349,6 +349,9 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             // Back-fill any key a preset does not define, so switching presets never leaks values.
             $defaults = self::get_defaults();
             foreach ( $presets as $p_key => $p_data ) {
+                if ( 'space' !== $p_key && ! isset( $p_data['stage_image_url'] ) ) {
+                    $p_data['stage_image_url'] = ''; // Night / Day / Glass stay image-free (the default image is not back-filled)
+                }
                 $presets[ $p_key ] = array_merge( $defaults, $p_data );
             }
 
@@ -602,6 +605,9 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             $late_file = dirname( dirname( __FILE__ ) ) . '/admin/css/zappoppop-builder-theme-late.css';
             wp_enqueue_style( 'zappoppop-builder-theme-late', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/zappoppop-builder-theme-late.css', array( 'zappoppop-builder-theme' ), file_exists( $late_file ) ? (string) filemtime( $late_file ) : '1.0' );
             wp_add_inline_style( 'zappoppop-builder-theme-late', ':root, html, body, body.wp-admin { ' . wp_strip_all_tags( $vars_css ) . ' }' );
+            /* ZPP_SETTINGS_SWITCHES: Popup Settings theme bridge + slide-toggles (needs the theme variables printed above) */
+            $zpp_sw_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/settings-switches.css';
+            wp_enqueue_style( 'zappoppop-builder-settings-switches', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/settings-switches.css', array( 'zappoppop-builder-theme-late' ), file_exists( $zpp_sw_file ) ? (string) filemtime( $zpp_sw_file ) : ( defined( 'ZAPPOPPOP_VERSION' ) ? ZAPPOPPOP_VERSION : '1.0' ) );
         }
 
         private static function verify_request_security() {
