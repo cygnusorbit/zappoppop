@@ -51,7 +51,8 @@
             row.appendChild(mkInput('Label', l, 'label'));
             row.appendChild(mkInput('Value', v, 'value'));
             row.appendChild(mkBtn('\u29C9', 'Copy this choice', 'copy'));
-            row.appendChild(mkBtn('\u00D7', 'Delete this choice', 'del'));
+            row.appendChild(mkBtn('+', 'Add a choice below', 'add'));
+            row.appendChild(mkBtn('\u2212', 'Delete this choice', 'del'));
             return row;
         }
         function serialize() {
@@ -153,7 +154,11 @@
                 var row = b.closest('.zappoppop-radio-row'), c = box();
                 if (!row || !c) { return; }
                 var act = b.getAttribute('data-act');
-                if (act === 'copy') {
+                if (act === 'add') {
+                    var nr = mkRow('', '');
+                    c.insertBefore(nr, row.nextSibling);
+                    var nf = nr.querySelector('input'); if (nf) { nf.focus(); }
+                } else if (act === 'copy') {
                     var cl = mkRow(row.querySelector('[data-role="label"]').value, row.querySelector('[data-role="value"]').value);
                     c.insertBefore(cl, row.nextSibling);
                 } else if (act === 'del') {

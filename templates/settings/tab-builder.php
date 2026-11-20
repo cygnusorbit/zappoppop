@@ -10,6 +10,7 @@ $__zm_on = !empty($__bld['builder_zoom_select']);
 $__st_on = !empty($__bld['builder_save_template']);
 $__cc_on = !empty($__bld['builder_click_canvas_settings']);
 $__ce_on = !empty($__bld['builder_click_element_settings']);
+$__hl_on = !empty($settings['builder_hide_field_labels']); /* default OFF: new form elements show their label */
 $__bg_on = !array_key_exists('builder_guide', (array) $settings) || !empty($settings['builder_guide']);
 ?>
 <?php ZapPopPop_Inline_Assets::style('settings-tab-builder'); ?><nav class="zappoppop-bld-subtabs zpp-theme-tabs" aria-label="<?php esc_attr_e('Builder sections', 'zappoppop'); ?>">
@@ -97,6 +98,16 @@ $__bg_on = !array_key_exists('builder_guide', (array) $settings) || !empty($sett
                 <span class="bld-desc" id="zappoppop-guide-restart-status" role="status" aria-live="polite"></span>
             </span>
             <button type="button" class="button" id="zappoppop-guide-restart" data-uid="<?php echo (int) get_current_user_id(); ?>" data-nonce="<?php echo esc_attr(ZapPopPop_Admin_Guide::nonce()); ?>"><?php esc_html_e('Restart tour', 'zappoppop'); ?></button>
+        </li>
+            <li>
+            <span class="bld-name"><?php esc_html_e('Hide Field Labels by Default', 'zappoppop'); ?>
+                <span class="bld-desc"><?php esc_html_e('New form elements (Text, Email, Date, Radio, etc.) start with their field label visible. Turn this on to start them hidden. Existing elements are not changed; each element can still show its label with the Hide Label switch. Saving a layer with Save Layer Settings as Default overrides this.', 'zappoppop'); ?></span>
+            </span>
+            <label class="zappoppop-switch-bld" title="<?php esc_attr_e('Hide Field Labels by Default', 'zappoppop'); ?>">
+                <input type="hidden" name="settings[builder_hide_field_labels]" value="0">
+                <input type="checkbox" name="settings[builder_hide_field_labels]" value="1" <?php checked($__hl_on); ?>>
+                <span class="trk"></span>
+            </label>
         </li>
     </ul>
 </div>

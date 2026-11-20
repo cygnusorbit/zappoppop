@@ -842,6 +842,7 @@
 
     function styleAccordionHeaderAndBody(headerBar) {
         if (!headerBar || isInsideIsolatedCanvas(headerBar)) return;
+        if (headerBar.closest && headerBar.closest('#zappoppop-ribbon-wrap')) return; /* ZPP_RIBBON_SKIP2 */
 
         // Native .zappoppop-acc-item cards are themed by CSS (one border on the rounded card); only style inner wrappers here.
         if (headerBar.classList && headerBar.classList.contains('zappoppop-acc-header')) {
@@ -909,6 +910,7 @@
 
     function styleContentBodyContainer(bodyPane) {
         if (!bodyPane || isInsideIsolatedCanvas(bodyPane)) return;
+        if (bodyPane.closest && bodyPane.closest('#zappoppop-ribbon-wrap')) return; /* ZPP_RIBBON_SKIP2 */
         bodyPane.setAttribute('data-zpp-role', 'content-panel');
         setVarImportant(bodyPane, 'background-image', 'none');
         setVarImportant(bodyPane, 'background-color', 'var(--zpp-builder-content-bg)');
@@ -919,6 +921,7 @@
             if (isCheckerSwatchElement(inner)) return;
             if (inner.hasAttribute('data-zpp-role') && inner.getAttribute('data-zpp-role').indexOf('toggle') !== -1) return;
             if (inner.getAttribute('data-zpp-role') === 'canvas-pill-bar') return;
+            if (inner.closest && inner.closest('#zappoppop-ribbon-wrap')) return; /* ZPP_RIBBON_SKIP: the Elements Ribbon Bar owns its colours (Theme > Builder > row 23) */
             var r = inner.getBoundingClientRect();
             if (r.width > 0 && r.width <= 54 && r.height > 0 && r.height <= 30 && !inner.querySelector('input[type="text"], input[type="number"], select')) {
                 return;
@@ -1909,4 +1912,21 @@
     } else {
         initBuilderThemeEngine();
     }
+})();
+
+/* ZPP_RIBBON_SKIP2: the Elements Ribbon Bar owns its colours - release anything the generic scanners tagged inside it */
+(function () {
+    'use strict';
+    function release() {
+        var wrap = document.getElementById('zappoppop-ribbon-wrap');
+        if (!wrap) { return; }
+        var list = wrap.querySelectorAll('[data-zpp-role="content-panel"]');
+        for (var i = 0; i < list.length; i++) {
+            var el = list[i];
+            el.removeAttribute('data-zpp-role');
+            ['background-image', 'background-color', 'border-color', 'color'].forEach(function (p) { el.style.removeProperty(p); });
+        }
+    }
+    function run() { release(); window.setTimeout(release, 600); window.setTimeout(release, 1800); }
+    if (document.readyState === 'complete') { run(); } else { window.addEventListener('load', run); }
 })();

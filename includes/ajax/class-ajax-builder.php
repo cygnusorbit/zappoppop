@@ -749,6 +749,7 @@ class ZapPopPop_Ajax_Builder {
             if ( isset( $el[ $rk ] ) && ! is_array( $el[ $rk ] ) ) { $clean[ $rk ] = sanitize_text_field( wp_unslash( (string) $el[ $rk ] ) ); }
         }
         /* ZPP_FIELD_LABEL_KEYS */
+        if ( isset( $el['fieldLabelPosition'] ) && ! is_array( $el['fieldLabelPosition'] ) ) { $clean['fieldLabelPosition'] = ( (string) $el['fieldLabelPosition'] === 'inside' ) ? 'inside' : 'outside'; } /* ZPP_FL_POSITION */
         if ( isset( $el['showFieldLabel'] ) && ! is_array( $el['showFieldLabel'] ) ) { $clean['showFieldLabel'] = ! ( $el['showFieldLabel'] === false || $el['showFieldLabel'] === 'false' || $el['showFieldLabel'] === 0 || $el['showFieldLabel'] === '0' ); }
         if ( isset( $el['fieldLabelColor'] ) && ! is_array( $el['fieldLabelColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelColor'] ) ) { $clean['fieldLabelColor'] = (string) $el['fieldLabelColor']; }
         if ( isset( $el['fieldLabelTextColor'] ) && ! is_array( $el['fieldLabelTextColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelTextColor'] ) ) { $clean['fieldLabelTextColor'] = (string) $el['fieldLabelTextColor']; }

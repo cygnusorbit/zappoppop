@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "_about": "Built-in defaults for NEW elements: { layers: { type: { tab: { prop: value } } } }. Tabs: basic, style, logic, data, advanced. Never put id/type/name/top/left/zIndex or secrets here. 'aliases' lets a type reuse another type's defaults. Site 'Save as Default' still wins over this file.",
+  "aliases": {
+    "link": "button",
+    "link_btn": "button",
+    "close_icon": "close",
+    "tel": "phone",
+    "checkboxes": "checkbox",
+    "radios": "radio",
+    "fontawesome": "icon"
+  },
+  "layers": {
+    "button": {
+      "basic": {
+        "buttonAction": "link",
+        "linkBlank": false,
+        "nofollow": false
+      },
+      "style": {
+        "bgColor": "#2563eb",
+        "color": "#ffffff",
+        "fontWeight": "600",
+        "fontSize": 14,
+        "borderRadius": 6,
+        "textAlign": "center",
+        "hoverBgColor": "#1d4ed8",
+        "hoverTextColor": "#ffffff",
+        "hoverBorderColor": "#1d4ed8"
+      }
+    },
+    "shape": {
+      "style": {
+        "shapePreset": "square",
+        "shapeFill": "#3b82f6",
+        "shapeStroke": "#1d4ed8",
+        "shapeStrokeWidth": 0,
+        "strokeWidth": 0,
+        "shapeRotate": 0,
+        "width": 120,
+        "height": 120
+      }
+    },
+    "close": {
+      "style": {
+        "width": 35,
+        "height": 35,
+        "sizePresetApplied": true
+      }
+    },
+    "video": {
+      "style": {
+        "height": 150
+      }
+    },
+    "image": {
+      "style": {
+        "width": 120,
+        "height": 150,
+        "sizePresetApplied": true,
+        "objectFit": "contain",
+        "imageFit": "contain"
+      },
+      "basic": {
+        "linkTarget": "_self",
+        "targetBlank": false,
+        "linkBlank": false
+      }
+    },
+    "text": {
+      "basic": {
+        "required": true
+      }
+    },
+    "html": {
+      "style": {
+        "width": 240
+      }
+    },
+    "signature": {
+      "style": {
+        "height": 60
+      }
+    },
+    "paragraph": {
+      "style": {
+        "padding": 8
+      }
+    },
+    "title": {
+      "style": {
+        "padding": 8
+      }
+    },
+    "label": {
+      "style": {
+        "lineHeight": 1,
+        "paddingTop": 0,
+        "paddingRight": 0,
+        "paddingBottom": 0,
+        "paddingLeft": 0
+      }
+    },
+    "phone": {
+      "basic": {
+        "autocomplete": "tel"
+      }
+    },
+    "textarea": {
+      "style": {
+        "height": 100,
+        "h": 100
+      },
+      "basic": {
+        "rows": 4
+      }
+    },
+    "checkbox": {
+      "style": {
+        "width": 300,
+        "fontSize": 12,
+        "w": 300,
+        "bgColor": "transparent",
+        "transparentFill": true
+      }
+    },
+    "radio": {
+      "style": {
+        "width": 100,
+        "height": 100,
+        "fontSize": 12,
+        "w": 100,
+        "h": 100,
+        "bgColor": "transparent",
+        "transparentFill": true
+      }
+    },
+    "checkboxgroup": {
+      "style": {
+        "width": 100,
+        "height": 100,
+        "fontSize": 12,
+        "w": 100,
+        "h": 100,
+        "bgColor": "transparent",
+        "transparentFill": true
+      }
+    },
+    "multiselect": {
+      "style": {
+        "width": 125,
+        "height": 125,
+        "w": 125,
+        "h": 125
+      }
+    },
+    "icon": {
+      "style": {
+        "width": 40,
+        "height": 40,
+        "textAlign": "center",
+        "iconSize": 36,
+        "iconColor": "#38bdf8",
+        "color": "#38bdf8",
+        "rotate": 0,
+        "w": 40,
+        "h": 40,
+        "bgColor": "transparent",
+        "transparentFill": true
+      },
+      "basic": {
+        "iconClass": "fas fa-star",
+        "content": "fas fa-star"
+      }
+    },
+    "submit": {
+      "style": {
+        "textAlign": "center"
+      },
+      "logic": {
+        "blockEmptySubmit": true
+      }
+    },
+    "email": {
+      "basic": {
+        "required": true
+      }
+    },
+    "number": {},
+    "select": {},
+    "date": {},
+    "time": {},
+    "upload": {},
+    "password": {}
+  }
+}

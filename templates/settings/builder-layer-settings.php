@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 $__ls_overrides = ZapPopPop_Layer_Settings::get_overrides();
-$__ls_elements  = ZapPopPop_Layer_Settings::elements();
+$__ls_elements  = ZapPopPop_Layer_Settings::ordered_elements(); /* ZPP_RIBBON_SYNC */
 $__ls_tabs      = ZapPopPop_Layer_Settings::tabs();
 $__ls_cat       = ZapPopPop_Layer_Settings::catalogue();
 $__ls_form      = ZapPopPop_Layer_Settings::form_types();

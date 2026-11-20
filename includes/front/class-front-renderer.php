@@ -419,7 +419,7 @@ class ZapPopPop_Front_Renderer {
             'star'     => '50,3 63,36 98,38 70,60 79,95 50,75 21,95 30,60 2,38 37,36',
             'pentagon' => '50,3 97,38 79,94 21,94 3,38',
             'hexagon'  => '25,5 75,5 98,50 75,95 25,95 2,50',
-            'badge'    => '50,2 62,13 78,10 83,25 97,33 93,49 99,64 86,74 83,90 67,91 56,99 44,91 28,90 25,74 12,64 18,49 14,33 28,25 33,10 48,13',
+            'badge'    => '50,2 60.4,11.4 74,8.4 78.3,21.7 91.6,26 88.6,39.6 98,50 88.6,60.4 91.6,74 78.3,78.3 74,91.6 60.4,88.6 50,98 39.6,88.6 26,91.6 21.7,78.3 8.4,74 11.4,60.4 2,50 11.4,39.6 8.4,26 21.7,21.7 26,8.4 39.6,11.4',
             'octagon'  => '30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30',
             'cross'    => '36,4 64,4 64,36 96,36 96,64 64,64 64,96 36,96 36,64 4,64 4,36 36,36',
         );
@@ -476,11 +476,24 @@ class ZapPopPop_Front_Renderer {
         $name = isset($el['name']) ? trim(wp_strip_all_tags((string) $el['name'])) : '';
         if ($name === '') { return $html; }
         $color = (isset($el['fieldLabelTextColor']) && is_string($el['fieldLabelTextColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldLabelTextColor'])) ? $el['fieldLabelTextColor'] : '#334155';
-        $label = '<span class="zpp-fld-label" aria-hidden="true" style="position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;color:' . esc_attr($color) . ';">' . esc_html($name) . '</span>';
+        /* ZPP_FL_Z: inside label needs z-index, the field wrapper is positioned and paints over it */ /* ZPP_FL_POSITION: fieldLabelPosition 'inside' puts the label in the field's top-left (input-like types only); anything else keeps it above the field */
+        $inside = isset($el['fieldLabelPosition']) && $el['fieldLabelPosition'] === 'inside' && in_array($t, array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password'), true);
+        if ($inside && !(isset($el['fieldLabelTextColor']) && is_string($el['fieldLabelTextColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldLabelTextColor']))) { $color = '#64748b'; }
+        $lbl_pos = $inside
+            ? 'position:absolute;z-index:3;left:12px;top:4px;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:0;text-transform:none;line-height:1;pointer-events:none;text-shadow:none;'
+            : 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;';
+        $label = '<span class="zpp-fld-label" aria-hidden="true" style="' . $lbl_pos . 'color:' . esc_attr($color) . ';">' . esc_html($name) . '</span>';
+        if ($inside) {
+            $label .= '<style>.zpp-fld-in input,.zpp-fld-in select,.zpp-fld-in textarea{box-sizing:border-box!important;padding-top:20px!important;padding-bottom:4px!important}.zpp-fld-in textarea{padding-top:22px!important}.zpp-fld-in [style*="top:50%"]:not(.zpp-fld-label){top:calc(50% + 8px)!important}</style>';
+        }
         $n = 0;
         $out = preg_replace_callback('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*>)/is', function ($m) use ($label) { return $m[1] . $label; }, $html, 1, $n);
         if (!$n) { return $html; }
-        $out = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bstyle="[^"]*?)(")/is', '${1};overflow:visible !important$2', $out, 1);
+        if ($inside) { /* ZPP_FL_POSITION: marker class so the CSS above can make room for the label inside the field */
+            $out = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bclass="[^"]*?)(")/is', '${1} zpp-fld-in$2', $out, 1);
+        } else {
+            $out = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bstyle="[^"]*?)(")/is', '${1};overflow:visible !important$2', $out, 1);
+        }
         $aria = ' aria-label="' . esc_attr($name) . '"';
         $out = preg_replace_callback('/<(input|select|textarea)\b(?![^>]*\baria-label=)/i', function ($m) use ($aria) { return '<' . $m[1] . $aria; }, $out, 1);
         return $out;

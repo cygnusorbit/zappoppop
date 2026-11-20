@@ -2290,3 +2290,26 @@ body.zappoppop-copy-drag * {
     background: var(--zpp-builder-accent-color, #2563eb);
     opacity: 0.1;
 }
+
+/* ZPP_GUIDE_SINGLE: the gray always-on dotted line is gone. An unselected layer shows no guide until hovered (blue dotted outline); a selected layer keeps its theme-colored guide. */
+#zappoppop-canvas-box .zappoppop-canvas-item:not(.zappoppop-selected)::after {
+    border-color: transparent !important;
+}
+
+/* ZPP_FORM_MODULE_FLAT */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > #zappoppop-form-style-module.zappoppop-insp-section {
+  background: transparent !important; border: 0 !important; box-shadow: none !important;
+  border-radius: 0 !important; padding: 0 !important;
+}
+
+/* ZPP_CHOICE_ROWS_THEME */
+html body #zappoppop-inspector-drawer #zappoppop-radio-rows .zappoppop-radio-row,
+html body #zappoppop-inspector-drawer #zappoppop-checkboxgroup-rows .zappoppop-checkboxgroup-row {
+  background: transparent !important; border: 1px solid var(--zpp-builder-field-border, #cbd5e1) !important;
+}
+html body #zappoppop-inspector-drawer #zappoppop-radio-rows .zappoppop-radio-row.is-dragging,
+html body #zappoppop-inspector-drawer #zappoppop-checkboxgroup-rows .zappoppop-checkboxgroup-row.is-dragging {
+  border-color: var(--zpp-builder-accent-color, #6366f1) !important; box-shadow: 0 2px 8px rgba(15,23,42,.15);
+}
+html body #zappoppop-inspector-drawer #zappoppop-radio-rows .zappoppop-radio-grip,
+html body #zappoppop-inspector-drawer #zappoppop-checkboxgroup-rows .zappoppop-checkboxgroup-grip { color: var(--zpp-builder-element-icon, #64748b); }

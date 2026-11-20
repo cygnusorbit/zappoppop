@@ -52,6 +52,44 @@ class ZapPopPop_Layer_Settings {
         ));
     }
 
+    /* ZPP_RIBBON_SYNC: element types in the exact left-to-right order of the builder ribbon (core buttons + anything an add-on prints through the zappoppop_builder_ribbon_tools hook). The ribbon template is the single source of truth, so this list can never drift from it. */
+    protected static $ribbon_types = null;
+
+    public static function ribbon_types() {
+        if (self::$ribbon_types !== null) {
+            return self::$ribbon_types;
+        }
+        self::$ribbon_types = array();
+        $file = ZAPPOPPOP_PATH . 'templates/builder/ribbon.php';
+        if (!is_readable($file)) {
+            return self::$ribbon_types;
+        }
+        ob_start();
+        include $file;
+        $html = (string) ob_get_clean();
+        if (preg_match_all('/<button\b[^>]*\bzappoppop-ribbon-tool\b[^>]*\bdata-type="([A-Za-z0-9_-]+)"/', $html, $m)) {
+            self::$ribbon_types = array_values(array_unique($m[1]));
+        }
+        return self::$ribbon_types;
+    }
+
+    /** elements() arranged like the ribbon; types the ribbon does not show keep their relative order at the end. */
+    public static function ordered_elements() {
+        $els = self::elements();
+        $out = array();
+        foreach (self::ribbon_types() as $type) {
+            if (isset($els[$type])) {
+                $out[$type] = $els[$type];
+            }
+        }
+        foreach ($els as $type => $label) {
+            if (!isset($out[$type])) {
+                $out[$type] = $label;
+            }
+        }
+        return $out;
+    }
+
     public static function form_types() {
         return (array) apply_filters('zappoppop_layer_form_types', array('text', 'email', 'number', 'phone', 'textarea', 'select', 'checkbox', 'checkboxgroup', 'radio', 'multiselect', 'date', 'time', 'upload', 'password'));
     }

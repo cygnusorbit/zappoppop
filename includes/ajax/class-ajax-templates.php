@@ -192,6 +192,7 @@ class ZapPopPop_Ajax_Templates {
         }
         $zappoppop_media = ZapPopPop_Template_Media::localize($t['data'], $id);
         $t['data']      = $zappoppop_media['json'];
+        $t['data']      = self::hide_missing_labels($t['data']);
         $base = sanitize_title($t['title']);
         $base = rtrim(substr($base === '' ? 'popup' : $base, 0, 29), '-');
         if ($base === '') { $base = 'popup'; }
@@ -251,6 +252,24 @@ class ZapPopPop_Ajax_Templates {
     }
 
     /** Stage a saved template so the real frontend renderer can show it (admins only). */
+    /* ZPP_TPL_HIDE_LABELS: library templates predate Hide Label (a missing value means "show"), so form layers without an explicit value start hidden in template preview and Use Template. Existing popups are not touched. */
+    public static function hide_missing_labels($data) {
+        $was_string = is_string($data);
+        $arr = $was_string ? json_decode($data, true) : $data;
+        if (!is_array($arr)) { return $data; }
+        $types = array('text', 'email', 'number', 'phone', 'textarea', 'select', 'multiselect', 'radio', 'checkbox', 'checkboxgroup', 'date', 'time', 'upload', 'password', 'imageselect', 'tile', 'rating');
+        $walk = function (&$node) use (&$walk, $types) {
+            if (!is_array($node)) { return; }
+            if (isset($node['type']) && is_string($node['type']) && in_array(strtolower($node['type']), $types, true) && !array_key_exists('showFieldLabel', $node)) {
+                $node['showFieldLabel'] = false;
+            }
+            foreach ($node as &$child) { if (is_array($child)) { $walk($child); } }
+            unset($child);
+        };
+        $walk($arr);
+        return $was_string ? wp_json_encode($arr) : $arr;
+    }
+
     public function preview() {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
@@ -278,6 +297,7 @@ class ZapPopPop_Ajax_Templates {
         if (!is_array($decoded)) {
             wp_send_json_error(array('message' => __('Template data is damaged.', 'zappoppop')));
         }
+        $decoded = self::hide_missing_labels($decoded);
         $uid = sanitize_key('tpl-' . $id);
         /* Same key scheme as ZapPopPop_Front_Preview::transient_key() */
         set_transient('zappoppop_prev_' . get_current_user_id() . '_' . md5($uid), wp_json_encode($decoded), HOUR_IN_SECONDS);

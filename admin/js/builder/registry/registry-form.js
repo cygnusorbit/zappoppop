@@ -54,6 +54,8 @@
 
         var align   = el.textAlign || 'left';
         var defVal  = $.trim(el.defaultValue || '');
+        /* ZPP_STAGE_FONT: placeholder text uses the layer's own font so Edit Mode matches Live Preview (the real input inherits it) */
+        var fTxt = 'font-size:' + (parseInt(el.fontSize, 10) || 14) + 'px;font-weight:' + (el.fontWeight || '400') + ';' + ((el.fontFamily && el.fontFamily !== 'inherit') ? 'font-family:' + String(el.fontFamily).replace(/["<>;]/g, '') + ';' : '');
         var reqStar = el.required ? ' <span style="color:#f43f5e;font-weight:700;">*</span>' : '';
         var roBadge = el.readOnly ? '<span style="font-size:9px;background:#e2e8f0;color:#475569;padding:1px 4px;border-radius:0px;margin-left:6px;flex-shrink:0;">RO</span>' : '';
 
@@ -74,7 +76,7 @@
             var textCol = defVal ? '#0f172a' : '#64748b';
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;padding-left:' + padL + 'px;padding-right:' + padR + 'px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
                 leftIconHtml +
-                '<span style="width:100%;text-align:' + align + ';color:' + textCol + ';font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(ph).html() + reqStar + '</span>' +
+                '<span style="width:100%;text-align:' + align + ';color:' + textCol + ';' + fTxt + 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(ph).html() + reqStar + '</span>' +
                 roBadge + rightIconHtml +
                 '</div>';
         } else if (canonical === 'number') {
@@ -83,28 +85,28 @@
             var maxV = (el.maxValue !== undefined && el.maxValue !== '') ? el.maxValue : (el.max !== undefined ? el.max : 100);
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding-left:' + padL + 'px;padding-right:10px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
                 leftIconHtml +
-                '<span style="flex:1;text-align:' + align + ';color:#334155;font-size:12px;">' + $('<div>').text(nPh).html() + reqStar + '</span>' +
+                '<span style="flex:1;text-align:' + align + ';color:#334155;' + fTxt + '">' + $('<div>').text(nPh).html() + reqStar + '</span>' +
                 (el.unitSuffix ? '<span style="font-size:11px;color:#64748b;margin-right:6px;">' + $('<div>').text(el.unitSuffix).html() + '</span>' : '') + '<span style="font-size:9px;color:#94a3b8;margin-right:6px;">[' + minV + '–' + maxV + ']</span>' +
                 '<span style="display:flex;flex-direction:column;font-size:8px;line-height:1;color:#64748b;">&#9650;<br>&#9660;</span>' +
                 '</div>';
         } else if (canonical === 'tel') {
             var tPh  = defVal || el.placeholder || el.inputMask || '(555) 000-0000';
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;overflow:hidden;box-sizing:border-box;pointer-events:none;">' +
-                /* ZAPPOPPOP_TEL_ICONS */ leftIconHtml + '<span style="flex:1;padding:0 ' + (iRight ? padR : 12) + 'px 0 ' + padL + 'px;text-align:' + align + ';color:#64748b;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(tPh).html() + reqStar + '</span>' +
+                /* ZAPPOPPOP_TEL_ICONS */ leftIconHtml + '<span style="flex:1;padding:0 ' + (iRight ? padR : 12) + 'px 0 ' + padL + 'px;text-align:' + align + ';color:#64748b;' + fTxt + 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(tPh).html() + reqStar + '</span>' +
                 rightIconHtml +
                 '</div>';
         } else if (canonical === 'textarea') {
             var taPh = defVal || el.placeholder || 'Write your message...';
             var maxC = parseInt(el.maxLength, 10) || 0;
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
-                '<div style="text-align:' + align + ';color:#64748b;font-size:12px;line-height:1.4;overflow:hidden;">' + $('<div>').text(taPh).html() + reqStar + '</div>' +
+                '<div style="text-align:' + align + ';color:#64748b;' + fTxt + 'line-height:1.4;overflow:hidden;">' + $('<div>').text(taPh).html() + reqStar + '</div>' +
                 (maxC > 0 ? '<div style="text-align:right;font-size:9px;color:#94a3b8;">0 / ' + maxC + '</div>' : '') +
                 '</div>';
         } else if (canonical === 'select') {
             var sOpts = parseOptionsList(el.optionsList || el.options, ['Option 1', 'Option 2', 'Option 3']);
             var sDisp = defVal || el.firstOption || el.placeholder || 'Select an option...';
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
-                '<span style="flex:1;text-align:' + align + ';color:#334155;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(sDisp).html() + reqStar + '</span>' +
+                '<span style="flex:1;text-align:' + align + ';color:#334155;' + fTxt + 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(sDisp).html() + reqStar + '</span>' +
                 '<span class="dashicons dashicons-arrow-down-alt2" style="font-size:16px;width:16px;height:16px;color:#64748b;"></span>' +
                 '</div>';
         } else if (canonical === 'checkbox' || canonical === 'checkboxes') {
@@ -182,8 +184,8 @@
                 var sel = (i === 0);
                 return '<span style="padding:2px 7px;border-radius:0px;font-size:' + (parseInt(el.fontSize, 10) || 10) + 'px;font-weight:600;background:' + (sel ? '#c2185b' : '#f1f5f9') + ';color:' + (sel ? '#ffffff' : '#475569') + ';border:1px solid ' + (sel ? '#c2185b' : '#cbd5e1') + ';">' + $('<div>').text(o).html() + '</span>';
             }).join('');
-            innerHtml = '<div style="width:100%;height:100%;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;padding:6px 8px;display:flex;flex-wrap:wrap;align-items:center;gap:5px;box-sizing:border-box;pointer-events:none;">' +
-                pills + (maxS > 0 ? '<span style="margin-left:auto;font-size:9px;color:#94a3b8;">Max: ' + maxS + '</span>' : '') +
+            innerHtml = '<div style="width:100%;height:100%;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;padding:6px 8px' + (maxS > 0 ? ' 16px' : '') + ';position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:5px;box-sizing:border-box;pointer-events:none;">' +
+                pills + (maxS > 0 ? '<span style="position:absolute;right:8px;bottom:3px;margin:0;font-size:10px;line-height:1;font-weight:600;color:#64748b;white-space:nowrap;">Max: ' + maxS + '</span>' : '') +
                 '</div>';
         } else if (window.ZapPopPopElementExt && window.ZapPopPopElementExt.has(canonical, 'stage')) { /* ZAPPOPPOP_EXT_STAGE */
             innerHtml = window.ZapPopPopElementExt.call(canonical, 'stage', [el, { align: align, reqStar: reqStar, defVal: defVal }]) || '';
@@ -192,7 +194,7 @@
             var dPh  = defVal || el.placeholder || dFmt;
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding-left:' + padL + 'px;padding-right:10px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
                 leftIconHtml +
-                '<span style="flex:1;text-align:' + align + ';color:#334155;font-size:12px;">' + $('<div>').text(dPh).html() + reqStar + '</span>' +
+                '<span style="flex:1;text-align:' + align + ';color:#334155;' + fTxt + '">' + $('<div>').text(dPh).html() + reqStar + '</span>' +
                 '<span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:2px 5px;border-radius:0px;">' + dFmt + '</span>' + rightIconHtml +
                 '</div>';
         } else if (canonical === 'time') {
@@ -201,7 +203,7 @@
             var tmPh  = defVal || el.placeholder || (tFmt === '24h' ? '14:00' : '02:00 PM');
             innerHtml = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding-left:' + padL + 'px;padding-right:10px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
                 leftIconHtml +
-                '<span style="flex:1;text-align:' + align + ';color:#334155;font-size:12px;">' + $('<div>').text(tmPh).html() + reqStar + '</span>' +
+                '<span style="flex:1;text-align:' + align + ';color:#334155;' + fTxt + '">' + $('<div>').text(tmPh).html() + reqStar + '</span>' +
                 '<span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:2px 5px;border-radius:0px;">' + tFmt + ' (' + tStep + 'm)</span>' + rightIconHtml +
                 '</div>';
         } else if (canonical === 'upload') {
@@ -228,7 +230,7 @@
             var pwPadR = Math.max(showEye ? 44 : 12, iRight ? (pwRightPos + 22) : 0);
             innerHtml = '<div class="zappoppop-pw-stage" style="position:relative;width:100%;height:100%;display:flex;align-items:center;padding-left:' + padL + 'px;padding-right:' + pwPadR + 'px;background:#ffffff;border:1px solid #cbd5e1;border-radius:0px;box-sizing:border-box;pointer-events:none;">' +
                 leftIconHtml +
-                '<span class="zappoppop-pw-prev-text" data-ph="' + $('<div>').text(pwPh).html().replace(/"/g, '&quot;') + '" style="flex:1;text-align:' + align + ';color:#64748b;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(pwPh).html() + reqStar + '</span>' +
+                '<span class="zappoppop-pw-prev-text" data-ph="' + $('<div>').text(pwPh).html().replace(/"/g, '&quot;') + '" style="flex:1;text-align:' + align + ';color:#64748b;' + fTxt + 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + $('<div>').text(pwPh).html() + reqStar + '</span>' +
                 pwRightIcon +
                 (showEye ? '<span class="zappoppop-pw-prev-eye dashicons dashicons-visibility" aria-label="Show password" style="position:absolute;right:0;top:0;width:40px;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:20px;color:#2271b1;cursor:pointer;pointer-events:auto;"></span>' : '') +
                 '</div>';

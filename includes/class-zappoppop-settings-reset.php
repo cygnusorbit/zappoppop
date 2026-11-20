@@ -25,7 +25,7 @@ class ZapPopPop_Settings_Reset {
                               'air_datepicker', 'load_air_datepicker', 'jquery_mask', 'load_jquery_mask',
                               'range_slider', 'load_range_slider'],
             'module'      => ['modules', 'module_order'],
-            'builder'     => ['builder_alignment_tool', 'builder_viewport_toggle', 'builder_zoom_select', 'builder_save_template', 'builder_extra_elements', 'builder_click_canvas_settings', 'builder_click_element_settings', 'builder_guide', 'builder_guide_steps_on', 'builder_guide_steps'],
+            'builder'     => ['builder_alignment_tool', 'builder_viewport_toggle', 'builder_zoom_select', 'builder_save_template', 'builder_extra_elements', 'builder_click_canvas_settings', 'builder_click_element_settings', 'builder_hide_field_labels', 'builder_guide', 'builder_guide_steps_on', 'builder_guide_steps'],
             'pages'       => ['menu_pages'],
             'tracking'    => array_keys(ZapPopPop_Tracking::defaults()),
         ]);

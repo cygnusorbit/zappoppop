@@ -522,6 +522,25 @@
     html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool:hover .dashicons {
         color: var(--zpp-builder-accent-color) !important;
     }
+    /* ZPP_RIBBON_BOX_THEME: zoom +/- and Layers-panel toggle follow Elements-ribbon theme colours (were hard-coded navy) */
+    html body .zappoppop-ribbon-bar .zppr-box {
+        background: var(--zpp-builder-element-bg) !important;
+        background-color: var(--zpp-builder-element-bg) !important;
+        border-color: var(--zpp-builder-element-border) !important;
+        color: var(--zpp-builder-element-icon) !important;
+    }
+    html body .zappoppop-ribbon-bar .zppr-wrap:hover .zppr-box,
+    html body .zappoppop-ribbon-bar .zppr-box:hover,
+    html body .zappoppop-ribbon-bar .zppr-box:focus {
+        background: var(--zpp-builder-element-hover) !important;
+        background-color: var(--zpp-builder-element-hover) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
+    html body .zappoppop-ribbon-bar .zppr-box[aria-pressed="true"],
+    html body .zappoppop-ribbon-bar .zppr-wrap > input:checked + .zppr-box {
+        color: var(--zpp-builder-accent-color) !important;
+        border-color: var(--zpp-builder-accent-color) !important;
+    }
 
     /* Canvas guide frame: a real dashed border that follows the canvas corner radius in every browser
        (outline ignores border-radius in older Safari / Firefox, which made the corners look wrong) */

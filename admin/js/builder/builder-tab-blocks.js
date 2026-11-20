@@ -7,7 +7,7 @@
     var TAB_LABEL = { style: 'Style', logic: 'Logic', data: 'Data', advanced: 'Advanced' };
     var ROUTING = ['buttonAction', 'linkUrl', 'url', 'linkBlank', 'targetBlank', 'nofollow', 'routeValue', 'routeLabel', 'goto_canvas', 'goto_screen', 'target_canvas', 'linkTarget'];
     var FIXED = {
-        style: ['borderEnabled', 'shadowEnabled'],
+        style: ['borderEnabled', 'shadowEnabled', 'textAlign'], /* ZPP_STYLE_TEXTALIGN: the Left/Center/Right buttons have no data-prop, so list the key here for Save-as-Default and Reset */
         logic: ['logicEnabled', 'logicAction', 'logicMatch', 'logicRules'].concat(ROUTING),
         data: ['defaultValue', 'dynamicDefault', 'paramName', 'dynamicParam', 'readOnly', 'saveToDb'],
         advanced: ['fieldName', 'fieldId', 'inputMask', 'errorMessage', 'validatorEqual', 'validatorList', 'filters', 'validators']
@@ -81,12 +81,14 @@
             if (L) { L.renderLayers = function () {}; }
             if (I) { I.open = function () {}; }
             if (SP) { SP.place = function () {}; }
+            window.__zppFactorySpawn = true; /* ZPP_LAYER_DEFAULTS: built-in spawn only, saved layer defaults are skipped */
             cv.addElement(type, 0, 0);
             made = list.length > saved.len ? list[list.length - 1] : null;
             if (made) { list.pop(); made = JSON.parse(JSON.stringify(made)); }
         } catch (e) {
             made = null;
         } finally {
+            window.__zppFactorySpawn = false;
             cv.renderCanvas = saved.render; c.pushHistory = saved.history;
             if (L) { L.renderLayers = saved.layers; }
             if (I) { I.open = saved.open; }
@@ -113,21 +115,32 @@
         });
     }
 
+    function tabKeys(tab) {
+        var pane = document.getElementById('insp-tab-' + tab), keys = {};
+        (FIXED[tab] || []).forEach(function (k) { keys[k] = 1; });
+        if (pane) {
+            Array.prototype.forEach.call(pane.querySelectorAll('[data-prop]'), function (n) {
+                var k = n.getAttribute('data-prop');
+                if (k && k !== 'name' && k !== 'id' && k !== 'type') { keys[k] = 1; }
+            });
+        }
+        return keys;
+    }
+    /* ZPP_LAYER_DEFAULTS: every model key of these tabs, read by "Save <Tab> Settings as Default" */
+    window.ZapPopTabKeys = window.ZapPopTabKeys || {};
+    Object.keys(FIXED).forEach(function (t) { window.ZapPopTabKeys[t] = function () { return tabKeys(t); }; });
+
     function resetTab(tab) {
         var el = activeEl(), pane = document.getElementById('insp-tab-' + tab);
         if (!el || !pane) { return; }
-        var keys = {};
-        FIXED[tab].forEach(function (k) { keys[k] = 1; });
-        Array.prototype.forEach.call(pane.querySelectorAll('[data-prop]'), function (n) {
-            var k = n.getAttribute('data-prop');
-            if (k && k !== 'name' && k !== 'id' && k !== 'type') { keys[k] = 1; }
-        });
+        var keys = tabKeys(tab);
         var def = spawnDefaults(String(el.type || '')) || {};
         Object.keys(keys).forEach(function (k) {
             if (Object.prototype.hasOwnProperty.call(def, k)) { el[k] = def[k]; }
             else if (Object.prototype.hasOwnProperty.call(EMPTY, k)) { el[k] = EMPTY[k].slice(); }
             else { delete el[k]; }
         });
+        if (window.ZapPopPopLayerDefaults) { window.ZapPopPopLayerDefaults.applyTo(el, tab); } /* ZPP_LAYER_DEFAULTS: saved default wins over the built-in one */
         resetDom(pane);
         var c = core();
         if (c && typeof c.pushHistory === 'function') { c.pushHistory('Reset ' + TAB_LABEL[tab] + ' Settings'); }

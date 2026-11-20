@@ -11,10 +11,9 @@ if (!defined('ABSPATH')) exit;
         <span style="flex:0 0 14px;"></span>
         <span style="flex:1 1 0;font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;"><?php esc_html_e('Label', 'zappoppop'); ?></span>
         <span style="flex:1 1 0;font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;"><?php esc_html_e('Value', 'zappoppop'); ?> <em style="font-weight:400;text-transform:none;"><?php esc_html_e('(optional)', 'zappoppop'); ?></em></span>
-        <span style="flex:0 0 43px;"></span>
+        <span style="flex:0 0 66px;"></span>
     </div>
-    <div id="zappoppop-radio-rows" style="margin-bottom:4px;"></div>
-    <button type="button" id="zappoppop-radio-add" class="button button-small"><?php esc_html_e('+ Add choice', 'zappoppop'); ?></button>
+    <div id="zappoppop-radio-rows" style="margin-bottom:10px;"></div>
     <?php ZapPopPop_Inline_Assets::script('builder-elements-elem-17-radio'); ?>    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Layout Orientation', 'zappoppop'); ?></label>
     <select id="prop-radio-layout" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="layout" style="font-size:12px;">
         <option value="vertical"><?php esc_html_e('Vertical (Stacked)', 'zappoppop'); ?></option>

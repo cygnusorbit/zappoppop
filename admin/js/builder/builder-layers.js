@@ -274,7 +274,7 @@
                 case 'textfield':   return 'dashicons-forms';
                 case 'email':       return 'dashicons-email';
                 case 'number':      return 'dashicons-calculator';
-                case 'select':      return 'dashicons-menu-alt';
+                case 'select':      return 'dashicons-arrow-down-alt2';
                 case 'radios':      return 'dashicons-marker';
                 case 'checkboxgroup': return 'dashicons-yes-alt';
                 case 'checkboxes':  return 'dashicons-yes';

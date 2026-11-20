@@ -8,6 +8,8 @@
     /* model keys behind the shared Animation / form fields (they have no data-prop; the pre-save flush reads them from the DOM) */
     var ALWAYS = { animation: 'none', animIn: 'none', animStart: 'after', animDuration: 1000, animDelay: 0 };
     var IF_SET = { required: false, requiredMessage: '', autocomplete: 'off' };
+    /* ZPP_LD_LABEL: field-label settings (Element Settings panel, no data-prop) join Save / Reset Content as Default; they exist on the model only once changed */
+    var LABEL_KEYS = ['showFieldLabel', 'fieldLabelPosition', 'fieldLabelTextColor'];
 
     function core() { return window.ZapPopPopBuilderCore || null; }
     function cid(v) { return String(v || '').replace(/^zappoppop-el-/, '').replace(/^el-/, '').trim(); }
@@ -114,22 +116,37 @@
         btn.classList.remove('is-armed');
         btn.querySelector('span').textContent = 'Reset Content Settings';
     }
-    function resetContent() {
-        var el = activeEl();
-        if (!el) { return; }
+    function contentKeys(el) {
         var keys = {};
-        SHAPE_KEYS.forEach(function (k) { if (el.type === 'shape') { keys[k] = 1; } });
+        SHAPE_KEYS.forEach(function (k) { if (el && el.type === 'shape') { keys[k] = 1; } });
         Array.prototype.forEach.call(document.querySelectorAll('#insp-tab-basic [data-prop]'), function (n) {
             if (n.closest('#insp-section-layer-name')) { return; }
             var k = n.getAttribute('data-prop');
             if (k && k !== 'name' && k !== 'id' && k !== 'type') { keys[k] = 1; }
         });
+        return keys;
+    }
+    /* ZPP_LAYER_DEFAULTS: every Content-tab model key (incl. the Animation / form fields), read by "Save Content Settings as Default" */
+    window.ZapPopTabKeys = window.ZapPopTabKeys || {};
+    window.ZapPopTabKeys.basic = function (el) {
+        var keys = contentKeys(el);
+        Object.keys(ALWAYS).forEach(function (k) { keys[k] = 1; });
+        Object.keys(IF_SET).forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } });
+        LABEL_KEYS.forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } }); /* ZPP_LD_LABEL */
+        return keys;
+    };
+
+    function resetContent() {
+        var el = activeEl();
+        if (!el) { return; }
+        var keys = contentKeys(el);
         Object.keys(keys).forEach(function (k) {
             if (Object.prototype.hasOwnProperty.call(ALWAYS, k) || Object.prototype.hasOwnProperty.call(IF_SET, k)) { return; }
             delete el[k];
         });
         Object.keys(ALWAYS).forEach(function (k) { el[k] = ALWAYS[k]; });
         Object.keys(IF_SET).forEach(function (k) { if (Object.prototype.hasOwnProperty.call(el, k)) { el[k] = IF_SET[k]; } });
+        LABEL_KEYS.forEach(function (k) { delete el[k]; }); /* ZPP_LD_LABEL: back to built-in (label shown above the field), then the saved default is re-applied below */
         $('#prop-anim-in').val('none');
         $('#prop-anim-start').val('after');
         $('#prop-anim-duration').val(1000);
@@ -137,6 +154,7 @@
         $('#prop-gp-required').prop('checked', false);
         $('#prop-gp-required-msg').val('');
         $('#prop-gp-autocomplete').val('off');
+        if (window.ZapPopPopLayerDefaults) { window.ZapPopPopLayerDefaults.applyTo(el, 'basic'); window.ZapPopPopLayerDefaults.syncDom(el); } /* ZPP_LAYER_DEFAULTS */
         var c = core();
         if (c && typeof c.pushHistory === 'function') { c.pushHistory('Reset Content Settings'); }
         var cv = window.ZapPopPopBuilderCanvas;

@@ -142,6 +142,7 @@ class ZapPopPop_Admin_Settings {
             'builder_extra_elements' => 0,
             'builder_click_canvas_settings' => 0,
             'builder_click_element_settings' => 0,
+            'builder_hide_field_labels' => 0,
             'builder_guide' => 1,
             'builder_guide_steps_on' => 1,
             'builder_guide_steps' => [],
@@ -280,6 +281,16 @@ class ZapPopPop_Admin_Settings {
         $builder_defaults = self::get_builder_defaults();
         foreach ($builder_defaults as $__bk => $__bv) {
             $o[$__bk] = (array_key_exists($__bk, $in) && !empty($in[$__bk])) ? 1 : $__bv;
+        }
+
+        // 5c0. Hide field labels on NEW form elements: OFF by default (labels shown); a missing key keeps the stored value.
+        $__hl_prev = get_option('zappoppop_settings', []);
+        if (array_key_exists('builder_hide_field_labels', $in)) {
+            $o['builder_hide_field_labels'] = !empty($in['builder_hide_field_labels']) ? 1 : 0;
+        } elseif (is_array($__hl_prev) && array_key_exists('builder_hide_field_labels', $__hl_prev)) {
+            $o['builder_hide_field_labels'] = !empty($__hl_prev['builder_hide_field_labels']) ? 1 : 0;
+        } else {
+            $o['builder_hide_field_labels'] = 0;
         }
 
         // 5c1. Builder guide: on by default; a missing key keeps the stored value.

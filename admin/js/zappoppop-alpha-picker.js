@@ -8,7 +8,9 @@
 (function (window, document) {
     'use strict';
 
-    var SEL = 'input[data-zpp-alpha]';
+    /* ZPP_CP_INSP: every colour input of the Layer Settings drawer (all tabs) gets the same [swatch][hex][revert] row, 30px high. The Layer Color swatch beside the Layer Name (data-zpp-fl) keeps its own compact look. */
+    var INSP = '#zappoppop-inspector-drawer';
+    var SEL = 'input[data-zpp-alpha], ' + INSP + ' input[type="color"]:not([data-zpp-fl])';
     var proto = window.HTMLInputElement && window.HTMLInputElement.prototype;
     var desc = proto && Object.getOwnPropertyDescriptor(proto, 'value');
     var pop = null, cur = null, uid = 0, R = {};
@@ -87,6 +89,7 @@
         ui.fill.style.backgroundColor = c ? rgba(c) : '';
         if (document.activeElement !== ui.hex) { ui.hex.value = c ? toHex(c) : String(v || ''); }
         ui.btn.disabled = ui.hex.disabled = !!ui.input.disabled;
+        if (ui.rev) { ui.rev.disabled = !!ui.input.disabled || !ui.base || !parse(ui.base) || !c || toHex(parse(ui.base)) === toHex(c); }
         if (cur === ui) { paintPop(); }
     }
     function refresh(ui) {
@@ -113,18 +116,29 @@
         return lab ? String(lab.textContent || '').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '') : '';
     }
 
+    function gridSpan(wrap) {
+        var cell = wrap, p, i;
+        for (i = 0; i < 4 && cell && cell.parentNode; i++) {
+            p = cell.parentNode;
+            if (p.nodeType === 1 && window.getComputedStyle(p).display === 'grid') { cell.style.gridColumn = '1 / -1'; return; }
+            if (p.id === 'zappoppop-inspector-drawer') { return; }
+            cell = p;
+        }
+    }
+
     function enhance(input) {
         var raw, attr, pa, pr, h, ui, c, name;
         if (input.__zppCp || !input.parentNode) { return; }
+        var inInsp = !!(input.closest && input.closest(INSP));
         raw = input.value; attr = input.getAttribute('value');
         /* a native colour input silently drops the alpha of "#rrggbbaa" (or resets it to #000000): trust the attribute then */
         pa = attr ? parse(attr) : null; pr = parse(raw);
         if (pa && (!pr || raw === '#000000' || (pa.a < 1 && pr.r === pa.r && pr.g === pa.g && pr.b === pa.b))) { raw = attr; }
-        h = parseInt(input.style.height, 10) || 32;
+        h = inInsp ? 30 : (parseInt(input.style.height, 10) || 32);
         ui = { input: input, st: { h: 0, s: 0, v: 1, a: 1 }, last: '', id: ++uid };
         input.__zppCp = ui;
 
-        ui.wrap = el('span', 'zpp-cp' + (input.getAttribute('data-zpp-alpha') === 'compact' ? ' is-compact' : ''));
+        ui.wrap = el('span', 'zpp-cp' + (!inInsp && input.getAttribute('data-zpp-alpha') === 'compact' ? ' is-compact' : ''));
         ui.btn = el('button', 'zpp-cp-btn');
         ui.btn.type = 'button';
         ui.btn.style.height = h + 'px';
@@ -142,14 +156,30 @@
         ui.hex.maxLength = 40;
 
         input.parentNode.insertBefore(ui.wrap, input);
-        ui.wrap.appendChild(ui.btn);
-        ui.wrap.appendChild(ui.hex);
+        if (inInsp) { /* ZPP_CP_BOX: swatch + hex share ONE bordered field, the revert button stands beside it */
+            ui.box = el('span', 'zpp-cp-box');
+            ui.box.appendChild(ui.btn);
+            ui.box.appendChild(ui.hex);
+            ui.wrap.appendChild(ui.box);
+        } else {
+            ui.wrap.appendChild(ui.btn);
+            ui.wrap.appendChild(ui.hex);
+        }
+        if (inInsp) { /* ZPP_CP_INSP: revert icon on the right, back to the value the layer was loaded with */
+            ui.rev = el('button', 'zpp-cp-revert');
+            ui.rev.type = 'button';
+            ui.rev.title = t('revert', 'Revert');
+            ui.rev.setAttribute('aria-label', t('revert', 'Revert'));
+            ui.rev.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>';
+            ui.wrap.appendChild(ui.rev);
+        }
         ui.wrap.appendChild(input);
         name = labelText(input, ui.wrap);
         ui.btn.setAttribute('aria-label', (name ? name + ': ' : '') + t('pick', 'Pick colour'));
         ui.hex.setAttribute('aria-label', name || t('hex', 'Colour value'));
 
         c = parse(raw);
+        ui.base = raw;
         input.type = 'hidden';
         if (c) { setRaw(input, raw); }
         if (desc && desc.get && desc.set) {
@@ -157,7 +187,7 @@
                 Object.defineProperty(input, 'value', {
                     configurable: true,
                     get: function () { return desc.get.call(this); },
-                    set: function (v) { desc.set.call(this, v); refresh(ui); }
+                    set: function (v) { desc.set.call(this, v); ui.base = String(v === null || v === undefined ? '' : v); refresh(ui); }
                 });
             } catch (e) {}
         }
@@ -172,6 +202,17 @@
         ui.hex.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); e.stopPropagation(); ui.hex.blur(); }
         });
+        if (ui.rev) {
+            ui.rev.addEventListener('click', function (e) {
+                var p = parse(ui.base);
+                e.preventDefault();
+                if (!p) { return; }
+                if (document.activeElement === ui.hex) { ui.hex.blur(); } /* Safari does not focus a clicked button: release the field so it repaints */
+                setFrom(ui.st, p);
+                commit(ui, true);
+            });
+            gridSpan(ui.wrap); /* a narrow grid cell would squeeze the hex field: the colour field takes the whole row */
+        }
         ui.wrap.addEventListener('pointerenter', function () { refresh(ui); });
         refresh(ui);
     }

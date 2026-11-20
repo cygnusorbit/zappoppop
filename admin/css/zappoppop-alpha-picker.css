@@ -71,3 +71,23 @@
 
 /* ZPP_CP_ROW3: "Opacity" caption aligned to the right edge of the field */
 .zpp-cp-pop .zpp-cp-pct > span:first-child { left: auto; right: 7px; text-align: right; }
+
+/* ZPP_CP_INSP: Layer Settings drawer, every tab: [swatch][hex][revert], one height, same border / radius tokens as the Theme page */
+#zappoppop-inspector-drawer .zpp-cp { gap: 6px; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-btn { -webkit-box-flex: 0; -ms-flex: 0 0 40px; flex: 0 0 40px; width: 40px; height: 30px !important; min-height: 30px; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-hex { display: block !important; height: 30px !important; min-height: 30px !important; margin: 0; line-height: 28px; box-sizing: border-box; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert { display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-flex: 0; -ms-flex: 0 0 30px; flex: 0 0 30px; width: 30px; height: 30px; min-height: 30px; margin: 0; padding: 0; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1); border-radius: var(--zpp-r-button, 4px); background: var(--zpp-c-bg-card, #fff); color: var(--zpp-c-muted, #64748b); cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; line-height: 0; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert:hover:not(:disabled) { border-color: var(--zpp-c-primary, #2563eb); color: var(--zpp-c-primary, #2563eb); }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert:focus-visible { outline: 2px solid var(--zpp-c-primary, #2563eb); outline-offset: 1px; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert:disabled { opacity: .4; cursor: default; }
+/* the old per-field reset buttons next to a colour field are replaced by the revert icon */
+#zappoppop-inspector-drawer .zpp-cp + .zappoppop-icon-color-reset, #zappoppop-inspector-drawer .zpp-cp + #prop-fg-color-reset { display: none !important; }
+
+/* ZPP_CP_BOX: one bordered field [swatch | #hex] + a separate revert button (same height, same border tokens) */
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-box { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 8px; -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; height: 30px; padding: 3px; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #cbd5e1); border-radius: var(--zpp-r-button, 4px); background: var(--zpp-c-bg-card, #fff); }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-box:hover, #zappoppop-inspector-drawer .zpp-cp .zpp-cp-box:focus-within { border-color: var(--zpp-c-primary, #2563eb); }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-box .zpp-cp-btn { -webkit-box-flex: 0; -ms-flex: 0 0 22px; flex: 0 0 22px; width: 22px; height: 22px !important; min-height: 22px; padding: 0; border: 1px solid var(--zpp-c-border, #cbd5e1) !important; border-radius: 4px; background: transparent; overflow: hidden; box-sizing: border-box; /* ZPP_CP_SWATCH_BORDER */ }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-box .zpp-cp-chk { border-radius: 3px; }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-box .zpp-cp-hex { -webkit-box-flex: 1; -ms-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; height: 22px !important; min-height: 22px !important; margin: 0; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; outline: 0 !important; font-family: inherit; font-size: 13px; line-height: 22px; color: var(--zpp-c-text, #1d2327); }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert { color: var(--zpp-c-text, #475569); }
+#zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert svg { width: 16px; height: 16px; }

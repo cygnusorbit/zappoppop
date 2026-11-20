@@ -12,6 +12,13 @@ class ZapPopPop_Admin_Assets {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
     }
 
+    /* ZPP_LAYER_FACTORY: built-in defaults for NEW layers (defaults/layer-defaults.json + Settings > Builder), localized to the builder as zappoppop_vars.layer_factory */
+    protected static function layer_factory_for_builder() {
+        if (!class_exists('ZapPopPop_Saved_Defaults') || !method_exists('ZapPopPop_Saved_Defaults', 'factory_layers')) { return array(); }
+        $f = ZapPopPop_Saved_Defaults::factory_layers();
+        return is_array($f) ? $f : array();
+    }
+
     /* Cache-friendly asset version: plugin version; adds a cache-buster only when WP_DEBUG is on. */
     protected static function ver() {
         $v = defined('ZAPPOPPOP_VERSION') ? ZAPPOPPOP_VERSION : '1.0';
@@ -98,6 +105,7 @@ class ZapPopPop_Admin_Assets {
                 'hue'     => __('Hue', 'zappoppop'),
                 'opacity' => __('Opacity', 'zappoppop'),
                 'clear'   => __('Transparent', 'zappoppop'),
+                'revert'  => __('Revert', 'zappoppop'),
             ]]);
             wp_enqueue_script('jquery-ui-draggable');
             wp_enqueue_script('jquery-ui-resizable');
@@ -106,13 +114,47 @@ class ZapPopPop_Admin_Assets {
             // Enqueue active typography & Font Awesome for builder stage
             ZapPopPop_Libraries::enqueue_builder_libraries();
             wp_enqueue_style('zappoppop-animations-core-css', ZAPPOPPOP_URL . 'public/css/animations-core.css', [], (defined('ZAPPOPPOP_VERSION') ? ZAPPOPPOP_VERSION : '1.0'));
+            /* ZPP_STAGE_DEFAULT_FONT: the stage inherits the same global default font/weight/size as the front wrapper, so Edit Mode matches Live Preview */
+            if (function_exists('zappoppop_get_setting')) {
+                $zpp_sf = '';
+                $zpp_ff = (string) zappoppop_get_setting('default_font', 'inherit');
+                if ($zpp_ff !== '' && $zpp_ff !== 'inherit' && preg_match('/^[A-Za-z0-9 ,\'"_-]+$/', $zpp_ff)) { $zpp_sf .= 'font-family:' . $zpp_ff . ';'; }
+                /* ZPP_STAGE_THEME_FONT: with Default Font = inherit the popup takes the site theme's body font on the front (and in Live Preview); resolve it so the stage matches */
+                if ($zpp_ff === '' || $zpp_ff === 'inherit') {
+                    if (function_exists('wp_get_global_styles')) {
+                        $zpp_tf = wp_get_global_styles(array('typography', 'fontFamily'));
+                        if (is_string($zpp_tf) && preg_match('/var\(--wp--preset--font-family--([a-z0-9-]+)\)/i', $zpp_tf, $zpp_m) && function_exists('wp_get_global_settings')) {
+                            $zpp_fams = wp_get_global_settings(array('typography', 'fontFamilies'));
+                            if (is_array($zpp_fams)) {
+                                foreach ($zpp_fams as $zpp_list) {
+                                    if (!is_array($zpp_list)) { continue; }
+                                    foreach ($zpp_list as $zpp_f) {
+                                        if (is_array($zpp_f) && isset($zpp_f['slug'], $zpp_f['fontFamily']) && $zpp_f['slug'] === $zpp_m[1]) { $zpp_tf = (string) $zpp_f['fontFamily']; break 2; }
+                                    }
+                                }
+                            }
+                        }
+                        if (is_string($zpp_tf) && $zpp_tf !== '' && preg_match('/^[A-Za-z0-9 ,\'"_-]+$/', $zpp_tf)) {
+                            $zpp_sf .= 'font-family:' . $zpp_tf . ';';
+                            if (function_exists('wp_print_font_faces')) { add_action('admin_head', 'wp_print_font_faces', 20); }
+                        }
+                    }
+                }
+                $zpp_fw = (string) zappoppop_get_setting('default_font_weight', 'inherit');
+                if (in_array($zpp_fw, array('300', '400', '500', '600', '700'), true)) { $zpp_sf .= 'font-weight:' . $zpp_fw . ';'; }
+                $zpp_fs = (int) zappoppop_get_setting('default_font_size', 0);
+                if ($zpp_fs > 0 && $zpp_fs <= 200) { $zpp_sf .= 'font-size:' . $zpp_fs . 'px;'; }
+                if (zappoppop_get_setting('default_font_italic', 0)) { $zpp_sf .= 'font-style:italic;'; }
+                if ($zpp_sf !== '') { wp_add_inline_style('zappoppop-builder-css', '#zappoppop-canvas-box{' . $zpp_sf . '}'); }
+            }
             wp_enqueue_script('zappoppop-builder-animation-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-animation.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
 
             if (function_exists('wp_enqueue_media')) { wp_enqueue_media(); }
         wp_enqueue_script('zappoppop-builder-element-ext-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-element-ext.js', [], self::ver(), true);
         wp_enqueue_script('zappoppop-builder-core-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-core.js', ['jquery', 'zappoppop-builder-element-ext-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-spawn-place-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-spawn-place.js', [], self::ver(), true);
-            wp_enqueue_script('zappoppop-builder-canvas-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-canvas.js', ['jquery', 'jquery-ui-draggable', 'jquery-ui-resizable', 'zappoppop-builder-core-js', 'jquery-ui-droppable', 'zappoppop-builder-spawn-place-js'], self::ver(), true);
+            wp_enqueue_script('zappoppop-builder-layer-factory-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-layer-factory.js', ['zappoppop-builder-core-js'], self::ver(), true); /* ZPP_LAYER_FACTORY */
+            wp_enqueue_script('zappoppop-builder-canvas-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-canvas.js', ['jquery', 'jquery-ui-draggable', 'jquery-ui-resizable', 'zappoppop-builder-core-js', 'jquery-ui-droppable', 'zappoppop-builder-spawn-place-js', 'zappoppop-builder-layer-factory-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-layers-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-layers.js', ['jquery', 'jquery-ui-sortable', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-style-toggles-js', ZAPPOPPOP_URL . 'admin/js/builder/registry/registry-style-toggles.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-style-stable-js', ZAPPOPPOP_URL . 'admin/js/builder/registry/registry-style-stable.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-canvas-js'], self::ver(), true);
@@ -189,7 +231,9 @@ class ZapPopPop_Admin_Assets {
                 'custom_fonts' => ZapPopPop_Libraries::get_custom_font_families(),
                 'fa_url' => ZapPopPop_Libraries::fa_url(),
                 'layer_settings' => ZapPopPop_Layer_Settings::builder_payload(),
-                'new_popup_defaults' => class_exists('ZapPopPop_Saved_Defaults') ? ZapPopPop_Saved_Defaults::get('popup') : null
+                'new_popup_defaults' => class_exists('ZapPopPop_Saved_Defaults') ? ZapPopPop_Saved_Defaults::get('popup') : null,
+                'layer_defaults' => class_exists('ZapPopPop_Saved_Defaults') ? (ZapPopPop_Saved_Defaults::get('layers') ?: null) : null,
+                'layer_factory' => class_exists('ZapPopPop_Saved_Defaults') ? (self::layer_factory_for_builder() ?: null) : null /* ZPP_LAYER_FACTORY */
             ]);
             $builder_payload = apply_filters('zappoppop_builder_payload', $builder_payload);
             wp_localize_script('zappoppop-builder-core-js', 'zappoppop_vars', $builder_payload);
@@ -199,8 +243,11 @@ class ZapPopPop_Admin_Assets {
             wp_enqueue_script('zappoppop-builder-content-tab-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-content-tab.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-link-group-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-link-group.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-tab-blocks-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-tab-blocks.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
+            wp_enqueue_style('zappoppop-builder-layer-defaults-css', ZAPPOPPOP_URL . 'admin/css/builder/layer-defaults.css', ['zappoppop-builder-css'], self::ver());
+            wp_enqueue_script('zappoppop-builder-layer-defaults-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-layer-defaults.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-content-tab-js', 'zappoppop-builder-tab-blocks-js', 'zappoppop-saved-defaults-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-field-id-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-id.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-field-label-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-label.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
+            wp_enqueue_script('zappoppop-builder-field-label-move-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-label-move.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-field-label-js'], self::ver(), true); /* ZPP_FL_MOVE */
             wp_enqueue_script('zappoppop-builder-alt-copy-guard-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-alt-copy-guard.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-form-cards-acc-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-form-cards-acc.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-required-move-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-required-move.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);

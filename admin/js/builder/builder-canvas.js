@@ -1189,10 +1189,10 @@
                 name: (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(type) + ' ' + (elements.length + 1),
                 top: (typeof spawnY === 'number' && !isNaN(spawnY)) ? spawnY : (50 + (elements.length * 15) % 150),
                 left: (typeof spawnX === 'number' && !isNaN(spawnX)) ? spawnX : (50 + (elements.length * 15) % 200),
-                width: (type === 'close' || type === 'close_icon') ? 35 : (type === 'video') ? 200 /* ZAPPOPPOP_VIDEO_SPAWN_200x150 */ : (type === 'shape' || type === 'image') ? 120 : ((type === 'text' || type === 'textfield') ? 200 : (type === 'html') ? 240 : 200),
-                height: (type === 'image') ? 150 /* ZAPPOPPOP_IMAGE_SPAWN_120x150 */ : (type === 'video') ? 150 : (type === 'close' || type === 'close_icon') ? 35 : (type === 'shape') ? 120 : ((type === 'signature') ? 60 : 42),
+                width: 200,
+                height: 42,
                 zIndex: nextZ, /* ZAPPOPPOP_CLOSE_SPAWN_35 */
-                sizePresetApplied: (type === 'close' || type === 'close_icon'),
+                sizePresetApplied: false,
                 borderRadius: 0,
                 opacity: 1,
                 fontSize: 14,
@@ -1200,7 +1200,7 @@
                 lineHeight: 1.4,
                 letterSpacing: 0,
                 textAlign: 'left',
-                padding: (type === 'paragraph' || type === 'title') ? 8 : 0,
+                padding: 0,
                 animation: 'none',
                 content: this.getDefaultContent(type),
                 goto_canvas: 2,
@@ -1210,56 +1210,10 @@
                 custom_settings: {}
             };
 
-            if (type === 'button' || type === 'link' || type === 'link_btn') { /* ZAPPOPPOP_BUTTON_DEFAULTS */
-                newEl.bgColor = '#2563eb';
-                newEl.color = '#ffffff';
-                newEl.fontWeight = '600';
-                newEl.fontSize = 14;
-                newEl.borderRadius = 6;
-                newEl.textAlign = 'center';
-                newEl.buttonAction = 'link';
-                newEl.linkBlank = false;
-                newEl.nofollow = false;
-                newEl.hoverBgColor = '#1d4ed8';
-                newEl.hoverTextColor = '#ffffff';
-                newEl.hoverBorderColor = '#1d4ed8';
-            }
 
-            if (type === 'label') { newEl.padding = 0; newEl.paddingTop = 0; newEl.paddingRight = 0; newEl.paddingBottom = 0; newEl.paddingLeft = 0; newEl.lineHeight = 1; } /* ZAPPOPPOP_LABEL_ZERO_GAP */
-            if (type === 'phone' || type === 'tel') { newEl.autocomplete = 'tel'; } /* ZAPPOPPOP_PHONE_AC_DEFAULT */
-            if (type === 'shape') {
-                newEl.shapePreset = 'square';
-                newEl.shapeFill = '#3b82f6';
-                newEl.shapeStroke = '#1d4ed8';
-                newEl.shapeStrokeWidth = 0;
-                newEl.strokeWidth = 0;
-                newEl.shapeRotate = 0;
-            }
 
-            if (type === 'image') { newEl.objectFit = 'contain'; newEl.imageFit = 'contain'; newEl.linkTarget = '_self'; newEl.targetBlank = false; newEl.linkBlank = false; newEl.sizePresetApplied = true; } /* ZAPPOPPOP_IMAGE_DEFAULTS */
-            if (type === 'textarea') { newEl.height = 100; newEl.h = 100; if (!newEl.rows) { newEl.rows = 4; } } /* ZAPPOPPOP_TEXTAREA_H100 */
-            if (type === 'checkbox' || type === 'checkboxes') { newEl.width = 300; newEl.w = 300; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_CHECKBOX_DEFAULTS */
-            if (type === 'radio' || type === 'radios') { newEl.width = 100; newEl.w = 100; newEl.height = 100; newEl.h = 100; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_RADIO_DEFAULTS */
-            if (type === 'checkboxgroup') { newEl.width = 100; newEl.w = 100; newEl.height = 100; newEl.h = 100; newEl.fontSize = 12; newEl.bgColor = 'transparent'; newEl.transparentFill = true; } /* ZAPPOPPOP_CBGROUP_DEFAULTS */
-            if (type === 'multiselect') { newEl.width = 125; newEl.w = 125; newEl.height = 125; newEl.h = 125; } /* ZAPPOPPOP_MULTISELECT_SIZE */
             if (window.ZapPopPopElementExt) { window.ZapPopPopElementExt.call(type, 'spawn', [newEl]); } /* ZAPPOPPOP_EXT_SPAWN */
-            if (type === 'icon' || type === 'fontawesome') { /* ZAPPOPPOP_ICON_DEFAULTS_V1 */
-                newEl.iconClass = 'fas fa-star';
-                newEl.content = 'fas fa-star';
-                newEl.iconSize = 36;
-                newEl.iconColor = '#38bdf8';
-                newEl.color = '#38bdf8';
-                newEl.rotate = 0;
-                newEl.width = 40; newEl.w = 40;
-                newEl.height = 40; newEl.h = 40;
-                newEl.borderRadius = 0;
-                newEl.padding = 0;
-                newEl.bgColor = 'transparent';
-                newEl.transparentFill = true;
-                newEl.textAlign = 'center';
-            }
-            if (type === 'submit') { newEl.textAlign = 'center'; newEl.blockEmptySubmit = true; } /* ZAPPOPPOP_SUBMIT_ALIGN_DEFAULT + ZAPPOPPOP_BLOCK_EMPTY_SUBMIT */
-            if (type === 'email' || type === 'text') { newEl.required = true; } /* ZAPPOPPOP_EMAIL_REQ_DEFAULT (Text spawns like Email) */
+            if (window.ZapPopPopLayerFactory) { window.ZapPopPopLayerFactory.apply(newEl); } /* ZPP_LAYER_FACTORY_P3: every type-specific default now lives in defaults/layer-defaults.json */ /* ZPP_LAYER_FACTORY: defaults/layer-defaults.json (saved site defaults still win, applied after addElement) */
             if (window.ZapPopPopSpawnPlace) { window.ZapPopPopSpawnPlace.place(newEl, elements); } /* ZAPPOPPOP_SPAWN_PLACE */
             elements.push(newEl);
             window.ZapPopPopBuilderCore.state.activeId = id;
