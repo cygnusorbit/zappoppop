@@ -125,9 +125,9 @@ class ZapPopPop_Layer_Settings {
             self::entry('layer_name', __('Layer Name', 'zappoppop'), '#insp-section-layer-name', $all),
             self::entry('element_settings', '', '#panel-elem-{type}', $all, 'block', array(), true),
             self::entry('animation', __('Animation (Appearance / Duration / Start Delay / Start Animation)', 'zappoppop'), '#insp-row-gp-animation', $all),
-            self::entry('required', __('Required Switch', 'zappoppop'), '#insp-row-gp-required', $form, 'flex'),
-            self::entry('required_msg', __('Required Error Message', 'zappoppop'), '#insp-row-gp-required-msg', $form),
-            self::entry('autocomplete', __('Autocomplete Attribute', 'zappoppop'), '#insp-row-gp-autocomplete', array()),
+            self::entry('required', __('Required Switch', 'zappoppop'), '#insp-row-gp-required', $form, 'flex', array(
+                self::entry('required_msg', __('Required Error Message', 'zappoppop'), '#insp-row-gp-required-msg', $form),
+            )),
             self::entry('coords', __('Coordinates & Bounds (X / Y / Width / Height)', 'zappoppop'), '#insp-section-coords, #insp-section-coords-grid', $all),
         );
 
@@ -224,6 +224,116 @@ class ZapPopPop_Layer_Settings {
         return self::sanitize($raw);
     }
 
+    /* ---- Layer Settings order (drag & drop). Stored apart from the on/off overrides: zappoppop_settings['builder_layer_order'][type][slot] = [keys]. Slot = tab, or "tab|parentKey" for child rows. ---- */
+
+    public static function order_slot($tab, $parent = '') {
+        return $parent === '' ? $tab : $tab . '|' . $parent;
+    }
+
+    private static function clean_keys($list, $allowed) {
+        $out = array();
+        foreach ((array) $list as $k) {
+            if (is_string($k) && $k !== '' && in_array($k, $allowed, true) && !in_array($k, $out, true)) {
+                $out[] = $k;
+            }
+        }
+        return $out;
+    }
+
+    private static function sort_by_keys($items, $keys) {
+        $pos  = array_flip(array_values(array_unique(array_map('strval', (array) $keys))));
+        $head = array();
+        $tail = array();
+        foreach ($items as $it) {
+            if (isset($pos[$it['key']])) {
+                $head[$pos[$it['key']]] = $it;
+            } else {
+                $tail[] = $it;
+            }
+        }
+        ksort($head);
+        return array_merge(array_values($head), $tail);
+    }
+
+    /** Entries (and their child rows) arranged by the saved order; anything unlisted keeps its default place after the listed ones. */
+    public static function ordered_entries($entries, $type, $tab, $order) {
+        $slots = (isset($order[$type]) && is_array($order[$type])) ? $order[$type] : array();
+        if (!empty($slots[$tab])) {
+            $entries = self::sort_by_keys($entries, $slots[$tab]);
+        }
+        foreach ($entries as $i => $e) {
+            $s = self::order_slot($tab, $e['key']);
+            if (!empty($e['rows']) && !empty($slots[$s])) {
+                $entries[$i]['rows'] = self::sort_by_keys($e['rows'], $slots[$s]);
+            }
+        }
+        return $entries;
+    }
+
+    /** Accepts an array or a JSON string; keeps only known keys and only orders that differ from the default. */
+    public static function sanitize_order($raw) {
+        if (is_string($raw)) {
+            $decoded = json_decode($raw, true);
+            $raw     = is_array($decoded) ? $decoded : array();
+        }
+        if (!is_array($raw)) {
+            return array();
+        }
+        $out = array();
+        $cat = self::catalogue();
+        foreach (array_keys(self::elements()) as $type) {
+            if (empty($raw[$type]) || !is_array($raw[$type])) {
+                continue;
+            }
+            foreach ($cat as $tab => $entries) {
+                $tops = array();
+                foreach ($entries as $e) {
+                    $tops[] = $e['key'];
+                }
+                $want = (isset($raw[$type][$tab]) && is_array($raw[$type][$tab])) ? self::clean_keys($raw[$type][$tab], $tops) : array();
+                if ($want && array_merge($want, array_values(array_diff($tops, $want))) !== $tops) {
+                    $out[$type][$tab] = $want;
+                }
+                foreach ($entries as $e) {
+                    $s = self::order_slot($tab, $e['key']);
+                    if (empty($e['rows']) || empty($raw[$type][$s]) || !is_array($raw[$type][$s])) {
+                        continue;
+                    }
+                    $kids = array();
+                    foreach ($e['rows'] as $r) {
+                        $kids[] = $r['key'];
+                    }
+                    $want = self::clean_keys($raw[$type][$s], $kids);
+                    if ($want && array_merge($want, array_values(array_diff($kids, $want))) !== $kids) {
+                        $out[$type][$s] = $want;
+                    }
+                }
+            }
+        }
+        return $out;
+    }
+
+    /** tab => list of {k: entry key, r: [child keys]} in default order (builder payload). */
+    public static function tree() {
+        $tree = array();
+        foreach (self::catalogue() as $tab => $entries) {
+            foreach ($entries as $e) {
+                $kids = array();
+                foreach ($e['rows'] as $r) {
+                    $kids[] = $r['key'];
+                }
+                $tree[$tab][] = array('k' => $e['key'], 'r' => $kids);
+            }
+        }
+        return $tree;
+    }
+
+    public static function get_order() {
+        $s   = get_option('zappoppop_settings', array());
+        $raw = (is_array($s) && isset($s['builder_layer_order'])) ? $s['builder_layer_order'] : array();
+        return self::sanitize_order($raw);
+    }
+
     /** Accepts an array or a JSON string; returns only values that differ from the defaults. */
     public static function sanitize($raw) {
         if (is_string($raw)) {
@@ -293,6 +403,8 @@ class ZapPopPop_Layer_Settings {
             'overrides' => empty($ov) ? new stdClass() : $ov,
             'selectors' => $sel,
             'tabs'      => $tabs,
+            'order'     => ($ord = self::get_order()) ? $ord : new stdClass(),
+            'tree'      => self::tree(),
         );
     }
 }

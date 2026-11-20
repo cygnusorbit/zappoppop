@@ -17,6 +17,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
     class ZapPopPop_Builder_Theme {
 
         const OPTION_KEY = 'zappoppop_builder_theme';
+        const DAY_OPTION = 'zappoppop_builder_day_preset'; /* ZPP_DAY_PRESET: your own saved Day Mode */
 
         public static function init() {
             add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ), 999 );
@@ -26,6 +27,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
 
             add_action( 'wp_ajax_zappoppop_save_builder_theme', array( __CLASS__, 'ajax_save_builder_theme' ) );
             add_action( 'wp_ajax_zappoppop_reset_builder_theme', array( __CLASS__, 'ajax_reset_builder_theme' ) );
+            add_action( 'wp_ajax_zappoppop_save_day_preset', array( __CLASS__, 'ajax_save_day_preset' ) );
             add_action( 'admin_init', array( __CLASS__, 'maybe_handle_post_save' ), 5 );
             add_filter( 'admin_body_class', array( __CLASS__, 'filter_admin_body_class' ) );
         }
@@ -64,11 +66,17 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 'content_text_color'     => '#f8fafc',
                 'content_border_color'   => '#1e293b',
 
-                // 03. Accordion Tab (Bg + Opacity + Dedicated Text + Dedicated Border)
+                // 03. Accordion Title (Bg + Opacity + Dedicated Text + Dedicated Border)
                 'accordion_bg_color'     => '#1e293b',
                 'accordion_bg_opacity'   => 100,
                 'accordion_text_color'   => '#f8fafc',
                 'accordion_border_color' => '#334155',
+
+                // 03b. Accordion Setting Area (Bg + Opacity + Dedicated Text + Dedicated Border)
+                'area_bg_color'          => '#1e293b',
+                'area_bg_opacity'        => 100,
+                'area_text_color'        => '#f8fafc',
+                'area_border_color'      => '#334155',
 
                 // 04. Form Field & Button (Bg + Opacity + Dedicated Text + Dedicated Border)
                 'field_bg_color'         => '#090d16',
@@ -129,7 +137,24 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 'edge_border_color'        => '#ff8a2a',
                 'edge_border_opacity'      => 0,
 
-                // 19. Layers Panel Frame (frame, header & row borders of the floating Layers Panel; active with 17/18)
+                // 18b. Layers Panel Title (header bar of the floating Layers Panel)
+                'layers_title_bg_color'    => '#1e293b',
+                'layers_title_bg_opacity'  => 100,
+                'layers_title_text_color'  => '#f8fafc',
+                'layers_title_border_color' => '#334155',
+
+                // 18c. Layers Area (list body of the floating Layers Panel)
+                'layers_area_bg_color'     => '#111827',
+                'layers_area_bg_opacity'   => 100,
+                'layers_area_text_color'   => '#f8fafc',
+                'layers_area_border_color' => '#1e293b',
+
+                // 18d. Elements Ribbon Bar (the bar behind the element buttons: Bg + Opacity + Border). Defaults = Header colours.
+                'ribbon_bg_color'          => '#0f172a',
+                'ribbon_bg_opacity'        => 100,
+                'ribbon_border_color'      => '#1e293b',
+
+                // 19. Layers Panel Frame (outer border of the whole floating Layers Panel)
                 'layers_border_color'      => '#2a78b8',
 
                 // 20. Stage Background Image (URL from the Media Library; opacity = how strongly it shows)
@@ -355,6 +380,29 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 $presets[ $p_key ] = array_merge( $defaults, $p_data );
             }
 
+            foreach ( $presets as $zpp_pk => $zpp_pv ) {
+                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
+                    if ( ! isset( $presets[ $zpp_pk ][ 'area_' . $zpp_sfx ] ) && isset( $zpp_pv[ 'accordion_' . $zpp_sfx ] ) ) {
+                        $presets[ $zpp_pk ][ 'area_' . $zpp_sfx ] = $zpp_pv[ 'accordion_' . $zpp_sfx ];
+                    }
+                }
+            }
+            foreach ( $presets as $zpp_pk => $zpp_pv ) {
+                foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zpp_new => $zpp_src ) {
+                    foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
+                        if ( ! isset( $presets[ $zpp_pk ][ $zpp_new . '_' . $zpp_sfx ] ) && isset( $zpp_pv[ $zpp_src . '_' . $zpp_sfx ] ) ) {
+                            $presets[ $zpp_pk ][ $zpp_new . '_' . $zpp_sfx ] = $zpp_pv[ $zpp_src . '_' . $zpp_sfx ];
+                        }
+                    }
+                }
+            }
+            /* ZPP_DAY_PRESET: the Day Mode button applies the user's saved Day Mode when there is one */
+            $zpp_day = get_option( self::DAY_OPTION, array() );
+            if ( is_array( $zpp_day ) && ! empty( $zpp_day ) && isset( $presets['day_light'] ) ) {
+                $zpp_label = $presets['day_light']['label'];
+                $presets['day_light'] = array_merge( $presets['day_light'], $zpp_day );
+                $presets['day_light']['label'] = $zpp_label;
+            }
             return $presets;
         }
 
@@ -368,6 +416,20 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             $parent_theme = get_option( 'zappoppop_theme', array() );
             if ( is_array( $parent_theme ) && isset( $parent_theme['builder'] ) && is_array( $parent_theme['builder'] ) ) {
                 $saved = array_merge( $parent_theme['builder'], $saved );
+            }
+
+            foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
+                if ( ! isset( $saved[ 'area_' . $zpp_sfx ] ) && isset( $saved[ 'accordion_' . $zpp_sfx ] ) ) {
+                    $saved[ 'area_' . $zpp_sfx ] = $saved[ 'accordion_' . $zpp_sfx ];
+                }
+            }
+
+            foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zpp_new => $zpp_src ) {
+                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
+                    if ( ! isset( $saved[ $zpp_new . '_' . $zpp_sfx ] ) && isset( $saved[ $zpp_src . '_' . $zpp_sfx ] ) ) {
+                        $saved[ $zpp_new . '_' . $zpp_sfx ] = $saved[ $zpp_src . '_' . $zpp_sfx ];
+                    }
+                }
             }
 
             return self::sanitize_settings( array_merge( $defaults, $saved ) );
@@ -438,6 +500,10 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             $header_rgba    = self::hex_to_rgba( $s['header_bg_color'], $s['header_bg_opacity'] );
             $content_rgba   = self::hex_to_rgba( $s['content_bg_color'], $s['content_bg_opacity'] );
             $accordion_rgba = self::hex_to_rgba( $s['accordion_bg_color'], $s['accordion_bg_opacity'] );
+            $area_rgba      = self::hex_to_rgba( $s['area_bg_color'], $s['area_bg_opacity'] );
+            $ltitle_rgba    = self::hex_to_rgba( $s['layers_title_bg_color'], $s['layers_title_bg_opacity'] );
+            $larea_rgba     = self::hex_to_rgba( $s['layers_area_bg_color'], $s['layers_area_bg_opacity'] );
+            $ribbon_rgba    = self::hex_to_rgba( $s['ribbon_bg_color'], $s['ribbon_bg_opacity'] );
             $field_rgba     = self::hex_to_rgba( $s['field_bg_color'], $s['field_bg_opacity'] );
             $border_rgba    = self::hex_to_rgba( $s['border_color'], $s['border_opacity'] );
             $stage_rgba     = self::hex_to_rgba( $s['stage_bg_color'], $s['stage_bg_opacity'] );
@@ -477,9 +543,12 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 '--zpp-builder-accordion-bg'       => $accordion_rgba,
                 '--zpp-builder-accordion-text'     => $s['accordion_text_color'],
                 '--zpp-builder-accordion-border'   => $s['accordion_border_color'],
+                '--zpp-builder-area-bg'            => $area_rgba,
+                '--zpp-builder-area-text'          => $s['area_text_color'],
+                '--zpp-builder-area-border'        => $s['area_border_color'],
                 '--zpp-builder-popup-acc-bg'       => $accordion_rgba,
                 '--zpp-builder-popup-acc-active-bg'=> $accordion_rgba,
-                '--zpp-builder-layers-header-bg'   => $accordion_rgba,
+                '--zpp-builder-layers-header-bg'   => $ltitle_rgba,
                 '--zpp-builder-field-bg'           => $field_rgba,
                 '--zpp-builder-field-text'         => $s['field_text_color'],
                 '--zpp-builder-field-border'       => $s['field_border_color'],
@@ -520,7 +589,15 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 '--zpp-builder-glow-shadow'        => '0 0 10px 1px ' . $glow_rgba,
                 '--zpp-builder-edge-border'        => $edge_rgba,
                 '--zpp-builder-edge-ring'          => 'inset 0 0 0 1px ' . $edge_rgba,
-                '--zpp-builder-layers-border'      => $s['layers_border_color'],
+                '--zpp-builder-layers-border'      => $s['layers_area_border_color'],
+                '--zpp-builder-layers-title-bg'    => $ltitle_rgba,
+                '--zpp-builder-layers-title-text'  => $s['layers_title_text_color'],
+                '--zpp-builder-layers-title-border' => $s['layers_title_border_color'],
+                '--zpp-builder-layers-area-bg'     => $larea_rgba,
+                '--zpp-builder-layers-area-text'   => $s['layers_area_text_color'],
+                '--zpp-builder-layers-area-border' => $s['layers_area_border_color'],
+                '--zpp-builder-ribbon-bg'          => $ribbon_rgba,
+                '--zpp-builder-ribbon-border'      => $s['ribbon_border_color'],
                 '--zpp-builder-stage-image'        => $stage_image,
             );
 
@@ -608,6 +685,21 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             /* ZPP_SETTINGS_SWITCHES: Popup Settings theme bridge + slide-toggles (needs the theme variables printed above) */
             $zpp_sw_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/settings-switches.css';
             wp_enqueue_style( 'zappoppop-builder-settings-switches', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/settings-switches.css', array( 'zappoppop-builder-theme-late' ), file_exists( $zpp_sw_file ) ? (string) filemtime( $zpp_sw_file ) : ( defined( 'ZAPPOPPOP_VERSION' ) ? ZAPPOPPOP_VERSION : '1.0' ) );
+            /* ZPP_INSPECTOR_THEME_BRIDGE: Inspector frames / labels / switches follow the Theme > Builder tokens */
+            $zpp_br_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/inspector-theme-bridge.css';
+            wp_enqueue_style( 'zappoppop-builder-inspector-theme-bridge', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/inspector-theme-bridge.css', array( 'zappoppop-builder-settings-switches' ), file_exists( $zpp_br_file ) ? (string) filemtime( $zpp_br_file ) : '1.0' );
+            /* ZPP_CONTENT_TAB: framed accordion blocks, compact fields, bottom Reset */
+            $zpp_ct_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/content-tab.css';
+            wp_enqueue_style( 'zappoppop-builder-content-tab', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/content-tab.css', array( 'zappoppop-builder-inspector-theme-bridge' ), file_exists( $zpp_ct_file ) ? (string) filemtime( $zpp_ct_file ) : '1.0' );
+            /* ZPP_LINK_GROUP */
+            $zpp_lk_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/link-group.css';
+            wp_enqueue_style( 'zappoppop-builder-link-group', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/link-group.css', array( 'zappoppop-builder-content-tab' ), file_exists( $zpp_lk_file ) ? (string) filemtime( $zpp_lk_file ) : '1.0' );
+            /* ZPP_TAB_BLOCKS */
+            $zpp_tb_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/tab-blocks.css';
+            wp_enqueue_style( 'zappoppop-builder-tab-blocks', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/tab-blocks.css', array( 'zappoppop-builder-link-group' ), file_exists( $zpp_tb_file ) ? (string) filemtime( $zpp_tb_file ) : '1.0' );
+            /* ZPP_LAYERS_THEME */
+            $zpp_lt_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/layers-panel-theme.css';
+            wp_enqueue_style( 'zappoppop-builder-layers-panel-theme', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/layers-panel-theme.css', array( 'zappoppop-builder-tab-blocks' ), file_exists( $zpp_lt_file ) ? (string) filemtime( $zpp_lt_file ) : '1.0' );
         }
 
         private static function verify_request_security() {
@@ -660,6 +752,22 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 'message'  => esc_html__( 'Builder theme settings saved.', 'zappoppop' ),
                 'settings' => $sanitized,
                 'cssVars'  => self::compile_css_vars( $sanitized ),
+            ) );
+        }
+
+        public static function ajax_save_day_preset() {
+            self::verify_request_security();
+            if ( ! class_exists( 'ZapPopPop_Sanitizer' ) ) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
+            $raw = isset( $_POST['settings'] ) && is_array( $_POST['settings'] )
+                ? ZapPopPop_Sanitizer::post_array( 'settings' )
+                : array();
+            if ( empty( $raw ) ) {
+                wp_send_json_error( array( 'message' => esc_html__( 'No settings received.', 'zappoppop' ) ), 400 );
+            }
+            update_option( self::DAY_OPTION, self::sanitize_settings( $raw ) );
+            wp_send_json_success( array(
+                'message' => esc_html__( 'Day Mode saved.', 'zappoppop' ),
+                'preset'  => self::get_presets()['day_light'],
             ) );
         }
 
@@ -720,8 +828,8 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 ),
                 array(
                     'num'              => '03',
-                    'title'            => 'Accordion Tab Background',
-                    'desc'             => 'All accordions in Popup Settings, Layer Settings & Layers Header (Bg, Text, Border & Opacity).',
+                    'title'            => 'Accordion Title',
+                    'desc'             => 'Header bar of every accordion in Popup Settings, Layer Settings & Layers Header (Bg, Text, Border & Opacity).',
                     'color_key'        => 'accordion_bg_color',
                     'text_color_key'   => 'accordion_text_color',
                     'border_color_key' => 'accordion_border_color',
@@ -729,6 +837,15 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 ),
                 array(
                     'num'              => '04',
+                    'title'            => 'Accordion Setting Area',
+                    'desc'             => 'Body of the accordion blocks in Layer Settings (Bg, Text, Border & Opacity).',
+                    'color_key'        => 'area_bg_color',
+                    'text_color_key'   => 'area_text_color',
+                    'border_color_key' => 'area_border_color',
+                    'opacity_key'      => 'area_bg_opacity',
+                ),
+                array(
+                    'num'              => '05',
                     'title'            => 'Form Field & Button Background',
                     'desc'             => 'All text inputs, coordinate boxes, dropdowns & icon buttons (Bg, Text, Border & Opacity).',
                     'color_key'        => 'field_bg_color',
@@ -737,56 +854,56 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'opacity_key'      => 'field_bg_opacity',
                 ),
                 array(
-                    'num'         => '05',
+                    'num'         => '06',
                     'title'       => 'General Text & Label Color',
                     'desc'        => 'Fallback typography color for general headings and labels.',
                     'color_key'   => 'text_color',
                     'opacity_key' => null,
                 ),
                 array(
-                    'num'         => '06',
+                    'num'         => '07',
                     'title'       => 'Muted & Unit Text Color',
                     'desc'        => 'Helper captions (Appearance, Duration ms, px, %, 350 x 400 readout).',
                     'color_key'   => 'muted_text_color',
                     'opacity_key' => null,
                 ),
                 array(
-                    'num'         => '07',
+                    'num'         => '08',
                     'title'       => 'Icon Color',
                     'desc'        => 'Toolbar icons, element glyphs, accordion arrows, layer icons, and dropdown chevrons.',
                     'color_key'   => 'icon_color',
                     'opacity_key' => null,
                 ),
                 array(
-                    'num'         => '08',
+                    'num'         => '09',
                     'title'       => 'Hover, Active & Toggle On Color',
                     'desc'        => 'Active tabs, active Canvas 1 pill, selected layer row, focus ring, and active switches.',
                     'color_key'   => 'hover_active_color',
                     'opacity_key' => null,
                 ),
                 array(
-                    'num'         => '09',
+                    'num'         => '10',
                     'title'       => 'Divider & Toggle Off Color',
                     'desc'        => 'Internal horizontal dividers, section lines, and unchecked toggle switches.',
                     'color_key'   => 'border_color',
                     'opacity_key' => 'border_opacity',
                 ),
                 array(
-                    'num'         => '10',
+                    'num'         => '11',
                     'title'       => 'Workspace Stage Background',
                     'desc'        => 'Base background color and opacity of the center builder workspace stage.',
                     'color_key'   => 'stage_bg_color',
                     'opacity_key' => 'stage_bg_opacity',
                 ),
                 array(
-                    'num'         => '11',
+                    'num'         => '12',
                     'title'       => 'Stage Checkerboard Pattern',
                     'desc'        => 'Checkerboard grid pattern on the workspace stage (set opacity to 0% to hide).',
                     'color_key'   => 'checker_color',
                     'opacity_key' => 'checker_opacity',
                 ),
                 array(
-                    'num'              => '12',
+                    'num'              => '13',
                     'title'            => 'Primary Save Button',
                     'desc'             => 'Background, Text, and Border color for Save & Save As Template buttons.',
                     'color_key'        => 'save_btn_bg_color',
@@ -795,14 +912,14 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'opacity_key'      => null,
                 ),
                 array(
-                    'num'         => '13',
+                    'num'         => '14',
                     'title'       => 'Canvas Guide Line Color',
                     'desc'        => 'Dashed popup canvas boundary frame and alignment/snap guide lines on stage.',
                     'color_key'   => 'canvas_guide_color',
                     'opacity_key' => 'canvas_guide_opacity',
                 ),
                 array(
-                    'num'              => '14',
+                    'num'              => '15',
                     'title'            => 'Selected Layer Highlight',
                     'desc'             => 'Active row in the floating Layers Panel (Bg + Opacity, Text & Border).',
                     'color_key'        => 'layer_sel_bg_color',
@@ -811,7 +928,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'opacity_key'      => 'layer_sel_bg_opacity',
                 ),
                 array(
-                    'num'              => '15',
+                    'num'              => '16',
                     'title'            => 'Update Button (Unsaved Changes)',
                     'desc'             => 'Color of the Save button once it turns into Update because the popup has unsaved changes.',
                     'color_key'        => 'update_btn_bg_color',
@@ -820,7 +937,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'opacity_key'      => null,
                 ),
                 array(
-                    'num'              => '16',
+                    'num'              => '17',
                     'title'            => 'Elements Ribbon Buttons',
                     'desc'             => 'Element tool buttons in the ribbon: Bg, Text, Border, Icon and Hover background.',
                     'color_key'        => 'element_bg_color',
@@ -830,28 +947,47 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                     'opacity_key'      => null,
                 ),
                 array(
-                    'num'         => '17',
+                    'num'              => '23',
+                    'title'            => 'Elements Ribbon Bar',
+                    'desc'             => 'The bar behind the element buttons (Bg + Opacity & Border). Buttons keep their own colours in row 17.',
+                    'color_key'        => 'ribbon_bg_color',
+                    'border_color_key' => 'ribbon_border_color',
+                    'opacity_key'      => 'ribbon_bg_opacity',
+                ),
+                array(
+                    'num'         => '18',
                     'title'       => 'Panel Glow',
                     'desc'        => 'Soft neon glow around accordions, Layers Panel, side drawers, Save buttons & ribbon buttons. Opacity 0% = off.',
                     'color_key'   => 'glow_color',
                     'opacity_key' => 'glow_opacity',
                 ),
                 array(
-                    'num'         => '18',
+                    'num'         => '19',
                     'title'       => 'Edge Border Rings',
                     'desc'        => 'Border for inactive canvas tabs and the frame around the elements ribbon bar (inset, no layout shift). Opacity 0% = off.',
                     'color_key'   => 'edge_border_color',
                     'opacity_key' => 'edge_border_opacity',
                 ),
                 array(
-                    'num'         => '19',
-                    'title'       => 'Layers Panel Frame',
-                    'desc'        => 'Border of the floating Layers Panel, its header and its layer rows, so it can differ from the orange field/accordion borders. Applies while Panel Glow or Edge Border Rings is on.',
-                    'color_key'   => 'layers_border_color',
-                    'opacity_key' => null,
+                    'num'              => '20',
+                    'title'            => 'Layers Panel Title',
+                    'desc'             => 'Header bar of the floating Layers Panel (Bg, Text, Border & Opacity).',
+                    'color_key'        => 'layers_title_bg_color',
+                    'text_color_key'   => 'layers_title_text_color',
+                    'border_color_key' => 'layers_title_border_color',
+                    'opacity_key'      => 'layers_title_bg_opacity',
                 ),
                 array(
-                    'num'         => '20',
+                    'num'              => '21',
+                    'title'            => 'Layers Area',
+                    'desc'             => 'Layer list body of the floating Layers Panel (Bg, Text, Border & Opacity).',
+                    'color_key'        => 'layers_area_bg_color',
+                    'text_color_key'   => 'layers_area_text_color',
+                    'border_color_key' => 'layers_area_border_color',
+                    'opacity_key'      => 'layers_area_bg_opacity',
+                ),
+                array(
+                    'num'         => '22',
                     'title'       => 'Stage Background Image',
                     'desc'        => 'Image behind the whole builder (the Space starfield or your own upload). Opacity = how strongly it shows; the rest is dimmed with the Stage color (row 10).',
                     'type'        => 'image',
@@ -913,7 +1049,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 <!-- Compact Top Action Bar -->
                 <div class="zpp-bt-top-bar">
                     <div class="zpp-bt-top-left">
-                        <span class="zpp-bt-badge">BUILDER THEME</span>
+                        <span class="zpp-bt-badge">Builder Theme</span>
                         <strong class="zpp-bt-heading">Workspace, Dedicated Text, Borders &amp; Guide Line Colors</strong>
                     </div>
 
@@ -926,6 +1062,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                 </button>
                             <?php endforeach; ?>
                         </div>
+                        <button type="button" id="zpp-bt-day-save" class="button button-secondary zpp-bt-btn-reset" title="<?php echo esc_attr__( 'Store the current settings as the Day Mode preset', 'zappoppop' ); ?>"><?php echo esc_html__( 'Save as Day Mode', 'zappoppop' ); ?></button>
                         <a href="<?php echo esc_url( admin_url( 'admin.php?page=zappoppop-builder' ) ); ?>" target="_blank" class="zpp-bt-link-btn">Open Builder &#8599;</a>
                         <button type="button" id="zpp-bt-reset-btn" class="button button-secondary zpp-bt-btn-reset">Reset</button>
                         <button type="button" id="zpp-bt-save-btn" class="button button-primary zpp-bt-btn-save">Save Theme</button>
@@ -1092,7 +1229,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                             <div class="zpp-bt-preview-topbar">
                                 <span class="zpp-bt-live-dot"></span>
                                 <strong>Interactive Live Builder Preview</strong>
-                                <span class="zpp-bt-preview-hint">Click accordions &amp; toggles to test</span>
+                                <span class="zpp-bt-preview-hint">Click accordion titles &amp; switches to test</span>
                             </div>
 
                             <!-- Interactive Mini-Builder Shell -->
@@ -1114,7 +1251,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                 </div>
 
                                 <!-- 01 / 04. Secondary Element Toolbar -->
-                                <div class="zpp-pv-subtoolbar" data-pv-role="header">
+                                <div class="zpp-pv-subtoolbar" data-pv-role="ribbon-bar">
                                     <span class="zpp-pv-tool-btn zpp-pv-element-btn">&#9638;</span>
                                     <span class="zpp-pv-tool-btn zpp-pv-element-btn">A</span>
                                     <span class="zpp-pv-tool-btn zpp-pv-element-btn">&#9733;</span>
@@ -1207,18 +1344,18 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                     <!-- 10, 11 & 13. Center Checkerboard Stage + Floating Layers Panel + Dashed Canvas Guide Line -->
                                     <div class="zpp-pv-stage" data-pv-role="stage">
                                         <!-- Floating Layers Panel -->
-                                        <div class="zpp-pv-layers-widget" data-pv-role="content">
-                                            <div class="zpp-pv-layers-hdr" data-pv-role="accordion">
-                                                <span data-pv-role="accordion-text">&#9776; LAYERS PANEL</span>
+                                        <div class="zpp-pv-layers-widget" data-pv-role="layers-frame">
+                                            <div class="zpp-pv-layers-hdr" data-pv-role="layers-title">
+                                                <span data-pv-role="layers-title-text">&#9776; Layers Panel</span>
                                                 <i data-pv-role="icon">&#9652;</i>
                                             </div>
-                                            <div class="zpp-pv-layers-body" data-pv-role="content">
+                                            <div class="zpp-pv-layers-body" data-pv-role="layers-area">
                                                 <div class="zpp-pv-layer-item is-active zpp-pv-layer-selected">
-                                                    <span>&#9675; SHAPE 1</span>
+                                                    <span data-pv-role="layers-area-text">&#9675; Shape 1</span>
                                                     <i data-pv-role="icon">&#128065; &#128465;</i>
                                                 </div>
-                                                <div class="zpp-pv-layer-item" data-pv-role="field">
-                                                    <span data-pv-role="field-text">&#9633; TEXT 2</span>
+                                                <div class="zpp-pv-layer-item" data-pv-role="layers-row">
+                                                    <span data-pv-role="layers-area-text">&#9633; Text 2</span>
                                                     <i data-pv-role="icon">&#128065; &#128465;</i>
                                                 </div>
                                             </div>
@@ -1248,49 +1385,47 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                     <!-- 02, 03, 04. Right Layer Settings Sidebar -->
                                     <div class="zpp-pv-sidebar zpp-pv-right" data-pv-role="content">
                                         <div class="zpp-pv-sb-hdr" data-pv-role="border">
-                                            <strong data-pv-role="content-text">&#9881; LAYER SETTINGS</strong>
+                                            <strong data-pv-role="content-text">&#9881; Layer Settings</strong>
                                             <span data-pv-role="icon">&times;</span>
                                         </div>
                                         <div class="zpp-pv-subtabs" data-pv-role="border">
-                                            <span class="is-active" data-pv-role="accent-text">CONTENT</span>
-                                            <span data-pv-role="muted">STYLE</span>
-                                            <span data-pv-role="muted">LOGIC</span>
+                                            <span class="is-active" data-pv-role="accent-text">Content</span>
+                                            <span data-pv-role="muted">Style</span>
+                                            <span data-pv-role="muted">Logic</span>
                                         </div>
                                         <div class="zpp-pv-right-body">
-                                            <label class="zpp-pv-lbl" data-pv-role="content-text">LAYER NAME</label>
-                                            <div class="zpp-pv-inp-box" data-pv-role="field">SHAPE 1</div>
-
-                                            <label class="zpp-pv-lbl" data-pv-role="content-text">ANIMATION</label>
-                                            <div class="zpp-pv-inp-box zpp-pv-select" data-pv-role="field">
-                                                <span>None</span>
-                                                <i data-pv-role="icon">&#9662;</i>
-                                            </div>
-                                            <span class="zpp-pv-muted-lbl" data-pv-role="muted">Appearance</span>
-
-                                            <div class="zpp-pv-acc-item is-open" style="margin-top:4px;">
-                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion">
-                                                    <span data-pv-role="accordion-text">1. SHAPE GEOMETRY</span>
-                                                    <i data-pv-role="icon">&#8634;</i>
-                                                </div>
-                                                <div class="zpp-pv-acc-body" data-pv-role="content">
-                                                    <div class="zpp-pv-inp-box zpp-pv-select" data-pv-role="field">
-                                                        <span>Square</span>
-                                                        <i data-pv-role="icon">&#9662;</i>
-                                                    </div>
-                                                    <div class="zpp-pv-grid2">
-                                                        <div class="zpp-pv-inp-box" data-pv-role="field">120</div>
-                                                        <div class="zpp-pv-inp-box" data-pv-role="field">120</div>
-                                                    </div>
+                                                <label class="zpp-pv-lbl" data-pv-role="content-text">Layer Name</label>
+                                                <div class="zpp-pv-inp-box" data-pv-role="field">Shape 1</div>
+                                            <div class="zpp-pv-acc-item zpp-pv-blk is-open">
+                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion"><span data-pv-role="accordion-text">Shape / Vector Geometry</span><i data-pv-role="accordion-text">&#8964;</i></div>
+                                                <div class="zpp-pv-acc-body" data-pv-role="area">
+                                                    <span class="zpp-pv-lbl" data-pv-role="area-text">SVG Shape Preset</span>
+                                                    <div class="zpp-pv-inp-box zpp-pv-select" data-pv-role="field"><span>Square</span><i data-pv-role="icon">&#9662;</i></div>
+                                                    <div class="zpp-pv-grid2"><div><span class="zpp-pv-lbl" data-pv-role="area-text">Width (px)</span><div class="zpp-pv-inp-box" data-pv-role="field">120</div></div><div><span class="zpp-pv-lbl" data-pv-role="area-text">Height (px)</span><div class="zpp-pv-inp-box" data-pv-role="field">120</div></div></div>
+                                                    <span class="zpp-pv-lbl" data-pv-role="area-text">Fill Color</span>
+                                                    <div class="zpp-pv-inp-box" data-pv-role="field"><span class="zpp-pv-chip"></span><span>#3b82f6</span></div>
+                                                    <span class="zpp-pv-lbl" data-pv-role="area-text">Link URL</span>
+                                                    <div class="zpp-pv-inp-box" data-pv-role="field"><span>https://example.com</span></div>
+                                                    <div class="zpp-pv-sw-row"><span class="zpp-pv-toggle is-on" data-pv-toggle><i></i></span><span data-pv-role="area-text">Open in new tab</span></div>
+                                                    <div class="zpp-pv-sw-row"><span class="zpp-pv-toggle" data-pv-toggle><i></i></span><span data-pv-role="area-text">rel="nofollow"</span></div>
                                                 </div>
                                             </div>
-
-                                            <div class="zpp-pv-acc-item">
-                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion">
-                                                    <span data-pv-role="accordion-text">COORDINATES &amp; BOUNDS</span>
-                                                    <i data-pv-role="icon">&#9662;</i>
+                                            <div class="zpp-pv-acc-item zpp-pv-blk">
+                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion"><span data-pv-role="accordion-text">Animation &amp; Behavior</span><i data-pv-role="accordion-text">&#8964;</i></div>
+                                                <div class="zpp-pv-acc-body" data-pv-role="area" style="display:none">
+                                                    <span class="zpp-pv-lbl" data-pv-role="area-text">Animation</span>
+                                                    <div class="zpp-pv-inp-box zpp-pv-select" data-pv-role="field"><span>None</span><i data-pv-role="icon">&#9662;</i></div>
+                                                    <div class="zpp-pv-grid2"><div><span class="zpp-pv-lbl" data-pv-role="area-text">Duration (ms)</span><div class="zpp-pv-inp-box" data-pv-role="field">1000</div></div><div><span class="zpp-pv-lbl" data-pv-role="area-text">Start Delay (ms)</span><div class="zpp-pv-inp-box" data-pv-role="field">0</div></div></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="zpp-pv-acc-item zpp-pv-blk">
+                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion"><span data-pv-role="accordion-text">Coordinates &amp; Bounds</span><i data-pv-role="accordion-text">&#8964;</i></div>
+                                                <div class="zpp-pv-acc-body" data-pv-role="area" style="display:none">
+                                                    <div class="zpp-pv-grid2"><div class="zpp-pv-inp-box" data-pv-role="field">75</div><div class="zpp-pv-inp-box" data-pv-role="field">170</div></div>
+                                                </div>
+                                            </div>
+                                                <div class="zpp-pv-reset" data-pv-role="field">&#8634; Reset Content Settings</div>
+                                                                                    </div>
                                     </div>
                                 </div>
                             </div>

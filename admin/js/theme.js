@@ -12,6 +12,12 @@
         if (!form) { return; }
         var main = form.querySelector('.zpp-theme-main');
 
+        /* ZPP_THEME_PICKER_TEXT: the colour picker wraps its model input in .zpp-cp, so look the saved text field up from the field row */
+        function textOfPicker(picker) {
+            var row = (picker.closest && picker.closest('.zpp-theme-input-row')) || picker.parentNode;
+            return row ? row.querySelector('input[type="text"][data-zpp-var]') : null;
+        }
+
         /* ---- Model: DOM inputs -> live CSS variables on <body> ---- */
         function applyVar(input) {
             var v = input.getAttribute('data-zpp-var');
@@ -20,7 +26,7 @@
         $all('[data-zpp-var]', form).forEach(function (input) {
             input.addEventListener('input', function () {
                 applyVar(input);
-                var picker = input.parentNode.querySelector('.zpp-theme-picker');
+                var picker = ((input.closest && input.closest('.zpp-theme-input-row')) || input.parentNode).querySelector('.zpp-theme-picker');
                 if (picker && isHex6(input.value)) { picker.value = input.value; }
             });
             input.addEventListener('change', function () { applyVar(input); });
@@ -29,7 +35,8 @@
         /* ---- Color pickers -> text field ---- */
         $all('.zpp-theme-picker', form).forEach(function (picker) {
             picker.addEventListener('input', function () {
-                var text = picker.parentNode.querySelector('input[type="text"][data-zpp-var]');
+                var text = textOfPicker(picker);
+                if (!text) { return; }
                 text.value = picker.value;
                 applyVar(text);
             });
@@ -142,7 +149,7 @@
             var action = document.getElementById('zpp-theme-action').value;
             if (action === 'save') {
                 $all('.zpp-theme-picker', form).forEach(function (picker) {
-                    var text = picker.parentNode.querySelector('input[type="text"][data-zpp-var]');
+                    var text = textOfPicker(picker);
                     if (text && text.value === '' ) { text.value = picker.value; }
                 });
             }

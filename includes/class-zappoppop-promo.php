@@ -5,7 +5,8 @@ if (!defined('ABSPATH')) {
 
 /**
  * Promotional placements driven by defaults/promo.json.
- * Core only: every slot disappears while a companion plugin is active (ZapPopPop_Pro_API::is_active()).
+ * Core only: every slot stays visible until the companion plugin reports a valid licence (ZapPopPop_Pro_API::is_licensed()).
+ * Pro installed but not yet licensed still shows them; they all disappear once the licence key is activated.
  * Filters: zappoppop_promo_file (path), zappoppop_promo_config (array).
  */
 class ZapPopPop_Promo {
@@ -46,9 +47,9 @@ class ZapPopPop_Promo {
         return self::$config;
     }
 
-    /** False while Pro is active or when the master switch is off. */
+    /** False once Pro is licensed, or when the master switch is off. Pro active without a licence still shows the promotions. */
     public static function visible() {
-        if (class_exists('ZapPopPop_Pro_API') && ZapPopPop_Pro_API::is_active()) {
+        if (class_exists('ZapPopPop_Pro_API') && ZapPopPop_Pro_API::is_licensed()) {
             return false;
         }
         $cfg = self::config();
@@ -145,7 +146,7 @@ class ZapPopPop_Promo {
         add_filter('network_admin_plugin_action_links_' . ZAPPOPPOP_BASENAME, array(__CLASS__, 'plugin_action_links'));
     }
 
-    /** Appends the link after "Deactivate". Hidden while Pro is active or when the slot is off. */
+    /** Appends the link after "Deactivate". Hidden once Pro is licensed or when the slot is off. */
     public static function plugin_action_links($links) {
         $item = self::item('plugin_link');
         if (!$item) {

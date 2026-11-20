@@ -4,7 +4,7 @@
 .zappoppop-subs-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .zappoppop-subs-tabs{display:flex;gap:4px}
 .zappoppop-subs-tabs button{background:#f6f7f7;border:1px solid #c3c4c7;color:#2c3338;padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px;line-height:1.4}
-.zappoppop-subs-tabs button small{font-size:9px;color:#b32d2e}
+.zappoppop-subs-tabs button small{font-size:9px;color:inherit;opacity:.75} /* ZPP_VIEW_COUNT: follows the tab text colour */
 .zappoppop-subs-tabs button.active{background:#c1272d;border-color:#c1272d;color:#fff;font-weight:600}
 .zappoppop-subs-tabs button.active small{color:#fff}
 .zappoppop-subs-searchbox{display:flex;align-items:center;gap:6px}

@@ -741,6 +741,17 @@ class ZapPopPop_Ajax_Builder {
             }
         }
 
+        /* ZAPPOPPOP_CLICK_ROUTING_KEYS: Action & Click Routing for every element type */
+        foreach ( array( 'goto_canvas', 'goto_screen', 'target_canvas' ) as $rk ) {
+            if ( isset( $el[ $rk ] ) && $el[ $rk ] !== '' && ! is_array( $el[ $rk ] ) ) { $clean[ $rk ] = max( 1, intval( $el[ $rk ] ) ); }
+        }
+        foreach ( array( 'routeValue', 'routeLabel' ) as $rk ) {
+            if ( isset( $el[ $rk ] ) && ! is_array( $el[ $rk ] ) ) { $clean[ $rk ] = sanitize_text_field( wp_unslash( (string) $el[ $rk ] ) ); }
+        }
+        /* ZPP_FIELD_LABEL_KEYS */
+        if ( isset( $el['showFieldLabel'] ) && ! is_array( $el['showFieldLabel'] ) ) { $clean['showFieldLabel'] = ! ( $el['showFieldLabel'] === false || $el['showFieldLabel'] === 'false' || $el['showFieldLabel'] === 0 || $el['showFieldLabel'] === '0' ); }
+        if ( isset( $el['fieldLabelColor'] ) && ! is_array( $el['fieldLabelColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelColor'] ) ) { $clean['fieldLabelColor'] = (string) $el['fieldLabelColor']; }
+        if ( isset( $el['fieldLabelTextColor'] ) && ! is_array( $el['fieldLabelTextColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelTextColor'] ) ) { $clean['fieldLabelTextColor'] = (string) $el['fieldLabelTextColor']; }
         if ( isset( $el['options'] ) && ! is_array( $el['options'] ) ) {
             $clean['options'] = sanitize_textarea_field( wp_unslash( (string)$el['options'] ) );
         }

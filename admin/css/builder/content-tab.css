@@ -1,0 +1,86 @@
+/* ZPP_CONTENT_TAB: framed accordion blocks, compact uniform fields, bottom Reset. Theme tokens only. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-head {
+    position: relative; cursor: pointer; user-select: none; -webkit-user-select: none; padding-right: 24px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-head::after {
+    content: ""; position: absolute; right: 9px; top: 50%; width: 6px; height: 6px; margin-top: -5px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    -webkit-transform: rotate(45deg); transform: rotate(45deg); transition: transform .15s ease;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-closed > .zpp-ca-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-head.zpp-ca-closed::after {
+    -webkit-transform: rotate(-45deg); transform: rotate(-45deg); margin-top: -3px;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-closed > *:not(.zpp-ca-head) { display: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-hidden { display: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-head:focus-visible { outline: 2px solid var(--zpp-builder-accent-color); outline-offset: 1px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--zpp-builder-accordion-text); margin: 0 0 10px;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-closed > .zpp-ca-head { margin-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared { padding: 12px !important; margin-bottom: 0; }
+
+/* Coordinates & Bounds: header + grid read as one framed block */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords {
+    background: var(--zpp-builder-accordion-bg) !important;
+    border: 1px solid var(--zpp-builder-accordion-border) !important;
+    border-radius: 8px 8px 0 0; padding: 10px 24px 10px 12px !important; margin-top: 12px !important;
+    color: var(--zpp-builder-accordion-text) !important; font-size: 10px !important; letter-spacing: 0.5px; box-sizing: border-box;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords.zpp-ca-closed { border-radius: 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid {
+    background: var(--zpp-builder-accordion-bg); border: 1px solid var(--zpp-builder-accordion-border); border-top: 0;
+    border-radius: 0 0 8px 8px; padding: 12px; margin-top: -1px; box-sizing: border-box;
+}
+
+/* Compact, uniform fields (Content tab) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic select,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic input[type="text"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic input[type="number"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic input[type="url"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic input[type="email"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic input[type="search"] {
+    height: 30px !important; min-height: 30px !important; padding-top: 0 !important; padding-bottom: 0 !important;
+    font-size: 12px !important; line-height: 28px !important; box-sizing: border-box !important; border-radius: 4px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic label:not(.zpp-sw):not(.zappoppop-shape-clear):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch) {
+    font-size: 10px !important; letter-spacing: 0.4px !important; line-height: 1.3 !important; margin-bottom: 3px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic .zappoppop-prop-row,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic .zappoppop-shape-field { margin-bottom: 8px !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic .zappoppop-shape-row { gap: 8px !important; margin-bottom: 8px !important; }
+
+/* Bottom Reset */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ct-reset-wrap {
+    margin: 14px 0 4px; padding-top: 12px; border-top: 1px solid var(--zpp-builder-border-color);
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ct-reset {
+    display: block; width: 100%; height: 30px; padding: 0 10px; border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--zpp-builder-field-border); background: var(--zpp-builder-field-bg);
+    color: var(--zpp-builder-text-color); font-size: 12px; font-weight: 600; line-height: 28px; box-sizing: border-box;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ct-reset:hover { border-color: var(--zpp-builder-accent-color); color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ct-reset.is-armed { border-color: #ef4444; color: #ef4444; }
+
+/* ZPP_CONTENT_TAB_V2: every block = frame + header bar (same as Coordinates & Bounds); Title Case everywhere in the Inspector */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer * { text-transform: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared { padding: 0 12px 12px !important; overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared > .zpp-ca-head {
+    display: block; margin: 0 -12px 12px !important; padding: 10px 24px 10px 12px !important;
+    border: 0 !important; border-bottom: 1px solid var(--zpp-builder-accordion-border) !important; border-radius: 0 !important;
+    background: transparent !important; box-shadow: none !important; height: auto !important;
+    font-size: 10px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; line-height: 1.3 !important;
+    color: var(--zpp-builder-accordion-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zpp-ca-head > div,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zappoppop-shape-head > div {
+    border: 0 !important; background: transparent !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important;
+    border-radius: 0 !important; height: auto !important; font-size: 10px !important; font-weight: 800 !important;
+    letter-spacing: 0.5px !important; color: inherit !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .element-panel.zpp-ca-closed, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared.zpp-ca-closed { padding-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .element-panel.zpp-ca-closed > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared.zpp-ca-closed > .zpp-ca-head { margin-bottom: 0 !important; border-bottom-color: transparent !important; }

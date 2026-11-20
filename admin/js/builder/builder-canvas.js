@@ -1186,7 +1186,7 @@
             var newEl = {
                 id: id,
                 type: type,
-                name: type.toUpperCase() + ' ' + (elements.length + 1),
+                name: (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(type) + ' ' + (elements.length + 1),
                 top: (typeof spawnY === 'number' && !isNaN(spawnY)) ? spawnY : (50 + (elements.length * 15) % 150),
                 left: (typeof spawnX === 'number' && !isNaN(spawnX)) ? spawnX : (50 + (elements.length * 15) % 200),
                 width: (type === 'close' || type === 'close_icon') ? 35 : (type === 'video') ? 200 /* ZAPPOPPOP_VIDEO_SPAWN_200x150 */ : (type === 'shape' || type === 'image') ? 120 : ((type === 'text' || type === 'textfield') ? 200 : (type === 'html') ? 240 : 200),
@@ -1200,7 +1200,7 @@
                 lineHeight: 1.4,
                 letterSpacing: 0,
                 textAlign: 'left',
-                padding: (type === 'text' || type === 'paragraph' || type === 'title') ? 8 : 0,
+                padding: (type === 'paragraph' || type === 'title') ? 8 : 0,
                 animation: 'none',
                 content: this.getDefaultContent(type),
                 goto_canvas: 2,
@@ -1259,7 +1259,7 @@
                 newEl.textAlign = 'center';
             }
             if (type === 'submit') { newEl.textAlign = 'center'; newEl.blockEmptySubmit = true; } /* ZAPPOPPOP_SUBMIT_ALIGN_DEFAULT + ZAPPOPPOP_BLOCK_EMPTY_SUBMIT */
-            if (type === 'email') { newEl.required = true; } /* ZAPPOPPOP_EMAIL_REQ_DEFAULT */
+            if (type === 'email' || type === 'text') { newEl.required = true; } /* ZAPPOPPOP_EMAIL_REQ_DEFAULT (Text spawns like Email) */
             if (window.ZapPopPopSpawnPlace) { window.ZapPopPopSpawnPlace.place(newEl, elements); } /* ZAPPOPPOP_SPAWN_PLACE */
             elements.push(newEl);
             window.ZapPopPopBuilderCore.state.activeId = id;
@@ -1279,8 +1279,8 @@
             switch(type) {
                 case 'label': return 'Hello World';
                 case 'title': return 'Headline Title';
-                case 'paragraph':
-                case 'text': return 'Click to edit your text headline...';
+                case 'paragraph': return 'Click to edit your text headline...';
+                case 'text': return 'Enter your text...';
                 case 'textfield': return 'Enter your text...';
                 case 'email': return 'Enter your best email...';
                 case 'number': return '1';

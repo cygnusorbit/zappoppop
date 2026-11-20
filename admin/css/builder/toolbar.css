@@ -135,7 +135,9 @@ body.theme-light .zappoppop-builder-wrap .zappoppop-builder-header,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home {
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts {
     background: var(--zpp-ctl-bg) !important;
     border: 1px solid var(--zpp-ctl-border) !important;
     color: var(--zpp-ctl-text) !important;
@@ -239,7 +241,9 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 /* ZAPPOPPOP-HDR-ICON-BTNS */
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed {
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -251,7 +255,9 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 }
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview i,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home i,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed i {
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts i {
     font-size: 14px;
     line-height: 1;
     pointer-events: none;
@@ -276,7 +282,9 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn {
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts {
     height: var(--zpp-ctl-h) !important; min-height: var(--zpp-ctl-h) !important; max-height: var(--zpp-ctl-h) !important;
     box-sizing: border-box !important; margin-top: 0 !important; margin-bottom: 0 !important;
     font-size: 12px !important; line-height: 1 !important; border-radius: 6px !important;
@@ -296,7 +304,9 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home,
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn { padding: 0 !important; width: var(--zpp-ctl-h) !important; min-width: var(--zpp-ctl-h) !important; max-width: var(--zpp-ctl-h) !important; }
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts { padding: 0 !important; width: var(--zpp-ctl-h) !important; min-width: var(--zpp-ctl-h) !important; max-width: var(--zpp-ctl-h) !important; }
 
 /* Update state: saved popup has unsaved changes */
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-save.is-dirty {
@@ -349,21 +359,47 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled),
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled),
 .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled),
-.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) {
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled),
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide:hover:not(:disabled),
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts:hover:not(:disabled) {
     background: var(--zpp-ctl-hover) !important;
     border-color: #38bdf8 !important;
     color: #38bdf8 !important;
     transform: none !important;
 }
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) svg,
-.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) .dashicons, .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) i, .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) svg {
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-theme-toggle:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-settings:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-canvas-duplicate-btn:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-add-canvas-btn:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview:not(.active):not(.preview-active):hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(.active):not(.preview-active):hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(.active):not(.preview-active):hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts:hover:not(:disabled) .dashicons,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts:hover:not(:disabled) i,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide:hover:not(:disabled) svg,
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts:hover:not(:disabled) svg {
     color: #38bdf8 !important;
 }
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-zoom-select:hover,
@@ -378,7 +414,9 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-preview-home:not(:disabled),
 .zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-embed:not(:disabled),
 .zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-viewport-btn:not(:disabled),
-.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(:disabled) {
+.zappoppop-builder-wrap .zappoppop-builder-header .zappoppop-canvas-tab:not(:disabled),
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide:not(:disabled),
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts:not(:disabled) {
     transition: background .15s ease, border-color .15s ease, color .15s ease !important;
 }
 
@@ -458,3 +496,10 @@ body:not(.theme-light) .zappoppop-builder-wrap #zappoppop-canvas-workspace {
     opacity: .6;
     cursor: not-allowed;
 }
+
+/* ZPP_HDR_ICON_SIZE */
+/* the Guide button draws a Dashicon (the others a Font Awesome <i>): give it the same 14px glyph box */
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-guide .dashicons {
+    width: 16px !important; height: 16px !important; font-size: 16px !important; line-height: 16px !important; margin: 0 !important; pointer-events: none;
+}
+.zappoppop-builder-wrap .zappoppop-builder-header #zappoppop-btn-shortcuts i { font-size: 14px; line-height: 1; pointer-events: none; }

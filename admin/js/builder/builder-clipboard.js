@@ -115,7 +115,7 @@
         var stamp = Date.now().toString(36);
         var ids = [];
         items.forEach(function (it, i) {
-            var base = (it.type === 'text' || it.type === 'paragraph') ? 'PARAGRAPH' : (it.name || String(it.type || 'LAYER').toUpperCase());
+            var base = (it.type === 'text' || it.type === 'paragraph') ? 'Paragraph' : (it.name || (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(it.type || 'Layer'));
             it.id = 'layer_' + stamp + '_' + Math.random().toString(36).substr(2, 4) + i;
             it.name = /\(Copy\)$/.test(base) ? base : base + ' (Copy)';
             it.zIndex = maxZ + 5 * (i + 1);

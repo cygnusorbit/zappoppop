@@ -1,0 +1,40 @@
+/* ZapPopPop Builder: Inspector section order + accordion (Layer Settings). Presentation only. */
+
+/* A container that is reordered becomes a flex column, but only while it is visible (the Inspector toggles panes inline). */
+html body #zappoppop-inspector-drawer .zpp-lo-flex:not([style*="display: none"]):not([style*="display:none"]) {
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* Accordion title bar */
+html body #zappoppop-inspector-drawer .zpp-acc-head {
+    position: relative;
+    cursor: pointer;
+    padding-right: 22px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+html body #zappoppop-inspector-drawer .zpp-acc-head::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -5px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .15s ease;
+    opacity: .8;
+}
+html body #zappoppop-inspector-drawer .zpp-acc-head:hover { opacity: .85; }
+html body #zappoppop-inspector-drawer .zpp-acc-head:focus-visible { outline: 2px solid var(--zpp-c-primary, #38bdf8); outline-offset: 2px; }
+html body #zappoppop-inspector-drawer .zpp-acc-closed > .zpp-acc-head::after { transform: rotate(-45deg); margin-top: -3px; }
+html body #zappoppop-inspector-drawer .zpp-acc-closed > .zpp-acc-head { margin-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer .zpp-acc-closed > :not(.zpp-acc-head) { display: none !important; }
+
+/* Wrapper card flattened so its settings join the tab's list (visible only; the Inspector hides cards inline). */
+html body #zappoppop-inspector-drawer .zpp-lo-contents:not([style*="display: none"]):not([style*="display:none"]) {
+    display: contents !important;
+}

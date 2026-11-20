@@ -77,6 +77,7 @@
         var contentRgba   = hexToRgba(s.content_bg_color, s.content_bg_opacity);
         var accordionRgba = hexToRgba(s.accordion_bg_color, s.accordion_bg_opacity);
         var fieldRgba     = hexToRgba(s.field_bg_color, s.field_bg_opacity);
+        var areaRgba      = hexToRgba(s.area_bg_color || s.accordion_bg_color, s.area_bg_opacity !== undefined ? s.area_bg_opacity : s.accordion_bg_opacity);
         var borderRgba    = hexToRgba(s.border_color, s.border_opacity);
         var stageRgba     = hexToRgba(s.stage_bg_color, s.stage_bg_opacity);
         var checkerRgba   = hexToRgba(s.checker_color, s.checker_opacity);
@@ -124,7 +125,15 @@
             '--zpp-builder-edge-border':         edgeRgba,
             '--zpp-builder-edge-ring':           'inset 0 0 0 1px ' + edgeRgba,
             '--zpp-builder-stage-image':         stageImage,
-            '--zpp-builder-layers-border':       normalizeHex(s.layers_border_color, '#2a78b8'),
+            '--zpp-builder-layers-border':       normalizeHex(s.layers_area_border_color, contentBdrHex),
+            '--zpp-builder-layers-title-bg':     hexToRgba(s.layers_title_bg_color || s.accordion_bg_color, s.layers_title_bg_opacity !== undefined ? s.layers_title_bg_opacity : s.accordion_bg_opacity),
+            '--zpp-builder-layers-title-text':   normalizeHex(s.layers_title_text_color, accordionTxtHex),
+            '--zpp-builder-layers-title-border': normalizeHex(s.layers_title_border_color, accordionBdrHex),
+            '--zpp-builder-layers-area-bg':      hexToRgba(s.layers_area_bg_color || s.content_bg_color, s.layers_area_bg_opacity !== undefined ? s.layers_area_bg_opacity : s.content_bg_opacity),
+            '--zpp-builder-layers-area-text':    normalizeHex(s.layers_area_text_color, contentTxtHex),
+            '--zpp-builder-layers-area-border':  normalizeHex(s.layers_area_border_color, contentBdrHex),
+            '--zpp-builder-ribbon-bg':           hexToRgba(s.ribbon_bg_color || s.header_bg_color, s.ribbon_bg_opacity !== undefined ? s.ribbon_bg_opacity : s.header_bg_opacity),
+            '--zpp-builder-ribbon-border':       normalizeHex(s.ribbon_border_color, headerBdrHex),
             '--zpp-builder-layer-sel-bg':        layerSelRgba,
             '--zpp-builder-layer-sel-text':      normalizeHex(s.layer_sel_text_color, '#f8fafc'),
             '--zpp-builder-layer-sel-border':    normalizeHex(s.layer_sel_border_color, '#3b82f6'),
@@ -151,6 +160,9 @@
             '--zpp-builder-accordion-bg':        accordionRgba,
             '--zpp-builder-accordion-text':      accordionTxtHex,
             '--zpp-builder-accordion-border':    accordionBdrHex,
+            '--zpp-builder-area-bg':             areaRgba,
+            '--zpp-builder-area-text':           normalizeHex(s.area_text_color, accordionTxtHex),
+            '--zpp-builder-area-border':         normalizeHex(s.area_border_color, accordionBdrHex),
             '--zpp-builder-popup-acc-bg':        accordionRgba,
             '--zpp-builder-popup-acc-active-bg': accordionRgba,
             '--zpp-builder-layers-header-bg':    accordionRgba,
@@ -252,7 +264,7 @@
             el.style.color = map['--zpp-builder-content-text'];
         });
 
-        // 03. Accordion Tab (+ Dedicated Accordion Text & Border)
+        // 03. Accordion Title (+ Dedicated Title Text & Border)
         shell.querySelectorAll('[data-pv-role="accordion"]').forEach(function(el) {
             el.style.backgroundColor = map['--zpp-builder-accordion-bg'];
             el.style.borderColor = map['--zpp-builder-accordion-border'];
@@ -260,6 +272,50 @@
         });
         shell.querySelectorAll('[data-pv-role="accordion-text"]').forEach(function(el) {
             el.style.color = map['--zpp-builder-accordion-text'];
+        });
+
+        shell.querySelectorAll('[data-pv-role="ribbon-bar"]').forEach(function(el) {
+            el.style.backgroundColor = map['--zpp-builder-ribbon-bg'];
+            el.style.borderColor = map['--zpp-builder-ribbon-border'];
+            el.style.color = map['--zpp-builder-header-text'];
+        });
+
+        // Layers Panel: frame / title / area
+        // ZPP_PV_LAYERS_V3: no outer frame; title and area each own their border
+        shell.querySelectorAll('[data-pv-role="layers-frame"]').forEach(function(el) {
+            el.style.borderColor = '';
+        });
+        shell.querySelectorAll('[data-pv-role="layers-title"]').forEach(function(el) {
+            el.style.backgroundColor = map['--zpp-builder-layers-title-bg'];
+            el.style.borderColor = map['--zpp-builder-layers-title-border'];
+            el.style.color = map['--zpp-builder-layers-title-text'];
+        });
+        shell.querySelectorAll('[data-pv-role="layers-title-text"]').forEach(function(el) {
+            el.style.color = map['--zpp-builder-layers-title-text'];
+        });
+        shell.querySelectorAll('[data-pv-role="layers-area"]').forEach(function(el) {
+            el.style.backgroundColor = map['--zpp-builder-layers-area-bg'];
+            el.style.borderColor = map['--zpp-builder-layers-area-border']; /* layers-area-border-v3 */
+            el.style.color = map['--zpp-builder-layers-area-text'];
+        });
+        shell.querySelectorAll('[data-pv-role="layers-row"]').forEach(function(el) {
+            el.style.backgroundColor = 'transparent';
+            el.style.borderColor = map['--zpp-builder-layers-area-border'];
+            el.style.color = map['--zpp-builder-layers-area-text'];
+        });
+        shell.querySelectorAll('[data-pv-role="layers-area-text"]').forEach(function(el) {
+            el.style.color = map['--zpp-builder-layers-area-text'];
+        });
+
+        // 03b. Accordion Setting Area (body of the Layer Settings blocks)
+        shell.querySelectorAll('[data-pv-role="area"]').forEach(function(el) {
+            el.style.backgroundColor = map['--zpp-builder-area-bg'];
+            if (el.parentNode) { el.parentNode.style.backgroundColor = map['--zpp-builder-area-bg']; el.parentNode.style.borderColor = map['--zpp-builder-area-border']; }
+            el.style.color = map['--zpp-builder-area-text'];
+        });
+        shell.querySelectorAll('[data-pv-role="area-text"]').forEach(function(el) {
+            if (el.closest('[data-pv-role="accordion"]')) { return; }
+            el.style.color = map['--zpp-builder-area-text'];
         });
 
         // 04. Form Field & Button (+ Dedicated Field Text & Border)
@@ -405,6 +461,7 @@
         var headers = document.querySelectorAll('div, button, summary, h3, h4, span');
         for (var i = 0; i < headers.length; i++) {
             var h = headers[i];
+            if (h.closest && h.closest('#zappoppop-tour, #zpp-sc-modal')) continue; /* ZPP_TOUR_THEME_SKIP */
             var txt = (h.textContent || '').replace(/\s+/g, ' ').trim();
             if (/^1\.\s*Canvas Settings/i.test(txt) && !hasFormControlsInside(h)) {
                 var bar = h;
@@ -517,6 +574,8 @@
 
     function isInsideIsolatedCanvas(el) {
         if (!el || !el.closest) return false;
+        /* ZPP_TOUR_THEME_SKIP: Builder Guide tour + Keyboard Shortcut modal own their colours (Theme > Builder Guide) */
+        if (el.closest('#zappoppop-tour, #zpp-sc-modal')) return true;
         return !!(el.closest('[data-zpp-isolated-canvas="1"], #zappoppop-canvas-box, #zappoppop-canvas, .zappoppop-canvas, .zappoppop-popup-canvas, #popup-canvas, #canvas-preview'));
     }
 
@@ -549,7 +608,7 @@
         '.zappoppop-acc-item', '.zappoppop-acc-item > .zappoppop-acc-header', '.zappoppop-acc-item > .zappoppop-acc-header *',
         '.zappoppop-acc-item > .zappoppop-acc-body',
         '#zappoppop-floating-layers-panel', '#zappoppop-floating-layers-panel *',
-        '.zappoppop-ribbon-tool', '.zappoppop-ribbon-tool *',
+        '.zappoppop-ribbon-tool', '.zappoppop-ribbon-tool *', '.zappoppop-ribbon-bar',
         '#zappoppop-inspector-drawer', '#zappoppop-inspector-drawer *'
     ].join(',');
 
@@ -1503,6 +1562,45 @@
                 applyCssVariablesToRoot(collectCurrentSettingsFromDOM(panel), false);
             });
         });
+
+        bindPreviewFit(shell);
+    }
+
+    // ZAPPOPPOP_PREVIEW_FIT: the mini-builder is laid out at a fixed design width (3 columns: drawer | stage | layer
+    // settings) and scaled down to the pane. Without this the shell is ~350px wide, the stage column collapses to
+    // ~60px and the Layer Settings column is clipped by overflow:hidden, so the preview cannot be used.
+    function bindPreviewFit(shell) {
+        if (!shell || shell._zppFit) return;
+        shell._zppFit = true;
+
+        var DESIGN_W = 500;
+        var fit = document.createElement('div');
+        fit.className = 'zpp-pv-fit';
+        shell.parentNode.insertBefore(fit, shell);
+        fit.appendChild(shell);
+
+        var raf = 0;
+        function apply() {
+            raf = 0;
+            var avail = fit.clientWidth;
+            if (!avail) return; // tab hidden; re-run when it becomes visible (ResizeObserver)
+            var k = Math.min(1, avail / DESIGN_W);
+            shell.style.width = (k < 1 ? DESIGN_W : avail) + 'px';
+            shell.style.transformOrigin = '0 0';
+            shell.style.transform = k < 1 ? 'scale(' + k + ')' : 'none';
+            fit.style.height = Math.ceil(shell.offsetHeight * k) + 'px';
+        }
+        function queue() {
+            if (!raf) raf = window.requestAnimationFrame(apply);
+        }
+
+        if (typeof window.ResizeObserver === 'function') {
+            var ro = new window.ResizeObserver(queue);
+            ro.observe(fit);
+            ro.observe(shell); // accordion open/close changes the shell height
+        }
+        window.addEventListener('resize', queue);
+        queue();
     }
 
     function bindThemePanelEvents(panel) {
@@ -1668,6 +1766,27 @@
                     populateSettingsIntoDOM(panel, defs);
                     showToast('Builder Theme reset to defaults.');
                 });
+            });
+        }
+
+        var daySave = panel.querySelector('#zpp-bt-day-save');
+        if (daySave) {
+            daySave.addEventListener('click', function(e) {
+                e.preventDefault();
+                var fd = new FormData();
+                fd.append('action', 'zappoppop_save_day_preset');
+                fd.append('nonce', DATA.nonce || '');
+                var cur = collectCurrentSettingsFromDOM(panel);
+                Object.keys(cur).forEach(function(k) { fd.append('settings[' + k + ']', cur[k]); });
+                fetch(DATA.ajaxUrl || window.ajaxurl || '/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+                    .then(function(r) { return r.json(); })
+                    .then(function(res) {
+                        if (res && res.success) {
+                            if (res.data && res.data.preset && DATA.presets) { DATA.presets.day_light = res.data.preset; }
+                            showToast('Current settings saved as Day Mode.');
+                        } else { showToast('Could not save Day Mode.', true); }
+                    })
+                    .catch(function() { showToast('Could not save Day Mode.', true); });
             });
         }
 

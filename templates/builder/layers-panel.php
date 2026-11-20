@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     
     <div id="zappoppop-layers-header">
         <span class="zappoppop-layers-title-wrap">
-            <span class="dashicons dashicons-menu"></span> <?php esc_html_e('LAYERS PANEL', 'zappoppop'); ?>
+            <span class="dashicons dashicons-menu"></span> <?php esc_html_e('Layers Panel', 'zappoppop'); ?>
         </span>
         <div class="zappoppop-layers-ctrls-wrap">
             <span id="zappoppop-layers-count" title="<?php esc_attr_e('Active Layers Count', 'zappoppop'); ?>">0</span>

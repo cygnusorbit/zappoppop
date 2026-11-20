@@ -16,7 +16,8 @@
     var hasOverrides = false;
     var k;
     for (k in overrides) { if (Object.prototype.hasOwnProperty.call(overrides, k)) { hasOverrides = true; break; } }
-    if (!hasOverrides) { return; }
+    var hasOrder = !!(cfg.order && Object.keys(cfg.order).length);
+    if (!hasOverrides && !hasOrder) { return; }
 
     var ATTR = 'data-zpp-ls-type';
     var STYLE_ID = 'zappoppop-layer-settings-css';

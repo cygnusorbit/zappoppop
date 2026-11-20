@@ -989,3 +989,65 @@ body.zpp-fx-on .zpp-pv-layer-item:not(.zpp-pv-layer-selected) {
     padding: 0 10px;
     font-size: 11px;
 }
+
+/* ZPP_PV_AREA: Layer Settings preview = framed blocks, Accordion Title bar + Accordion Setting Area body */
+html body .zpp-pv-right-body .zpp-pv-blk {
+    border: 1px solid var(--zpp-builder-area-border, var(--zpp-builder-accordion-border, #334155));
+    border-radius: 6px; overflow: hidden; margin-top: 4px; box-shadow: none;
+    background-color: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg, #1e293b));
+}
+html body .zpp-pv-right-body .zpp-pv-blk .zpp-pv-acc-hdr {
+    border: 0; border-bottom: 1px solid var(--zpp-builder-accordion-border, #334155); border-radius: 0; box-shadow: none;
+    padding: 5px 8px; font-size: 8px; font-weight: 800; letter-spacing: .4px;
+}
+html body .zpp-pv-right-body .zpp-pv-blk:not(.is-open) .zpp-pv-acc-hdr { border-bottom-color: transparent !important; }
+html body .zpp-pv-right-body .zpp-pv-blk .zpp-pv-acc-body {
+    border: 0; border-radius: 0; padding: 6px 8px 8px; gap: 3px;
+    background-color: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg, #1e293b));
+    color: var(--zpp-builder-area-text, var(--zpp-builder-accordion-text, #f8fafc));
+}
+.zpp-pv-right-body .zpp-pv-blk .zpp-pv-grid2 > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.zpp-pv-right-body .zpp-pv-sw-row { display: flex; align-items: center; gap: 6px; font-size: 8.5px; margin-top: 3px; }
+.zpp-pv-right-body .zpp-pv-chip { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #3b82f6; margin-right: 5px; }
+.zpp-pv-right-body .zpp-pv-inp-box { justify-content: flex-start; }
+.zpp-pv-right-body .zpp-pv-inp-box.zpp-pv-select { justify-content: space-between; }
+.zpp-pv-right-body .zpp-pv-reset {
+    margin-top: 8px; padding: 4px 6px; border-radius: 4px; text-align: center; font-size: 9px; font-weight: 600;
+    border: 1px solid var(--zpp-builder-field-border, #334155); background-color: var(--zpp-builder-field-bg, #090d16);
+    color: var(--zpp-builder-field-text, #f8fafc);
+}
+
+/* ZPP_PV_LAYERS: preview of the floating Layers Panel = frame + title bar + area */
+html body .zpp-pv-layers-widget { border: 1px solid var(--zpp-builder-layers-border, #2a78b8); overflow: hidden; }
+html body .zpp-pv-layers-widget .zpp-pv-layers-hdr {
+    background-color: var(--zpp-builder-layers-title-bg, #1e293b); color: var(--zpp-builder-layers-title-text, #f8fafc);
+    border: 0; border-bottom: 1px solid var(--zpp-builder-layers-title-border, #334155);
+}
+html body .zpp-pv-layers-widget .zpp-pv-layers-body { background-color: var(--zpp-builder-layers-area-bg, #111827); color: var(--zpp-builder-layers-area-text, #f8fafc); }
+
+/* ZPP_PV_LAYERS_V2: Title row = title bar only; Area row = frame + list + rows */
+html body .zpp-pv-layers-widget { border-color: var(--zpp-builder-layers-area-border, #1e293b); background-color: var(--zpp-builder-layers-area-bg, #111827); }
+html body .zpp-pv-layers-widget .zpp-pv-layer-item:not(.zpp-pv-layer-selected) {
+    background-color: transparent; border-color: var(--zpp-builder-layers-area-border, #1e293b); color: var(--zpp-builder-layers-area-text, #f8fafc);
+}
+
+/* ZAPPOPPOP_PREVIEW_FIT: scaling frame for the Interactive Live Builder Preview */
+.zpp-pv-fit {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.zpp-pv-fit > .zappoppop-theme-preview-shell {
+    box-sizing: border-box;
+    max-width: none;
+}
+
+/* ZPP_PV_LAYERS_V3: preview mirrors the real Layers Panel (no outer frame; title box + list box) */
+html body .zpp-pv-layers-widget { border: 0; background-color: transparent; background-image: none; overflow: visible; }
+html body .zpp-pv-layers-widget .zpp-pv-layers-hdr {
+    border: 1px solid var(--zpp-builder-layers-title-border, #334155); border-radius: 5px 5px 0 0;
+}
+html body .zpp-pv-layers-widget .zpp-pv-layers-body {
+    border: 1px solid var(--zpp-builder-layers-area-border, #1e293b); border-top: 0; border-radius: 0 0 5px 5px;
+}

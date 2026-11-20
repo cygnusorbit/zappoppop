@@ -3,20 +3,20 @@ if (!defined('ABSPATH')) exit;
 ?>
 <!-- DECOMPOSED MODULE 03: VIDEO EMBED (video) -->
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-video" data-elem-family="media" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('3. Video Embed & Playback', 'zappoppop'); ?></div>
+    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Video Embed & Playback', 'zappoppop'); ?></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
-            <label for="prop-video-width" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('WIDTH (PX)', 'zappoppop'); ?></label>
+            <label for="prop-video-width" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Width (px)', 'zappoppop'); ?></label>
             <input type="number" id="prop-video-width" class="widefat zappoppop-input" min="16" step="1" value="200" style="font-size:12px;">
         </div>
         <div>
-            <label for="prop-video-height" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('HEIGHT (PX)', 'zappoppop'); ?></label>
+            <label for="prop-video-height" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Height (px)', 'zappoppop'); ?></label>
             <input type="number" id="prop-video-height" class="widefat zappoppop-input" min="16" step="1" value="150" style="font-size:12px;">
         </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('VIDEO PROVIDER', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Video Provider', 'zappoppop'); ?></label>
             <select id="prop-video-provider" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="videoProvider" style="font-size:12px;">
                 <option value="youtube"><?php esc_html_e('YouTube', 'zappoppop'); ?></option>
                 <option value="vimeo"><?php esc_html_e('Vimeo', 'zappoppop'); ?></option>
@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) exit;
             </select>
         </div>
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('ASPECT RATIO', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Aspect Ratio', 'zappoppop'); ?></label>
             <select id="prop-video-aspect" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="aspectRatio" style="font-size:12px;">
                 <option value="16:9"><?php esc_html_e('16:9 Widescreen', 'zappoppop'); ?></option>
                 <option value="4:3"><?php esc_html_e('4:3 Standard', 'zappoppop'); ?></option>
@@ -33,9 +33,9 @@ if (!defined('ABSPATH')) exit;
             </select>
         </div>
     </div>
-    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('VIDEO URL OR EMBED ID', 'zappoppop'); ?></label>
+    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Video URL or Embed ID', 'zappoppop'); ?></label>
     <input type="text" id="prop-video-url" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="videoUrl" placeholder="https://www.youtube.com/watch?v=..." style="margin-bottom:10px;font-size:12px;">
-    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('VIDEO THUMBNAIL', 'zappoppop'); ?></label>
+    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Video Thumbnail', 'zappoppop'); ?></label>
     <div style="display:flex;gap:6px;margin-bottom:6px;">
         <input type="text" id="prop-video-thumb" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="videoThumb" placeholder="https://... (optional)" style="flex:1;min-width:0;font-size:12px;">
         <button type="button" id="prop-video-thumb-btn" class="button button-secondary" style="height:36px;padding:0 10px;font-size:11px;font-weight:700;white-space:nowrap;"><?php esc_html_e('WP Media', 'zappoppop'); ?></button>

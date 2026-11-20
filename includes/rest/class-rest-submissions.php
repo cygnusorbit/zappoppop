@@ -37,6 +37,12 @@ class ZapPopPop_Rest_Submissions {
             return new WP_Error('spam_detected', __('Spam detected by security shield.', 'zappoppop'), ['status' => 400]);
         }
 
+        // Request-level gates (add-ons: rate limits, bot verification), same hook as the Ajax route
+        $zappoppop_gate = (string) apply_filters('zappoppop_submission_gate', '', 'request', ['ip' => ZapPopPop_Security::get_client_ip(), 'recaptcha_token' => isset($params['recaptcha_token']) ? (string) $params['recaptcha_token'] : (isset($params['g-recaptcha-response']) ? (string) $params['g-recaptcha-response'] : '')]);
+        if ($zappoppop_gate !== '') {
+            return new WP_Error('submission_blocked', $zappoppop_gate, ['status' => 429]);
+        }
+
         $uid   = isset($params['uid']) ? sanitize_text_field($params['uid']) : '';
         $email = isset($params['email']) ? sanitize_email($params['email']) : '';
         $fields = isset($params['fields']) ? (array)$params['fields'] : [];
@@ -47,6 +53,11 @@ class ZapPopPop_Rest_Submissions {
             foreach ($fields as $fk => $fv) {
                 if (is_string($fv) && is_email($fv)) { $email = sanitize_email($fv); break; }
             }
+        }
+        // Field-level gates (add-ons: e-mail policy), same hook as the Ajax route
+        $zappoppop_gate = (string) apply_filters('zappoppop_submission_gate', '', 'fields', ['ip' => ZapPopPop_Security::get_client_ip(), 'email' => $email]);
+        if ($zappoppop_gate !== '') {
+            return new WP_Error('submission_rejected', $zappoppop_gate, ['status' => 422]);
         }
         $clean = [];
         foreach ((array) $fields as $fk => $fv) {
@@ -60,13 +71,6 @@ class ZapPopPop_Rest_Submissions {
             return new WP_Error('invalid_email', __('Please enter a valid email address.', 'zappoppop'), ['status' => 422]);
         }
 
-        // 2. Disposable Email Filter
-        $disposable_domains = ['mailinator.com', '10minutemail.com', 'guerrillamail.com', 'trashmail.com', 'tempmail.com', 'sharklasers.com'];
-        $domain = $email !== '' ? substr(strrchr($email, '@'), 1) : '';
-        if (in_array(strtolower($domain), $disposable_domains, true)) {
-            return new WP_Error('disposable_email', __('Disposable and temporary email addresses are not allowed.', 'zappoppop'), ['status' => 422]);
-        }
-
         global $wpdb;
         $items_table = $wpdb->prefix . 'zappoppop_items';
         $subs_table  = $wpdb->prefix . 'zappoppop_submissions';
@@ -77,6 +81,12 @@ class ZapPopPop_Rest_Submissions {
         }
 
         $config = json_decode($row['data'], true) ?: [];
+
+        // Disposable e-mail filter: runs when an Email layer of this popup has "Block Disposable Emails" on
+        $zappoppop_dis = ZapPopPop_Disposable::check($config, $email);
+        if ($zappoppop_dis !== '') {
+            return new WP_Error('disposable_email', $zappoppop_dis, ['status' => 422]);
+        }
 
         /* ZAPPOPPOP_PROTECT_REST: extension modules (Pro) check the lead before anything is stored */
         $zappoppop_pre = ZapPopPop_Module_Bridge::precheck($uid, $fields, $config);

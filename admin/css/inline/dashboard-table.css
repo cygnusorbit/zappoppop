@@ -37,7 +37,7 @@
     border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde); border-radius: var(--zpp-r-button, 4px); box-shadow: 0 1px 2px rgba(0,0,0,.08);
 }
 .zappoppop-table-wrap a.zappoppop-view-btn:hover { background: var(--zpp-c-secondary-hover, #fff); border-color: var(--zpp-c-border-strong, #c3c4c7); color: var(--zpp-c-secondary-text, #1d2327); }
-.zappoppop-table-wrap a.zappoppop-view-btn .count { color: var(--zpp-c-danger, #d63638); font-size: var(--zpp-fs-small, 12px); font-weight: 400; }
+.zappoppop-table-wrap a.zappoppop-view-btn .count { color: inherit; opacity: .75; font-size: var(--zpp-fs-small, 12px); font-weight: 400; } /* ZPP_VIEW_COUNT: follows the button text colour (Theme > Buttons > Secondary text) */
 .zappoppop-table-wrap a.zappoppop-view-btn.current {
     background: var(--zpp-c-primary, #c0281c); border-color: var(--zpp-c-primary-hover, #a62016); color: var(--zpp-c-primary-text, #fff); font-weight: 700;
 }

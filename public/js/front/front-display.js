@@ -599,3 +599,68 @@
     }, true);
 })(window, document);
 /* === ZAPPOPPOP_VIDEO_FACADE_END === */
+
+/* === ZAPPOPPOP_CLICK_ROUTE_JS === */
+(function (win, doc) {
+    function go(n, e) {
+        var href = n.getAttribute('data-zpp-href');
+        if (!href) { return; }
+        e.preventDefault();
+        if (href === '#') { return; }
+        var rel = n.getAttribute('data-zpp-rel') || '';
+        if (n.getAttribute('data-zpp-blank') === '1') {
+            var w = win.open(href, '_blank');
+            if (w && rel.indexOf('noopener') > -1) { try { w.opener = null; } catch (x) {} }
+        } else { win.location.href = href; }
+    }
+    doc.addEventListener('click', function (e) {
+        var n = e.target.closest ? e.target.closest('.zappoppop-click-link[data-zpp-href]') : null;
+        if (n) { go(n, e); }
+    });
+    doc.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') { return; }
+        var n = e.target.closest ? e.target.closest('.zappoppop-click-route') : null;
+        if (!n) { return; }
+        e.preventDefault();
+        n.click();
+    });
+})(window, document);
+/* === ZAPPOPPOP_CLICK_ROUTE_JS_END === */
+
+/* === ZAPPOPPOP_CLICK_ROUTE_JS2: copy-to-clipboard + scroll-to-anchor === */
+(function (win, doc) {
+    function copyText(txt, done) {
+        function legacy() {
+            var ta = doc.createElement('textarea');
+            ta.value = txt; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+            doc.body.appendChild(ta); ta.select();
+            try { doc.execCommand('copy'); } catch (x) {}
+            doc.body.removeChild(ta); done();
+        }
+        if (win.navigator && win.navigator.clipboard && win.isSecureContext) {
+            win.navigator.clipboard.writeText(txt).then(done, legacy);
+        } else { legacy(); }
+    }
+    doc.addEventListener('click', function (e) {
+        var t = e.target;
+        var c = t.closest ? t.closest('.zappoppop-click-route[data-zpp-copy]') : null;
+        if (c) {
+            e.preventDefault();
+            copyText(c.getAttribute('data-zpp-copy'), function () {
+                c.setAttribute('data-zpp-copied', '1');
+                var old = c.style.opacity; c.style.opacity = '0.6';
+                win.setTimeout(function () { c.removeAttribute('data-zpp-copied'); c.style.opacity = old; }, 900);
+            });
+            return;
+        }
+        var a = t.closest ? t.closest('.zappoppop-click-route[data-zpp-anchor]') : null;
+        if (a) {
+            e.preventDefault();
+            var node = doc.getElementById(a.getAttribute('data-zpp-anchor'));
+            if (node && node.scrollIntoView) {
+                try { node.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (x) { node.scrollIntoView(); }
+            }
+        }
+    });
+})(window, document);
+/* === ZAPPOPPOP_CLICK_ROUTE_JS2_END === */

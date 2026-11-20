@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     <!-- Floating Workspace Preview Control Bar (Active during Preview Mode) -->
     <div id="zappoppop-workspace-preview-bar" class="zappoppop-workspace-preview-bar">
         <span class="zappoppop-preview-badge">
-            <span class="dashicons dashicons-visibility"></span> <?php esc_html_e('LIVE PREVIEW MODE', 'zappoppop'); ?>
+            <span class="dashicons dashicons-visibility"></span> <?php esc_html_e('Live Preview Mode', 'zappoppop'); ?>
         </span>
         <button type="button" id="zappoppop-preview-replay-btn" class="button zappoppop-preview-bar-btn" title="<?php esc_attr_e('Replay Canvas Entrance Animation', 'zappoppop'); ?>"><?php esc_html_e('Replay Animation', 'zappoppop'); ?></button>
         <button type="button" id="zappoppop-preview-exit-btn" class="button button-primary zappoppop-preview-bar-btn" title="<?php esc_attr_e('Exit Preview and Return to Editor', 'zappoppop'); ?>"><?php esc_html_e('Exit Preview', 'zappoppop'); ?></button>

@@ -1,0 +1,222 @@
+/* ZPP_TAB_BLOCKS: Style / Logic / Data / Advanced use the same framed blocks, header bars, compact fields and Reset as the Content tab. Theme tokens only. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section {
+    background: var(--zpp-builder-accordion-bg) !important; background-color: var(--zpp-builder-accordion-bg) !important;
+    border: 1px solid var(--zpp-builder-accordion-border) !important; border-radius: 8px !important;
+    padding: 0 12px 12px !important; overflow: hidden; box-sizing: border-box;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-tb-head {
+    margin: 0 -12px 12px !important; padding: 10px 24px 10px 12px !important; border: 0 !important;
+    border-bottom: 1px solid var(--zpp-builder-accordion-border) !important; border-radius: 0 !important;
+    background: transparent !important; box-shadow: none !important; height: auto !important;
+    font-size: 10px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; line-height: 1.3 !important;
+    color: var(--zpp-builder-accordion-text) !important; position: relative; cursor: pointer;
+    -webkit-user-select: none; user-select: none;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zappoppop-sec-head .zappoppop-sec-title,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zappoppop-sec-head .zappoppop-sec-title,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zappoppop-sec-head .zappoppop-sec-title,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zappoppop-sec-head .zappoppop-sec-title {
+    color: inherit !important; font-size: 10px !important; font-weight: 800 !important; letter-spacing: 0.5px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-acc-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-acc-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-acc-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-acc-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zappoppop-sec-head::after {
+    content: ""; position: absolute; right: 9px; top: 50%; width: 6px; height: 6px; margin-top: -5px; opacity: 1;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    -webkit-transform: rotate(45deg); transform: rotate(45deg); transition: transform .15s ease;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-acc-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-tb-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-acc-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-tb-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-acc-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-tb-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-acc-closed,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-tb-closed { padding-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-acc-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-tb-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-acc-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-tb-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-acc-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-tb-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-acc-closed > *:first-child,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-tb-closed > *:first-child { margin-bottom: 0 !important; border-bottom-color: transparent !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-acc-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-tb-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-acc-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-tb-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-acc-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-tb-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-acc-closed > .zappoppop-sec-head::after,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-tb-closed > .zappoppop-sec-head::after { -webkit-transform: rotate(-45deg); transform: rotate(-45deg); margin-top: -3px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module).zpp-tb-closed > *:not(:first-child),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section.zpp-tb-closed > *:not(:first-child),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section.zpp-tb-closed > *:not(:first-child),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section.zpp-tb-closed > *:not(:first-child) { display: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style select,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style input[type="text"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style input[type="number"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style input[type="url"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style input[type="email"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style input[type="search"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic select,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic input[type="text"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic input[type="number"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic input[type="url"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic input[type="email"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic input[type="search"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data select,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data input[type="text"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data input[type="number"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data input[type="url"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data input[type="email"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data input[type="search"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced select,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced input[type="text"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced input[type="number"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced input[type="url"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced input[type="email"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced input[type="search"] {
+    height: 30px !important; min-height: 30px !important; padding-top: 0 !important; padding-bottom: 0 !important;
+    font-size: 12px !important; line-height: 28px !important; box-sizing: border-box !important; border-radius: 4px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear) { font-size: 10px !important; letter-spacing: 0.4px !important; line-height: 1.3 !important; }
+
+/* Per-tab Reset */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tr-wrap { margin: 14px 0 4px; padding-top: 12px; border-top: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tr-btn {
+    display: block; width: 100%; height: 30px; padding: 0 10px; border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--zpp-builder-field-border); background: var(--zpp-builder-field-bg);
+    color: var(--zpp-builder-text-color); font-size: 12px; font-weight: 600; line-height: 28px; box-sizing: border-box;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tr-btn:hover { border-color: var(--zpp-builder-accent-color); color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tr-btn.is-armed { border-color: #ef4444; color: #ef4444; }
+
+/* Border & Corner Radius / Box Shadow: no on/off switch, always editable */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border > .zappoppop-sec-head > label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-shadow > .zappoppop-sec-head > label { display: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border.zappoppop-sec-off .zappoppop-sec-body,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-shadow.zappoppop-sec-off .zappoppop-sec-body { opacity: 1 !important; pointer-events: auto !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border.zpp-tb-closed > .zappoppop-sec-body,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-shadow.zpp-tb-closed > .zappoppop-sec-body { display: none !important; }
+
+/* Transparent switches removed: the colour pickers have their own alpha */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-shape-clear,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label:has(> #prop-bg-transparent),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-bg-transparent { display: none !important; }
+
+/* ZPP_ACCORDION_AREA: Accordion Title = header bar, Accordion Setting Area = the framed body (Theme > Builder). Falls back to the title colours until set. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section {
+    background: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg)) !important;
+    background-color: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg)) !important;
+    border-color: var(--zpp-builder-area-border, var(--zpp-builder-accordion-border)) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zappoppop-shape-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-tb-head {
+    background: var(--zpp-builder-accordion-bg) !important;
+    background-color: var(--zpp-builder-accordion-bg) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section .zappoppop-shape-label,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section label:not(.zpp-sw):not(.zappoppop-insp-switch):not(.zappoppop-gp-switch):not(.zappoppop-shape-clear),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section .zappoppop-shape-label { color: var(--zpp-builder-area-text, var(--zpp-builder-text-color)) !important; }
+
+/* Closed Shape / element blocks: no leftover strip (the id-based padding rule used to win) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel.zpp-ca-closed { padding-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel.zpp-ca-closed > .zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel.zpp-ca-closed > .zappoppop-shape-head { margin-bottom: 0 !important; border-bottom-color: transparent !important; }
+
+/* ZPP_AREA_ROWS: rows inside a framed block show the block's own Setting Area colour (no per-row boxes) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section [data-zpp-role="content-panel"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section [data-zpp-role="content-panel"] {
+    background: transparent !important; background-color: transparent !important; box-shadow: none !important;
+}
+
+/* ZPP_COORDS_STYLE: Coordinates & Bounds = same frame as the other accordion blocks (frame = Setting Area border, header bar = Accordion Title, divider = Accordion border). */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords {
+    display: block !important; position: relative; box-sizing: border-box; margin: 12px 0 0 !important; padding: 10px 24px 10px 12px !important;
+    background: var(--zpp-builder-accordion-bg) !important; background-color: var(--zpp-builder-accordion-bg) !important;
+    border: 1px solid var(--zpp-builder-area-border, var(--zpp-builder-accordion-border)) !important;
+    border-bottom: 1px solid var(--zpp-builder-accordion-border) !important;
+    border-radius: 8px 8px 0 0 !important; box-shadow: none !important;
+    font-size: 10px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; line-height: 1.3 !important;
+    color: var(--zpp-builder-accordion-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords.zpp-ca-closed {
+    border-radius: 8px !important; border-bottom-color: var(--zpp-builder-area-border, var(--zpp-builder-accordion-border)) !important; margin-bottom: 12px !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid {
+    box-sizing: border-box; margin: 0 0 12px !important; padding: 12px !important;
+    background: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg)) !important; background-color: var(--zpp-builder-area-bg, var(--zpp-builder-accordion-bg)) !important;
+    border: 1px solid var(--zpp-builder-area-border, var(--zpp-builder-accordion-border)) !important; border-top: 0 !important;
+    border-radius: 0 0 8px 8px !important; box-shadow: none !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords-grid.zpp-ca-hidden { display: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-coords:focus-visible { outline: 2px solid var(--zpp-builder-accordion-text); outline-offset: -2px; }

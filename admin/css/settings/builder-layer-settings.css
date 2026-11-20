@@ -41,3 +41,19 @@
     .zappoppop-ls-layout { grid-template-columns: 1fr; }
     .zappoppop-ls-elements { max-height: 240px; }
 }
+
+/* Phase 1: drag handle + accordion (ls-order) */
+.zappoppop-ls-main .zappoppop-bld-list .zappoppop-ls-row { gap: 8px; }
+.zappoppop-ls-main .zappoppop-bld-list .bld-name { flex: 1 1 auto; min-width: 0; }
+.zappoppop-ls-grip, .zappoppop-ls-chev { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; margin: 0; background: transparent; border: 0; border-radius: 3px; color: #8c8f94; cursor: pointer; }
+.zappoppop-ls-grip { cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; }
+.zappoppop-ls-grip:hover, .zappoppop-ls-chev:hover { color: var(--zpp-c-primary, #2563eb); background: #f0f6fc; }
+.zappoppop-ls-grip:focus, .zappoppop-ls-chev:focus { outline: 0; box-shadow: 0 0 0 2px var(--zpp-c-primary, #2563eb); }
+.zappoppop-ls-chev-sp { flex: none; display: inline-block; width: 24px; }
+.zappoppop-ls-chev .dashicons { transition: transform .15s ease; }
+.zappoppop-ls-row.is-collapsed > .zappoppop-ls-chev .dashicons { transform: rotate(-90deg); }
+.zappoppop-ls-main .zappoppop-bld-list li.is-hidden-child { display: none !important; }
+.zappoppop-ls-main .zappoppop-bld-list li:not(.is-child) .bld-name { cursor: default; }
+.zappoppop-ls-main .zappoppop-bld-list li.is-dragging { background: #f0f6fc; box-shadow: inset 0 0 0 2px var(--zpp-c-primary, #2563eb); position: relative; z-index: 1; }
+.zappoppop-ls-main .zappoppop-bld-list li.is-dragging .zappoppop-ls-grip { cursor: grabbing; }
+.zappoppop-ls.is-sorting, .zappoppop-ls.is-sorting * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }

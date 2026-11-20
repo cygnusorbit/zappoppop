@@ -465,7 +465,85 @@ class ZapPopPop_Front_Renderer {
         return $el;
     }
 
+    /* ZAPPOPPOP_CLICK_ROUTE: Action & Click Routing for display elements (shape, icon, label, text, html) */
+    /* ZPP_FIELD_LABEL */
+    private function zpp_add_field_label(array $el, $html) {
+        if (!is_string($html) || $html === '') { return $html; }
+        $t = strtolower((string) (isset($el['type']) ? $el['type'] : ''));
+        $form = array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'multiselect', 'radio', 'radios', 'checkbox', 'checkboxes', 'checkboxgroup', 'date', 'time', 'upload', 'file', 'password', 'imageselect', 'tile', 'rating');
+        if (!in_array($t, $form, true)) { return $html; }
+        if (isset($el['showFieldLabel']) && ($el['showFieldLabel'] === false || $el['showFieldLabel'] === 'false' || $el['showFieldLabel'] === 0 || $el['showFieldLabel'] === '0')) { return $html; }
+        $name = isset($el['name']) ? trim(wp_strip_all_tags((string) $el['name'])) : '';
+        if ($name === '') { return $html; }
+        $color = (isset($el['fieldLabelTextColor']) && is_string($el['fieldLabelTextColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldLabelTextColor'])) ? $el['fieldLabelTextColor'] : '#334155';
+        $label = '<span class="zpp-fld-label" aria-hidden="true" style="position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;color:' . esc_attr($color) . ';">' . esc_html($name) . '</span>';
+        $n = 0;
+        $out = preg_replace_callback('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*>)/is', function ($m) use ($label) { return $m[1] . $label; }, $html, 1, $n);
+        if (!$n) { return $html; }
+        $out = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bstyle="[^"]*?)(")/is', '${1};overflow:visible !important$2', $out, 1);
+        $aria = ' aria-label="' . esc_attr($name) . '"';
+        $out = preg_replace_callback('/<(input|select|textarea)\b(?![^>]*\baria-label=)/i', function ($m) use ($aria) { return '<' . $m[1] . $aria; }, $out, 1);
+        return $out;
+    }
+
     private function render_canvas_element(array $el, array $config = array()) {
+        $html = $this->render_canvas_element_core($el, $config);
+        $type = isset($el['type']) ? (string) $el['type'] : 'text';
+        /* ZPP_FIELD_LABEL: the Layer Name is the visible label of every form element */
+        $html = $this->zpp_add_field_label($el, $html);
+        if (!in_array($type, array('shape', 'icon', 'label', 'text', 'html'), true) || !is_string($html) || $html === '') { return $html; }
+        $on = function ($keys) use ($el) {
+            foreach ($keys as $k) { if (isset($el[$k])) { return !empty($el[$k]) && $el[$k] !== 'false' && $el[$k] !== '0'; } }
+            return false;
+        };
+        $act = isset($el['buttonAction']) ? (string) $el['buttonAction'] : '';
+        if ($act === 'url') { $act = 'link'; }
+        if ($act === 'goto_canvas') { $act = 'step'; }
+        $cls = ''; $attr = '';
+        if ($act === 'step') {
+            $to = !empty($el['goto_canvas']) ? max(1, intval($el['goto_canvas'])) : (!empty($el['goto_screen']) ? max(1, intval($el['goto_screen'])) : 2);
+            $cls = ' zappoppop-next-canvas-btn zappoppop-next-screen-btn zappoppop-click-route';
+            $attr = ' data-goto-canvas="' . $to . '" data-goto-screen="' . $to . '" data-goto="' . $to . '" role="button" tabindex="0"';
+        } elseif ($act === 'close') {
+            $cls = ' zappoppop-close-trigger zappoppop-click-route';
+            $attr = ' data-close-action="close" role="button" tabindex="0"';
+        } elseif ($act === 'mailto' || $act === 'tel') {
+            $rv = isset($el['routeValue']) ? trim((string) $el['routeValue']) : '';
+            if ($rv === '') { return $html; }
+            $href = ($act === 'mailto') ? 'mailto:' . sanitize_email($rv) : 'tel:' . preg_replace('/[^0-9+#*,;]/', '', $rv);
+            if ($href === 'mailto:' || $href === 'tel:') { return $html; }
+            $cls = ' zappoppop-click-route zappoppop-click-link';
+            $attr = ' data-zpp-href="' . esc_url($href) . '" role="link" tabindex="0"';
+        } elseif ($act === 'copy') {
+            $rv = isset($el['routeValue']) ? trim((string) $el['routeValue']) : '';
+            if ($rv === '') { return $html; }
+            $cls = ' zappoppop-click-route';
+            $attr = ' data-zpp-copy="' . esc_attr($rv) . '" role="button" tabindex="0"';
+        } elseif ($act === 'anchor') {
+            $rv = isset($el['routeValue']) ? preg_replace('/[^A-Za-z0-9_\-:.]/', '', ltrim(trim((string) $el['routeValue']), '#')) : '';
+            if ($rv === '') { return $html; }
+            $cls = ' zappoppop-click-route';
+            $attr = ' data-zpp-anchor="' . esc_attr($rv) . '" role="link" tabindex="0"';
+        } else {
+            $url = !empty($el['linkUrl']) ? esc_url($el['linkUrl']) : '';
+            if ($url === '') { return $html; }
+            $blank = $on(array('linkBlank', 'targetBlank'));
+            $rel = array();
+            if ($blank) { $rel[] = 'noopener'; $rel[] = 'noreferrer'; }
+            if ($on(array('nofollow'))) { $rel[] = 'nofollow'; }
+            $cls = ' zappoppop-click-route zappoppop-click-link';
+            $attr = ' data-zpp-href="' . esc_url($url) . '"' . ($blank ? ' data-zpp-blank="1"' : '') . (!empty($rel) ? ' data-zpp-rel="' . esc_attr(implode(' ', $rel)) . '"' : '') . ' role="link" tabindex="0"';
+        }
+        $out = preg_replace('/^(<div\b[^>]*?\bclass=")/', '$1' . trim($cls) . ' ', $html, 1, $n1);
+        if (!$n1) { return $html; }
+        $rt_lab = (isset($el['routeLabel']) && trim((string) $el['routeLabel']) !== '') ? ' aria-label="' . esc_attr($el['routeLabel']) . '" title="' . esc_attr($el['routeLabel']) . '"' : '';
+        $out = preg_replace('/^<div\b/', '<div' . $attr . $rt_lab, $out, 1);
+        /* ZAPPOPPOP_CLICK_ROUTE_CURSOR: inline so it works even when elements.css is not loaded */
+        $out = preg_replace('/^(<div\b[^>]*?\bstyle=")/', '$1cursor:pointer;', $out, 1);
+        return $out;
+    }
+
+    private function render_canvas_element_core(array $el, array $config = array()) {
         /* ZAPPOPPOP_LOAD_DECOMPOSED: the autoloader cannot find elements/class-front-decomposed-26.php */
         if (!class_exists('ZapPopPop_Front_Decomposed_26')) {
             $zappoppop_dec_file = ZAPPOPPOP_PATH . 'includes/front/elements/class-front-decomposed-26.php';
@@ -895,6 +973,11 @@ class ZapPopPop_Front_Renderer {
                 $bt_nofollow = $bt_on(array('nofollow'));
                 $bt_url = !empty($el['linkUrl']) ? esc_url($el['linkUrl']) : (!empty($el['url']) ? esc_url($el['url']) : '#');
                 if ($bt_url === '') { $bt_url = '#'; }
+                if (($bt_act === 'mailto' || $bt_act === 'tel') && !empty($el['routeValue'])) {
+                    $bt_rv = ($bt_act === 'mailto') ? 'mailto:' . sanitize_email((string) $el['routeValue']) : 'tel:' . preg_replace('/[^0-9+#*,;]/', '', (string) $el['routeValue']);
+                    if ($bt_rv !== 'mailto:' && $bt_rv !== 'tel:') { $bt_url = esc_url($bt_rv); }
+                    $bt_act = 'link';
+                }
                 $bt_step = !empty($el['goto_canvas']) ? intval($el['goto_canvas']) : (!empty($el['goto_screen']) ? intval($el['goto_screen']) : 2);
                 $bt_x = array();
                 if (!empty($el['fontWeight']) && preg_match('/^[0-9a-z]{3,10}$/i', (string) $el['fontWeight'])) { $bt_x[] = 'font-weight:' . $el['fontWeight']; }

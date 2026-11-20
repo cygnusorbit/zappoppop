@@ -3,8 +3,8 @@ if (!defined('ABSPATH')) exit;
 ?>
 <!-- DECOMPOSED MODULE 17: RADIO BUTTONS (radio / radios) -->
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-radio" data-elem-family="form" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('17. Radio Button Choices', 'zappoppop'); ?></div>
-    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('RADIO CHOICES (LABEL + VALUE)', 'zappoppop'); ?></label>
+    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Radio Button Choices', 'zappoppop'); ?></div>
+    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Radio Choices (Label + Value)', 'zappoppop'); ?></label>
     <textarea id="prop-radio-options" rows="4" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="optionsList" tabindex="-1" aria-hidden="true" style="display:none;"></textarea>
     <!-- ZAPPOPPOP_RADIO_REPEATER -->
     <?php ZapPopPop_Inline_Assets::style('builder-elements-elem-17-radio'); ?>    <div style="display:flex;gap:3px;margin-bottom:3px;padding:0 3px;">
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) exit;
     </div>
     <div id="zappoppop-radio-rows" style="margin-bottom:4px;"></div>
     <button type="button" id="zappoppop-radio-add" class="button button-small"><?php esc_html_e('+ Add choice', 'zappoppop'); ?></button>
-    <?php ZapPopPop_Inline_Assets::script('builder-elements-elem-17-radio'); ?>    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('LAYOUT ORIENTATION', 'zappoppop'); ?></label>
+    <?php ZapPopPop_Inline_Assets::script('builder-elements-elem-17-radio'); ?>    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Layout Orientation', 'zappoppop'); ?></label>
     <select id="prop-radio-layout" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="layout" style="font-size:12px;">
         <option value="vertical"><?php esc_html_e('Vertical (Stacked)', 'zappoppop'); ?></option>
         <option value="horizontal"><?php esc_html_e('Horizontal (Inline Row)', 'zappoppop'); ?></option>

@@ -18,26 +18,26 @@ if (!defined('ABSPATH')) {
     <div class="zappoppop-prop-body">
         <!-- Basic Tab -->
         <div class="zappoppop-prop-section active" data-section="basic">
-            <label><?php esc_html_e('NAME', 'zappoppop'); ?></label>
+            <label><?php esc_html_e('Name', 'zappoppop'); ?></label>
             <input type="text" id="zappoppop-prop-name" class="widefat">
 
             <div style="display:flex;gap:10px;margin-top:10px;">
                 <div style="flex:1;"><label><?php esc_html_e('TOP (PX)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-top"></div>
-                <div style="flex:1;"><label><?php esc_html_e('LEFT (PX)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-left"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Left (px)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-left"></div>
             </div>
 
             <div style="display:flex;gap:10px;margin-top:10px;">
-                <div style="flex:1;"><label><?php esc_html_e('WIDTH (PX)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-width"></div>
-                <div style="flex:1;"><label><?php esc_html_e('HEIGHT (PX)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-height"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Width (px)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-width"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Height (px)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-height"></div>
             </div>
 
-            <label style="margin-top:12px;display:block;"><?php esc_html_e('CONTENT / VALUE', 'zappoppop'); ?></label>
+            <label style="margin-top:12px;display:block;"><?php esc_html_e('Content / Value', 'zappoppop'); ?></label>
             <textarea id="zappoppop-prop-content" class="widefat" rows="3"></textarea>
 
             <label style="margin-top:12px;display:block;"><?php esc_html_e('TARGET SCREEN (Next Step)', 'zappoppop'); ?></label>
             <input type="number" id="zappoppop-prop-goto" value="2">
 
-            <label style="margin-top:12px;display:block;"><?php esc_html_e('CLICK ACTION', 'zappoppop'); ?></label>
+            <label style="margin-top:12px;display:block;"><?php esc_html_e('Click Action', 'zappoppop'); ?></label>
             <select id="zappoppop-prop-click-act" class="widefat">
                 <option value="none"><?php esc_html_e('None', 'zappoppop'); ?></option>
                 <option value="close"><?php esc_html_e('Close Popup', 'zappoppop'); ?></option>
@@ -47,7 +47,7 @@ if (!defined('ABSPATH')) {
 
         <!-- Style Tab -->
         <div class="zappoppop-prop-section" data-section="style" style="display:none;">
-            <label><?php esc_html_e('FONT FAMILY', 'zappoppop'); ?></label>
+            <label><?php esc_html_e('Font Family', 'zappoppop'); ?></label>
             <select id="zappoppop-prop-font" class="widefat">
                 <option value="inherit"><?php esc_html_e('Inherit', 'zappoppop'); ?></option>
                 <option value="Inter"><?php esc_html_e('Inter', 'zappoppop'); ?></option>
@@ -57,16 +57,16 @@ if (!defined('ABSPATH')) {
             </select>
 
             <div style="display:flex;gap:10px;margin-top:10px;">
-                <div style="flex:1;"><label><?php esc_html_e('FONT SIZE (PX)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-fontsize" value="16"></div>
-                <div style="flex:1;"><label><?php esc_html_e('TEXT COLOR', 'zappoppop'); ?></label><input type="color" id="zappoppop-prop-color" value="#1e293b"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Font Size (px)', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-fontsize" value="16"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Text Color', 'zappoppop'); ?></label><input type="color" id="zappoppop-prop-color" value="#1e293b"></div>
             </div>
 
             <div style="display:flex;gap:10px;margin-top:10px;">
-                <div style="flex:1;"><label><?php esc_html_e('BACKGROUND', 'zappoppop'); ?></label><input type="color" id="zappoppop-prop-bgcolor" value="#2271b1"></div>
-                <div style="flex:1;"><label><?php esc_html_e('BORDER RADIUS', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-radius" value="0"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Background', 'zappoppop'); ?></label><input type="color" id="zappoppop-prop-bgcolor" value="#2271b1"></div>
+                <div style="flex:1;"><label><?php esc_html_e('Border Radius', 'zappoppop'); ?></label><input type="number" id="zappoppop-prop-radius" value="0"></div>
             </div>
 
-            <label style="margin-top:12px;display:block;"><?php esc_html_e('ANIMATION ENTRANCE', 'zappoppop'); ?></label>
+            <label style="margin-top:12px;display:block;"><?php esc_html_e('Animation Entrance', 'zappoppop'); ?></label>
             <select id="zappoppop-prop-anim" class="widefat">
                 <option value="none"><?php esc_html_e('None', 'zappoppop'); ?></option>
                 <option value="fade"><?php esc_html_e('Fade In', 'zappoppop'); ?></option>
@@ -79,7 +79,7 @@ if (!defined('ABSPATH')) {
         <!-- Logic Tab -->
         <div class="zappoppop-prop-section" data-section="logic" style="display:none;">
             <label><input type="checkbox" id="zappoppop-prop-req"> <?php esc_html_e('Mandatory Field (Required)', 'zappoppop'); ?></label>
-            <label style="margin-top:10px;display:block;"><?php esc_html_e('FIELD NAME / PARAM KEY', 'zappoppop'); ?></label>
+            <label style="margin-top:10px;display:block;"><?php esc_html_e('Field Name / Param Key', 'zappoppop'); ?></label>
             <input type="text" id="zappoppop-prop-fieldname" class="widefat" placeholder="<?php esc_attr_e('e.g. email or qty', 'zappoppop'); ?>">
             <label style="margin-top:10px;display:block;"><?php esc_html_e('OPTIONS (For Select, Radio, Wheel, Scratch)', 'zappoppop'); ?></label>
             <textarea id="zappoppop-prop-options" class="widefat" rows="4" placeholder="Option 1:10&#10;Option 2:20"></textarea>

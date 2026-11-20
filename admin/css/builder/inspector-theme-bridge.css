@@ -1,0 +1,54 @@
+/* ZPP_INSPECTOR_THEME_BRIDGE: Inspector colours / borders follow the Theme > Builder tokens (no hard-coded slate palette). */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing {
+    background: var(--zpp-builder-accordion-bg) !important;
+    background-color: var(--zpp-builder-accordion-bg) !important;
+    border: 1px solid var(--zpp-builder-accordion-border) !important;
+    border-radius: 8px !important;
+    box-sizing: border-box;
+}
+/* leftover inline slate colours -> theme tokens */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#94a3b8"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #94a3b8"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#64748b"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #64748b"] {
+    color: var(--zpp-builder-muted-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#cbd5e1"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #cbd5e1"] {
+    color: var(--zpp-builder-text-color) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color:#38bdf8"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer [style*="color: #38bdf8"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-sec-head .zappoppop-sec-title,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-shape-rotate-val {
+    color: var(--zpp-builder-accordion-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-shape-rotate-val {
+    color: var(--zpp-builder-accent-color) !important;
+}
+/* Action & Click Routing labels: same label look as the other panels */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing label[style*="text-transform"],
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing #prop-route-value-label {
+    font-size: 11px !important;
+    letter-spacing: 0.5px;
+}
+/* Transparent-fill swatch */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-shape-clear { color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-shape-clear-sw { border-color: var(--zpp-builder-field-border) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-shape-clear input:checked + .zappoppop-shape-clear-sw {
+    border-color: var(--zpp-builder-accent-color) !important;
+    box-shadow: 0 0 0 2px var(--zpp-builder-accent-soft) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-shape-clear input:focus-visible + .zappoppop-shape-clear-sw {
+    outline-color: var(--zpp-builder-accent-color) !important;
+}
+/* Slide switches (.zpp-sw): off = Toggle Off, on = Hover / Active / Toggle On, text = theme text */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw .zpp-sw-track { background: var(--zpp-builder-toggle-off-bg) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw input[type=checkbox]:checked + .zpp-sw-track { background: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw input[type=checkbox]:focus-visible + .zpp-sw-track { box-shadow: 0 0 0 2px var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw > span { color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw code { color: var(--zpp-builder-accent-color) !important; }

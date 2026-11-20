@@ -187,6 +187,28 @@ class ZapPopPop_Admin_Theme {
                 'c_guide_color' => $f(__('Selected element guide line color', 'zappoppop'), 'color', '#7dd3fc'),
                 'bw_guide'      => $f(__('Selected element guide line size', 'zappoppop'), 'size', '1px'),
             ]],
+            /* ZPP_BUILDER_GUIDE_TAB: colours of the Builder Guide (the guided tour) */
+            'builder_guide' => ['label' => __('Builder Guide', 'zappoppop'), 'fields' => [
+                'tg_dim' => $f(__('Backdrop (dimmed page behind the tour)', 'zappoppop'), 'color', '#0f172a99'),
+                'tg_spot' => $f(__('Spotlight ring around the highlighted item', 'zappoppop'), 'color', '#c1272d'),
+                'tg_card_bg' => $f(__('Step card background', 'zappoppop'), 'color', '#ffffff'),
+                'tg_card_border' => $f(__('Step card border', 'zappoppop'), 'color', '#dcdcde'),
+                'tg_card_text' => $f(__('Step text', 'zappoppop'), 'color', '#1d2327'),
+                'tg_title' => $f(__('Step title', 'zappoppop'), 'color', '#1d2327'),
+                'tg_count' => $f(__('Step counter (e.g. 3 of 12)', 'zappoppop'), 'color', '#787c82'),
+                'tg_link' => $f(__('Skip / Don\'t show again link', 'zappoppop'), 'color', '#2237c9'),
+                'tg_link_hover' => $f(__('Skip / Don\'t show again link hover', 'zappoppop'), 'color', '#c1272d'),
+                'tg_btn_bg' => $f(__('Back button background', 'zappoppop'), 'color', '#ffffff'),
+                'tg_btn_text' => $f(__('Back button text', 'zappoppop'), 'color', '#1d2327'),
+                'tg_btn_border' => $f(__('Back button border', 'zappoppop'), 'color', '#c3c4c7'),
+                'tg_btn_hover' => $f(__('Back button hover background', 'zappoppop'), 'color', '#f1f5f9'),
+                'tg_primary' => $f(__('Next button background', 'zappoppop'), 'color', '#c1272d'),
+                'tg_primary_text' => $f(__('Next button text', 'zappoppop'), 'color', '#ffffff'),
+                'tg_primary_hover' => $f(__('Next button hover background', 'zappoppop'), 'color', '#a51f25'),
+                'tg_close' => $f(__('Close (×) icon', 'zappoppop'), 'color', '#787c82'),
+                'tg_close_hover' => $f(__('Close (×) icon hover', 'zappoppop'), 'color', '#1d2327'),
+                'tg_focus' => $f(__('Keyboard focus ring', 'zappoppop'), 'color', '#c1272d'),
+            ]],
         ];
     }
 
@@ -341,7 +363,7 @@ class ZapPopPop_Admin_Theme {
         $css = 'body.zappoppop-admin-themed{';
         foreach (self::schema() as $group) {
             foreach ($group['fields'] as $key => $field) {
-                if (in_array($field['type'], ['bool', 'textarea', 'media'], true)) {
+                if (in_array($field['type'], ['bool', 'textarea', 'media'], true) || strpos($key, 'tg_') === 0) {
                     continue;
                 }
                 $css .= self::css_var($key) . ':' . $v[$key] . ';';
@@ -354,6 +376,17 @@ class ZapPopPop_Admin_Theme {
         if (!preg_match('/^\d{1,2}(\.\d{1,2})?px$/', $g_w)) { $g_w = '1px'; }
         $g_c = isset($v['c_guide_color']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', (string) $v['c_guide_color']) ? $v['c_guide_color'] : '#7dd3fc';
         $css .= ':root{--zpp-guide-color:' . $g_c . ';--zpp-guide-width:' . $g_w . ';}';
+        /* ZPP_BUILDER_GUIDE_TAB: Builder Guide colours (saved ones only) */
+        $zpp_saved = get_option(self::OPTION, []);
+        $zpp_tg = '';
+        if (is_array($zpp_saved) && isset(self::schema()['builder_guide'])) {
+            foreach (self::schema()['builder_guide']['fields'] as $key => $field) {
+                if (array_key_exists($key, $zpp_saved) && isset($v[$key])) {
+                    $zpp_tg .= self::css_var($key) . ':' . $v[$key] . ';';
+                }
+            }
+        }
+        if ($zpp_tg !== '') { $css .= ':root{' . $zpp_tg . '}'; }
         return $css;
     }
 

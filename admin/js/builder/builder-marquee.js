@@ -322,6 +322,29 @@
             if (ids.length >= 2 && canvas()) { canvas().deselect(); }
             return;
         }
+        /* ZPP_MULTI_DELETE: Delete / Backspace removes the whole marquee selection in one step (one Undo brings them all back). Locked layers stay. */
+        if (ids.length >= 2 && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'Delete' || e.key === 'Backspace' || e.keyCode === 46 || e.keyCode === 8)) {
+            var cv = canvas(), c0 = core(), arr = (cv && cv.getActiveElements) ? cv.getActiveElements() : null;
+            if (arr && c0) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var gone = 0;
+                ids.slice().forEach(function (id) {
+                    for (var i = 0; i < arr.length; i++) {
+                        if (cid(arr[i].id) === cid(id) && !arr[i].locked) { arr.splice(i, 1); gone++; break; }
+                    }
+                });
+                ids = [];
+                if (cv.deselect) { cv.deselect(); }
+                if (gone) {
+                    if (cv.renderCanvas) { cv.renderCanvas(); }
+                    if (window.ZapPopPopBuilderLayers && window.ZapPopPopBuilderLayers.renderLayers) { window.ZapPopPopBuilderLayers.renderLayers(); }
+                    if (typeof c0.pushHistory === 'function') { c0.pushHistory('Delete Layers'); }
+                }
+                paint();
+                return;
+            }
+        }
         if (ids.length < 2 || e.metaKey || e.ctrlKey || e.altKey) { return; }
         var k = KEYS[e.key] || CODES[e.keyCode];
         if (!k) { return; }

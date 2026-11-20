@@ -111,7 +111,7 @@
         var stamp = Date.now().toString(36);
         var clones = ordered.map(function (m, i) {
             var c = JSON.parse(JSON.stringify(m.el));
-            var base = (m.el.type === 'text' || m.el.type === 'paragraph') ? 'PARAGRAPH' : (m.el.name || String(m.el.type || 'LAYER').toUpperCase());
+            var base = (m.el.type === 'text' || m.el.type === 'paragraph') ? 'Paragraph' : (m.el.name || (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(m.el.type || 'Layer'));
             c.id = 'layer_' + stamp + '_' + Math.random().toString(36).substr(2, 4) + i;
             c.name = base + ' (Copy)';
             c.zIndex = maxZ + 5 * (i + 1);

@@ -79,6 +79,10 @@ class ZapPopPop_Ajax_Frontend {
         if ($gate !== '') {
             wp_send_json_error(['message' => $gate]);
         }
+        $zappoppop_dis = ZapPopPop_Disposable::check_uid($this->resolve_popup_uid(), $email);
+        if ($zappoppop_dis !== '') {
+            wp_send_json_error(['message' => $zappoppop_dis]);
+        }
 
         // 6. Database Persistence
         global $wpdb;

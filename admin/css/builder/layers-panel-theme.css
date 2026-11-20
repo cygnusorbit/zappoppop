@@ -1,0 +1,42 @@
+/* ZPP_LAYERS_THEME: Layers Panel Title / Layers Area / Layers Panel Frame follow Theme > Builder. Everything in the builder is Title Case. */
+html body .zappoppop-builder-wrap, html body .zappoppop-builder-wrap * { text-transform: none !important; }
+/* ZPP_LAYERS_AREA_V2: the Title row styles the title bar only; the Area row styles everything below it (frame, list, rows). */
+html body #zappoppop-floating-layers-panel {
+    border: 1px solid var(--zpp-builder-layers-area-border) !important;
+    background: var(--zpp-builder-layers-area-bg) !important; background-color: var(--zpp-builder-layers-area-bg) !important;
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header {
+    background: var(--zpp-builder-layers-title-bg) !important; background-color: var(--zpp-builder-layers-title-bg) !important;
+    color: var(--zpp-builder-layers-title-text) !important;
+    border: 0 !important; border-bottom: 1px solid var(--zpp-builder-layers-title-border) !important;
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header .zappoppop-layers-title-wrap,
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header .dashicons,
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header #zappoppop-layers-count,
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header #zappoppop-layers-toggle-collapse { color: var(--zpp-builder-layers-title-text) !important; }
+html body #zappoppop-floating-layers-panel #zappoppop-layers-header #zappoppop-layers-count { border-color: var(--zpp-builder-layers-title-border) !important; }
+html body #zappoppop-floating-layers-panel #zappoppop-layers-list {
+    background: var(--zpp-builder-layers-area-bg) !important; background-color: var(--zpp-builder-layers-area-bg) !important;
+    color: var(--zpp-builder-layers-area-text) !important;
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-list .zappoppop-layer-item:not(.active):not(.zappoppop-selected) {
+    border-color: var(--zpp-builder-layers-area-border) !important;
+    background: transparent !important; background-color: transparent !important;
+}
+html body #zappoppop-floating-layers-panel #zappoppop-layers-list .zappoppop-layer-item:not(.active):not(.zappoppop-selected) .zappoppop-layer-title { color: var(--zpp-builder-layers-area-text) !important; }
+
+/* ZPP_LAYERS_ACCORDION: the Layers Panel is an accordion. Title bar = its own bordered box (Title colours); open -> the list sits flush under it as a second box (Area colours); closed -> the title bar is one fully rounded box. */
+html body #zappoppop-floating-layers-panel#zappoppop-floating-layers-panel {
+    border: 0 !important; background: transparent !important; background-color: transparent !important; box-shadow: none !important;
+    overflow: visible !important; padding: 0 !important;
+}
+html body #zappoppop-floating-layers-panel#zappoppop-floating-layers-panel #zappoppop-layers-header {
+    border: 1px solid var(--zpp-builder-layers-title-border) !important; border-radius: 8px 8px 0 0 !important;
+    box-shadow: none !important; outline: 0 !important; margin: 0 !important;
+}
+html body #zappoppop-floating-layers-panel#zappoppop-floating-layers-panel #zappoppop-layers-list {
+    border: 1px solid var(--zpp-builder-layers-area-border) !important; border-top: 0 !important; border-radius: 0 0 8px 8px !important;
+    box-shadow: none !important; outline: 0 !important; margin: 0 !important;
+}
+html body #zappoppop-floating-layers-panel#zappoppop-floating-layers-panel.collapsed #zappoppop-layers-header { border-radius: 8px !important; border: 1px solid var(--zpp-builder-layers-title-border) !important; }
+html body #zappoppop-floating-layers-panel#zappoppop-floating-layers-panel.collapsed #zappoppop-layers-list { display: none !important; }

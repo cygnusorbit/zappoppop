@@ -494,6 +494,14 @@
         font-weight: 600 !important;
     }
 
+    /* Elements ribbon bar (theme row 23): Bg + Opacity and Border. Buttons keep row 17. */
+    html body #zappoppop-ribbon-wrap > #zappoppop-ribbon.zappoppop-ribbon-bar {
+        background: var(--zpp-builder-ribbon-bg) !important;
+        background-color: var(--zpp-builder-ribbon-bg) !important;
+        background-image: none !important;
+        border: 1px solid var(--zpp-builder-ribbon-border) !important;
+        box-sizing: border-box;
+    }
     /* Elements ribbon buttons (theme row 16) */
     html body .zappoppop-ribbon-bar .zappoppop-ribbon-tool {
         background: var(--zpp-builder-element-bg) !important;

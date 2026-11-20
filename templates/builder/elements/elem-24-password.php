@@ -3,14 +3,14 @@ if (!defined('ABSPATH')) exit;
 ?>
 <!-- DECOMPOSED MODULE 24: PASSWORD INPUT (password) -->
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-password" data-elem-family="form" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('24. Password Input Settings', 'zappoppop'); ?></div>
+    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Password Input Settings', 'zappoppop'); ?></div>
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('PLACEHOLDER', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Placeholder', 'zappoppop'); ?></label>
             <input type="text" id="prop-password-placeholder" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="placeholder" placeholder="<?php esc_attr_e('Enter password...', 'zappoppop'); ?>" style="font-size:12px;">
         </div>
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('MIN LENGTH', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Min Length', 'zappoppop'); ?></label>
             <input type="number" id="prop-password-minlength" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="minLength" min="1" max="64" placeholder="e.g. 8" style="font-size:12px;">
         </div>
     </div>
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) exit;
         <input type="checkbox" id="prop-password-eye" class="zappoppop-gp-bind" data-prop="showEyeToggle" value="1" checked>  <?php esc_html_e('Show Password Visibility Eye Icon', 'zappoppop'); ?>
     </label>
     <div style="margin-top:10px;">
-        <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('BROWSER AUTOCOMPLETE', 'zappoppop'); ?></label>
+        <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Browser Autocomplete', 'zappoppop'); ?></label>
         <select id="prop-password-autocomplete" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="autocomplete" style="font-size:12px;">
                 <option value="on"><?php esc_html_e('On (Default) (on)', 'zappoppop'); ?></option>
                 <option value="off"><?php esc_html_e('Off (off)', 'zappoppop'); ?></option>

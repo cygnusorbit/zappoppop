@@ -3,16 +3,16 @@ if (!defined('ABSPATH')) exit;
 ?>
 <!-- DECOMPOSED MODULE 11: EMAIL ADDRESS (email) -->
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-email" data-elem-family="form" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('11. Email Input Settings', 'zappoppop'); ?></div>
-    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('PLACEHOLDER EMAIL', 'zappoppop'); ?></label>
+    <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Email Input Settings', 'zappoppop'); ?></div>
+    <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Placeholder Email', 'zappoppop'); ?></label>
     <input type="text" id="prop-email-placeholder" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="placeholder" placeholder="<?php esc_attr_e('Enter your email...', 'zappoppop'); ?>" style="margin-bottom:10px;font-size:12px;">
     <div style="display:grid;grid-template-columns:1fr;gap:10px;">
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('MAX LENGTH', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Max Length', 'zappoppop'); ?></label>
             <input type="number" id="prop-email-maxlength" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="maxLength" min="0" max="500" placeholder="<?php esc_attr_e('Unlimited', 'zappoppop'); ?>" style="font-size:12px;">
         </div>
         <div>
-            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('BROWSER AUTOCOMPLETE', 'zappoppop'); ?></label>
+            <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Browser Autocomplete', 'zappoppop'); ?></label>
             <select id="prop-email-autocomplete" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="autocomplete" style="font-size:12px;">
                 <option value="on"><?php esc_html_e('On (Default) (on)', 'zappoppop'); ?></option>
                 <option value="off"><?php esc_html_e('Off (off)', 'zappoppop'); ?></option>
@@ -39,9 +39,11 @@ if (!defined('ABSPATH')) exit;
                 <option value="one-time-code"><?php esc_html_e('One-Time Code (one-time-code)', 'zappoppop'); ?></option>
             </select>
         </div>
-        <div>
-            <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#cbd5e1;cursor:pointer;">
-                <input type="checkbox" id="prop-email-disposable" class="zappoppop-gp-bind" data-prop="blockDisposable" value="1"> <?php esc_html_e('Block Disposable Emails', 'zappoppop'); ?>
+        <div class="zappoppop-prop-row zappoppop-gp-switch-row" id="insp-row-email-disposable">
+            <label class="zappoppop-prop-label" for="prop-email-disposable"><?php esc_html_e('Block Disposable Emails', 'zappoppop'); ?></label>
+            <label class="zappoppop-gp-switch">
+                <input type="checkbox" id="prop-email-disposable" class="zappoppop-gp-bind" data-prop="blockDisposable" value="1">
+                <span class="zappoppop-gp-slider"></span>
             </label>
         </div>
     </div>

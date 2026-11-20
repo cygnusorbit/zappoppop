@@ -25,29 +25,15 @@ if (!defined('ABSPATH')) exit;
         <!-- TAB 1: CONTENT (BASIC) -->
         <div id="insp-tab-basic" class="zappoppop-tab-pane zappoppop-insp-content active" style="display:block;">
             <div class="zappoppop-inspector-section" id="insp-section-layer-name" style="margin-bottom:12px;">
-                <label style="display:block;font-size:11px;font-weight:700;color:#cbd5e1;margin-bottom:4px;"><?php esc_html_e('LAYER NAME', 'zappoppop'); ?></label>
+                <label style="display:block;font-size:11px;font-weight:700;color:#cbd5e1;margin-bottom:4px;"><?php esc_html_e('Layer Name', 'zappoppop'); ?></label>
                 <input type="text" id="prop-layer-name" class="zappoppop-input" style="width:100%;height:30px;padding:4px 8px;font-size:12px;border:1px solid #334155;border-radius:4px;background:#1e293b;color:#f1f5f9;">
             </div>
             <div style="display:flex;flex-direction:column;gap:12px;">
                 <!-- DYNAMIC ELEMENT-SPECIFIC SETTINGS -->
                 <!-- CANONICAL ANIMATION & REQUIRED CONTROLS -->
             <div class="zappoppop-insp-card" id="insp-section-gp-basic-Shared">
-                <div class="zappoppop-prop-row" id="insp-row-gp-autocomplete" style="display:none; margin-bottom:10px;">
-                    <label class="zappoppop-prop-label" for="prop-gp-autocomplete"><?php esc_html_e( 'AUTOCOMPLETE ATTRIBUTE', 'zappoppop' ); ?></label>
-                    <select id="prop-gp-autocomplete" class="zappoppop-select">
-                        <option value="off"><?php esc_html_e( 'Disabled (off)', 'zappoppop' ); ?></option>
-                        <option value="on"><?php esc_html_e( 'Enabled (on)', 'zappoppop' ); ?></option>
-                        <option value="email"><?php esc_html_e( 'Email (email)', 'zappoppop' ); ?></option>
-                        <option value="name"><?php esc_html_e( 'Full name (name)', 'zappoppop' ); ?></option>
-                        <option value="given-name"><?php esc_html_e( 'First name (given-name)', 'zappoppop' ); ?></option>
-                        <option value="family-name"><?php esc_html_e( 'Last name (family-name)', 'zappoppop' ); ?></option>
-                        <option value="tel"><?php esc_html_e( 'Telephone (tel)', 'zappoppop' ); ?></option>
-                        <option value="username"><?php esc_html_e( 'Username (username)', 'zappoppop' ); ?></option>
-                    </select>
-                </div>
-
                 <div class="zappoppop-prop-row" id="insp-row-gp-animation">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><label class="zappoppop-prop-label" style="margin:0;"><?php esc_html_e( 'ANIMATION', 'zappoppop' ); ?></label><button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;height:22px;padding:0 8px;cursor:pointer;">&#9654; Play</button></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><label class="zappoppop-prop-label" style="margin:0;"><?php esc_html_e( 'Animation', 'zappoppop' ); ?></label><button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;height:22px;padding:0 8px;cursor:pointer;">&#9654; Play</button></div>
                     <div class="zappoppop-gp-2col-grid">
                         <div class="zappoppop-gp-col" style="grid-column:1 / -1;">
                             <select id="prop-anim-in" class="zappoppop-select">
@@ -149,17 +135,18 @@ if (!defined('ABSPATH')) exit;
                 </div>
 
                 <div class="zappoppop-prop-row zappoppop-gp-switch-row" id="insp-row-gp-required" style="display:none; margin-top:12px;">
-                    <label class="zappoppop-prop-label" for="prop-gp-required"><?php esc_html_e( 'REQUIRED', 'zappoppop' ); ?> <span class="dashicons dashicons-editor-help" title="<?php echo esc_attr__( 'Visitors must fill this field before submitting.', 'zappoppop' ); ?>" style="font-size:15px;width:15px;height:15px;vertical-align:middle;color:#94a3b8;"></span></label>
+                    <label class="zappoppop-prop-label" for="prop-gp-required"><?php esc_html_e( 'Required', 'zappoppop' ); ?> <span class="dashicons dashicons-editor-help" title="<?php echo esc_attr__( 'Visitors must fill this field before submitting.', 'zappoppop' ); ?>" style="font-size:15px;width:15px;height:15px;vertical-align:middle;color:#94a3b8;"></span></label>
                     <label class="zappoppop-gp-switch">
                         <input type="checkbox" id="prop-gp-required">
                         <span class="zappoppop-gp-slider"></span>
                     </label>
                 </div>
                 <div class="zappoppop-prop-row" id="insp-row-gp-required-msg" style="display:none; margin-top:10px;">
-                    <label class="zappoppop-prop-label" for="prop-gp-required-msg" style="color:#c2185b;font-weight:700;"><?php esc_html_e( 'ERROR MESSAGE', 'zappoppop' ); ?></label>
+                    <label class="zappoppop-prop-label" for="prop-gp-required-msg" style="color:#c2185b;font-weight:700;"><?php esc_html_e( 'Error Message', 'zappoppop' ); ?></label>
                     <input type="text" id="prop-gp-required-msg" class="widefat zappoppop-input" placeholder="<?php echo esc_attr__( 'This field is required.', 'zappoppop' ); ?>" style="font-size:12px;">
                     <em style="display:block;font-size:11px;color:#94a3b8;margin-top:4px;"><?php esc_html_e( 'Default message: This field is required.', 'zappoppop' ); ?></em>
                 </div>
+                <?php $zpp_lk_id = 'anim'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
             </div>
 <div id="zappoppop-element-specific-settings">
                 <?php
@@ -178,23 +165,23 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- NUMBER FIELD -->
                 <div class="element-panel" id="panel-elem-number-legacy" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('PLACEHOLDER TEXT', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Placeholder Text', 'zappoppop'); ?></label>
                     <input type="text" id="prop-num-placeholder" class="widefat" placeholder="e.g. 10" style="font-size:12px;margin-bottom:8px;">
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('MIN', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Min', 'zappoppop'); ?></label>
                             <input type="number" id="prop-num-min" value="0" class="widefat" style="font-size:11px;">
                         </div>
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('MAX', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Max', 'zappoppop'); ?></label>
                             <input type="number" id="prop-num-max" value="100" class="widefat" style="font-size:11px;">
                         </div>
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('STEP', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Step', 'zappoppop'); ?></label>
                             <input type="number" id="prop-num-step" value="1" class="widefat" style="font-size:11px;">
                         </div>
                     </div>
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FIELD NAME / TOKEN', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Field Name / Token', 'zappoppop'); ?></label>
                     <input type="text" id="prop-num-name" class="widefat" value="number_field" style="font-size:12px;margin-bottom:8px;">
                     <label style="font-size:12px;color:#334155;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
                         <input type="checkbox" id="prop-num-required" value="1"> <?php esc_html_e('Required Field', 'zappoppop'); ?>
@@ -211,9 +198,9 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- CHECKBOXES -->
                 <div class="element-panel" id="panel-elem-checkboxes-legacy" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('CHECKBOX LABEL', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Checkbox Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-cb-label" class="widefat" value="I agree to terms" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FIELD NAME / TOKEN', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Field Name / Token', 'zappoppop'); ?></label>
                     <input type="text" id="prop-cb-name" class="widefat" value="terms_agreement" style="font-size:12px;margin-bottom:8px;">
                     <div style="display:flex;gap:12px;align-items:center;">
                         <label style="font-size:12px;color:#334155;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
@@ -233,11 +220,11 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- FILE UPLOAD -->
                 <div class="element-panel" id="panel-elem-file-legacy" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('ALLOWED EXTENSIONS', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Allowed Extensions', 'zappoppop'); ?></label>
                     <input type="text" id="prop-file-extensions" class="widefat" placeholder="<?php esc_attr_e('jpg, png, pdf, docx', 'zappoppop'); ?>" value="jpg, png, pdf" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('MAX FILE SIZE (MB)', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Max File Size (MB)', 'zappoppop'); ?></label>
                     <input type="number" id="prop-file-max-size" value="5" min="1" max="50" class="widefat" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FIELD NAME / TOKEN', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Field Name / Token', 'zappoppop'); ?></label>
                     <input type="text" id="prop-file-name" class="widefat" value="attachment" style="font-size:12px;margin-bottom:8px;">
                     <label style="font-size:12px;color:#334155;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
                         <input type="checkbox" id="prop-file-required" value="1"> <?php esc_html_e('Required Field', 'zappoppop'); ?>
@@ -246,9 +233,9 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- STEP BUTTON -->
                 <div class="element-panel" id="panel-elem-step_btn-legacy" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('BUTTON LABEL', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Button Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-step-label" value="Next Step &rarr;" class="widefat" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('TARGET CANVAS NUMBER', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Target Canvas Number', 'zappoppop'); ?></label>
                     <input type="number" id="prop-step-canvas" value="2" min="1" max="10" class="widefat" style="font-size:12px;">
                 </div>
 
@@ -257,15 +244,15 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- PAY BUTTON -->
                 <div class="element-panel" id="panel-elem-pay" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('BUTTON LABEL', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Button Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-pay-label" value="Pay Now" class="widefat" style="font-size:12px;margin-bottom:8px;">
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('AMOUNT', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Amount', 'zappoppop'); ?></label>
                             <input type="number" id="prop-pay-amount" value="19.99" step="0.01" class="widefat" style="font-size:11px;">
                         </div>
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('CURRENCY', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Currency', 'zappoppop'); ?></label>
                             <select id="prop-pay-currency" class="widefat" style="font-size:11px;">
                                 <option value="USD" selected><?php esc_html_e('USD ($)', 'zappoppop'); ?></option>
                                 <option value="EUR"><?php esc_html_e('EUR (€)', 'zappoppop'); ?></option>
@@ -273,7 +260,7 @@ if (!defined('ABSPATH')) exit;
                             </select>
                         </div>
                     </div>
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('PAYMENT GATEWAY', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Payment Gateway', 'zappoppop'); ?></label>
                     <select id="prop-pay-gateway" class="widefat" style="font-size:12px;">
                         <option value="stripe" selected>Stripe</option>
                         <option value="paypal">PayPal</option>
@@ -284,10 +271,10 @@ if (!defined('ABSPATH')) exit;
 
                 <!-- DIVIDER ELEMENT -->
                 <div class="element-panel" id="panel-elem-divider" style="display:none;">
-                    <div style="font-size:11px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:4px;"><?php esc_html_e('DIVIDER SETTINGS', 'zappoppop'); ?></div>
+                    <div style="font-size:11px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:4px;"><?php esc_html_e('Divider Settings', 'zappoppop'); ?></div>
                     
                     <div style="margin-bottom:10px;">
-                        <label for="prop-divider-style" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('DIVIDER TYPE', 'zappoppop'); ?></label>
+                        <label for="prop-divider-style" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('Divider Type', 'zappoppop'); ?></label>
                         <select id="prop-divider-style" class="widefat zappoppop-input" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;color:var(--zpp-builder-field-text,#f8fafc) !important;font-size:12px;border-radius:4px;padding:4px 8px;">
                             <option value="solid" selected><?php esc_html_e('Solid Line', 'zappoppop'); ?></option>
                             <option value="dashed"><?php esc_html_e('Dashed Line', 'zappoppop'); ?></option>
@@ -300,22 +287,22 @@ if (!defined('ABSPATH')) exit;
 
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
                         <div>
-                            <label for="prop-divider-weight" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('THICKNESS (PX)', 'zappoppop'); ?></label>
+                            <label for="prop-divider-weight" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('Thickness (px)', 'zappoppop'); ?></label>
                             <input type="number" id="prop-divider-weight" class="widefat zappoppop-input" min="1" max="30" value="2" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;color:var(--zpp-builder-field-text,#f8fafc) !important;font-size:12px;border-radius:4px;padding:4px 8px;">
                         </div>
                         <div>
-                            <label for="prop-divider-color" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('LINE COLOR', 'zappoppop'); ?></label>
+                            <label for="prop-divider-color" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('Line Color', 'zappoppop'); ?></label>
                             <input type="color" data-zpp-alpha="compact" id="prop-divider-color" class="widefat zappoppop-input" value="#94a3b8" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;border-radius:4px;padding:2px;cursor:pointer;">
                         </div>
                     </div>
 
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
                         <div>
-                            <label for="prop-divider-width-pct" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('WIDTH (%)', 'zappoppop'); ?></label>
+                            <label for="prop-divider-width-pct" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('Width (%)', 'zappoppop'); ?></label>
                             <input type="number" id="prop-divider-width-pct" class="widefat zappoppop-input" min="10" max="100" step="5" value="100" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;color:var(--zpp-builder-field-text,#f8fafc) !important;font-size:12px;border-radius:4px;padding:4px 8px;">
                         </div>
                         <div>
-                            <label for="prop-divider-align" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('ALIGNMENT', 'zappoppop'); ?></label>
+                            <label for="prop-divider-align" style="display:block;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;"><?php esc_html_e('Alignment', 'zappoppop'); ?></label>
                             <select id="prop-divider-align" class="widefat zappoppop-input" style="width:100%;height:32px;background:var(--zpp-builder-field-bg,#0f172a) !important;border:1px solid var(--zpp-builder-field-border,#334155) !important;color:var(--zpp-builder-field-text,#f8fafc) !important;font-size:12px;border-radius:4px;padding:4px 8px;">
                                 <option value="center" selected><?php esc_html_e('Center', 'zappoppop'); ?></option>
                                 <option value="left"><?php esc_html_e('Left', 'zappoppop'); ?></option>
@@ -331,27 +318,27 @@ if (!defined('ABSPATH')) exit;
                 <!-- CLOSE BUTTON -->
                 <!-- WHEEL -->
                 <div class="element-panel" id="panel-elem-wheel" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('PRIZE SLICES (COMMA SEPARATED)', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Prize Slices (Comma Separated)', 'zappoppop'); ?></label>
                     <textarea id="prop-wheel-slices" rows="4" class="widefat" placeholder="10% OFF, FREE SHIPPING, 25% OFF, JACKPOT" style="font-size:12px;margin-bottom:8px;"></textarea>
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('SPIN BUTTON LABEL', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Spin Button Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-wheel-btn-text" value="SPIN TO WIN!" class="widefat" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('WIN MESSAGE', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Win Message', 'zappoppop'); ?></label>
                     <input type="text" id="prop-wheel-win-msg" value="Congratulations! You won {prize}!" class="widefat" style="font-size:12px;">
                 </div>
                 <!-- SCRATCH -->
                 <div class="element-panel" id="panel-elem-scratch" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('SECRET WINNING / REVEAL TEXT', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Secret Winning / Reveal Text', 'zappoppop'); ?></label>
                     <input type="text" id="prop-scratch-prize" value="YOU WON 25% OFF! USE CODE: WIN25" class="widefat" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FOIL COVER COLOR', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Foil Cover Color', 'zappoppop'); ?></label>
                     <input type="color" id="prop-scratch-foil" value="#94a3b8" class="widefat" style="height:32px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('PERCENT UNCOVERED TO REVEAL (10-90%)', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Percent Uncovered to Reveal (10-90%)', 'zappoppop'); ?></label>
                     <input type="number" id="prop-scratch-pct" min="10" max="90" value="45" class="widefat" style="font-size:12px;">
                 </div>
                 <!-- COUNTDOWN -->
                 <div class="element-panel" id="panel-elem-countdown" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('DURATION (SECONDS)', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Duration (Seconds)', 'zappoppop'); ?></label>
                     <input type="number" id="prop-countdown-seconds" value="900" class="widefat" placeholder="<?php esc_attr_e('e.g. 900 for 15 minutes', 'zappoppop'); ?>" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('ACTION ON EXPIRE', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Action on Expire', 'zappoppop'); ?></label>
                     <select id="prop-countdown-expire" class="widefat" style="font-size:12px;">
                         <option value="none"><?php esc_html_e('Stay at 00:00', 'zappoppop'); ?></option>
                         <option value="close"><?php esc_html_e('Close Popup', 'zappoppop'); ?></option>
@@ -360,30 +347,30 @@ if (!defined('ABSPATH')) exit;
                 </div>
                 <!-- SIGNATURE -->
                 <div class="element-panel" id="panel-elem-signature" style="display:none;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('PEN INK COLOR', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Pen Ink Color', 'zappoppop'); ?></label>
                     <input type="color" id="prop-sig-color" value="#0f172a" class="widefat" style="height:32px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('CLEAR BUTTON LABEL', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Clear Button Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-sig-clear-label" value="Clear Signature" class="widefat" style="font-size:12px;margin-bottom:8px;">
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FIELD NAME', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Field Name', 'zappoppop'); ?></label>
                     <input type="text" id="prop-sig-fieldname" value="digital_signature" class="widefat" style="font-size:12px;">
                 </div>
                 <!-- SLIDER -->
                 <div class="element-panel" id="panel-elem-slider" style="display:none;">
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('MIN', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Min', 'zappoppop'); ?></label>
                             <input type="number" id="prop-slider-min" value="0" class="widefat" style="font-size:11px;">
                         </div>
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('MAX', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Max', 'zappoppop'); ?></label>
                             <input type="number" id="prop-slider-max" value="100" class="widefat" style="font-size:11px;">
                         </div>
                         <div>
-                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('DEFAULT', 'zappoppop'); ?></label>
+                            <label style="font-size:10px;color:#64748b;"><?php esc_html_e('Default', 'zappoppop'); ?></label>
                             <input type="number" id="prop-slider-val" value="50" class="widefat" style="font-size:11px;">
                         </div>
                     </div>
-                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('FIELD NAME / TOKEN', 'zappoppop'); ?></label>
+                    <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Field Name / Token', 'zappoppop'); ?></label>
                     <input type="text" id="prop-slider-fieldname" value="range_val" class="widefat" style="font-size:12px;">
                 </div>
                 <!-- SUBMIT BUTTON -->
@@ -396,7 +383,7 @@ if (!defined('ABSPATH')) exit;
                     <!-- Element #3: Text Field -->
                     <div id="panel-elem-textfield-legacy" class="element-panel zappoppop-elem-panel" style="display:none;">
                         <div class="zappoppop-prop-group">
-                            <label for="prop-textfield-placeholder" style="font-size:11px;font-weight:700;color:#94a3b8;display:block;margin-bottom:4px;"><?php esc_html_e('PLACEHOLDER TEXT', 'zappoppop'); ?></label>
+                            <label for="prop-textfield-placeholder" style="font-size:11px;font-weight:700;color:#94a3b8;display:block;margin-bottom:4px;"><?php esc_html_e('Placeholder Text', 'zappoppop'); ?></label>
                             <input type="text" id="prop-textfield-placeholder" class="zappoppop-input" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:6px 10px;border-radius:4px;font-size:12px;box-sizing:border-box;">
                         </div>
                     </div>
@@ -406,7 +393,7 @@ if (!defined('ABSPATH')) exit;
                     <!-- General Content Fallback -->
                     <div id="panel-elem-general" class="element-panel zappoppop-elem-panel" style="display:none;">
                         <div class="zappoppop-prop-group">
-                            <label for="prop-content" style="font-size:11px;font-weight:700;color:#94a3b8;display:block;margin-bottom:4px;"><?php esc_html_e('ELEMENT CONTENT / LABEL', 'zappoppop'); ?></label>
+                            <label for="prop-content" style="font-size:11px;font-weight:700;color:#94a3b8;display:block;margin-bottom:4px;"><?php esc_html_e('Element Content / Label', 'zappoppop'); ?></label>
                             <textarea id="prop-content" class="zappoppop-input" rows="3" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:6px 10px;border-radius:4px;font-size:12px;box-sizing:border-box;resize:vertical;"></textarea>
                         </div>
                     </div>
@@ -414,22 +401,22 @@ if (!defined('ABSPATH')) exit;
                 </div>
 
                 <!-- Position & Dimensions -->
-                <div id="insp-section-coords" style="font-size:11px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-top:6px;border-bottom:1px solid #334155;padding-bottom:4px;"><?php esc_html_e('COORDINATES & BOUNDS', 'zappoppop'); ?></div>
+                <div id="insp-section-coords" style="font-size:11px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-top:6px;border-bottom:1px solid #334155;padding-bottom:4px;"><?php esc_html_e('Coordinates & Bounds', 'zappoppop'); ?></div>
                 <div id="insp-section-coords-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                     <div>
-                        <label for="prop-left" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('X POS (PX)', 'zappoppop'); ?></label>
+                        <label for="prop-left" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('X Pos (px)', 'zappoppop'); ?></label>
                         <input type="number" id="prop-left" class="zappoppop-input" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:5px 8px;border-radius:4px;font-size:11px;box-sizing:border-box;">
                     </div>
                     <div>
-                        <label for="prop-top" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('Y POS (PX)', 'zappoppop'); ?></label>
+                        <label for="prop-top" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('Y Pos (px)', 'zappoppop'); ?></label>
                         <input type="number" id="prop-top" class="zappoppop-input" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:5px 8px;border-radius:4px;font-size:11px;box-sizing:border-box;">
                     </div>
                     <div>
-                        <label for="prop-width" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('WIDTH (PX)', 'zappoppop'); ?></label>
+                        <label for="prop-width" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('Width (px)', 'zappoppop'); ?></label>
                         <input type="number" id="prop-width" class="zappoppop-input" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:5px 8px;border-radius:4px;font-size:11px;box-sizing:border-box;">
                     </div>
                     <div>
-                        <label for="prop-height" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('HEIGHT (PX)', 'zappoppop'); ?></label>
+                        <label for="prop-height" style="font-size:10px;font-weight:700;color:#94a3b8;"><?php esc_html_e('Height (px)', 'zappoppop'); ?></label>
                         <input type="number" id="prop-height" class="zappoppop-input" style="width:100%;background:#0f172a;border:1px solid #334155;color:#f8fafc;padding:5px 8px;border-radius:4px;font-size:11px;box-sizing:border-box;">
                     </div>
                 </div>
