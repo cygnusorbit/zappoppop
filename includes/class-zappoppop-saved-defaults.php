@@ -44,10 +44,10 @@ class ZapPopPop_Saved_Defaults {
     public static function file_writable() {
         $file = self::file_path();
         $dir  = dirname($file);
-        if (!is_dir($dir) || !is_writable($dir)) {
+        if (!is_dir($dir) || !wp_is_writable($dir)) {
             return false;
         }
-        return !file_exists($file) || is_writable($file);
+        return !file_exists($file) || wp_is_writable($file);
     }
 
     /** Development mode: defaults are also written to defaults/defaults.json. True while the plugin's `.dev/` folder exists (never shipped), or when ZAPPOPPOP_DEV_DEFAULTS is true. */

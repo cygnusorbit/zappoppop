@@ -285,6 +285,8 @@ class ZapPopPop_Ajax_Submissions {
         $cells = [];
         foreach ($fields as $v) {
             $v = (string) $v;
+            /* ZAPPOPPOP_P24_CSV_FORMULA: neutralise spreadsheet formulas (=, +, -, @) in exported cells */
+            if ($v !== '' && preg_match('/^[=+\-@\t\r]/', $v)) { $v = "'" . $v; }
             if ($v !== '' && (preg_match('/["\r\n\t ]/', $v) || strpos($v, ',') !== false || strpos($v, '\\') !== false)) {
                 $v = '"' . str_replace('"', '""', $v) . '"';
             }

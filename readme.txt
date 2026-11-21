@@ -1,5 +1,5 @@
 === ZapPopPop ===
-Contributors: ZapPopPop
+Contributors: wppoppop
 Donate link: https://zappoppop.com
 Tags: popup, modal, popup builder, optin, lead generation
 Requires at least: 5.8

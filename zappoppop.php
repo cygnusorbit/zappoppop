@@ -5,7 +5,7 @@
  * Description: The ultimate, high-converting WordPress visual popup builder and lead capture platform.
  * Version: 1.0.09
  * Author: ZapPopPop
- * Author URI: 
+ * Author URI: https://profiles.wordpress.org/wppoppop/
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * License: GPL-2.0-or-later

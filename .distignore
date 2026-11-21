@@ -19,3 +19,6 @@ Thumbs.db
 *.patch
 .zpp-*
 /vendor
+__pycache__
+*.pyc
+/bin
