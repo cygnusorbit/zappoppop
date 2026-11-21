@@ -3,7 +3,7 @@
 (function (window, $) {
     'use strict';
     if (!$) { return; }
-    var BOX = 'zpp-fl-box', DEF_COLOR = '#334155', INSIDE_COLOR = '#64748b';
+    var BOX = 'zpp-fl-box', DEF_COLOR = '#334155', LAYER_DEF = '#64748b', INSIDE_COLOR = '#64748b';
     /* ZPP_FL_POSITION: model key fieldLabelPosition = 'inside' | 'outside' (undefined = outside). Inside = label in the field's top-left; input-like types only. */
     var INPUTS = ['text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password'];
     var STYLE_OUT = 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;';
@@ -16,7 +16,7 @@
     function cid(v) { return String(v || '').replace(/^zappoppop-el-/, '').replace(/^el-/, '').trim(); }
     function isForm(el) { return !!el && FORM.indexOf(String(el.type || '').toLowerCase()) !== -1; }
     function shown(el) { return !(el.showFieldLabel === false || el.showFieldLabel === 'false' || el.showFieldLabel === 0 || el.showFieldLabel === '0'); }
-    function colorOf(el) { return /^#[0-9a-f]{3,8}$/i.test(String(el.fieldLabelColor || '')) ? el.fieldLabelColor : DEF_COLOR; }
+    function colorOf(el) { return /^#[0-9a-f]{3,8}$/i.test(String(el.fieldLabelColor || '')) ? el.fieldLabelColor : LAYER_DEF; } /* ZPP_LC_DEFAULT: the default Layer Color is #64748b */
     function isInput(el) { return !!el && INPUTS.indexOf(String(el.type || '').toLowerCase()) !== -1; }
     function inside(el) { return isInput(el) && String(el.fieldLabelPosition || '') === 'inside'; }
     function textColorOf(el) { return /^#[0-9a-f]{3,8}$/i.test(String(el.fieldLabelTextColor || '')) ? el.fieldLabelTextColor : (inside(el) ? INSIDE_COLOR : DEF_COLOR); }
@@ -38,7 +38,7 @@
     }
 
     /* ---- inspector controls: switch row under Layer Name, colour pick next to the "Layer Name" caption ---- */
-    var CSS = "html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw {\n    display: flex !important; align-items: center !important; gap: 10px !important; margin: 0 !important; position: relative; cursor: pointer;\n    font-size: 12px !important; line-height: 20px; font-weight: 500 !important; letter-spacing: 0 !important; color: var(--zpp-builder-text-color) !important;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox] {\n    position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; min-width: 0 !important; margin: 0 !important;\n    pointer-events: none !important; -webkit-appearance: none; appearance: none;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]::before { display: none !important; content: none !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw .zpp-sw-track {\n    display: block !important; position: relative; flex: 0 0 36px; width: 36px; height: 20px; border-radius: 20px; box-sizing: border-box;\n    background: var(--zpp-builder-toggle-off-bg); transition: background .15s ease;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw .zpp-sw-track::after {\n    content: \"\"; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff;\n    box-shadow: 0 1px 2px rgba(0,0,0,.4); transition: transform .15s ease;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:checked + .zpp-sw-track { background: var(--zpp-builder-accent-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:checked + .zpp-sw-track::after { transform: translateX(16px); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:focus-visible + .zpp-sw-track { box-shadow: 0 0 0 2px var(--zpp-builder-accent-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw > span:last-child { flex: 1 1 auto; display: block; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw code { font-family: inherit !important; font-size: inherit !important; font-weight: 700 !important; background: transparent !important; padding: 0 !important; color: var(--zpp-builder-accent-color) !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl { margin-top: 10px; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl .zpp-fl-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; font-size: 12px; font-weight: 500; line-height: 20px; color: var(--zpp-builder-text-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-fl-text-color { height: 20px !important; min-height: 20px !important; width: 34px !important; padding: 1px !important; margin: 0 !important; cursor: pointer; border-radius: 4px !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw { flex-direction: row-reverse !important; justify-content: space-between !important; width: 100%; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw > span:last-child { flex: 1 1 auto; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-fl-color { height: 30px !important; min-height: 30px !important; width: 36px !important; flex: 0 0 36px !important; box-sizing: border-box !important; padding: 2px !important; margin: 0 !important; cursor: pointer; border-radius: 4px !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ln-row { display: flex; align-items: center; gap: 8px; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ln-row > #prop-layer-name { flex: 1 1 0 !important; min-width: 0 !important; width: auto !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-layer-name > label.zpp-fl-head { display: flex !important; align-items: center; justify-content: space-between; }\n";
+    var CSS = "html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw {\n    display: flex !important; align-items: center !important; gap: 10px !important; margin: 0 !important; position: relative; cursor: pointer;\n    font-size: 12px !important; line-height: 20px; font-weight: 500 !important; letter-spacing: 0 !important; color: var(--zpp-builder-text-color) !important;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox] {\n    position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; min-width: 0 !important; margin: 0 !important;\n    pointer-events: none !important; -webkit-appearance: none; appearance: none;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]::before { display: none !important; content: none !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw .zpp-sw-track {\n    display: block !important; position: relative; flex: 0 0 36px; width: 36px; height: 20px; border-radius: 20px; box-sizing: border-box;\n    background: var(--zpp-builder-toggle-off-bg); transition: background .15s ease;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw .zpp-sw-track::after {\n    content: \"\"; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff;\n    box-shadow: 0 1px 2px rgba(0,0,0,.4); transition: transform .15s ease;\n}\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:checked + .zpp-sw-track { background: var(--zpp-builder-accent-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:checked + .zpp-sw-track::after { transform: translateX(16px); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw input[type=checkbox]:focus-visible + .zpp-sw-track { box-shadow: 0 0 0 2px var(--zpp-builder-accent-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw > span:last-child { flex: 1 1 auto; display: block; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw code { font-family: inherit !important; font-size: inherit !important; font-weight: 700 !important; background: transparent !important; padding: 0 !important; color: var(--zpp-builder-accent-color) !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl { margin-top: 10px; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl .zpp-fl-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; font-size: 12px; font-weight: 500; line-height: 20px; color: var(--zpp-builder-text-color); }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl .zpp-fl-row.zpp-fl-col { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 4px; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-fl-text-color { height: 20px !important; min-height: 20px !important; width: 34px !important; padding: 1px !important; margin: 0 !important; cursor: pointer; border-radius: 4px !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw { flex-direction: row-reverse !important; justify-content: space-between !important; width: 100%; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fl label.zpp-sw > span:last-child { flex: 1 1 auto; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-fl-color { height: 30px !important; min-height: 30px !important; width: 36px !important; flex: 0 0 36px !important; box-sizing: border-box !important; padding: 2px !important; margin: 0 !important; cursor: pointer; border-radius: 4px !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ln-row { display: flex; align-items: center; gap: 8px; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zpp-ln-row > #prop-layer-name { flex: 1 1 0 !important; min-width: 0 !important; width: auto !important; }\nhtml body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-layer-name > label.zpp-fl-head { display: flex !important; align-items: center; justify-content: space-between; }\n";
     function css() {
         if (document.getElementById('zpp-fl-css')) { return; }
         var st = document.createElement('style');
@@ -57,7 +57,7 @@
         c.setAttribute('id', 'prop-fl-color');
         c.title = 'Layer Color';
         c.setAttribute('aria-label', 'Layer Color');
-        c.value = DEF_COLOR;
+        c.value = LAYER_DEF;
         c.style.display = 'none';
         c.setAttribute('data-zpp-fl', '1');
         /* ZPP_LN_ROW: the colour swatch sits in the same row as the Layer Name input, on the right, same height */
@@ -83,7 +83,10 @@
         b.id = BOX;
         b.className = 'zpp-fl';
         b.style.display = 'none';
-        b.innerHTML = '<label class="zpp-sw"><input type="checkbox" id="prop-fl-show" /><span class="zpp-sw-track"></span><span>Hide Label</span></label><div class="zpp-fl-row" id="zpp-fl-pos-row"><span>Label Position</span><select id="prop-fl-pos" class="zappoppop-input" aria-label="Label Position"><option value="outside">Above field</option><option value="inside">Inside field</option></select></div><div class="zpp-fl-row"><span>Label Text Color</span><input type="color" id="prop-fl-text-color" value="' + DEF_COLOR + '" aria-label="Label Text Color" title="Label Text Color" /></div>';
+        b.innerHTML = '<label class="zpp-sw"><input type="checkbox" id="prop-fl-show" /><span class="zpp-sw-track"></span><span>Hide Label</span></label><div class="zpp-fl-row zpp-fl-col"><span>Label</span><input type="color" id="prop-fl-text-color" value="' + DEF_COLOR + '" aria-label="Label" title="Label" /></div><div class="zpp-fl-row" id="zpp-fl-pos-row"><span>Label Position</span><select id="prop-fl-pos" class="zappoppop-input" aria-label="Label Position"><option value="outside">Above field</option><option value="inside">Inside field</option></select></div>'
+            + '<div class="zpp-fl-row zpp-fl-col" id="zpp-fs-bg-row" style="display:none"><span>Background</span><input type="color" id="prop-fs-bg" data-zpp-alpha="1" value="#ffffff" aria-label="Background" title="Background" /></div>'
+            + '<div class="zpp-fl-row zpp-fl-col" id="zpp-fs-bd-row" style="display:none"><span>Border</span><input type="color" id="prop-fs-bd" data-zpp-alpha="1" value="#cbd5e1" aria-label="Border" title="Border" /></div>'
+            + '<div class="zpp-fl-row zpp-fl-col" id="zpp-fs-ph-row" style="display:none"><span>Placeholder</span><input type="color" id="prop-fs-ph" data-zpp-alpha="1" value="#64748b" aria-label="Placeholder" title="Placeholder" /></div>'; /* ZPP_FS_PH */ /* ZPP_FIELD_STYLE: logic in builder-field-style.js */
         host.appendChild(b);
         return b;
     }
@@ -91,15 +94,17 @@
     function hydrate() {
         var b = box(), el = activeEl(), c = document.getElementById('prop-fl-color');
         if (!b) { return; }
-        if (!isForm(el)) { setDisplay(b, 'none'); setDisplay(c, 'none'); return; }
-        setDisplay(b, 'block');
+        /* ZPP_LAYER_COLOR_ALL: the Layer Color swatch belongs to every element; the label box is form-only */
+        if (!el) { setDisplay(b, 'none'); setDisplay(c, 'none'); return; }
         setDisplay(c, 'inline-block');
+        if (!isForm(el)) { setDisplay(b, 'none'); var nv = colorOf(el).length === 4 ? LAYER_DEF : colorOf(el).slice(0, 7); if (c && c.value !== nv) { c.value = nv; } return; }
+        setDisplay(b, 'block');
         $('#prop-fl-show').prop('checked', !shown(el));
         cssPos(); /* ZPP_FL_POSITION */
         var pr = document.getElementById('zpp-fl-pos-row'), ps = document.getElementById('prop-fl-pos');
         setDisplay(pr, isInput(el) && shown(el) ? 'flex' : 'none');
         if (ps && ps.value !== (inside(el) ? 'inside' : 'outside')) { ps.value = inside(el) ? 'inside' : 'outside'; }
-        var cv = colorOf(el).length === 4 ? DEF_COLOR : colorOf(el).slice(0, 7);
+        var cv = colorOf(el).length === 4 ? LAYER_DEF : colorOf(el).slice(0, 7);
         if (c && c.value !== cv) { c.value = cv; }
         var tv = textColorOf(el).length === 4 ? DEF_COLOR : textColorOf(el).slice(0, 7), tc = document.getElementById('prop-fl-text-color');
         if (tc && tc.value !== tv) { tc.value = tv; }
@@ -114,7 +119,11 @@
             if (!node) { return; }
             var old = node.querySelector(':scope > .zpp-fld-label');
             var want = isForm(el) && shown(el) && String(el.name || '').trim() !== '';
-            if (!want) { if (old) { old.remove(); } return; }
+            if (!want) { /* ZPP_FL_HIDE_RESET: hidden label = no label room; drop the inside-label padding classes so the placeholder sits vertically centred */
+                if (old) { old.remove(); }
+                node.classList.remove('zpp-fld-in', 'zpp-fld-in-stage', 'zpp-fld-in-ta');
+                return;
+            }
             if (!old) {
                 old = document.createElement('span');
                 old.className = 'zpp-fld-label';
@@ -139,15 +148,15 @@
         allEls().forEach(function (el) {
             var ic = document.querySelector('#layer-item-' + cid(el.id) + ' .zappoppop-layer-icon');
             if (!ic) { return; }
-            if (isForm(el)) { ic.style.setProperty('color', colorOf(el), 'important'); ic.querySelectorAll('.dashicons').forEach(function (d) { d.style.setProperty('color', colorOf(el), 'important'); }); }
+            if (isForm(el) || /^#[0-9a-f]{3,8}$/i.test(String(el.fieldLabelColor || ''))) { ic.style.setProperty('color', colorOf(el), 'important'); ic.querySelectorAll('.dashicons').forEach(function (d) { d.style.setProperty('color', colorOf(el), 'important'); }); }
             else { ic.style.removeProperty('color'); ic.querySelectorAll('.dashicons').forEach(function (d) { d.style.removeProperty('color'); }); }
         });
     }
     function schedule() { [50, 300, 900].forEach(function (ms) { window.setTimeout(function () { hydrate(); paintStage(); paintIcons(); }, ms); }); }
 
-    function commit(mutate) {
+    function commit(mutate, anyType) {
         var el = activeEl();
-        if (!el || !isForm(el)) { return; }
+        if (!el || (!anyType && !isForm(el))) { return; }
         mutate(el);
         var c = core();
         if (c && typeof c.pushHistory === 'function') { c.pushHistory(); }
@@ -156,7 +165,7 @@
 
     $(document).on('change.zppFl', '#prop-fl-show', function () { var hide = this.checked; commit(function (el) { el.showFieldLabel = !hide; }); });
     $(document).on('change.zppFl', '#prop-fl-pos', function () { var v = this.value === 'inside' ? 'inside' : 'outside'; commit(function (el) { el.fieldLabelPosition = v; }); }); /* ZPP_FL_POSITION */
-    $(document).on('input.zppFl change.zppFl', '#prop-fl-color', function () { var v = this.value; commit(function (el) { el.fieldLabelColor = v; }); });
+    $(document).on('input.zppFl change.zppFl', '#prop-fl-color', function () { var v = this.value; commit(function (el) { el.fieldLabelColor = v; }, true); });
     $(document).on('input.zppFl change.zppFl', '#prop-fl-text-color', function () { var v = this.value; commit(function (el) { el.fieldLabelTextColor = v; }); });
     $(document).on('input.zppFl change.zppFl', '#prop-layer-name, #prop-element-name', schedule);
     $(document).on('click.zppFl', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', schedule);
@@ -179,7 +188,8 @@
             var last = '';
             window.setInterval(function () {
                 var c = core(), id = (c && c.state) ? cid(c.state.activeId) : '', el = activeEl(), b = document.getElementById(BOX);
-                var want = isForm(el), has = !!b && b.style.display !== 'none';
+                var want = isForm(el), has = !!b && b.style.display !== 'none', cc = document.getElementById('prop-fl-color'), cwant = !!el, chas = !!cc && cc.style.display !== 'none';
+                if (cwant !== chas) { want = !want; } /* ZPP_LAYER_COLOR_ALL: force a hydrate when the swatch visibility is out of step */
                 var key = id + '|' + (el ? String(el.type || '') : '');
                 if (key !== last || want !== has) { last = key; hydrate(); paintIcons(); }
             }, 150);

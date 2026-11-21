@@ -960,3 +960,67 @@ html body #zappoppop-settings-drawer .zappoppop-acc-item .zappoppop-fa-pick-btn 
     border-color: var(--zpp-builder-field-border) !important;
     color: var(--zpp-builder-field-text) !important;
 }
+
+/* ZPP_RIBBON_DIVIDER_THEME: Elements-ribbon divider follows the Builder theme border colour (was hard-coded white 16%, invisible on light) */
+.zappoppop-ribbon-divider {
+    display: inline-block;
+    flex: 0 0 1px;
+    width: 1px;
+    height: 28px;
+    margin: 0 6px;
+    background: var(--zpp-builder-element-border, var(--zpp-builder-border-color, #cbd5e1)) !important;
+}
+
+/* ZPP_TOGGLE_UNIFORM: one slide-switch spec in the inspector: 36x20 track, 16px knob centred (2px inset), 16px travel */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-switch{position:relative !important;display:inline-block !important;flex:0 0 36px !important;width:36px !important;min-width:36px !important;height:20px !important;margin:0 !important;box-sizing:border-box !important;vertical-align:middle !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-switch .zappoppop-gp-slider{position:absolute !important;inset:0 !important;width:36px !important;height:20px !important;border-radius:20px !important;box-sizing:border-box !important;display:block !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-switch .zappoppop-gp-slider::before{content:"" !important;position:absolute !important;left:2px !important;top:50% !important;bottom:auto !important;width:16px !important;height:16px !important;margin:-8px 0 0 0 !important;border-radius:50% !important;box-sizing:border-box !important;transform:translateX(0) !important;-webkit-transform:translateX(0) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-gp-switch input:checked + .zappoppop-gp-slider::before{transform:translateX(16px) !important;-webkit-transform:translateX(16px) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch{position:relative !important;display:inline-block !important;flex:0 0 36px !important;width:36px !important;min-width:36px !important;height:20px !important;margin:0 !important;box-sizing:border-box !important;vertical-align:middle !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch .zappoppop-insp-slider{position:absolute !important;inset:0 !important;width:36px !important;height:20px !important;border-radius:20px !important;box-sizing:border-box !important;display:block !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch .zappoppop-insp-slider::before{content:"" !important;position:absolute !important;left:2px !important;top:50% !important;bottom:auto !important;width:16px !important;height:16px !important;margin:-8px 0 0 0 !important;border-radius:50% !important;box-sizing:border-box !important;transform:translateX(0) !important;-webkit-transform:translateX(0) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-insp-switch input:checked + .zappoppop-insp-slider::before{transform:translateX(16px) !important;-webkit-transform:translateX(16px) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw .zpp-sw-track{position:relative !important;display:block !important;flex:0 0 36px !important;width:36px !important;min-width:36px !important;height:20px !important;border-radius:20px !important;box-sizing:border-box !important;inset:auto !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw .zpp-sw-track::after{content:"" !important;position:absolute !important;left:2px !important;top:50% !important;bottom:auto !important;width:16px !important;height:16px !important;margin:-8px 0 0 0 !important;border-radius:50% !important;box-sizing:border-box !important;transform:translateX(0) !important;-webkit-transform:translateX(0) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw input:checked + .zpp-sw-track::after{transform:translateX(16px) !important;-webkit-transform:translateX(16px) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer span:has(> .zappoppop-up-slider){position:relative !important;display:inline-block !important;flex:0 0 36px !important;width:36px !important;min-width:36px !important;height:20px !important;margin:0 !important;box-sizing:border-box !important;vertical-align:middle !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer span:has(> .zappoppop-up-slider) .zappoppop-up-slider{position:absolute !important;inset:0 !important;width:36px !important;height:20px !important;border-radius:20px !important;box-sizing:border-box !important;display:block !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer span:has(> .zappoppop-up-slider) .zappoppop-up-slider::before{content:"" !important;position:absolute !important;left:2px !important;top:50% !important;bottom:auto !important;width:16px !important;height:16px !important;margin:-8px 0 0 0 !important;border-radius:50% !important;box-sizing:border-box !important;transform:translateX(0) !important;-webkit-transform:translateX(0) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer span:has(> .zappoppop-up-slider) input:checked + .zappoppop-up-slider::before{transform:translateX(16px) !important;-webkit-transform:translateX(16px) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-up-slider{background:var(--zpp-builder-toggle-off-bg) !important}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input:checked + .zappoppop-up-slider{background:var(--zpp-builder-accent-color) !important}
+
+/* ZPP_ACCORDION_HEAD_STABLE: accordion titles keep the themed colour from the first frame; the delayed data-zpp-role retag (content-panel -> divider-row) no longer flashes them transparent. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zpp-ca-head.zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-element-specific-settings > .element-panel > .zappoppop-shape-head.zappoppop-shape-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-gp-basic-Shared > .zpp-ca-head.zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-conditional-logic > .zpp-ca-head.zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-action-routing > .zpp-ca-head.zpp-ca-head {
+    background: var(--zpp-builder-accordion-bg) !important;
+    background-color: var(--zpp-builder-accordion-bg) !important;
+}
+
+/* ZPP_ACCORDION_HEAD_STABLE_TABS: same first-frame guarantee for Style/Logic/Data/Advanced section titles. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-acc-head.zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zappoppop-sec-head.zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-style > .zappoppop-insp-section:not(#zappoppop-form-style-module) > .zpp-tb-head.zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-acc-head.zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zappoppop-sec-head.zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-logic > .zappoppop-insp-section > .zpp-tb-head.zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-acc-head.zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zappoppop-sec-head.zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-data > .zappoppop-insp-section > .zpp-tb-head.zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-acc-head.zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zappoppop-sec-head.zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-advanced > .zappoppop-insp-section > .zpp-tb-head.zpp-tb-head {
+    background: var(--zpp-builder-accordion-bg) !important;
+    background-color: var(--zpp-builder-accordion-bg) !important;
+}
+
+/* ZPP_ACCORDION_GAP: one 12px rhythm between the Content-tab accordions (Animation, element settings, Coordinates). The panel kept 14px below it and Coordinates 12px above it, so that one gap was 26px. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic #zappoppop-element-specific-settings > .element-panel {
+    margin-bottom: 0 !important; /* the flex wrapper around it already adds the 12px gap */
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic #insp-section-coords {
+    margin-top: 12px !important;
+}

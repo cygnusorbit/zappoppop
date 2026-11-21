@@ -1,0 +1,262 @@
+import os, sys, shutil, subprocess
+
+CORE = os.getcwd()
+PRO = os.path.normpath(os.path.join(CORE, '..', 'zappoppop-pro'))
+BK = os.path.join(CORE, '.patch-backups')
+ROOTS = {'core': CORE, 'pro': PRO}
+
+if not os.path.isfile(os.path.join(CORE, 'zappoppop.php')) or not os.path.isfile(os.path.join(PRO, 'zappoppop-pro.php')):
+    sys.exit('ABORT: run from ~/Desktop/zappoppop with ../zappoppop-pro next to it.')
+
+FILES = []   # (root, rel, marker, [(old, new), ...])
+
+NEW = []     # (root, rel, marker, content)
+NEW.append(('pro', 'includes/modules/class-zappoppop-woo-evergreen.php', 'ZPP_WC_P6', '<?php\n/**\n * ZapPopPop Pro: WooCommerce evergreen (per-visitor) coupons.   ZPP_WC_P6\n *\n * The popup\'s coupon code is a TEMPLATE. Each visitor who is about to see the popup gets their own single-use copy\n * of it that expires N minutes after they first see the offer, so the countdown is real and a shared code cannot spread.\n *  - The browser sends only the popup uid; the template code is never printed in the page.\n *  - The visitor\'s coupon is remembered in a signed cookie: the offer is one-time per visitor.\n *  - Per-IP and per-popup limits stop a script from filling the shop with coupons.\n *  - A daily cleanup removes expired, unused copies.\n * Keep the template coupon as a Draft: it then cannot be used directly at checkout, but is still copied.\n *\n * @package ZapPopPop_Pro\n */\n\nif (!defined(\'ABSPATH\')) {\n    exit;\n}\n\nclass ZapPopPop_Woo_Evergreen {\n\n    const ENDPOINT = \'zappoppop_wc_evergreen\';\n    const CRON     = \'zappoppop_wc_ev_cleanup\';\n    const META     = \'_zpp_ev_uid\';\n    const PER_IP   = 3;       /* new coupons per visitor address, popup and day */\n    const PER_HOUR = 300;     /* new coupons per popup and hour */\n    const COOKIE_T = 2592000; /* 30 days */\n\n    public static function boot() {\n        add_action(\'wc_ajax_\' . self::ENDPOINT, array(__CLASS__, \'ajax\'));\n        add_action(self::CRON, array(__CLASS__, \'cleanup\'));\n        add_action(\'init\', array(__CLASS__, \'schedule\'));\n    }\n\n    public static function schedule() {\n        if (!wp_next_scheduled(self::CRON)) {\n            wp_schedule_event(time() + 3600, \'daily\', self::CRON);\n        }\n    }\n\n    /* ---------------------------------------------------------------- settings */\n\n    public static function defaults() {\n        return array(\'ev_on\' => false, \'ev_minutes\' => 30);\n    }\n\n    public static function sanitize($in) {\n        $in = is_array($in) ? $in : array();\n        $on = isset($in[\'ev_on\']) && in_array($in[\'ev_on\'], array(true, 1, \'1\', \'true\', \'on\'), true);\n        $m  = isset($in[\'ev_minutes\']) ? $in[\'ev_minutes\'] : 30;\n        $m  = (is_scalar($m) && is_numeric($m)) ? max(5, min(1440, (int) round((float) $m))) : 30;\n        return array(\'ev_on\' => $on, \'ev_minutes\' => $m);\n    }\n\n    /** True when this popup config hands out per-visitor coupons (needs a template code). */\n    public static function enabled($c) {\n        return is_array($c) && !empty($c[\'ev_on\']) && isset($c[\'coupon_code\']) && $c[\'coupon_code\'] !== \'\';\n    }\n\n    /* ---------------------------------------------------------------- cookie */\n\n    protected static function cookie_name($uid) {\n        return \'zpp_ev_\' . substr(md5((string) $uid), 0, 10);\n    }\n\n    protected static function sign($code, $uid) {\n        return substr(hash_hmac(\'sha256\', $code . \'|\' . $uid, wp_salt(\'auth\')), 0, 20);\n    }\n\n    /** The coupon code stored for this visitor and popup, or \'\' (missing or tampered cookie). */\n    protected static function read_cookie($uid) {\n        $n = self::cookie_name($uid);\n        if (empty($_COOKIE[$n]) || !is_string($_COOKIE[$n])) {\n            return \'\';\n        }\n        $v = explode(\'.\', sanitize_text_field(wp_unslash($_COOKIE[$n])));\n        if (count($v) !== 2 || $v[0] === \'\' || !hash_equals(self::sign($v[0], $uid), (string) $v[1])) {\n            return \'\';\n        }\n        return $v[0];\n    }\n\n    protected static function write_cookie($uid, $code) {\n        if (headers_sent()) {\n            return;\n        }\n        $exp  = time() + self::COOKIE_T;\n        $path = defined(\'COOKIEPATH\') && COOKIEPATH ? COOKIEPATH : \'/\';\n        $val  = $code . \'.\' . self::sign($code, $uid);\n        if (PHP_VERSION_ID >= 70300) {\n            setcookie(self::cookie_name($uid), $val, array(\'expires\' => $exp, \'path\' => $path, \'secure\' => is_ssl(), \'httponly\' => true, \'samesite\' => \'Lax\'));\n        } else {\n            setcookie(self::cookie_name($uid), $val, $exp, $path . \'; samesite=Lax\', \'\', is_ssl(), true);\n        }\n        $_COOKIE[self::cookie_name($uid)] = $val;\n    }\n\n    /* ---------------------------------------------------------------- coupons */\n\n    /** WooCommerce coupon id by code, drafts and private ones included (the template may be a Draft). */\n    protected static function template_id($code) {\n        global $wpdb;\n        $code = wc_format_coupon_code($code);\n        if ($code === \'\') {\n            return 0;\n        }\n        // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- no core API finds draft coupons by code.\n        return (int) $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_type = \'shop_coupon\' AND post_status IN (\'publish\',\'draft\',\'private\') AND post_title = %s ORDER BY ID DESC LIMIT 1", $code));\n    }\n\n    /** A visitor copy: its WC_Coupon when it is ours for this popup, else null. */\n    protected static function own($code, $uid) {\n        $id = function_exists(\'wc_get_coupon_id_by_code\') ? (int) wc_get_coupon_id_by_code($code) : 0;\n        if ($id < 1) {\n            return null;\n        }\n        try {\n            $cp = new WC_Coupon($id);\n        } catch (Throwable $e) {\n            return null;\n        }\n        return ((string) $cp->get_meta(self::META) === (string) $uid) ? $cp : null;\n    }\n\n    protected static function expiry($cp) {\n        $d = $cp->get_date_expires();\n        return $d ? (int) $d->getTimestamp() : 0;\n    }\n\n    /** \'ok\' while the visitor\'s copy can still be used. */\n    protected static function status($cp) {\n        $x = self::expiry($cp);\n        if ($x > 0 && $x <= time()) {\n            return \'expired\';\n        }\n        return ((int) $cp->get_usage_count() > 0) ? \'used\' : \'ok\';\n    }\n\n    /** The code the apply endpoint may apply for this visitor (\'\' = none valid). */\n    public static function code_for($uid, $c) {\n        if (!self::enabled($c)) {\n            return \'\';\n        }\n        $code = self::read_cookie($uid);\n        if ($code === \'\') {\n            return \'\';\n        }\n        $cp = self::own($code, $uid);\n        return ($cp && self::status($cp) === \'ok\') ? $code : \'\';\n    }\n\n    protected static function limited($uid) {\n        $ip = isset($_SERVER[\'REMOTE_ADDR\']) ? sanitize_text_field(wp_unslash($_SERVER[\'REMOTE_ADDR\'])) : \'\';\n        $k1 = \'zpp_ev_ip_\' . md5($uid . \'|\' . $ip . \'|\' . wp_salt(\'auth\'));\n        $k2 = \'zpp_ev_h_\' . md5($uid);\n        return array((int) get_transient($k1) >= self::PER_IP || (int) get_transient($k2) >= self::PER_HOUR, $k1, $k2);\n    }\n\n    protected static function make($uid, $c) {\n        $tid = self::template_id($c[\'coupon_code\']);\n        if ($tid < 1) {\n            return null;\n        }\n        try {\n            $tpl = new WC_Coupon($tid);\n            $now = time();\n            $end = $now + ((int) $c[\'ev_minutes\'] * 60);\n            $tx  = self::expiry($tpl);\n            if ($tx > 0) {\n                $end = min($end, $tx);\n            }\n            if ($end <= $now + 60) {\n                return null; /* the template itself is (almost) expired */\n            }\n            $cp   = null;\n            $code = \'\';\n            for ($i = 0; $i < 4; $i++) {\n                $code = \'ZPP-\' . strtoupper(bin2hex(random_bytes(4)));\n                if ((int) wc_get_coupon_id_by_code($code) < 1) {\n                    $cp = new WC_Coupon();\n                    break;\n                }\n            }\n            if (!$cp) {\n                return null;\n            }\n            $cp->set_code($code);\n            $cp->set_discount_type($tpl->get_discount_type());\n            $cp->set_amount($tpl->get_amount());\n            $cp->set_free_shipping($tpl->get_free_shipping());\n            $cp->set_individual_use($tpl->get_individual_use());\n            $cp->set_exclude_sale_items($tpl->get_exclude_sale_items());\n            $cp->set_product_ids($tpl->get_product_ids());\n            $cp->set_excluded_product_ids($tpl->get_excluded_product_ids());\n            $cp->set_product_categories($tpl->get_product_categories());\n            $cp->set_excluded_product_categories($tpl->get_excluded_product_categories());\n            $cp->set_minimum_amount($tpl->get_minimum_amount());\n            $cp->set_maximum_amount($tpl->get_maximum_amount());\n            $cp->set_usage_limit(1);\n            $cp->set_usage_limit_per_user(1);\n            $cp->set_date_expires($end);\n            $cp->set_description(\'ZapPopPop evergreen coupon (auto-created)\');\n            $cp->update_meta_data(self::META, (string) $uid);\n            if (!$cp->save()) {\n                return null;\n            }\n            return array(\'code\' => $code, \'x\' => $end);\n        } catch (Throwable $e) {\n            return null;\n        }\n    }\n\n    /* ---------------------------------------------------------------- endpoint */\n\n    /** POST uid. Answers {code,x} (the visitor\'s own coupon), {ended:true} (already used or expired) or an error. */\n    public static function ajax() {\n        nocache_headers();\n        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- hands out a server-configured coupon, rate limited; no state of the caller is changed.\n        $uid = isset($_POST[\'uid\']) ? sanitize_text_field(wp_unslash($_POST[\'uid\'])) : \'\';\n        if ($uid === \'\' || !class_exists(\'ZapPopPop_Woo_Cart\') || !ZapPopPop_Woo_Cart::module_active() || !ZapPopPop_Woo_Cart::woo_active() || !class_exists(\'ZapPopPop_Module_Bridge\')) {\n            wp_send_json_error(array(\'message\' => \'inactive\'));\n        }\n        $c = ZapPopPop_Woo_Cart::active(ZapPopPop_Module_Bridge::stored_settings($uid));\n        if (!self::enabled($c)) {\n            wp_send_json_error(array(\'message\' => \'inactive\'));\n        }\n        $have = self::read_cookie($uid);\n        if ($have !== \'\') {\n            $cp = self::own($have, $uid);\n            if ($cp && self::status($cp) === \'ok\') {\n                wp_send_json_success(array(\'code\' => $have, \'x\' => self::expiry($cp), \'now\' => time()));\n            }\n            wp_send_json_success(array(\'ended\' => true)); /* one offer per visitor */\n        }\n        $lim = self::limited($uid);\n        if ($lim[0]) {\n            wp_send_json_error(array(\'message\' => \'limit\'));\n        }\n        $new = self::make($uid, $c);\n        if (!$new) {\n            wp_send_json_error(array(\'message\' => \'inactive\'));\n        }\n        set_transient($lim[1], (int) get_transient($lim[1]) + 1, DAY_IN_SECONDS);\n        set_transient($lim[2], (int) get_transient($lim[2]) + 1, HOUR_IN_SECONDS);\n        self::write_cookie($uid, $new[\'code\']);\n        wp_send_json_success(array(\'code\' => $new[\'code\'], \'x\' => $new[\'x\'], \'now\' => time()));\n    }\n\n    /* ---------------------------------------------------------------- cleanup */\n\n    /** Deletes expired, never-used copies a day after they ended; used copies are kept as history but lose the marker. */\n    public static function cleanup() {\n        global $wpdb;\n        $before = time() - DAY_IN_SECONDS;\n        // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- own marker meta, values prepared.\n        $ids = (array) $wpdb->get_col($wpdb->prepare(\n            "SELECT p.ID FROM {$wpdb->posts} p\n             INNER JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = %s\n             INNER JOIN {$wpdb->postmeta} e ON e.post_id = p.ID AND e.meta_key = \'date_expires\'\n             WHERE p.post_type = \'shop_coupon\' AND e.meta_value <> \'\' AND CAST(e.meta_value AS UNSIGNED) < %d LIMIT 200",\n            self::META,\n            $before\n        ));\n        foreach ($ids as $id) {\n            $id = (int) $id;\n            try {\n                $cp = new WC_Coupon($id);\n                if ((int) $cp->get_usage_count() > 0) {\n                    delete_post_meta($id, self::META);\n                } else {\n                    wp_delete_post($id, true);\n                }\n            } catch (Throwable $e) {\n                unset($e);\n            }\n        }\n    }\n}\n'))
+
+# =====================================================================================================
+# 2. Woo cart class: wiring (defaults, sanitize, boot, frontend, apply, vars, i18n)
+# =====================================================================================================
+FILES.append(('pro', 'includes/modules/class-zappoppop-woo-cart.php', 'ZPP_WC_P6', [
+
+(r"""        ) + ZapPopPop_Woo_Recover::defaults();""", r"""        ) + ZapPopPop_Woo_Recover::defaults() + ZapPopPop_Woo_Evergreen::defaults();"""),
+
+(r"""        ) + ZapPopPop_Woo_Recover::sanitize($in);""", r"""        ) + ZapPopPop_Woo_Recover::sanitize($in) + ZapPopPop_Woo_Evergreen::sanitize($in);"""),
+
+(r"""        ZapPopPop_Woo_Recover::boot(); /* ZPP_WC_P4 */""", r"""        ZapPopPop_Woo_Recover::boot(); /* ZPP_WC_P4 */
+        ZapPopPop_Woo_Evergreen::boot(); /* ZPP_WC_P6 */"""),
+
+(r"""        if ($c['coupon_code'] !== '') {
+            $r['cc'] = $c['coupon_code'];""", r"""        /* e = every visitor gets their own coupon (ZPP_WC_P6): the template code is never printed, em = minutes it lasts (Live Preview). */
+        if (ZapPopPop_Woo_Evergreen::enabled($c)) {
+            $r['e']  = 1;
+            $r['em'] = (int) $c['ev_minutes'];
+            if ($c['coupon_on']) {
+                $r['cm'] = $c['coupon_apply'];
+            }
+        } elseif ($c['coupon_code'] !== '') {
+            $r['cc'] = $c['coupon_code'];"""),
+
+(r"""        $code = wc_format_coupon_code($c['coupon_code']);""", r"""        /* With per-visitor coupons the code is the visitor's own copy, never the template. */
+        $raw = ZapPopPop_Woo_Evergreen::enabled($c) ? ZapPopPop_Woo_Evergreen::code_for($uid, $c) : $c['coupon_code'];
+        if ($raw === '') {
+            wp_send_json_error(array('message' => 'inactive'));
+        }
+        $code = wc_format_coupon_code($raw);"""),
+
+(r"""                'addUrl'   => class_exists('WC_AJAX') ? WC_AJAX::get_endpoint(self::ADD_UP) : '',""", r"""                'addUrl'   => class_exists('WC_AJAX') ? WC_AJAX::get_endpoint(self::ADD_UP) : '',
+                'evUrl'    => class_exists('WC_AJAX') ? WC_AJAX::get_endpoint(ZapPopPop_Woo_Evergreen::ENDPOINT) : '',"""),
+
+(r"""                'Send a follow-up email' => __('Send a follow-up email', 'zappoppop'),""", r"""                'A unique coupon for every visitor' => __('A unique coupon for every visitor', 'zappoppop'),
+                'Each visitor gets their own single-use copy of the coupon above. The code above is only a template: it is never shown in the page, so it can stay a Draft coupon. The offer is made once per visitor.' => __('Each visitor gets their own single-use copy of the coupon above. The code above is only a template: it is never shown in the page, so it can stay a Draft coupon. The offer is made once per visitor.', 'zappoppop'),
+                'Valid for' => __('Valid for', 'zappoppop'),
+                'minutes after the visitor first sees it' => __('minutes after the visitor first sees it', 'zappoppop'),
+                'Send a follow-up email' => __('Send a follow-up email', 'zappoppop'),"""),
+]))
+
+# =====================================================================================================
+# 3. Cron cleanup on uninstall / network deactivation
+# =====================================================================================================
+FILES.append(('pro', 'includes/class-pro-uninstall.php', 'ZPP_WC_P6', [
+(r"""        wp_clear_scheduled_hook('zappoppop_wc_recover_send'); /* ZPP_WC_P4 */""", r"""        wp_clear_scheduled_hook('zappoppop_wc_recover_send'); /* ZPP_WC_P4 */
+        wp_clear_scheduled_hook('zappoppop_wc_ev_cleanup'); /* ZPP_WC_P6 */"""),
+]))
+FILES.append(('pro', 'includes/class-pro-multisite.php', 'ZPP_WC_P6', [
+(r"""        wp_clear_scheduled_hook('zappoppop_wc_recover_send'); /* ZPP_WC_P4 */""", r"""        wp_clear_scheduled_hook('zappoppop_wc_recover_send'); /* ZPP_WC_P4 */
+        wp_clear_scheduled_hook('zappoppop_wc_ev_cleanup'); /* ZPP_WC_P6 */"""),
+]))
+
+# =====================================================================================================
+# 4. Front runtime
+# =====================================================================================================
+FILES.append(('pro', 'assets/js/front/front-woo-cart.js', 'ZPP_WC_P6', [
+
+(r"""    var fired = {};             /* uid -> 1: already shown by this module on this page view */""", r"""    var fired = {};             /* uid -> 1: already shown by this module on this page view */
+    var ev = {}, evBusy = {}, evPrevX = 0;  /* ZPP_WC_P6: per-visitor coupon per popup: { code, x } or { ended: 1 } */"""),
+
+(r"""        r.uid = $w.attr('data-uid') || '';
+        return r;
+    }""", r"""        r.uid = $w.attr('data-uid') || '';
+        r.e = r.e ? 1 : 0;
+        r.em = +r.em || 0;
+        if (r.e) { evOverlay(r); }
+        return r;
+    }
+    /* ZPP_WC_P6: the visitor's own code and expiry replace the (never printed) template. Live Preview shows a sample countdown. */
+    function evOverlay(r) {
+        var e = ev[r.uid];
+        if (isPreview()) {
+            if (!evPrevX) { evPrevX = Math.floor(new Date().getTime() / 1000) + (r.em || 30) * 60; }
+            r.x = evPrevX;
+        } else if (e && e.code) {
+            r.cc = e.code;
+            r.x = +e.x || 0;
+        } else if (e && e.ended) {
+            r.ended = 1;
+        }
+    }"""),
+
+(r"""    function pass(r, c) {
+""", r"""    function pass(r, c) {
+        if (r.ended) { return false; }
+"""),
+
+(r"""        $(SEL).each(function () { var r = parse($(this)); if (r && r.x) { any = true; } });""", r"""        $(SEL).each(function () { var r = parse($(this)); if (r && (r.x || r.e)) { any = true; } });"""),
+
+(r"""    /* Keeps {coupon_countdown} ticking while a popup is open. */""", r"""    /* ZPP_WC_P6: asks the server for this visitor's own coupon, then shows the popup (or keeps it hidden when the offer is over). */
+    function issueEv(uid) {
+        if (evBusy[uid]) { return; }
+        evBusy[uid] = 1;
+        var done = function (ok) { $(document).trigger('zappoppop:wc_released', [uid, ok]); };
+        if (!W.evUrl) { delete evBusy[uid]; done(false); return; }
+        $.ajax({ url: W.evUrl, type: 'POST', dataType: 'json', cache: false, timeout: 8000, data: { uid: uid } })
+            .done(function (res) {
+                var d = (res && res.success) ? res.data : null, $w, r, c, ok = false;
+                if (d && d.code) {
+                    ev[uid] = { code: String(d.code), x: +d.x || 0 };
+                    if (+d.now) { skew = (+d.now * 1000) - new Date().getTime(); }
+                    ok = true;
+                } else if (d && d.ended) {
+                    ev[uid] = { ended: 1 };
+                }
+                if (ok) {
+                    $w = wrap(uid);
+                    r = parse($w);
+                    c = (cart && !cart.failed) ? cart : ZERO;
+                    if (r) { render($w, c, r); maybeApply(uid, r, c); }
+                    startTick();
+                    origShow.call(D, uid);
+                }
+                done(ok);
+            })
+            .fail(function () { done(false); })
+            .always(function () { delete evBusy[uid]; });
+    }
+    /* Keeps {coupon_countdown} ticking while a popup is open. */"""),
+
+(r"""                ok = !r || c.failed || pass(r, c);
+                if (ok) {""", r"""                ok = !r || c.failed || pass(r, c);
+                if (ok && r && r.ended) { ok = false; }
+                if (ok && r && r.e && !ev[uid]) { issueEv(uid); continue; }
+                if (ok) {"""),
+
+(r"""        if (cart.failed) { return origShow.apply(this, arguments); }
+        if (gated && !pass(r, cart)) {
+            if (r.a) { deferred[uid] = 1; }
+            return false;
+        }
+""", r"""        if (cart.failed) {
+            if (gated && r.e) {
+                if (r.ended) { return false; }
+                if (!ev[uid]) { issueEv(uid); return 'wait'; }
+                render($w, ZERO, r);
+            }
+            return origShow.apply(this, arguments);
+        }
+        if (gated && !pass(r, cart)) {
+            if (r.a) { deferred[uid] = 1; }
+            return false;
+        }
+        if (gated && r.e && !ev[uid]) { issueEv(uid); return 'wait'; }
+"""),
+]))
+
+# =====================================================================================================
+# 5. Inspector UI
+# =====================================================================================================
+FILES.append(('pro', 'modules/acc-woo-cart/admin.js', 'ZPP_WC_P6', [
+
+(r"""rc2_delay: [1, 168, 0] };""", r"""rc2_delay: [1, 168, 0], ev_minutes: [5, 1440, 0] };"""),
+
+(r"""rc2_message: '', rc2_coupon: '' }; /* ZPP_WC_P2 ZPP_WC_P3 ZPP_WC_P4 ZPP_WC_P5 */""", r"""rc2_message: '', rc2_coupon: '', ev_on: false, ev_minutes: 30 }; /* ZPP_WC_P2 ZPP_WC_P3 ZPP_WC_P4 ZPP_WC_P5 ZPP_WC_P6 */"""),
+
+(r"""        m.rc2_coupon = txt(raw.rc2_coupon, 80, false).replace(/["']/g, '');
+""", r"""        m.rc2_coupon = txt(raw.rc2_coupon, 80, false).replace(/["']/g, '');
+        m.ev_on = bool(raw.ev_on);
+        m.ev_minutes = (raw.ev_minutes === undefined || raw.ev_minutes === null || raw.ev_minutes === '') ? 30 : num(raw.ev_minutes, 5, 1440, 0);
+"""),
+
+(r"""        $s.append(toggle('data-wcc-flag', 'coupon_on', L('Apply it to the cart automatically')));""", r"""        $s.append(toggle('data-wcc-flag', 'ev_on', L('A unique coupon for every visitor')));
+        $s.append(el('div', { 'data-wcc-when': 'ev_on:true' })
+            .append(hint(L('Each visitor gets their own single-use copy of the coupon above. The code above is only a template: it is never shown in the page, so it can stay a Draft coupon. The offer is made once per visitor.')))
+            .append(numRow('ev_minutes', L('Valid for'), L('minutes after the visitor first sees it'))));
+        $s.append(toggle('data-wcc-flag', 'coupon_on', L('Apply it to the cart automatically')));"""),
+]))
+# =====================================================================================================
+# Pre-flight: every anchor must match exactly once before anything is written
+# =====================================================================================================
+def rd(p):
+    with open(p, 'r', encoding='utf-8') as f:
+        return f.read()
+
+p1 = os.path.join(PRO, 'includes/modules/class-zappoppop-woo-cart.php')
+if not os.path.isfile(p1) or 'ZPP_WC_P5' not in rd(p1):
+    sys.exit('ABORT: Phase 5 is not installed yet. Run the Phase 1 to 5 patches first.')
+
+plan, problems = [], []
+newplan = []
+for root, rel, marker, content in NEW:
+    p = os.path.join(ROOTS[root], rel)
+    if os.path.isfile(p):
+        if marker in rd(p):
+            print('ALREADY    ' + rel)
+        else:
+            problems.append('exists without marker %s: %s/%s' % (marker, root, rel))
+    else:
+        newplan.append((root, rel, p, content))
+for root, rel, marker, pairs in FILES:
+    p = os.path.join(ROOTS[root], rel)
+    if not os.path.isfile(p):
+        problems.append('missing file: %s/%s' % (root, rel))
+        continue
+    txt = rd(p)
+    if marker in txt:
+        print('ALREADY    ' + rel)
+        continue
+    for old, new in pairs:
+        n = txt.count(old)
+        if n != 1:
+            problems.append('%s/%s: anchor found %d times (expected 1): %s' % (root, rel, n, old.strip().split('\n')[0][:80]))
+    plan.append((root, rel, p, txt, pairs))
+
+if problems:
+    sys.exit('ABORT, nothing written:\n  ' + '\n  '.join(problems))
+
+# =====================================================================================================
+# Apply (backups go to core's existing .patch-backups)
+# =====================================================================================================
+if not os.path.isdir(BK):
+    os.makedirs(BK)
+written = []
+for root, rel, p, content in newplan:
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(content)
+    written.append(p)
+    print('CREATED     %s/%s' % (root, rel))
+for root, rel, p, txt, pairs in plan:
+    shutil.copy2(p, os.path.join(BK, root + '__' + rel.replace('/', '__') + '.bak-woocart6'))
+    for old, new in pairs:
+        txt = txt.replace(old, new, 1)
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(txt)
+    written.append(p)
+    print('PATCHED     %s/%s  (%d edit%s)' % (root, rel, len(pairs), '' if len(pairs) == 1 else 's'))
+
+def tool(name):
+    return shutil.which(name)
+
+bad = 0
+for p in written:
+    if p.endswith('.js') and tool('node'):
+        r = subprocess.run(['node', '--check', p], capture_output=True, text=True)
+        if r.returncode:
+            bad += 1
+            print('JS SYNTAX ERROR ' + p + '\n' + r.stderr)
+    elif p.endswith('.php') and tool('php'):
+        r = subprocess.run(['php', '-l', p], capture_output=True, text=True)
+        if r.returncode:
+            bad += 1
+            print('PHP SYNTAX ERROR ' + p + '\n' + r.stdout + r.stderr)
+print('\nDone. %d file(s) patched, %d syntax problem(s). Nothing was committed.' % (len(written), bad))
+if not tool('php'):
+    print('Note: php is not on PATH, so PHP was not linted. Run php -l on every .php file this patch lists above.')

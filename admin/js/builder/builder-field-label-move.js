@@ -1,4 +1,4 @@
-/* ZPP_FL_MOVE: the label controls (Hide Label, Label Position, Label Text Color) belong to the element's own settings block, not to the Layer Name section.
+/* ZPP_FL_MOVE: the label controls (Hide Label, Label Position, Label Text, Field Background, Field Border) belong to the element's own settings block, not to the Layer Name section.
    The existing #zpp-fl-box is re-parented into the visible element panel (#panel-elem-<type>) of the selected layer, so ids, bindings, the JS model,
    the flush, the AJAX whitelist and the renderer are untouched (only the DOM parent changes). Types without an element panel keep it under Layer Name. */
 (function (window, $) {
@@ -30,7 +30,7 @@
         sync();
         var host = document.getElementById(HOST), t = null;
         if (host && window.MutationObserver) {
-            new MutationObserver(function () { window.clearTimeout(t); t = window.setTimeout(sync, 30); }).observe(host, { attributes: true, attributeFilter: ['style', 'class'], subtree: true, childList: false });
+            new MutationObserver(function () { sync(); /* ZPP_FLICKER_FIX: before paint */ window.clearTimeout(t); t = window.setTimeout(sync, 30); }).observe(host, { attributes: true, attributeFilter: ['style', 'class'], subtree: true, childList: false });
         }
         $(document).on('click.zppFlMove', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', burst);
         var n = 0, iv = window.setInterval(function () { sync(); if (++n > 40) { window.clearInterval(iv); } }, 500);

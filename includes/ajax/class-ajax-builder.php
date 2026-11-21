@@ -12,6 +12,7 @@ class ZapPopPop_Ajax_Builder {
         add_action('wp_ajax_zappoppop_builder_save', array($this, 'save_popup'));
         add_action('wp_ajax_zappoppop_save_popup', [$this, 'save_popup']);
         add_action('wp_ajax_zappoppop_load_popup', [$this, 'load_popup']);
+        add_action('wp_ajax_zappoppop_layer_color_presets', [$this, 'save_layer_color_presets']); /* ZPP_LAYER_COLOR_PRESETS */
         add_action('wp_ajax_zappoppop_duplicate_popup', [$this, 'duplicate_popup']);
         add_action('wp_ajax_zappoppop_delete_popup', [$this, 'delete_popup']);
         add_action('wp_ajax_zappoppop_bulk_delete', [$this, 'bulk_delete']);
@@ -29,6 +30,20 @@ class ZapPopPop_Ajax_Builder {
         if (!wp_verify_nonce($nonce, 'zappoppop_builder_nonce') && !wp_verify_nonce($nonce, 'zappoppop_admin_nonce')) {
             wp_send_json_error(['message' => __('Security check failed. Please refresh the page.', 'zappoppop')]);
         }
+    }
+
+    /* ZPP_LAYER_COLOR_PRESETS: per-site list of preset Layer Colors (#rrggbb, max 24) */
+    public function save_layer_color_presets() {
+        $this->verify_security();
+        $raw = isset($_POST['presets']) && is_array($_POST['presets']) ? wp_unslash($_POST['presets']) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in verify_security()
+        $out = array();
+        foreach ($raw as $c) {
+            $c = is_string($c) ? strtolower(trim($c)) : '';
+            if (preg_match('/^#[0-9a-f]{6}$/', $c) && !in_array($c, $out, true)) { $out[] = $c; }
+            if (count($out) >= 24) { break; }
+        }
+        update_option('zappoppop_layer_color_presets', $out, false);
+        wp_send_json_success(array('presets' => $out));
     }
 
     public function save_popup() {
@@ -648,7 +663,7 @@ class ZapPopPop_Ajax_Builder {
         if (isset($el['cookieDays'])) $clean['cookieDays'] = intval($el['cookieDays']);
         if (isset($el['iconClass'])) $clean['iconClass'] = sanitize_text_field($el['iconClass']);
         if (isset($el['iconSize'])) $clean['iconSize'] = intval($el['iconSize']);
-        if (isset($el['progressMode'])) $clean['progressMode'] = in_array($el['progressMode'], array('manual','form','steps'), true) ? $el['progressMode'] : 'manual';
+        if (isset($el['progressMode'])) $clean['progressMode'] = in_array($el['progressMode'], (array) apply_filters('zappoppop_progress_modes', array('manual','form','steps')), true) ? $el['progressMode'] : 'manual';
         if (isset($el['progressPercent'])) $clean['progressPercent'] = max(0, min(100, intval($el['progressPercent'])));
         if (isset($el['progressColor'])) $clean['progressColor'] = ZapPopPop_Color::sanitize($el['progressColor'], null);
         if (isset($el['progressStriped'])) $clean['progressStriped'] = !empty($el['progressStriped']);
@@ -752,6 +767,10 @@ class ZapPopPop_Ajax_Builder {
         if ( isset( $el['fieldLabelPosition'] ) && ! is_array( $el['fieldLabelPosition'] ) ) { $clean['fieldLabelPosition'] = ( (string) $el['fieldLabelPosition'] === 'inside' ) ? 'inside' : 'outside'; } /* ZPP_FL_POSITION */
         if ( isset( $el['showFieldLabel'] ) && ! is_array( $el['showFieldLabel'] ) ) { $clean['showFieldLabel'] = ! ( $el['showFieldLabel'] === false || $el['showFieldLabel'] === 'false' || $el['showFieldLabel'] === 0 || $el['showFieldLabel'] === '0' ); }
         if ( isset( $el['fieldLabelColor'] ) && ! is_array( $el['fieldLabelColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelColor'] ) ) { $clean['fieldLabelColor'] = (string) $el['fieldLabelColor']; }
+        /* ZPP_FIELD_STYLE: field background / border colour (#rgb .. #rrggbbaa; absent = built-in look) */
+        foreach ( array( 'fieldBgColor', 'fieldBorderColor', 'fieldPlaceholderColor' ) as $zpp_fs_k ) {
+            if ( isset( $el[ $zpp_fs_k ] ) && ! is_array( $el[ $zpp_fs_k ] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el[ $zpp_fs_k ] ) ) { $clean[ $zpp_fs_k ] = (string) $el[ $zpp_fs_k ]; }
+        }
         if ( isset( $el['fieldLabelTextColor'] ) && ! is_array( $el['fieldLabelTextColor'] ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $el['fieldLabelTextColor'] ) ) { $clean['fieldLabelTextColor'] = (string) $el['fieldLabelTextColor']; }
         if ( isset( $el['options'] ) && ! is_array( $el['options'] ) ) {
             $clean['options'] = sanitize_textarea_field( wp_unslash( (string)$el['options'] ) );

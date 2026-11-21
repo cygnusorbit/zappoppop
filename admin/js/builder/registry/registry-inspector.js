@@ -251,12 +251,12 @@
             if (pane) {
                 if (allTabs[i] === target) {
                     $(pane).addClass('active');
-                    pane.style.setProperty('display', 'block', 'important');
+                    if (pane.style.getPropertyValue('display') !== 'block' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'block', 'important'); } /* ZPP_FLICKER_FIX */
                     // Ensure direct section cards inside active tab are visible unless explicitly scoped off
                     $(pane).children('.zappoppop-insp-section').not('#zappoppop-form-style-module, #prop-btn-hover-section').show();
                 } else {
                     $(pane).removeClass('active');
-                    pane.style.setProperty('display', 'none', 'important');
+                    if (pane.style.getPropertyValue('display') !== 'none' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'none', 'important'); } /* ZPP_FLICKER_FIX */
                 }
             }
         }

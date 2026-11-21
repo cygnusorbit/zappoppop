@@ -9,7 +9,7 @@
     var ALWAYS = { animation: 'none', animIn: 'none', animStart: 'after', animDuration: 1000, animDelay: 0 };
     var IF_SET = { required: false, requiredMessage: '', autocomplete: 'off' };
     /* ZPP_LD_LABEL: field-label settings (Element Settings panel, no data-prop) join Save / Reset Content as Default; they exist on the model only once changed */
-    var LABEL_KEYS = ['showFieldLabel', 'fieldLabelPosition', 'fieldLabelTextColor'];
+    var LABEL_KEYS = ['showFieldLabel', 'fieldLabelPosition', 'fieldLabelTextColor', 'fieldBgColor', 'fieldBorderColor', 'fieldPlaceholderColor', 'fieldLabelColor']; /* ZPP_FIELD_STYLE, ZPP_FS_PH, ZPP_LAYER_COLOR_ALL */
 
     function core() { return window.ZapPopPopBuilderCore || null; }
     function cid(v) { return String(v || '').replace(/^zappoppop-el-/, '').replace(/^el-/, '').trim(); }

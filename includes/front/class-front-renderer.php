@@ -499,11 +499,38 @@ class ZapPopPop_Front_Renderer {
         return $out;
     }
 
+    /* ZPP_FIELD_STYLE: fieldBgColor / fieldBorderColor recolour the field box of input-like form elements (Live Preview == builder stage).
+       The layer wrapper carries the two CSS variables + marker classes; one scoped rule block applies them to the real controls. */
+    private function zpp_add_field_style(array $el, $html) {
+        if (!is_string($html) || $html === '') { return $html; }
+        $t = strtolower((string) (isset($el['type']) ? $el['type'] : ''));
+        if (!in_array($t, array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'multiselect', 'date', 'time', 'password', 'upload', 'file'), true)) { return $html; }
+        $bg = (isset($el['fieldBgColor']) && is_string($el['fieldBgColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldBgColor'])) ? $el['fieldBgColor'] : '';
+        $bd = (isset($el['fieldBorderColor']) && is_string($el['fieldBorderColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldBorderColor'])) ? $el['fieldBorderColor'] : '';
+        /* ZPP_FS_PH: placeholder colour (only for types that show a placeholder) */
+        $ph = (in_array($t, array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'password'), true) && isset($el['fieldPlaceholderColor']) && is_string($el['fieldPlaceholderColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldPlaceholderColor'])) ? $el['fieldPlaceholderColor'] : '';
+        if ($bg === '' && $bd === '' && $ph === '') { return $html; }
+        $cls = ($bg !== '' ? ' zpp-fs-bg' : '') . ($bd !== '' ? ' zpp-fs-bd' : '') . ($ph !== '' ? ' zpp-fs-ph' : '');
+        $vars = ';' . ($bg !== '' ? '--zpp-fs-bg:' . $bg . ';' : '') . ($bd !== '' ? '--zpp-fs-bd:' . $bd . ';' : '') . ($ph !== '' ? '--zpp-fs-ph:' . $ph . ';' : '');
+        $n1 = 0; $n2 = 0;
+        $out = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bclass="[^"]*?)(")/is', '${1}' . $cls . '$2', $html, 1, $n1);
+        if (!$n1 || !is_string($out)) { return $html; }
+        $out2 = preg_replace('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*?\bstyle="[^"]*?)(")/is', '${1}' . $vars . '$2', $out, 1, $n2);
+        if (!$n2 || !is_string($out2)) { return $html; }
+        $box = 'input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]):not([type=range]):not([type=submit]):not([type=button])';
+        $css = '';
+        if ($bg !== '') { $css .= '.zpp-fs-bg{background-color:transparent!important}'; /* ZPP_FS_OUTER */ $css .= '.zpp-fs-bg ' . $box . ',.zpp-fs-bg select,.zpp-fs-bg textarea,.zpp-fs-bg .zappoppop-ms-wrap,.zpp-fs-bg .zappoppop-upload-dropzone{background-color:var(--zpp-fs-bg)!important}'; }
+        if ($bd !== '') { $css .= '.zpp-fs-bd{border-color:var(--zpp-fs-bd)!important}'; /* ZPP_FS_WRAP: wrapper border from the Style tab */ $css .= '.zpp-fs-bd ' . $box . ',.zpp-fs-bd select,.zpp-fs-bd textarea,.zpp-fs-bd .zappoppop-ms-wrap,.zpp-fs-bd .zappoppop-upload-dropzone{border-color:var(--zpp-fs-bd)!important}'; }
+        if ($ph !== '') { $css .= '.zpp-fs-ph input::placeholder,.zpp-fs-ph textarea::placeholder{color:var(--zpp-fs-ph)!important;opacity:1!important}.zpp-fs-ph input::-moz-placeholder,.zpp-fs-ph textarea::-moz-placeholder{color:var(--zpp-fs-ph)!important;opacity:1!important}.zpp-fs-ph select:has(option[value=""]:checked){color:var(--zpp-fs-ph)!important}'; }
+        return $out2 . '<style>' . $css . '</style>';
+    }
+
     private function render_canvas_element(array $el, array $config = array()) {
         $html = $this->render_canvas_element_core($el, $config);
         $type = isset($el['type']) ? (string) $el['type'] : 'text';
         /* ZPP_FIELD_LABEL: the Layer Name is the visible label of every form element */
         $html = $this->zpp_add_field_label($el, $html);
+        $html = $this->zpp_add_field_style($el, $html); /* ZPP_FIELD_STYLE */
         if (!in_array($type, array('shape', 'icon', 'label', 'text', 'html'), true) || !is_string($html) || $html === '') { return $html; }
         $on = function ($keys) use ($el) {
             foreach ($keys as $k) { if (isset($el[$k])) { return !empty($el[$k]) && $el[$k] !== 'false' && $el[$k] !== '0'; } }

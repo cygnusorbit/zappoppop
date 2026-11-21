@@ -23,6 +23,9 @@
     CSS += '\n' + ROWSEL + '{flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;justify-content:space-between !important;gap:10px}';
     CSS += '\n' + ROWSEL.split(',').join(' > .zappoppop-prop-label,') + ' > .zappoppop-prop-label{width:auto !important;margin:0 !important;flex:1 1 auto}';
     CSS += '\n' + ROWSEL.split(',').join(' > .zappoppop-gp-switch,') + ' > .zappoppop-gp-switch{flex:0 0 auto;margin:0 !important}';
+    /* ZPP_REQUIRED_RIGHT: a row shown with display:block (inline style or a block rule) stacks the label above the switch; keep it a flex row while it is shown, never when it is hidden or its element block is closed */
+    var ROWSHOW = [D + ' #zappoppop-element-specific-settings > .element-panel:not(.zpp-ca-closed) > #insp-row-gp-required', D + ' #zappoppop-element-specific-settings > .element-panel:not(.zpp-ca-closed) #insp-row-email-disposable'].join(':not([style*="display: none"]):not([style*="display:none"]),') + ':not([style*="display: none"]):not([style*="display:none"])';
+    CSS += '\n' + ROWSHOW + '{display:flex !important}';
     function ensureCss() {
         if (document.getElementById('zpp-rm-css')) { return; }
         var st = document.createElement('style');
@@ -65,7 +68,7 @@
         sync();
         var host = document.getElementById(HOST), t = null;
         if (host && window.MutationObserver) {
-            new MutationObserver(function () { window.clearTimeout(t); t = window.setTimeout(sync, 30); }).observe(host, { attributes: true, attributeFilter: ['style', 'class'], subtree: true, childList: false });
+            new MutationObserver(function () { sync(); /* ZPP_FLICKER_FIX: before paint */ window.clearTimeout(t); t = window.setTimeout(sync, 30); }).observe(host, { attributes: true, attributeFilter: ['style', 'class'], subtree: true, childList: false });
         }
         $(document).on('click.zppReqMove', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', burst);
         var n = 0, iv = window.setInterval(function () { sync(); if (++n > 20) { window.clearInterval(iv); } }, 500);

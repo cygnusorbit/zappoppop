@@ -233,6 +233,7 @@ class ZapPopPop_Admin_Assets {
                 'layer_settings' => ZapPopPop_Layer_Settings::builder_payload(),
                 'new_popup_defaults' => class_exists('ZapPopPop_Saved_Defaults') ? ZapPopPop_Saved_Defaults::get('popup') : null,
                 'layer_defaults' => class_exists('ZapPopPop_Saved_Defaults') ? (ZapPopPop_Saved_Defaults::get('layers') ?: null) : null,
+                'layer_color_presets' => (is_array($zpp_lc_saved = get_option('zappoppop_layer_color_presets', null)) ? array_values(array_filter($zpp_lc_saved, 'is_string')) : null), /* ZPP_LAYER_COLOR_PRESETS: null = never saved (JS shows the defaults); an empty array = the user removed them all */
                 'layer_factory' => class_exists('ZapPopPop_Saved_Defaults') ? (self::layer_factory_for_builder() ?: null) : null /* ZPP_LAYER_FACTORY */
             ]);
             $builder_payload = apply_filters('zappoppop_builder_payload', $builder_payload);
@@ -248,6 +249,8 @@ class ZapPopPop_Admin_Assets {
             wp_enqueue_script('zappoppop-builder-field-id-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-id.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-field-label-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-label.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-field-label-move-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-label-move.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-field-label-js'], self::ver(), true); /* ZPP_FL_MOVE */
+            wp_enqueue_script('zappoppop-builder-layer-color-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-layer-color.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-field-label-js'], self::ver(), true); /* ZPP_LAYER_COLOR_PRESETS */
+            wp_enqueue_script('zappoppop-builder-field-style-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-field-style.js', ['jquery', 'zappoppop-builder-core-js', 'zappoppop-builder-field-label-js'], self::ver(), true); /* ZPP_FIELD_STYLE */
             wp_enqueue_script('zappoppop-builder-alt-copy-guard-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-alt-copy-guard.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-form-cards-acc-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-form-cards-acc.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);
             wp_enqueue_script('zappoppop-builder-required-move-js', ZAPPOPPOP_URL . 'admin/js/builder/builder-required-move.js', ['jquery', 'zappoppop-builder-core-js'], self::ver(), true);

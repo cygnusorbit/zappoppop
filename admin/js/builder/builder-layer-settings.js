@@ -126,7 +126,7 @@
                         el.setAttribute('data-zpp-ls-set', '1');
                         el.setAttribute('data-zpp-ls-prev', el.style.getPropertyValue('display') + '|' + el.style.getPropertyPriority('display'));
                     }
-                    el.style.setProperty('display', on ? 'inline-block' : 'none', 'important');
+                    var zppV = on ? 'inline-block' : 'none'; if (el.style.getPropertyValue('display') !== zppV || el.style.getPropertyPriority('display') !== 'important') { el.style.setProperty('display', zppV, 'important'); } /* ZPP_FLICKER_FIX */
                 } else if (el.hasAttribute('data-zpp-ls-set')) {
                     var prev = (el.getAttribute('data-zpp-ls-prev') || '|').split('|');
                     el.removeAttribute('data-zpp-ls-set');
@@ -156,11 +156,53 @@
         if (type) { applyType(type); }
     }
 
+    /* ZPP_FLICKER_FIX: one pending re-sync per delay (nested selection wrappers used to queue 9+ identical passes per click) */
+    var settleT = {};
     function settle() {
         syncTabs(currentType());
-        setTimeout(function () { syncTabs(currentType()); }, 0);
-        setTimeout(function () { syncTabs(currentType()); }, 120);
-        setTimeout(function () { syncTabs(currentType()); }, 400);
+        [0, 120, 400].forEach(function (ms) {
+            if (settleT[ms]) { return; }
+            settleT[ms] = setTimeout(function () { settleT[ms] = 0; syncTabs(currentType()); }, ms);
+        });
+    }
+
+    /* ZPP_FLICKER_FIX: the Inspector re-renders on every selection; keep the scroll position of the drawer body and the panes across it */
+    var keepDepth = 0;
+    function keepScroll(run) {
+        if (keepDepth) { return run(); }
+        var d = drawer(), saved = [];
+        if (d && d.classList.contains('is-open')) {
+            var nodes = [document.getElementById('zappoppop-inspector-body')];
+            TAB_KEYS.forEach(function (k) { nodes.push(document.getElementById('insp-tab-' + k)); });
+            nodes.forEach(function (n) { if (n && n.scrollTop > 0) { saved.push([n, n.scrollTop]); } });
+        }
+        keepDepth++;
+        try { return run(); }
+        finally {
+            keepDepth--;
+            if (saved.length) { holdScroll(saved); }
+        }
+    }
+
+    /* The Inspector finishes re-rendering over the next few hundred ms (timers in builder-inspector.js); a pane that is briefly shorter
+       clamps scrollTop and never gets it back. Re-assert the saved position every frame for 900 ms, until the user scrolls or clicks in the drawer. */
+    var hold = null, userAt = 0, userBound = false;
+    function holdScroll(saved) {
+        var d = drawer(), now = Date.now();
+        /* the Inspector's later open() calls fire after the pane was already clamped: keep the positions captured at the first call */
+        if (hold && now <= hold.until && userAt < hold.started) { hold.until = now + 900; return; }
+        var h = hold = { saved: saved, started: now, until: now + 900 };
+        if (d && !userBound) {
+            userBound = true;
+            ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) {
+                d.addEventListener(ev, function () { userAt = Date.now(); }, { capture: true, passive: true });
+            });
+        }
+        (function step() {
+            if (hold !== h || userAt >= h.started || Date.now() > h.until) { return; }
+            h.saved.forEach(function (s) { if (s[0].scrollTop !== s[1]) { s[0].scrollTop = s[1]; } });
+            window.requestAnimationFrame(step);
+        })();
     }
 
     // Capture phase: runs before the selection handlers re-render the Inspector. Never blocks the event.
@@ -180,7 +222,8 @@
         var orig = obj[name];
         obj[name] = function (idOrObj) {
             applyId(idOrObj && typeof idOrObj === 'object' ? idOrObj.id : idOrObj);
-            var res = orig.apply(this, arguments);
+            var zppSelf = this, zppArgs = arguments;
+            var res = keepScroll(function () { return orig.apply(zppSelf, zppArgs); });
             settle();
             return res;
         };
@@ -194,7 +237,8 @@
             var origSel = window.selectLayerEverywhere;
             window.selectLayerEverywhere = function (idOrObj) {
                 applyId(idOrObj && typeof idOrObj === 'object' ? idOrObj.id : idOrObj);
-                var res = origSel.apply(this, arguments);
+                var zppSelf = this, zppArgs = arguments;
+                var res = keepScroll(function () { return origSel.apply(zppSelf, zppArgs); });
                 settle();
                 return res;
             };

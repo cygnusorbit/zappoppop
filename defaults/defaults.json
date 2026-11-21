@@ -29,13 +29,19 @@
             "range_slider": 0,
             "modules": {
                 "acc-01-canvas-styling": 1,
+                "acc-animation": 1,
                 "acc-display-triggers": 1,
-                "acc-notifications": 1
+                "acc-popup-overlay": 1,
+                "acc-notifications": 1,
+                "acc-woo-cart": 1
             },
             "module_order": [
                 "acc-01-canvas-styling",
                 "acc-display-triggers",
-                "acc-notifications"
+                "acc-notifications",
+                "acc-animation",
+                "acc-popup-overlay",
+                "acc-woo-cart"
             ],
             "builder_alignment_tool": 1,
             "builder_viewport_toggle": 0,
@@ -44,6 +50,7 @@
             "builder_extra_elements": 0,
             "builder_click_canvas_settings": 0,
             "builder_click_element_settings": 0,
+            "builder_hide_field_labels": 1,
             "builder_guide": 1,
             "builder_guide_steps_on": 1,
             "builder_guide_steps": [
@@ -177,16 +184,10 @@
                 },
                 "text": {
                     "style": {
-                        "opacity": 1,
                         "bg": 1,
                         "typo": 1,
-                        "padding": 1,
                         "border": 1,
-                        "shadow": 1,
-                        "hover": 1,
-                        "css": 1,
-                        "textAlign": 1,
-                        "submitAlign": 1
+                        "shadow": 1
                     },
                     "data": {
                         "rating_data": 1
@@ -197,21 +198,20 @@
                 },
                 "email": {
                     "style": {
-                        "opacity": 1,
                         "bg": 1,
                         "typo": 1,
-                        "padding": 1,
                         "border": 1,
-                        "shadow": 1,
-                        "hover": 1,
-                        "css": 1,
-                        "textAlign": 1,
-                        "submitAlign": 1
+                        "shadow": 1
                     }
                 },
                 "select": {
                     "style": {
                         "typo": 1,
+                        "border": 1
+                    }
+                },
+                "checkboxgroup": {
+                    "style": {
                         "border": 1
                     }
                 },
@@ -336,7 +336,7 @@
             "geoip_service": "none",
             "geoip_api_service": "none"
         },
-        "saved": 1795179259
+        "saved": 1795207689
     },
     "theme": {
         "data": {
@@ -834,66 +834,6 @@
                         "trim"
                     ],
                     "validators": []
-                }
-            },
-            "text": {
-                "basic": {
-                    "content": "Enter your text...",
-                    "goto_canvas": 2,
-                    "placeholder": "",
-                    "maxLength": "",
-                    "autocomplete": "on",
-                    "animation": "none",
-                    "animIn": "none",
-                    "animStart": "after",
-                    "animDuration": 1000,
-                    "animDelay": 0,
-                    "required": true,
-                    "requiredMessage": "",
-                    "fieldLabelPosition": "inside",
-                    "left": 75,
-                    "top": 132,
-                    "width": 200,
-                    "height": 42,
-                    "w": 200,
-                    "h": 42
-                },
-                "style": {
-                    "textAlign": "left",
-                    "iconLeft": "",
-                    "iconLeftOffset": 10,
-                    "iconLeftColor": "#64748b",
-                    "iconRight": "",
-                    "iconRightOffset": 10,
-                    "iconRightColor": "#64748b",
-                    "opacity": 1,
-                    "fontSize": "13",
-                    "fontWeight": "400",
-                    "lineHeight": 1.4,
-                    "letterSpacing": 0,
-                    "borderWidth": "1",
-                    "borderColor": "#d4d4d4",
-                    "borderRadius": "5"
-                },
-                "logic": {
-                    "logicEnabled": false,
-                    "logicAction": "show",
-                    "logicMatch": "all",
-                    "logicRules": [],
-                    "goto_canvas": 2,
-                    "goto_screen": 2
-                },
-                "advanced": {
-                    "inputMask": "",
-                    "errorMessage": "",
-                    "validatorEqual": "",
-                    "validatorList": "",
-                    "filters": [
-                        "trim"
-                    ],
-                    "validators": [
-                        "required"
-                    ]
                 }
             },
             "submit": {
@@ -2006,6 +1946,6 @@
                 }
             }
         },
-        "saved": 1795185876
+        "saved": 1795235363
     }
 }

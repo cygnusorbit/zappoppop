@@ -194,9 +194,11 @@
     /* ZPP_LO_SIG: skip the remove/re-insert churn when nothing structural changed (was repainting the Content tab on every layer click) */
     var lastSig = '';
     function sig(d) {
-        var s = d.getAttribute(ATTR) || '', n = d.querySelectorAll('[id]'), i;
-        for (i = 0; i < n.length; i++) { s += '|' + n[i].id; }
-        return s;
+        /* ZPP_FLICKER_FIX: order-independent. Rows that builder-field-label-move / builder-required-move re-parent after the first pass only change the id ORDER,
+           which used to trigger a second full remove + re-insert (48-56 nodes) per click. A new / removed id or a new layer type still re-runs. */
+        var n = d.querySelectorAll('[id]'), i, ids = [];
+        for (i = 0; i < n.length; i++) { ids.push(n[i].id); }
+        return (d.getAttribute(ATTR) || '') + '|' + ids.sort().join('|');
     }
     function editing(d) {
         var a = document.activeElement;

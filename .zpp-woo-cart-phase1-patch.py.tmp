@@ -1,0 +1,1223 @@
+import os, sys, shutil, subprocess
+
+CORE = os.getcwd()
+PRO = os.path.normpath(os.path.join(CORE, '..', 'zappoppop-pro'))
+FORCE = os.environ.get('FORCE') == '1'
+BK = os.path.join(CORE, '.patch-backups')
+
+if not os.path.isfile(os.path.join(CORE, 'zappoppop.php')) or not os.path.isfile(os.path.join(PRO, 'zappoppop-pro.php')):
+    sys.exit('ABORT: run from ~/Desktop/zappoppop with ../zappoppop-pro next to it.')
+
+NEW = {}
+EDITS = []
+
+# ---------------------------------------------------------------------------------------------------------------
+# 1. Server class
+# ---------------------------------------------------------------------------------------------------------------
+NEW['includes/modules/class-zappoppop-woo-cart.php'] = r'''<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * WooCommerce Cart module (Pro). ZPP_WC_CART
+ * Cart-aware display rules, a cart-state bridge for the front end and live cart text tokens.
+ *
+ * Shape: settings.woo_cart = {
+ *   enabled, cart (any|has_items|empty), min_items, min_total, max_total,
+ *   products[] (product / variation ids), cats[] (product_cat term ids), show_on_add, free_ship_min
+ * }
+ * Defaults are never stored. A popup behaves exactly as before unless this module is installed, switched on in
+ * Settings > Modules and enabled for the popup. Rules are evaluated in the browser (front-woo-cart.js) from a
+ * no-cache WooCommerce endpoint, so a full-page cache can never show one visitor's cart to another.
+ * No WooCommerce code lives in core: everything attaches through core filters and actions.
+ */
+class ZapPopPop_Woo_Cart {
+
+    const MODULE_KEY = 'acc-woo-cart';
+    const KEY        = 'woo_cart';
+    const ENDPOINT   = 'zappoppop_wc_cart_state';
+    const CARTS      = array('any', 'has_items', 'empty');
+    const MAX_AMOUNT = 9999999;
+
+    protected static $booted = false;
+
+    public static function boot() {
+        if (self::$booted) {
+            return;
+        }
+        self::$booted = true;
+
+        /* Feature compatibility is declared whether or not the module is switched on. */
+        if (did_action('before_woocommerce_init')) {
+            self::declare_compat();
+        } else {
+            add_action('before_woocommerce_init', array(__CLASS__, 'declare_compat'));
+        }
+
+        add_filter('zappoppop_extension_settings_keys', array(__CLASS__, 'extension_keys'));
+        add_filter('zappoppop_handled_settings_keys', array(__CLASS__, 'handled_keys'));
+        add_filter('zappoppop_module_adoptable_keys', array(__CLASS__, 'adoptable_keys'));
+        add_filter('zappoppop_sanitize_popup_settings', array(__CLASS__, 'sanitize_settings'), 11, 2);
+        add_filter('zappoppop_popup_wrapper_attrs', array(__CLASS__, 'wrapper_attrs'), 11, 3);
+        add_action('zappoppop_front_enqueue', array(__CLASS__, 'front_assets'));
+        add_filter('zappoppop_front_vars', array(__CLASS__, 'front_vars'));
+        add_action('zappoppop_admin_builder_assets', array(__CLASS__, 'localize_builder'), 21);
+        add_action('wc_ajax_' . self::ENDPOINT, array(__CLASS__, 'ajax_cart_state'));
+    }
+
+    /* ---------------------------------------------------------------- WooCommerce compatibility */
+
+    public static function declare_compat() {
+        if (!class_exists('Automattic\WooCommerce\Utilities\FeaturesUtil') || !defined('ZAPPOPPOP_PRO_FILE')) {
+            return;
+        }
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', ZAPPOPPOP_PRO_FILE, true);
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', ZAPPOPPOP_PRO_FILE, true);
+    }
+
+    public static function woo_active() {
+        return class_exists('WooCommerce') && function_exists('WC');
+    }
+
+    /** Settings > Modules switch. A module that is switched off or deleted never affects the front end. */
+    public static function module_active() {
+        if (!class_exists('ZapPopPop_Modules')) {
+            return true;
+        }
+        /* Not registered: the bundled package is seeded on the first admin load, so stay on until then. A deleted module is off. */
+        if (!ZapPopPop_Modules::get(self::MODULE_KEY)) {
+            $orphans = ZapPopPop_Modules::orphans();
+            return !isset($orphans[self::MODULE_KEY]);
+        }
+        if (!class_exists('ZapPopPop_Admin_Settings')) {
+            require_once ZAPPOPPOP_PATH . 'includes/admin/class-admin-settings.php';
+        }
+        return ZapPopPop_Admin_Settings::module_enabled(self::MODULE_KEY);
+    }
+
+    /* ---------------------------------------------------------------- model */
+
+    public static function defaults() {
+        return array(
+            'enabled'       => false,
+            'cart'          => 'any',
+            'min_items'     => 0,
+            'min_total'     => 0,
+            'max_total'     => 0,
+            'products'      => array(),
+            'cats'          => array(),
+            'show_on_add'   => false,
+            'free_ship_min' => 0,
+        );
+    }
+
+    private static function flag($v) {
+        return in_array($v, array(true, 1, '1', 'true', 'on'), true);
+    }
+
+    private static function num($v, $min, $max) {
+        if (!is_scalar($v) || !is_numeric($v)) {
+            return $min;
+        }
+        return max($min, min($max, (int) round((float) $v)));
+    }
+
+    /** Money-like amount, 0 = off. Whole numbers stay integers so a stored default compares equal to the factory default. */
+    private static function money($v) {
+        if (!is_scalar($v) || !is_numeric($v)) {
+            return 0;
+        }
+        $n = round(max(0, min((float) self::MAX_AMOUNT, (float) $v)), 2);
+        return ($n == floor($n)) ? (int) $n : $n;
+    }
+
+    private static function ids($v) {
+        $out = array();
+        if (!is_array($v)) {
+            return $out;
+        }
+        foreach (array_slice($v, 0, 500) as $x) {
+            if (is_scalar($x)) {
+                $n = absint($x);
+                if ($n) {
+                    $out[$n] = $n;
+                }
+            }
+            if (count($out) >= 200) {
+                break;
+            }
+        }
+        return array_values($out);
+    }
+
+    /** Backend AJAX whitelist. Returns a clean array. */
+    public static function sanitize($raw) {
+        $in = json_decode(wp_json_encode($raw), true);
+        if (!is_array($in)) {
+            $in = array();
+        }
+        $d = self::defaults();
+        $g = function ($k) use ($in, $d) {
+            return array_key_exists($k, $in) ? $in[$k] : $d[$k];
+        };
+        $cart = $g('cart');
+        $cart = (is_string($cart) && in_array($cart, self::CARTS, true)) ? $cart : 'any';
+        $min  = self::money($g('min_total'));
+        $max  = self::money($g('max_total'));
+        if ($min > 0 && $max > 0 && $min > $max) {
+            $t   = $min;
+            $min = $max;
+            $max = $t;
+        }
+        return array(
+            'enabled'       => self::flag($g('enabled')),
+            'cart'          => $cart,
+            'min_items'     => self::num($g('min_items'), 0, 9999),
+            'min_total'     => $min,
+            'max_total'     => $max,
+            'products'      => self::ids($g('products')),
+            'cats'          => self::ids($g('cats')),
+            'show_on_add'   => self::flag($g('show_on_add')),
+            'free_ship_min' => self::money($g('free_ship_min')),
+        );
+    }
+
+    /** Clean config of a popup, or null when the module is off / not enabled for it. */
+    public static function active($settings) {
+        if (!is_array($settings) || !isset($settings[self::KEY])) {
+            return null;
+        }
+        $c = self::sanitize($settings[self::KEY]);
+        if (!$c['enabled'] || !self::module_active()) {
+            return null;
+        }
+        return $c;
+    }
+
+    /* ---------------------------------------------------------------- core extension points */
+
+    public static function extension_keys($keys) {
+        $keys = is_array($keys) ? $keys : array();
+        if (!in_array(self::KEY, $keys, true)) {
+            $keys[] = self::KEY;
+        }
+        return $keys;
+    }
+
+    public static function handled_keys($keys) {
+        return array_merge((array) $keys, array(self::KEY));
+    }
+
+    public static function adoptable_keys($keys) {
+        $keys = is_array($keys) ? $keys : array();
+        if (!in_array(self::KEY, $keys, true)) {
+            $keys[] = self::KEY;
+        }
+        return $keys;
+    }
+
+    /** Save / template: allow-lists settings.woo_cart. Defaults are never stored. */
+    public static function sanitize_settings($settings, $ctx) {
+        if (!is_object($settings)) {
+            return $settings;
+        }
+        $raw = (is_array($ctx) && isset($ctx['raw']) && is_array($ctx['raw'])) ? $ctx['raw'] : array();
+        if (isset($raw[self::KEY])) {
+            $clean = self::sanitize($raw[self::KEY]);
+            if ($clean != self::defaults()) {
+                $settings->{self::KEY} = json_decode(wp_json_encode($clean));
+            }
+        }
+        return $settings;
+    }
+
+    /** data-wc-cart carries the compact rule set to the browser. Only non-default rules are listed. */
+    public static function frontend($settings) {
+        $c = self::active($settings);
+        if ($c === null) {
+            return '';
+        }
+        $r = array('c' => $c['cart']);
+        if ($c['cart'] !== 'empty') {
+            if ($c['min_items'] > 0) {
+                $r['mi'] = $c['min_items'];
+            }
+            if ($c['min_total'] > 0) {
+                $r['mn'] = $c['min_total'];
+            }
+            if ($c['max_total'] > 0) {
+                $r['mx'] = $c['max_total'];
+            }
+            if ($c['products']) {
+                $r['p'] = $c['products'];
+            }
+            if ($c['cats']) {
+                $r['k'] = $c['cats'];
+            }
+        }
+        if ($c['show_on_add']) {
+            $r['a'] = 1;
+        }
+        if ($c['free_ship_min'] > 0) {
+            $r['f'] = $c['free_ship_min'];
+        }
+        return ' data-wc-cart="' . esc_attr(wp_json_encode($r)) . '"';
+    }
+
+    public static function wrapper_attrs($attrs, $settings, $args) {
+        return (string) $attrs . self::frontend(is_array($settings) ? $settings : array());
+    }
+
+    /* ---------------------------------------------------------------- cart-state bridge */
+
+    /** Visitor's live cart as plain numbers and ids. Never cached: reached through WooCommerce's ?wc-ajax= endpoint. */
+    public static function cart_state() {
+        $out = array('count' => 0, 'subtotal' => 0, 'total' => 0, 'products' => array(), 'cats' => array(), 'coupons' => array(), 'free_min' => 0);
+        if (!self::woo_active()) {
+            return $out;
+        }
+        if (function_exists('wc_load_cart') && null === WC()->cart) {
+            wc_load_cart();
+        }
+        $cart = WC()->cart;
+        if (!$cart) {
+            return $out;
+        }
+        try {
+            $dec              = function_exists('wc_get_price_decimals') ? (int) wc_get_price_decimals() : 2;
+            $out['count']     = (int) $cart->get_cart_contents_count();
+            $out['subtotal']  = round((float) $cart->get_displayed_subtotal(), $dec);
+            $out['total']     = round((float) $cart->get_total('edit'), $dec);
+            $pids             = array();
+            $cids             = array();
+            foreach ((array) $cart->get_cart() as $line) {
+                if (empty($line['product_id'])) {
+                    continue;
+                }
+                $pid        = (int) $line['product_id'];
+                $pids[$pid] = $pid;
+                if (!empty($line['variation_id'])) {
+                    $vid        = (int) $line['variation_id'];
+                    $pids[$vid] = $vid;
+                }
+                foreach ((array) wc_get_product_term_ids($pid, 'product_cat') as $tid) {
+                    $tid        = (int) $tid;
+                    $cids[$tid] = $tid;
+                    foreach ((array) get_ancestors($tid, 'product_cat', 'taxonomy') as $aid) {
+                        $aid        = (int) $aid;
+                        $cids[$aid] = $aid;
+                    }
+                }
+            }
+            $out['products'] = array_values($pids);
+            $out['cats']     = array_values($cids);
+            $out['coupons']  = array_values(array_map('strval', (array) $cart->get_applied_coupons()));
+            $out['free_min'] = self::free_shipping_min($cart);
+        } catch (Throwable $e) {
+            /* A broken third-party hook must never break the popup: return what was read so far. */
+            unset($e);
+        }
+        return $out;
+    }
+
+    /** Minimum order amount of the free shipping method that serves this visitor's address (0 = none found). */
+    protected static function free_shipping_min($cart) {
+        if (!class_exists('WC_Shipping_Zones')) {
+            return 0;
+        }
+        $package  = null;
+        $packages = (array) $cart->get_shipping_packages();
+        if ($packages) {
+            $package = reset($packages);
+        }
+        if (!is_array($package) || empty($package['destination'])) {
+            $c = WC()->customer;
+            if (!$c) {
+                return 0;
+            }
+            $package = array('destination' => array(
+                'country'   => (string) $c->get_shipping_country(),
+                'state'     => (string) $c->get_shipping_state(),
+                'postcode'  => (string) $c->get_shipping_postcode(),
+                'city'      => (string) $c->get_shipping_city(),
+                'address'   => (string) $c->get_shipping_address(),
+                'address_1' => (string) $c->get_shipping_address(),
+                'address_2' => (string) $c->get_shipping_address_2(),
+            ));
+        }
+        $zone = WC_Shipping_Zones::get_zone_matching_package($package);
+        foreach ($zone->get_shipping_methods(true) as $method) {
+            if ($method->id !== 'free_shipping') {
+                continue;
+            }
+            $req = (string) $method->get_option('requires');
+            if (in_array($req, array('min_amount', 'either', 'both'), true)) {
+                return (float) $method->get_option('min_amount');
+            }
+        }
+        return 0;
+    }
+
+    public static function ajax_cart_state() {
+        if (!self::module_active()) {
+            wp_send_json_error(array('message' => 'inactive'));
+        }
+        nocache_headers();
+        wp_send_json_success(self::cart_state());
+    }
+
+    /* ---------------------------------------------------------------- front end */
+
+    public static function front_assets() {
+        if (!self::module_active()) {
+            return;
+        }
+        wp_enqueue_script('zappoppop-front-woo-cart-js', ZAPPOPPOP_PRO_URL . 'assets/js/front/front-woo-cart.js', array('jquery', 'zappoppop-front-js'), ZAPPOPPOP_PRO_VERSION, true);
+    }
+
+    public static function front_vars($vars) {
+        if (!is_array($vars) || !self::module_active()) {
+            return $vars;
+        }
+        $w = array('active' => false);
+        if (self::woo_active()) {
+            $w = array(
+                'active'   => true,
+                'endpoint' => class_exists('WC_AJAX') ? WC_AJAX::get_endpoint(self::ENDPOINT) : '',
+                'fmt'      => array(
+                    'symbol' => self::symbol(),
+                    'pos'    => (string) get_option('woocommerce_currency_pos', 'left'),
+                    'dec'    => (int) wc_get_price_decimals(),
+                    'dsep'   => (string) wc_get_price_decimal_separator(),
+                    'tsep'   => (string) wc_get_price_thousand_separator(),
+                ),
+            );
+        }
+        $vars['wc'] = $w;
+        return $vars;
+    }
+
+    protected static function symbol() {
+        return self::woo_active() ? html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8') : '$';
+    }
+
+    /* ---------------------------------------------------------------- builder */
+
+    protected static function cats_list() {
+        if (!taxonomy_exists('product_cat')) {
+            return array();
+        }
+        $terms = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => false, 'number' => 500, 'orderby' => 'name'));
+        if (is_wp_error($terms) || !is_array($terms)) {
+            return array();
+        }
+        $out = array();
+        foreach ($terms as $t) {
+            $out[] = array((string) $t->term_id, wp_strip_all_tags((string) $t->name));
+        }
+        return $out;
+    }
+
+    public static function localize_builder() {
+        if (!class_exists('ZapPopPop_Modules') || !ZapPopPop_Modules::is_installed(self::MODULE_KEY) || !wp_script_is('zappoppop-builder-ext-js', 'enqueued')) {
+            return;
+        }
+        wp_localize_script('zappoppop-builder-ext-js', 'ZapPopPopWooCartData', array(
+            'wc_active' => self::woo_active(),
+            'symbol'    => self::symbol(),
+            'cats'      => self::cats_list(),
+            'i18n'      => array(
+                'WooCommerce Cart' => __('WooCommerce Cart', 'zappoppop'),
+                'Turn the WooCommerce cart features for this popup on or off' => __('Turn the WooCommerce cart features for this popup on or off', 'zappoppop'),
+                'Enable WooCommerce Cart' => __('Enable WooCommerce Cart', 'zappoppop'),
+                'Cart-aware display rules and live cart text for this popup.' => __('Cart-aware display rules and live cart text for this popup.', 'zappoppop'),
+                'WooCommerce is not active on this site, so the cart rules are ignored.' => __('WooCommerce is not active on this site, so the cart rules are ignored.', 'zappoppop'),
+                'Show this popup when the cart is' => __('Show this popup when the cart is', 'zappoppop'),
+                'Any' => __('Any', 'zappoppop'),
+                'Has items' => __('Has items', 'zappoppop'),
+                'Empty' => __('Empty', 'zappoppop'),
+                'Empty ignores the conditions below.' => __('Empty ignores the conditions below.', 'zappoppop'),
+                'Cart conditions' => __('Cart conditions', 'zappoppop'),
+                'Minimum items' => __('Minimum items', 'zappoppop'),
+                'Minimum subtotal' => __('Minimum subtotal', 'zappoppop'),
+                'Maximum subtotal' => __('Maximum subtotal', 'zappoppop'),
+                'items' => __('items', 'zappoppop'),
+                'A value of 0 turns that condition off.' => __('A value of 0 turns that condition off.', 'zappoppop'),
+                'Product IDs' => __('Product IDs', 'zappoppop'),
+                'Comma-separated. The popup shows when any of these products is in the cart. Empty = off.' => __('Comma-separated. The popup shows when any of these products is in the cart. Empty = off.', 'zappoppop'),
+                'Product categories' => __('Product categories', 'zappoppop'),
+                'Search...' => __('Search...', 'zappoppop'),
+                'Nothing found.' => __('Nothing found.', 'zappoppop'),
+                'No product categories found.' => __('No product categories found.', 'zappoppop'),
+                'The popup shows when the cart holds a product from any selected category. None selected = off.' => __('The popup shows when the cart holds a product from any selected category. None selected = off.', 'zappoppop'),
+                'Show right after an item is added to the cart' => __('Show right after an item is added to the cart', 'zappoppop'),
+                'Works with AJAX add to cart and the cart block. Shown once per page view, and only when the conditions above match.' => __('Works with AJAX add to cart and the cart block. Shown once per page view, and only when the conditions above match.', 'zappoppop'),
+                'Free shipping' => __('Free shipping', 'zappoppop'),
+                'Free shipping threshold' => __('Free shipping threshold', 'zappoppop'),
+                '0 = detect it from your WooCommerce free shipping method.' => __('0 = detect it from your WooCommerce free shipping method.', 'zappoppop'),
+                'Dynamic text' => __('Dynamic text', 'zappoppop'),
+                'Type these into any text layer. Live Preview shows sample values; visitors see their own cart.' => __('Type these into any text layer. Live Preview shows sample values; visitors see their own cart.', 'zappoppop'),
+                'Cart total' => __('Cart total', 'zappoppop'),
+                'Cart subtotal' => __('Cart subtotal', 'zappoppop'),
+                'Number of items' => __('Number of items', 'zappoppop'),
+                'Amount left for free shipping' => __('Amount left for free shipping', 'zappoppop'),
+                'Applied coupon code' => __('Applied coupon code', 'zappoppop'),
+            ),
+        ));
+    }
+}
+'''
+
+# ---------------------------------------------------------------------------------------------------------------
+# 2. Front-end runtime
+# ---------------------------------------------------------------------------------------------------------------
+NEW['assets/js/front/front-woo-cart.js'] = r'''/**
+ * ZapPopPop Pro Front: WooCommerce Cart runtime.   ZPP_WC_CART
+ * - Cart-state bridge: reads the visitor's live cart from a no-cache WooCommerce endpoint, so full-page caches stay safe.
+ * - Display rules: reads data-wc-cart (ZapPopPop_Woo_Cart::frontend) and gates ZapPopPopFrontDisplay.show().
+ *   show() answers false (blocked) or 'wait' (cart still loading) so a blocked view is never counted as seen.
+ * - Dynamic text: {cart_total} {cart_subtotal} {cart_count} {shipping_remaining} {free_shipping_min} {coupon_code}.
+ * - Fails open: if the cart cannot be read, popups show as they did before.
+ * Skips gating for manual (button / shortcode) and inline popups. Live Preview uses sample values.
+ * Cross-browser: ES5 only (Chrome, Safari, Firefox, Edge).
+ */
+(function (window, document, $) {
+    'use strict';
+    if (window.__zppWCBound) { return; }
+    window.__zppWCBound = true;
+
+    var D = window.ZapPopPopFrontDisplay;
+    if (!D || !$) { return; }
+    var vars = window.zappoppop_front_vars || {};
+    var W = vars.wc || {};
+    var SEL = '.zappoppop-popup-wrap[data-wc-cart]';
+    var TOKEN_TEST = /\{(?:cart_total|cart_subtotal|cart_count|shipping_remaining|free_shipping_min|coupon_code)\}/;
+    var TOKEN_RE = /\{(cart_total|cart_subtotal|cart_count|shipping_remaining|free_shipping_min|coupon_code)\}/g;
+    var SHIP_TEST = /\{(?:shipping_remaining|free_shipping_min)\}/;
+    var SAMPLE = { count: 2, subtotal: 49, total: 49, free_min: 75, products: [], cats: [], coupons: ['SAVE10'] };
+    var ZERO = { count: 0, subtotal: 0, total: 0, free_min: 0, products: [], cats: [], coupons: [] };
+
+    var cart = null;            /* null = not read yet, { failed: true } = could not be read */
+    var loading = false, queued = false, timer = null, lastLoad = 0, pendingAdd = false;
+    var pending = {};           /* uid -> 1: show() answered 'wait' */
+    var deferred = {};          /* uid -> 1: blocked, replay when the cart changes (only with "show after add to cart") */
+    var fired = {};             /* uid -> 1: already shown by this module on this page view */
+    var origShow = D.show;
+
+    function isPreview() {
+        return (document.body && document.body.className.indexOf('zappoppop-preview-frame') !== -1) || /[?&]zappoppop_preview=/.test(window.location.search);
+    }
+    function getCookie(name) {
+        var parts = document.cookie ? document.cookie.split('; ') : [], i, kv;
+        for (i = 0; i < parts.length; i++) {
+            kv = parts[i].split('=');
+            if (kv.shift() === name) { try { return decodeURIComponent(kv.join('=')); } catch (e) { return ''; } }
+        }
+        return '';
+    }
+    function wrap(uid) { return D.getPopupWrap(uid); }
+
+    function parse($w) {
+        var raw = $w.attr('data-wc-cart'), r;
+        if (!raw) { return null; }
+        try { r = JSON.parse(raw); } catch (e) { return null; }
+        if (!r || typeof r !== 'object') { return null; }
+        r.c = r.c || 'any';
+        r.mi = +r.mi || 0;
+        r.mn = +r.mn || 0;
+        r.mx = +r.mx || 0;
+        r.f = +r.f || 0;
+        r.a = r.a ? 1 : 0;
+        r.p = $.isArray(r.p) ? r.p : [];
+        r.k = $.isArray(r.k) ? r.k : [];
+        return r;
+    }
+
+    function anyIn(wanted, have) {
+        var i;
+        for (i = 0; i < wanted.length; i++) {
+            if ($.inArray(+wanted[i], have) !== -1) { return true; }
+        }
+        return false;
+    }
+    function pass(r, c) {
+        if (r.c === 'empty') { return c.count === 0; }
+        if (r.c === 'has_items' && c.count < 1) { return false; }
+        if (r.mi > 0 && c.count < r.mi) { return false; }
+        if (r.mn > 0 && c.subtotal < r.mn) { return false; }
+        if (r.mx > 0 && c.subtotal > r.mx) { return false; }
+        if (r.p.length && !anyIn(r.p, c.products)) { return false; }
+        if (r.k.length && !anyIn(r.k, c.cats)) { return false; }
+        return true;
+    }
+
+    /* ------------------------------------------------------------ tokens */
+    function money(n) {
+        var f = W.fmt || {}, d = isNaN(+f.dec) ? 2 : +f.dec, parts = Math.abs(+n || 0).toFixed(d).split('.'),
+            tsep = (f.tsep === undefined || f.tsep === null) ? ',' : f.tsep,
+            int = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, tsep),
+            out = d ? int + (f.dsep || '.') + parts[1] : int,
+            sym = f.symbol || '$';
+        switch (f.pos) {
+            case 'right': return out + sym;
+            case 'left_space': return sym + ' ' + out;
+            case 'right_space': return out + ' ' + sym;
+            default: return sym + out;
+        }
+    }
+    function shipMin(c, r) { return (r && r.f > 0) ? r.f : (+c.free_min || 0); }
+    function tokenValue(key, c, r) {
+        var min;
+        switch (key) {
+            case 'cart_count': return String(c.count);
+            case 'cart_subtotal': return money(c.subtotal);
+            case 'cart_total': return money(c.total);
+            case 'coupon_code': return c.coupons && c.coupons.length ? String(c.coupons[0]) : '';
+            case 'free_shipping_min':
+                min = shipMin(c, r);
+                return min > 0 ? money(min) : '';
+            case 'shipping_remaining':
+                min = shipMin(c, r);
+                return min > 0 ? money(Math.max(0, min - c.subtotal)) : '';
+        }
+        return '';
+    }
+    function walk(node, fn) {
+        var n = node.firstChild;
+        while (n) {
+            if (n.nodeType === 3) { fn(n); }
+            else if (n.nodeType === 1 && !/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.nodeName)) { walk(n, fn); }
+            n = n.nextSibling;
+        }
+    }
+    /* The original text is kept on the node, so the tokens can be filled again whenever the cart changes. */
+    function render($w, c, r) {
+        if (!$w.length || !c || c.failed) { return; }
+        walk($w[0], function (t) {
+            var src = (t.__zppWcO !== undefined) ? t.__zppWcO : t.nodeValue;
+            if (t.__zppWcO === undefined && !TOKEN_TEST.test(src)) { return; }
+            t.__zppWcO = src;
+            t.nodeValue = src.replace(TOKEN_RE, function (m, k) { return tokenValue(k, c, r); });
+        });
+    }
+
+    /* ------------------------------------------------------------ cart state */
+    function fail() {
+        cart = { failed: true };
+        settle();
+    }
+    function setCart(d) {
+        var i, list = function (a) {
+            var out = [];
+            if ($.isArray(a)) { for (i = 0; i < a.length; i++) { out.push(+a[i]); } }
+            return out;
+        };
+        cart = {
+            count: parseInt(d.count, 10) || 0,
+            subtotal: +d.subtotal || 0,
+            total: +d.total || 0,
+            free_min: +d.free_min || 0,
+            products: list(d.products),
+            cats: list(d.cats),
+            coupons: $.isArray(d.coupons) ? d.coupons : []
+        };
+        settle();
+    }
+    function load() {
+        if (loading) { queued = true; return; }
+        if (!W.endpoint) { fail(); return; }
+        loading = true;
+        $.ajax({ url: W.endpoint, type: 'POST', dataType: 'json', cache: false, timeout: 8000, data: { t: new Date().getTime() } })
+            .done(function (res) {
+                if (res && res.success && res.data) { setCart(res.data); } else { fail(); }
+            })
+            .fail(fail)
+            .always(function () {
+                loading = false;
+                lastLoad = new Date().getTime();
+                if (queued) { queued = false; load(); }
+            });
+    }
+    function schedule(isAdd) {
+        if (isAdd) { pendingAdd = true; }
+        else if (new Date().getTime() - lastLoad < 1500) { return; }
+        window.clearTimeout(timer);
+        timer = window.setTimeout(load, 200);
+    }
+
+    /* Releases everything that was waiting for, or reacting to, a cart read. */
+    function settle() {
+        var c = cart, uid, $w, r, ok;
+        for (uid in pending) {
+            if (pending.hasOwnProperty(uid)) {
+                delete pending[uid];
+                $w = wrap(uid);
+                r = parse($w);
+                ok = !r || c.failed || pass(r, c);
+                if (ok) {
+                    if (r) { render($w, c, r); }
+                    origShow.call(D, uid);
+                } else if (r && r.a) {
+                    deferred[uid] = 1;
+                }
+                $(document).trigger('zappoppop:wc_released', [uid, ok]);
+            }
+        }
+        if (c.failed) { return; }
+        if (pendingAdd) {
+            pendingAdd = false;
+            $(SEL).each(function () {
+                var $x = $(this), u = $x.attr('data-uid'), rr = parse($x);
+                if (!u || !rr || !rr.a || fired[u] || $x.is(':visible') || !pass(rr, c)) { return; }
+                fired[u] = 1;
+                delete deferred[u];
+                D.show(u);
+            });
+        }
+        for (uid in deferred) {
+            if (deferred.hasOwnProperty(uid)) {
+                $w = wrap(uid);
+                r = parse($w);
+                if (r && !fired[uid] && !$w.is(':visible') && pass(r, c)) {
+                    delete deferred[uid];
+                    fired[uid] = 1;
+                    D.show(uid);
+                }
+            }
+        }
+        $(SEL).filter(':visible').each(function () { render($(this), c, parse($(this))); });
+    }
+
+    /* ------------------------------------------------------------ display gate */
+    D.show = function (uid) {
+        var $w = wrap(uid), r = $w.length ? parse($w) : null, gated;
+        if (!r) { return origShow.apply(this, arguments); }
+        if (isPreview()) { render($w, SAMPLE, r); return origShow.apply(this, arguments); }
+        if (!W.active) { render($w, ZERO, r); return origShow.apply(this, arguments); }
+        gated = $w.attr('data-manual') !== '1' && $w.attr('data-inline') !== '1';
+        if (cart === null) {
+            if (!gated) { return origShow.apply(this, arguments); }
+            pending[uid] = 1;
+            if (!loading) { load(); }
+            return 'wait';
+        }
+        if (cart.failed) { return origShow.apply(this, arguments); }
+        if (gated && !pass(r, cart)) {
+            if (r.a) { deferred[uid] = 1; }
+            return false;
+        }
+        render($w, cart, r);
+        return origShow.apply(this, arguments);
+    };
+
+    /* ------------------------------------------------------------ start */
+    function bindEvents() {
+        $(document.body).on('added_to_cart', function () { schedule(true); });
+        $(document.body).on('removed_from_cart updated_cart_totals wc_fragments_refreshed wc_cart_emptied updated_checkout', function () { schedule(false); });
+        document.addEventListener('wc-blocks_added_to_cart', function () { schedule(true); }, false);
+        document.addEventListener('wc-blocks_removed_from_cart', function () { schedule(false); }, false);
+    }
+    function needsServerForShipping() {
+        var need = false;
+        $(SEL).each(function () {
+            var r = parse($(this));
+            if (r && !r.f && SHIP_TEST.test($(this).text())) { need = true; }
+        });
+        return need;
+    }
+
+    window.ZapPopPopWooCart = {
+        state: function () { return cart; },
+        refresh: function () { schedule(false); }
+    };
+
+    $(function () {
+        if (!$(SEL).length) { return; }
+        bindEvents();
+        if (isPreview() || !W.active) { return; }
+        /* WooCommerce sets these cookies only while the cart holds items: without them the cart is empty and no request is needed. */
+        if (!getCookie('woocommerce_items_in_cart') && !getCookie('woocommerce_cart_hash') && !needsServerForShipping()) {
+            cart = $.extend({}, ZERO);
+            settle();
+            return;
+        }
+        load();
+    });
+})(window, document, window.jQuery);
+'''
+
+# ---------------------------------------------------------------------------------------------------------------
+# 3. Module package (Inspector UI)
+# ---------------------------------------------------------------------------------------------------------------
+NEW['modules/acc-woo-cart/module.json'] = r'''{
+    "schema": 1,
+    "slug": "acc-woo-cart",
+    "name": "WooCommerce Cart",
+    "version": "1.0.0",
+    "author": "ZapPopPop",
+    "description": "Show popups by cart contents and fill live cart values into popup text.",
+    "image": "icon.svg",
+    "category": "all-modules",
+    "default_active": false,
+    "order": 240,
+    "on_missing": "skip",
+    "requires": [],
+    "accordion": "accordion.html",
+    "allow_edit": true,
+    "allow_delete": false,
+    "data_keys": [
+        "woo_cart"
+    ],
+    "in_use": [
+        "woo_cart.enabled"
+    ],
+    "min_version": "",
+    "deprecated": false
+}
+'''
+
+NEW['modules/acc-woo-cart/accordion.html'] = r'''<div id="zappoppop-wcc-item" class="zappoppop-wcc"></div>
+'''
+
+NEW['modules/acc-woo-cart/icon.svg'] = r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#b4234f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 4h2.4l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 8H6.2"/></svg>
+'''
+
+NEW['modules/acc-woo-cart/module.css'] = r'''/* ZPP_WC_CART: WooCommerce Cart module. Same look as Targeting Triggers (toggle-slide switches, segmented buttons). */
+#zappoppop-wcc-item{position:relative}
+#zappoppop-wcc-item .wcc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
+#zappoppop-wcc-item .wcc-top .wcc-h{margin:0}
+#zappoppop-wcc-item .wcc-master,#zappoppop-wcc-item .wcc-sw{position:relative;display:flex;align-items:center;flex:none;margin:0;padding:0}
+#zappoppop-wcc-item .wcc-master input,#zappoppop-wcc-item .wcc-sw input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+#zappoppop-wcc-item .wcc-track{position:relative;display:block;width:34px;height:18px;border-radius:9px;background:#cbd5e1;-webkit-transition:background .15s;transition:background .15s;cursor:pointer}
+#zappoppop-wcc-item .wcc-track:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);-webkit-transition:left .15s;transition:left .15s}
+#zappoppop-wcc-item input:checked + .wcc-track{background:#b4234f}
+#zappoppop-wcc-item input:checked + .wcc-track:after{left:18px}
+#zappoppop-wcc-item input:focus + .wcc-track{box-shadow:0 0 0 2px #2271b1}
+#zappoppop-wcc-fs{border:0;margin:0;padding:0;min-width:0;display:block}
+#zappoppop-wcc-item.is-off #zappoppop-wcc-fs{opacity:.45}
+#zappoppop-wcc-item .wcc-h{display:block;font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;margin:0 0 6px}
+#zappoppop-wcc-item .wcc-sec{margin:0 0 14px}
+#zappoppop-wcc-item .wcc-sec + .wcc-sec{border-top:1px solid #e2e8f0;padding-top:12px}
+#zappoppop-wcc-item .wcc-note{margin:0 0 12px;padding:8px 10px;font-size:11px;line-height:1.4;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px}
+#zappoppop-wcc-item .wcc-segs{display:flex;flex-wrap:wrap;gap:6px}
+#zappoppop-wcc-item .wcc-seg{flex:1 1 auto;margin:0;padding:6px 8px;font-size:11px;font-weight:600;line-height:1.3;color:#334155;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;-webkit-appearance:none;appearance:none;text-align:center}
+#zappoppop-wcc-item .wcc-seg:hover{border-color:#be4a6f;background:#fff7fa}
+#zappoppop-wcc-item .wcc-seg.is-on{color:#fff;background:#b4234f;border-color:#b4234f}
+#zappoppop-wcc-item .wcc-seg:focus{outline:none}
+#zappoppop-wcc-item .wcc-seg:focus-visible{outline:2px solid #2271b1;outline-offset:1px}
+#zappoppop-wcc-item .wcc-row{display:flex;align-items:center;gap:8px;margin:8px 0 0}
+#zappoppop-wcc-item .wcc-row label{margin:0;flex:1 1 50%;font-size:11px;font-weight:600;color:#475569}
+#zappoppop-wcc-item .wcc-row input{flex:1 1 40%;min-width:0;width:100%}
+#zappoppop-wcc-item .wcc-unit{font-size:11px;color:#64748b;flex:none;min-width:24px}
+#zappoppop-wcc-item .wcc-hint{font-size:11px;color:#64748b;margin:6px 0 0}
+#zappoppop-wcc-item .wcc-lbl{display:block;margin:10px 0 4px;font-size:11px;font-weight:600;color:#475569}
+#zappoppop-wcc-item .wcc-tg{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:3px 0;font-size:11px;font-weight:600;color:#334155;line-height:1.35;cursor:pointer}
+#zappoppop-wcc-item .wcc-tg-t{min-width:0;word-break:break-word}
+#zappoppop-wcc-item .wcc-tg-sm{font-weight:500}
+#zappoppop-wcc-item .wcc-list{max-height:150px;overflow:auto;border:1px solid #e2e8f0;border-radius:6px;background:#fff;margin:6px 0 0;padding:4px 8px}
+#zappoppop-wcc-item .wcc-none{margin:4px 0;font-size:11px;color:#94a3b8}
+#zappoppop-wcc-item .wcc-filter{margin:8px 0 0}
+#zappoppop-wcc-item .wcc-tokens{margin:6px 0 0;padding:0;list-style:none}
+#zappoppop-wcc-item .wcc-tokens li{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0;padding:3px 0;font-size:11px;color:#475569}
+#zappoppop-wcc-item .wcc-tokens code{flex:none;padding:1px 5px;font-size:11px;color:#b4234f;background:#fff7fa;border:1px solid #f3d3de;border-radius:4px}
+'''
+
+NEW['modules/acc-woo-cart/admin.js'] = r'''/**
+ * ZapPopPop Builder: WooCommerce Cart module (Popup Settings > WooCommerce Cart)   ZPP_WC_CART
+ * Data lifecycle: inspector DOM <-> JS model <-> getSettings()/setSettings() <-> save payload (settings.woo_cart).
+ * The model (not the DOM) is the source of truth. Save / Clear / Reset as Default need no extra key list here: the
+ * whole popup settings object is captured and re-applied through setSettings(), which repaints this UI.
+ * Only loaded while the module is installed; the UI is built here from the data the core provides.
+ * Cross-browser: ES5 only (Chrome, Safari, Firefox, Edge).
+ */
+(function ($) {
+    'use strict';
+    var S = window.ZapPopPopBuilderSettings;
+    if (!S || S._wcCartWrapped) { return; }
+    S._wcCartWrapped = true;
+
+    var DRAWER = '#zappoppop-settings-drawer';
+    var ROOT = '#zappoppop-wcc-item';
+    var DATA = window.ZapPopPopWooCartData || {};
+    var CARTS = ['any', 'has_items', 'empty'];
+    var NUM = { min_items: [0, 9999, 0], min_total: [0, 9999999, 2], max_total: [0, 9999999, 2], free_ship_min: [0, 9999999, 2] };
+    var model = blank();
+
+    function L(s) { return (DATA.i18n && DATA.i18n[s]) ? DATA.i18n[s] : s; }
+    function blank() {
+        return { enabled: false, cart: 'any', min_items: 0, min_total: 0, max_total: 0, products: [], cats: [], show_on_add: false, free_ship_min: 0 };
+    }
+    function bool(v) { return v === true || v === 1 || v === '1' || v === 'true' || v === 'on'; }
+    function num(v, min, max, dec) {
+        var n = parseFloat(String(v).replace(',', '.'));
+        if (isNaN(n)) { return min; }
+        n = Math.max(min, Math.min(max, n));
+        return dec ? Math.round(n * 100) / 100 : Math.round(n);
+    }
+    function ids(v) {
+        var out = [], seen = {}, i, n;
+        if (!$.isArray(v)) { return out; }
+        for (i = 0; i < v.length && out.length < 200; i++) {
+            n = parseInt(v[i], 10);
+            if (n > 0 && !seen[n]) { seen[n] = 1; out.push(n); }
+        }
+        return out;
+    }
+    function clone(o) { return JSON.parse(JSON.stringify(o)); }
+    function normalize(raw) {
+        var m = blank(), t;
+        raw = (raw && typeof raw === 'object') ? raw : {};
+        m.enabled = bool(raw.enabled);
+        m.cart = $.inArray(raw.cart, CARTS) !== -1 ? raw.cart : 'any';
+        m.min_items = num(raw.min_items, NUM.min_items[0], NUM.min_items[1], 0);
+        m.min_total = num(raw.min_total, NUM.min_total[0], NUM.min_total[1], 2);
+        m.max_total = num(raw.max_total, NUM.max_total[0], NUM.max_total[1], 2);
+        if (m.min_total > 0 && m.max_total > 0 && m.min_total > m.max_total) { t = m.min_total; m.min_total = m.max_total; m.max_total = t; }
+        m.products = ids(raw.products);
+        m.cats = ids(raw.cats);
+        m.show_on_add = bool(raw.show_on_add);
+        m.free_ship_min = num(raw.free_ship_min, NUM.free_ship_min[0], NUM.free_ship_min[1], 2);
+        return m;
+    }
+
+    /* ------------------------------------------------------------ DOM builders */
+    function el(tag, attrs, text) {
+        var $e = $(document.createElement(tag));
+        if (attrs) { $.each(attrs, function (k, v) { $e.attr(k, v); }); }
+        if (text !== undefined) { $e.text(text); }
+        return $e;
+    }
+    function head(text) { return el('span', { 'class': 'wcc-h' }, text); }
+    function hint(text, cond) {
+        var $p = el('p', { 'class': 'wcc-hint' }, text);
+        if (cond) { $p.attr('data-wcc-when', cond); }
+        return $p;
+    }
+    /* Toggle-slide switch (never a check mark). attrName/attrVal tag the hidden checkbox for the delegated handlers. */
+    function toggle(attrName, attrVal, label, small) {
+        var a = { type: 'checkbox' };
+        a[attrName] = attrVal;
+        return el('label', { 'class': 'wcc-tg' + (small ? ' wcc-tg-sm' : '') })
+            .append(el('span', { 'class': 'wcc-tg-t' }, label))
+            .append(el('span', { 'class': 'wcc-sw' }).append(el('input', a)).append(el('span', { 'class': 'wcc-track' })));
+    }
+    function seg(group, opts) {
+        var $s = el('div', { 'class': 'wcc-segs', role: 'radiogroup' });
+        $.each(opts, function (i, o) {
+            $s.append(el('button', { type: 'button', 'class': 'wcc-seg', role: 'radio', 'aria-checked': 'false', 'data-wcc-group': group, 'data-wcc-val': o[0] }, o[1]));
+        });
+        return $s;
+    }
+    function numRow(field, label, unit) {
+        var $r = el('div', { 'class': 'wcc-row' });
+        $r.append(el('label', { 'for': 'wcc-f-' + field }, label));
+        $r.append(el('input', { id: 'wcc-f-' + field, type: 'number', 'class': 'widefat', 'data-wcc-field': field, min: NUM[field][0], max: NUM[field][1], step: NUM[field][2] ? '0.01' : '1' }));
+        if (unit) { $r.append(el('span', { 'class': 'wcc-unit' }, unit)); }
+        return $r;
+    }
+
+    function build() {
+        var $root = $(ROOT), $fs, $s, $list, cats, sym = DATA.symbol || '$', tokens, i;
+        if (!$root.length || $root.attr('data-built')) { return; }
+        $root.attr('data-built', '1');
+
+        $root.append(el('div', { 'class': 'wcc-top' })
+            .append(head(L('WooCommerce Cart')))
+            .append(el('label', { 'class': 'wcc-master', title: L('Turn the WooCommerce cart features for this popup on or off') })
+                .append(el('input', { type: 'checkbox', id: 'set-wcc-enabled', 'aria-label': L('Enable WooCommerce Cart') }))
+                .append(el('span', { 'class': 'wcc-track' }))));
+        $root.append(hint(L('Cart-aware display rules and live cart text for this popup.')));
+
+        $fs = el('fieldset', { id: 'zappoppop-wcc-fs' });
+        if (!DATA.wc_active) { $fs.append(el('p', { 'class': 'wcc-note' }, L('WooCommerce is not active on this site, so the cart rules are ignored.'))); }
+
+        $s = el('div', { 'class': 'wcc-sec' });
+        $s.append(head(L('Show this popup when the cart is')));
+        $s.append(seg('cart', [['any', L('Any')], ['has_items', L('Has items')], ['empty', L('Empty')]]));
+        $s.append(hint(L('Empty ignores the conditions below.'), 'cart:empty'));
+        $fs.append($s);
+
+        $s = el('div', { 'class': 'wcc-sec', 'data-wcc-when': 'cart:!empty' });
+        $s.append(head(L('Cart conditions')));
+        $s.append(numRow('min_items', L('Minimum items'), L('items')));
+        $s.append(numRow('min_total', L('Minimum subtotal'), sym));
+        $s.append(numRow('max_total', L('Maximum subtotal'), sym));
+        $s.append(hint(L('A value of 0 turns that condition off.')));
+        $s.append(el('label', { 'class': 'wcc-lbl', 'for': 'wcc-f-products' }, L('Product IDs')));
+        $s.append(el('input', { id: 'wcc-f-products', type: 'text', 'class': 'widefat', 'data-wcc-field': 'products', placeholder: '12, 48, 105', autocomplete: 'off' }));
+        $s.append(hint(L('Comma-separated. The popup shows when any of these products is in the cart. Empty = off.')));
+        $s.append(el('span', { 'class': 'wcc-lbl' }, L('Product categories')));
+        cats = $.isArray(DATA.cats) ? DATA.cats : [];
+        $list = el('div', { 'class': 'wcc-list' });
+        if (!cats.length) { $list.append(el('p', { 'class': 'wcc-none' }, L('No product categories found.'))); }
+        $.each(cats, function (j, c) { $list.append(toggle('data-wcc-cat', c[0], c[1], true).attr('data-wcc-name', String(c[1]).toLowerCase())); });
+        if (cats.length > 8) { $s.append(el('input', { type: 'search', 'class': 'widefat wcc-filter', 'data-wcc-filter': '1', placeholder: L('Search...'), autocomplete: 'off' })); }
+        $s.append($list);
+        $s.append(hint(L('The popup shows when the cart holds a product from any selected category. None selected = off.')));
+        $fs.append($s);
+
+        $s = el('div', { 'class': 'wcc-sec' });
+        $s.append(toggle('data-wcc-flag', 'show_on_add', L('Show right after an item is added to the cart')));
+        $s.append(hint(L('Works with AJAX add to cart and the cart block. Shown once per page view, and only when the conditions above match.')));
+        $fs.append($s);
+
+        $s = el('div', { 'class': 'wcc-sec' });
+        $s.append(head(L('Free shipping')));
+        $s.append(numRow('free_ship_min', L('Free shipping threshold'), sym));
+        $s.append(hint(L('0 = detect it from your WooCommerce free shipping method.')));
+        $fs.append($s);
+
+        $s = el('div', { 'class': 'wcc-sec' });
+        $s.append(head(L('Dynamic text')));
+        tokens = [['{cart_total}', 'Cart total'], ['{cart_subtotal}', 'Cart subtotal'], ['{cart_count}', 'Number of items'],
+                  ['{shipping_remaining}', 'Amount left for free shipping'], ['{free_shipping_min}', 'Free shipping threshold'], ['{coupon_code}', 'Applied coupon code']];
+        $list = el('ul', { 'class': 'wcc-tokens' });
+        for (i = 0; i < tokens.length; i++) {
+            $list.append(el('li').append(el('code', null, tokens[i][0])).append(el('span', null, L(tokens[i][1]))));
+        }
+        $s.append($list);
+        $s.append(hint(L('Type these into any text layer. Live Preview shows sample values; visitors see their own cart.')));
+        $fs.append($s);
+
+        $root.append($fs);
+    }
+
+    /* ------------------------------------------------------------ model -> DOM */
+    function paint() {
+        var $root = $(ROOT);
+        if (!$root.length) { return; }
+        $('#set-wcc-enabled').prop('checked', model.enabled);
+        $('#zappoppop-wcc-fs').prop('disabled', !model.enabled);
+        $root.toggleClass('is-off', !model.enabled);
+
+        $root.find('[data-wcc-group]').each(function () {
+            var on = String(model[$(this).attr('data-wcc-group')]) === $(this).attr('data-wcc-val');
+            $(this).toggleClass('is-on', on).attr('aria-checked', on ? 'true' : 'false');
+        });
+        $root.find('[data-wcc-field]').each(function () {
+            var k = $(this).attr('data-wcc-field');
+            if (document.activeElement === this) { return; }
+            $(this).val(k === 'products' ? model.products.join(', ') : model[k]);
+        });
+        $root.find('[data-wcc-flag]').each(function () { this.checked = !!model[$(this).attr('data-wcc-flag')]; });
+        $root.find('[data-wcc-cat]').each(function () { this.checked = $.inArray(parseInt(this.value, 10), model.cats) !== -1; });
+        $root.find('[data-wcc-when]').each(function () {
+            var p = $(this).attr('data-wcc-when').split(':'), neg = p[1].charAt(0) === '!', want = neg ? p[1].substring(1) : p[1], is = String(model[p[0]]) === want;
+            $(this).toggle(neg ? !is : is);
+        });
+    }
+
+    function changed() { $(DRAWER).trigger('change'); }
+
+    /* ------------------------------------------------------------ save / load wrappers */
+    var origGet = S.getSettings, origSet = S.setSettings;
+
+    S.getSettings = function () {
+        var out = origGet.apply(this, arguments) || {};
+        out.woo_cart = clone(model);
+        return out;
+    };
+
+    S.setSettings = function (settings) {
+        var r = origSet.apply(this, arguments);
+        model = normalize(settings && settings.woo_cart);
+        paint();
+        return r;
+    };
+
+    /* ------------------------------------------------------------ DOM -> model */
+    function bind() {
+        $(DRAWER)
+            .off('.zppWCC')
+            .on('change.zppWCC', '#set-wcc-enabled', function () {
+                model.enabled = this.checked;
+                paint();
+            })
+            .on('click.zppWCC', ROOT + ' [data-wcc-group]', function (e) {
+                e.preventDefault();
+                model[$(this).attr('data-wcc-group')] = $(this).attr('data-wcc-val');
+                model = normalize(model);
+                paint();
+                changed();
+            })
+            .on('input.zppWCC change.zppWCC', ROOT + ' [data-wcc-field]', function (e) {
+                var k = $(this).attr('data-wcc-field'), v = $(this).val();
+                if (k === 'products') {
+                    model.products = ids(String(v).split(/[\s,;]+/));
+                } else if (NUM[k]) {
+                    model[k] = num(v, NUM[k][0], NUM[k][1], NUM[k][2]);
+                }
+                if (e.type === 'change') {
+                    model = normalize(model);
+                    $(this).val(k === 'products' ? model.products.join(', ') : model[k]);
+                    paint();
+                }
+            })
+            .on('change.zppWCC', ROOT + ' [data-wcc-flag]', function () {
+                model[$(this).attr('data-wcc-flag')] = this.checked;
+            })
+            .on('change.zppWCC', ROOT + ' [data-wcc-cat]', function () {
+                var n = parseInt(this.value, 10), cur = $.grep(model.cats, function (x) { return x !== n; });
+                if (this.checked) { cur.push(n); }
+                model.cats = cur;
+            })
+            .on('input.zppWCC', ROOT + ' [data-wcc-filter]', function () {
+                var q = String($(this).val()).replace(/^\s+|\s+$/g, '').toLowerCase();
+                $(ROOT + ' [data-wcc-name]').each(function () {
+                    $(this).toggle(!q || $(this).attr('data-wcc-name').indexOf(q) !== -1);
+                });
+            });
+    }
+
+    if ($(DRAWER).length) { bind(); }
+    $(function () { build(); bind(); paint(); });
+})(jQuery);
+'''
+
+# ---------------------------------------------------------------------------------------------------------------
+# 4. Edits to existing Pro files
+# ---------------------------------------------------------------------------------------------------------------
+EDITS.append((
+    'includes/class-pro-plugin.php',
+    'ZapPopPop_Woo_Cart::boot();',
+    "        ZapPopPop_Pro_Modules::boot();\n",
+    "        ZapPopPop_Pro_Modules::boot();\n        ZapPopPop_Woo_Cart::boot(); /* ZPP_WC_CART: autoloaded from includes/modules/ */\n",
+))
+
+EDITS.append((
+    'assets/js/front/front-targeting-triggers.js',
+    'ZPP_WC_GATE',
+    """            var closeAfter;
+            if (fired) { return; }
+            fired = true;
+            if ($w.is(':visible') || !allowed($w, uid)) { return; }
+            D.show(uid);
+            markSeen(uid);
+            closeAfter = ev === 'onload' ? num($w, 'data-tt-close', 0) : 0;
+            if (closeAfter > 0) {
+                window.setTimeout(function () { if ($w.is(':visible')) { D.close(uid); } }, closeAfter * 1000);
+            }
+""",
+    """            var closeAfter, res, onRelease;
+            if (fired) { return; }
+            fired = true;
+            if ($w.is(':visible') || !allowed($w, uid)) { return; }
+
+            function seen() {
+                markSeen(uid);
+                closeAfter = ev === 'onload' ? num($w, 'data-tt-close', 0) : 0;
+                if (closeAfter > 0) {
+                    window.setTimeout(function () { if ($w.is(':visible')) { D.close(uid); } }, closeAfter * 1000);
+                }
+            }
+
+            /* ZPP_WC_GATE: the WooCommerce Cart module answers false (blocked by a cart rule) or 'wait' (cart still loading).
+               A blocked view is never counted as seen, so once-only / once-per-period popups are not used up. */
+            res = D.show(uid);
+            if (res === false) { return; }
+            if (res === 'wait') {
+                onRelease = function (e, u, shown) {
+                    if (u !== uid) { return; }
+                    $(document).off('zappoppop:wc_released', onRelease);
+                    if (shown) { seen(); }
+                };
+                $(document).on('zappoppop:wc_released', onRelease);
+                return;
+            }
+            seen();
+""",
+))
+
+# ---------------------------------------------------------------------------------------------------------------
+# Pre-flight: validate every anchor before anything is written.
+# ---------------------------------------------------------------------------------------------------------------
+def rd(p):
+    with open(p, 'r', encoding='utf-8') as f:
+        return f.read()
+
+plan_new, plan_edit, problems = [], [], []
+for rel, content in NEW.items():
+    p = os.path.join(PRO, rel)
+    if os.path.exists(p):
+        cur = rd(p)
+        if cur == content:
+            print('UNCHANGED  ' + rel)
+        elif FORCE:
+            plan_new.append((rel, p, content, True))
+        else:
+            print('SKIP       ' + rel + '  (exists and differs; run with FORCE=1 to overwrite our own file)')
+    else:
+        plan_new.append((rel, p, content, False))
+
+for rel, marker, old, new in EDITS:
+    p = os.path.join(PRO, rel)
+    if not os.path.isfile(p):
+        problems.append('missing file: ' + rel)
+        continue
+    txt = rd(p)
+    if marker in txt:
+        print('ALREADY    ' + rel)
+        continue
+    n = txt.count(old)
+    if n != 1:
+        problems.append('%s: anchor found %d times (expected 1)' % (rel, n))
+        continue
+    plan_edit.append((rel, p, txt, old, new))
+
+if problems:
+    sys.exit('ABORT, nothing written:\n  ' + '\n  '.join(problems))
+
+# ---------------------------------------------------------------------------------------------------------------
+# Apply (backups go to core's existing .patch-backups, prefixed pro__)
+# ---------------------------------------------------------------------------------------------------------------
+def backup(rel, p):
+    if not os.path.isdir(BK):
+        os.makedirs(BK)
+    shutil.copy2(p, os.path.join(BK, 'pro__' + rel.replace('/', '__') + '.bak-woocart'))
+
+written = []
+for rel, p, content, existed in plan_new:
+    if existed:
+        backup(rel, p)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(content)
+    written.append(p)
+    print(('OVERWROTE   ' if existed else 'CREATED     ') + rel)
+
+for rel, p, txt, old, new in plan_edit:
+    backup(rel, p)
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(txt.replace(old, new, 1))
+    written.append(p)
+    print('PATCHED     ' + rel)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Syntax checks (skipped when the tool is not installed)
+# ---------------------------------------------------------------------------------------------------------------
+def tool(name):
+    return shutil.which(name)
+
+bad = 0
+for p in written:
+    if p.endswith('.js') and tool('node'):
+        r = subprocess.run(['node', '--check', p], capture_output=True, text=True)
+        if r.returncode:
+            bad += 1
+            print('JS SYNTAX ERROR ' + p + '\n' + r.stderr)
+    elif p.endswith('.php') and tool('php'):
+        r = subprocess.run(['php', '-l', p], capture_output=True, text=True)
+        if r.returncode:
+            bad += 1
+            print('PHP SYNTAX ERROR ' + p + '\n' + r.stdout + r.stderr)
+    elif p.endswith('.json'):
+        import json
+        try:
+            json.loads(rd(p))
+        except Exception as e:
+            bad += 1
+            print('JSON ERROR ' + p + ' ' + str(e))
+print('\nDone. %d file(s) written, %d syntax problem(s). Nothing was committed.' % (len(written), bad))
+if not tool('php'):
+    print('Note: php is not on PATH here, so PHP syntax was not linted. Run: php -l ../zappoppop-pro/includes/modules/class-zappoppop-woo-cart.php')

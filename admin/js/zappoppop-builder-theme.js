@@ -431,7 +431,7 @@
         }
 
         if (dimReadoutEl) {
-            dimReadoutEl.setAttribute('data-zpp-role', 'muted');
+            setZppRole(dimReadoutEl, 'muted');
             dimReadoutEl.style.setProperty('color', 'var(--zpp-builder-muted-text)', 'important');
             dimReadoutEl.style.setProperty('background', 'transparent', 'important');
         }
@@ -616,6 +616,11 @@
         try { return !!(el && el.matches && el.matches(CSS_MANAGED_SEL)); } catch (e) { return false; }
     }
 
+    /* ZPP_FLICKER_FIX: write data-zpp-role only when it changes (the restyle sweeps re-stamped ~1,500 nodes per layer click) */
+    function setZppRole(el, val) {
+        if (el && el.getAttribute('data-zpp-role') !== val) { el.setAttribute('data-zpp-role', val); }
+    }
+
     function setVarImportant(el, prop, cssVarExpr) {
         if (!el || !el.style || isInsideIsolatedCanvas(el) || isCssManaged(el)) return;
         /* ZAPPOPPOP_MODE_LOCK: builder-mode-sync.js owns the workspace background while a Day / Night override is active */
@@ -686,7 +691,7 @@
         var isActive = (activeCanvasName && pillCanvasName === activeCanvasName);
 
         pillEl.setAttribute('data-zpp-canvas-name', pillCanvasName);
-        pillEl.setAttribute('data-zpp-role', isActive ? 'canvas-tab-pill-active' : 'canvas-tab-pill');
+        setZppRole(pillEl, isActive ? 'canvas-tab-pill-active' : 'canvas-tab-pill');
         setVarImportant(pillEl, 'background-image', 'none');
         setVarImportant(pillEl, 'background-color', isActive ? 'var(--zpp-builder-accent-color)' : 'var(--zpp-builder-field-bg)');
         setVarImportant(pillEl, 'border', '1px solid ' + (isActive ? 'var(--zpp-builder-accent-color)' : 'var(--zpp-builder-field-border)'));
@@ -697,7 +702,7 @@
 
         var innerTxtColor = isActive ? '#ffffff' : 'var(--zpp-builder-header-text)';
         pillEl.querySelectorAll('*').forEach(function(inner) {
-            inner.setAttribute('data-zpp-role', 'canvas-tab-inner');
+            setZppRole(inner, 'canvas-tab-inner');
             setVarImportant(inner, 'background', 'transparent');
             setVarImportant(inner, 'background-color', 'transparent');
             setVarImportant(inner, 'background-image', 'none');
@@ -734,7 +739,7 @@
             });
 
             if (pillBar) {
-                pillBar.setAttribute('data-zpp-role', 'canvas-pill-bar');
+                setZppRole(pillBar, 'canvas-pill-bar');
                 setVarImportant(pillBar, 'background-image', 'none');
                 setVarImportant(pillBar, 'background-color', 'var(--zpp-builder-field-bg)');
                 setVarImportant(pillBar, 'border-color', 'var(--zpp-builder-field-border)');
@@ -743,7 +748,7 @@
                 Array.prototype.slice.call(pillBar.children).forEach(function(item) {
                     var rawTxt = (item.textContent || '').trim();
                     if (rawTxt === '+' || item.getAttribute('title') === 'Add Canvas' || item.getAttribute('aria-label') === 'Add Canvas') {
-                        item.setAttribute('data-zpp-role', 'add-canvas-btn');
+                        setZppRole(item, 'add-canvas-btn');
                         setVarImportant(item, 'background-image', 'none');
                         setVarImportant(item, 'background-color', 'var(--zpp-builder-field-bg)');
                         setVarImportant(item, 'border', '1px solid var(--zpp-builder-field-border)');
@@ -761,7 +766,7 @@
                     var isAct = (cName === activeCanvasName);
 
                     if (isAct) {
-                        item.setAttribute('data-zpp-role', 'active-pill');
+                        setZppRole(item, 'active-pill');
                         setVarImportant(item, 'background-image', 'none');
                         setVarImportant(item, 'background-color', 'var(--zpp-builder-accent-color)');
                         setVarImportant(item, 'border', '1px solid var(--zpp-builder-accent-color)');
@@ -772,7 +777,7 @@
                             setVarImportant(ch, 'color', '#ffffff');
                         });
                     } else {
-                        item.setAttribute('data-zpp-role', 'toolbar-btn');
+                        setZppRole(item, 'toolbar-btn');
                         setVarImportant(item, 'background-image', 'none');
                         setVarImportant(item, 'background-color', 'var(--zpp-builder-field-bg)');
                         setVarImportant(item, 'border', '1px solid var(--zpp-builder-field-border)');
@@ -801,7 +806,7 @@
             });
 
             if (headerAddBtn) {
-                headerAddBtn.setAttribute('data-zpp-role', 'add-canvas-btn');
+                setZppRole(headerAddBtn, 'add-canvas-btn');
                 setVarImportant(headerAddBtn, 'background-image', 'none');
                 setVarImportant(headerAddBtn, 'background-color', 'var(--zpp-builder-field-bg)');
                 setVarImportant(headerAddBtn, 'border', '1px solid var(--zpp-builder-field-border)');
@@ -814,7 +819,7 @@
                 // The siblings of headerAddBtn (or children of its previous sibling tab list container) are the Top Header Canvas Tab Pills!
                 var tabGroupParent = headerAddBtn.parentElement;
                 if (tabGroupParent && tabGroupParent !== headerBar) {
-                    tabGroupParent.setAttribute('data-zpp-role', 'header-group');
+                    setZppRole(tabGroupParent, 'header-group');
                     setVarImportant(tabGroupParent, 'background', 'transparent');
                     setVarImportant(tabGroupParent, 'background-color', 'transparent');
                     setVarImportant(tabGroupParent, 'border-color', 'transparent');
@@ -824,7 +829,7 @@
                         if (sib.tagName === 'INPUT') return;
                         // If sib is a inner tab-list container holding multiple tab pills
                         if (sib.children.length >= 2 && (sib.textContent || '').indexOf('×') !== -1 && sib.querySelectorAll('button').length >= 3) {
-                            sib.setAttribute('data-zpp-role', 'header-group');
+                            setZppRole(sib, 'header-group');
                             setVarImportant(sib, 'background', 'transparent');
                             setVarImportant(sib, 'background-color', 'transparent');
                             setVarImportant(sib, 'border-color', 'transparent');
@@ -851,7 +856,7 @@
             return;
         }
 
-        headerBar.setAttribute('data-zpp-role', 'accordion-header');
+        setZppRole(headerBar, 'accordion-header');
         setVarImportant(headerBar, 'background-image', 'none');
         setVarImportant(headerBar, 'background-color', 'var(--zpp-builder-accordion-bg)');
         setVarImportant(headerBar, 'border-color', 'var(--zpp-builder-accordion-border)');
@@ -872,7 +877,7 @@
             var isCaret = (ch.tagName === 'SVG' || ch.tagName === 'PATH' || ch.tagName === 'POLYLINE' || ch.tagName === 'I' ||
                           (txt.length === 1 && !/[0-9A-Za-z]/.test(txt)));
             if (isCaret) {
-                ch.setAttribute('data-zpp-role', 'accordion-caret');
+                setZppRole(ch, 'accordion-caret');
                 setVarImportant(ch, 'color', 'var(--zpp-builder-icon-color)');
             } else {
                 setVarImportant(ch, 'background-color', 'transparent');
@@ -890,7 +895,7 @@
                 }
             }
             if (directHeaders <= 1) {
-                cardWrapper.setAttribute('data-zpp-role', 'content-panel');
+                setZppRole(cardWrapper, 'content-panel');
                 setVarImportant(cardWrapper, 'background-image', 'none');
                 setVarImportant(cardWrapper, 'background-color', 'var(--zpp-builder-content-bg)');
                 setVarImportant(cardWrapper, 'border-color', 'var(--zpp-builder-content-border)');
@@ -911,7 +916,7 @@
     function styleContentBodyContainer(bodyPane) {
         if (!bodyPane || isInsideIsolatedCanvas(bodyPane)) return;
         if (bodyPane.closest && bodyPane.closest('#zappoppop-ribbon-wrap')) return; /* ZPP_RIBBON_SKIP2 */
-        bodyPane.setAttribute('data-zpp-role', 'content-panel');
+        setZppRole(bodyPane, 'content-panel');
         setVarImportant(bodyPane, 'background-image', 'none');
         setVarImportant(bodyPane, 'background-color', 'var(--zpp-builder-content-bg)');
         setVarImportant(bodyPane, 'border-color', 'var(--zpp-builder-content-border)');
@@ -929,7 +934,7 @@
             var cs = window.getComputedStyle(inner);
             var bg = cs.backgroundColor || '';
             if (bg === 'rgb(255, 255, 255)' || bg === 'rgb(248, 250, 252)' || bg === 'rgb(241, 245, 249)' || bg === 'rgb(226, 232, 240)' || hasFormControlsInside(inner)) {
-                inner.setAttribute('data-zpp-role', 'content-panel');
+                setZppRole(inner, 'content-panel');
                 setVarImportant(inner, 'background-image', 'none');
                 setVarImportant(inner, 'background-color', 'var(--zpp-builder-content-bg)');
                 setVarImportant(inner, 'border-color', 'var(--zpp-builder-content-border)');
@@ -940,7 +945,7 @@
 
     function applyCheckerboardToStage(stageEl) {
         if (!stageEl || isInsideIsolatedCanvas(stageEl)) return;
-        stageEl.setAttribute('data-zpp-role', 'stage');
+        setZppRole(stageEl, 'stage');
         setVarImportant(stageEl, 'background-color', 'var(--zpp-builder-stage-bg)');
         setVarImportant(stageEl, 'background-image', 'var(--zpp-builder-checker-image)');
         setVarImportant(stageEl, 'background-size', '20px 20px');
@@ -950,7 +955,7 @@
 
     function applyCanvasGuideLineColor(canvasEl, stageCandidates) {
         document.querySelectorAll('.zappoppop-guide-line, .zappoppop-snap-line, .zappoppop-alignment-guide, .zappoppop-canvas-guide, .zappoppop-canvas-boundary').forEach(function(gl) {
-            gl.setAttribute('data-zpp-role', 'canvas-guide');
+            setZppRole(gl, 'canvas-guide');
             gl.style.setProperty('border-color', 'var(--zpp-builder-guide-color)', 'important');
         });
 
@@ -986,7 +991,7 @@
                     if (hasSiblingSidebars || p.clientWidth > window.innerWidth * 0.35) {
                         if (stageCandidates.indexOf(p) === -1) stageCandidates.push(p);
                         if (p.parentElement && p.parentElement !== document.body && p.parentElement.id !== 'wpbody-content') {
-                            p.parentElement.setAttribute('data-zpp-role', 'workspace-flex');
+                            setZppRole(p.parentElement, 'workspace-flex');
                             setVarImportant(p.parentElement, 'background-color', 'var(--zpp-builder-stage-bg)');
                             setVarImportant(p.parentElement, 'flex-wrap', 'nowrap');
                         }
@@ -1030,7 +1035,7 @@
                            !hasFormControlsInside(hdrRow.parentElement)) {
                         hdrRow = hdrRow.parentElement;
                     }
-                    hdrRow.setAttribute('data-zpp-role', 'sidebar-header');
+                    setZppRole(hdrRow, 'sidebar-header');
                     setVarImportant(hdrRow, 'background-image', 'none');
                     setVarImportant(hdrRow, 'background-color', 'var(--zpp-builder-content-bg)');
                     setVarImportant(hdrRow, 'border-color', 'var(--zpp-builder-content-border)');
@@ -1039,7 +1044,7 @@
                     var drawer = hdrRow.parentElement;
                     while (drawer && drawer !== document.body && drawer.id !== 'wpbody-content') {
                         if (hasFormControlsInside(drawer) || drawer.children.length >= 2) {
-                            drawer.setAttribute('data-zpp-role', 'sidebar');
+                            setZppRole(drawer, 'sidebar');
                             setVarImportant(drawer, 'background-image', 'none');
                             setVarImportant(drawer, 'background-color', 'var(--zpp-builder-content-bg)');
                             setVarImportant(drawer, 'border-color', 'var(--zpp-builder-content-border)');
@@ -1096,7 +1101,7 @@
                     if (isInsideIsolatedCanvas(node) || isCheckerSwatchElement(node)) return;
 
                     if (node.tagName === 'HR') {
-                        node.setAttribute('data-zpp-role', 'divider-line');
+                        setZppRole(node, 'divider-line');
                         setVarImportant(node, 'border-color', 'var(--zpp-builder-border-color)');
                         setVarImportant(node, 'background-color', 'var(--zpp-builder-border-color)');
                         return;
@@ -1110,14 +1115,14 @@
                         var bBottom = parseFloat(cs.borderBottomWidth) || 0;
                         var bTop = parseFloat(cs.borderTopWidth) || 0;
                         if (bBottom >= 1 && bBottom <= 2) {
-                            node.setAttribute('data-zpp-role', 'divider-row');
+                            setZppRole(node, 'divider-row');
                             setVarImportant(node, 'border-bottom-color', 'var(--zpp-builder-border-color)');
                         }
                         if (bTop >= 1 && bTop <= 2 && !node.hasAttribute('data-zpp-role')) {
                             setVarImportant(node, 'border-top-color', 'var(--zpp-builder-border-color)');
                         }
                         if (r.height >= 1 && r.height <= 2 && node.children.length === 0) {
-                            node.setAttribute('data-zpp-role', 'divider-line');
+                            setZppRole(node, 'divider-line');
                             setVarImportant(node, 'background-color', 'var(--zpp-builder-border-color)');
                             return;
                         }
@@ -1129,12 +1134,12 @@
                                           node.getAttribute('aria-selected') === 'true' ||
                                           (bBotW >= 1.5 && cs.borderBottomColor !== 'rgba(0, 0, 0, 0)' && cs.borderBottomColor !== 'transparent');
                         if (isSubActive) {
-                            node.setAttribute('data-zpp-role', 'subtab-active');
+                            setZppRole(node, 'subtab-active');
                             setVarImportant(node, 'color', 'var(--zpp-builder-accent-color)');
                             setVarImportant(node, 'border-bottom-color', 'var(--zpp-builder-accent-color)');
                             setVarImportant(node, 'background-color', 'transparent');
                         } else {
-                            node.setAttribute('data-zpp-role', 'subtab-inactive');
+                            setZppRole(node, 'subtab-inactive');
                             setVarImportant(node, 'color', 'var(--zpp-builder-muted-text)');
                             setVarImportant(node, 'background-color', 'transparent');
                         }
@@ -1146,7 +1151,7 @@
                     }
 
                     if ( /^(▶\s*Play|↺\s*Reset|Play|Reset)$/i.test(nTxt) && r.height >= 20 && r.height <= 38) {
-                        node.setAttribute('data-zpp-role', 'toolbar-btn');
+                        setZppRole(node, 'toolbar-btn');
                         setVarImportant(node, 'background-color', 'var(--zpp-builder-field-bg)');
                         setVarImportant(node, 'border-color', 'var(--zpp-builder-field-border)');
                         setVarImportant(node, 'color', 'var(--zpp-builder-field-text)');
@@ -1164,7 +1169,7 @@
                         return;
                     }
                     if (t === 'checkbox' || t === 'radio' || t === 'color' || t === 'hidden' || t === 'button' || t === 'submit') return;
-                    inp.setAttribute('data-zpp-role', 'field');
+                    setZppRole(inp, 'field');
                     setVarImportant(inp, 'background-color', 'var(--zpp-builder-field-bg)');
                     setVarImportant(inp, 'border-color', 'var(--zpp-builder-field-border)');
                     setVarImportant(inp, 'color', 'var(--zpp-builder-field-text)');
@@ -1176,7 +1181,7 @@
                     if (lbl.closest('[data-zpp-role="accordion-header"], [data-zpp-role="active-pill"], [data-zpp-role="subtab-active"], [data-zpp-role="subtab-inactive"], [data-zpp-role="toolbar-btn"], [data-zpp-role="add-canvas-btn"], [data-zpp-role="canvas-pill-bar"]')) return;
                     var tx = (lbl.textContent || '').trim();
                     if (/^(Appearance|Duration \(ms\)|Start delay \(ms\)|Start Animation|px|%|deg|ms|sec \(0 = disabled\)|Automatically dismisses.*)$/i.test(tx)) {
-                        lbl.setAttribute('data-zpp-role', 'muted');
+                        setZppRole(lbl, 'muted');
                         setVarImportant(lbl, 'color', 'var(--zpp-builder-muted-text)');
                     } else {
                         setVarImportant(lbl, 'color', 'var(--zpp-builder-content-text)');
@@ -1189,7 +1194,7 @@
                     if (!track) return;
                     var tr = track.getBoundingClientRect();
                     if (tr.width >= 24 && tr.width <= 64 && tr.height >= 12 && tr.height <= 34) {
-                        track.setAttribute('data-zpp-role', chk.checked ? 'toggle-track-on' : 'toggle-track-off');
+                        setZppRole(track, chk.checked ? 'toggle-track-on' : 'toggle-track-off');
                         setVarImportant(track, 'background-color', chk.checked ? 'var(--zpp-builder-accent-color)' : 'var(--zpp-builder-border-color)');
                     }
                 });
@@ -1204,7 +1209,7 @@
                     while (lHdr.parentElement && lHdr.parentElement.getBoundingClientRect().height <= 52 && lHdr.parentElement.children.length <= 4) {
                         lHdr = lHdr.parentElement;
                     }
-                    lHdr.setAttribute('data-zpp-role', 'layers-header');
+                    setZppRole(lHdr, 'layers-header');
                     setVarImportant(lHdr, 'background-image', 'none');
                     setVarImportant(lHdr, 'background-color', 'var(--zpp-builder-accordion-bg)');
                     setVarImportant(lHdr, 'border-color', 'var(--zpp-builder-accordion-border)');
@@ -1212,18 +1217,18 @@
 
                     var lPanel = lHdr.parentElement;
                     if (lPanel && lPanel !== document.body) {
-                        lPanel.setAttribute('data-zpp-role', 'layers-panel');
+                        setZppRole(lPanel, 'layers-panel');
                         setVarImportant(lPanel, 'background-color', 'var(--zpp-builder-content-bg)');
                         setVarImportant(lPanel, 'border-color', 'var(--zpp-builder-content-border)');
                     }
                     if (lHdr.nextElementSibling) {
                         var lBody = lHdr.nextElementSibling;
-                        lBody.setAttribute('data-zpp-role', 'layers-body');
+                        setZppRole(lBody, 'layers-body');
                         setVarImportant(lBody, 'background-color', 'var(--zpp-builder-content-bg)');
                         (document.getElementById('zappoppop-layers-list') ? [] : lBody.querySelectorAll('div, li')).forEach(function(row) {
                             var rr = row.getBoundingClientRect();
                             if (rr.height >= 22 && rr.height <= 48 && rr.width > 100) {
-                                row.setAttribute('data-zpp-role', 'layer-row');
+                                setZppRole(row, 'layer-row');
                                 setVarImportant(row, 'background-color', 'var(--zpp-builder-field-bg)');
                                 setVarImportant(row, 'border-color', 'var(--zpp-builder-field-border)');
                                 setVarImportant(row, 'color', 'var(--zpp-builder-field-text)');
@@ -1242,7 +1247,7 @@
                 var txt = (btn.textContent || '').trim();
                 if (btn.id === 'zappoppop-btn-save' || btn.id === 'zappoppop-btn-save-template' ||
                     /^(Save|Update|Updated|Saving\.\.\.|Saved!?|Save As Template|Save Popup)$/i.test(txt)) {
-                    btn.setAttribute('data-zpp-role', 'save-btn');
+                    setZppRole(btn, 'save-btn');
                     setVarImportant(btn, 'background-image', 'none');
                     setVarImportant(btn, 'background-color', 'var(--zpp-builder-save-bg)');
                     setVarImportant(btn, 'border-color', 'var(--zpp-builder-save-border)');
@@ -1267,7 +1272,7 @@
             if (!headerBar) { headerBar = document.querySelector('.zappoppop-builder-header'); }
 
             if (headerBar) {
-                headerBar.setAttribute('data-zpp-role', 'header');
+                setZppRole(headerBar, 'header');
                 setVarImportant(headerBar, 'background-image', 'none');
                 setVarImportant(headerBar, 'background-color', 'var(--zpp-builder-header-bg)');
                 setVarImportant(headerBar, 'border-color', 'var(--zpp-builder-header-border)');
@@ -1275,7 +1280,7 @@
 
                 if (headerBar.parentElement && headerBar.parentElement !== document.body) {
                     var topWrap = headerBar.parentElement;
-                    topWrap.setAttribute('data-zpp-role', 'workspace-root');
+                    setZppRole(topWrap, 'workspace-root');
                     setVarImportant(topWrap, 'background-color', 'var(--zpp-builder-stage-bg)');
                     setVarImportant(topWrap, 'border-color', 'var(--zpp-builder-header-border)');
                 }
@@ -1283,7 +1288,7 @@
                 headerBar.querySelectorAll('input, select').forEach(function(inp) {
                     var t = (inp.type || '').toLowerCase();
                     if (t === 'hidden' || t === 'checkbox' || t === 'radio') return;
-                    inp.setAttribute('data-zpp-role', 'field');
+                    setZppRole(inp, 'field');
                     setVarImportant(inp, 'background-color', 'var(--zpp-builder-field-bg)');
                     setVarImportant(inp, 'border-color', 'var(--zpp-builder-field-border)');
                     setVarImportant(inp, 'color', 'var(--zpp-builder-field-text)');
@@ -1304,7 +1309,7 @@
                     var isActBtn = btn.classList.contains('active') || btn.classList.contains('is-active') ||
                                    cs.backgroundColor === 'rgb(37, 99, 235)' || cs.backgroundColor === 'rgb(59, 130, 246)';
 
-                    btn.setAttribute('data-zpp-role', 'toolbar-btn');
+                    setZppRole(btn, 'toolbar-btn');
                     setVarImportant(btn, 'background-image', 'none');
                     setVarImportant(btn, 'background-color', 'var(--zpp-builder-field-bg)');
                     setVarImportant(btn, 'border', '1px solid ' + (isActBtn ? 'var(--zpp-builder-accent-color)' : 'var(--zpp-builder-field-border)'));
@@ -1318,7 +1323,7 @@
                 if (nextBar && !isInsideIsolatedCanvas(nextBar)) {
                     var nr = nextBar.getBoundingClientRect();
                     if (nr.height >= 28 && nr.height <= 75 && nr.width > window.innerWidth * 0.5) {
-                        nextBar.setAttribute('data-zpp-role', 'subtoolbar');
+                        setZppRole(nextBar, 'subtoolbar');
                         setVarImportant(nextBar, 'background-image', 'none');
                         setVarImportant(nextBar, 'background-color', 'var(--zpp-builder-header-bg)');
                         setVarImportant(nextBar, 'border-color', 'var(--zpp-builder-header-border)');
@@ -1326,7 +1331,7 @@
                         setVarImportant(nextBar, 'margin-bottom', '0px');
 
                         nextBar.querySelectorAll('button, a, [role="button"]').forEach(function(tBtn) {
-                            tBtn.setAttribute('data-zpp-role', 'toolbar-btn');
+                            setZppRole(tBtn, 'toolbar-btn');
                             setVarImportant(tBtn, 'background-color', 'var(--zpp-builder-field-bg)');
                             setVarImportant(tBtn, 'border-color', 'var(--zpp-builder-field-border)');
                             setVarImportant(tBtn, 'color', 'var(--zpp-builder-icon-color)');
@@ -1346,7 +1351,7 @@
                             if (track) {
                                 var tr = track.getBoundingClientRect();
                                 if (tr.width >= 24 && tr.width <= 60 && tr.height >= 12 && tr.height <= 32) {
-                                    track.setAttribute('data-zpp-role', chk.checked ? 'toggle-track-on' : 'toggle-track-off');
+                                    setZppRole(track, chk.checked ? 'toggle-track-on' : 'toggle-track-off');
                                     setVarImportant(track, 'background-color', chk.checked ? 'var(--zpp-builder-accent-color)' : 'var(--zpp-builder-border-color)');
                                 }
                             }
