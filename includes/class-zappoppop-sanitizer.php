@@ -218,7 +218,7 @@ class ZapPopPop_Sanitizer {
     /** Inline-style properties the renderer writes that wp_kses() would otherwise drop. */
     public static function render_safe_css($props = array()) {
         $more = array(
-            'position', 'top', 'right', 'bottom', 'left', 'inset', 'z-index', 'display', 'flex', 'flex-direction', 'flex-wrap', 'flex-grow',
+            '--*', 'position', 'top', 'right', 'bottom', 'left', 'inset', 'z-index', 'display', 'flex', 'flex-direction', 'flex-wrap', 'flex-grow',
             'flex-shrink', 'flex-basis', 'align-items', 'align-content', 'align-self', 'justify-content', 'justify-items', 'justify-self',
             'order', 'gap', 'row-gap', 'column-gap', 'grid', 'grid-template-columns', 'grid-template-rows', 'grid-column', 'grid-row',
             'place-items', 'place-content', 'width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'aspect-ratio',
@@ -244,6 +244,29 @@ class ZapPopPop_Sanitizer {
     }
 
     /**
+     * wp_kses() rejects any inline-style value that still contains "(" after the functions it knows (var, calc, ...) are removed,
+     * which would drop rgba(), hsl(), filter and timing functions. This lets those through when nothing else unsafe is left.
+     */
+    public static function render_allow_css($allow, $test = '') {
+        if ($allow) {
+            return true;
+        }
+        $t = (string) $test;
+        if (preg_match('/expression|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:|@import|[\\\\&}=]|\/\*/i', $t)) {
+            return false;
+        }
+        $fn = 'rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|cubic-bezier|steps|blur|brightness|contrast|drop-shadow|grayscale|hue-rotate|invert|opacity|saturate|sepia|attr|env|linear-gradient|radial-gradient|conic-gradient|repeating-linear-gradient|repeating-radial-gradient';
+        for ($i = 0; $i < 5; $i++) {
+            $n = preg_replace('/\b(?:' . $fn . ')\((?:[^()]|\([^()]*\))*\)/i', '', $t);
+            if ($n === null || $n === $t) {
+                break;
+            }
+            $t = $n;
+        }
+        return strpos($t, '(') === false && strpos($t, ')') === false;
+    }
+
+    /**
      * Output-side kses for popup markup (block render callback). Escaping already happens where the renderer builds
      * each value; this is the second layer. Return false from 'zappoppop_block_output_kses' to bypass it for a
      * site where an exotic custom element is being stripped (support escape hatch).
@@ -257,9 +280,30 @@ class ZapPopPop_Sanitizer {
             return $html;
         }
         $css = array(__CLASS__, 'render_safe_css');
+        $acc = array(__CLASS__, 'render_allow_css');
         add_filter('safe_style_css', $css);
+        add_filter('safecss_filter_attr_allow_css', $acc, 10, 2);
+        /* ZAPPOPPOP_STYLE_SPLIT: <style> blocks are cleaned on their own (wp_kses would turn the > in CSS selectors into &gt;) and put back afterwards */
+        $keep = array();
+        $tok  = 'zppstyle' . md5(uniqid('', true));
+        $html = preg_replace_callback('~<style\b([^>]*)>(.*?)</style\s*>~is', function ($m) use (&$keep, $tok) {
+            $css = preg_replace('/expression\s*\(|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:|@import/i', '', wp_strip_all_tags($m[2]));
+            $css = str_ireplace('</style', '', (string) $css);
+            $id  = preg_match('/\bid\s*=\s*["\']?([A-Za-z0-9_\-]+)/i', $m[1], $mm) ? ' id="' . $mm[1] . '"' : '';
+            $keep[] = '<style' . $id . '>' . $css . '</style>';
+            return $tok . (count($keep) - 1) . 'x';
+        }, $html);
+        if (!is_string($html)) {
+            remove_filter('safe_style_css', $css);
+            remove_filter('safecss_filter_attr_allow_css', $acc, 10);
+            return '';
+        }
         $out = wp_kses($html, self::render_allowed_html(), array_merge(wp_allowed_protocols(), array('data')));
+        foreach ($keep as $i => $block) {
+            $out = str_replace($tok . $i . 'x', $block, $out);
+        }
         remove_filter('safe_style_css', $css);
+        remove_filter('safecss_filter_attr_allow_css', $acc, 10);
         return $out;
     }
 
@@ -270,8 +314,8 @@ class ZapPopPop_Sanitizer {
 
     /** Settings subtrees owned by extension modules; they sanitise their own markup (see ZapPopPop_Module_Bridge). */
     protected static function module_keys() {
-        $keys = apply_filters('zappoppop_sanitizer_module_keys', array('overlay', 'custom_code'));
-        return is_array($keys) ? array_filter($keys, 'is_string') : array('overlay', 'custom_code');
+        $keys = apply_filters('zappoppop_sanitizer_module_keys', array('overlay'));
+        return is_array($keys) ? array_filter($keys, 'is_string') : array('overlay');
     }
 
     public static function deep($node, $key = '', $depth = 0, $raw = false) {

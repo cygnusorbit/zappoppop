@@ -155,7 +155,7 @@ class ZapPopPop_Promo {
         $color = $item['text_color'] !== '' ? $item['text_color'] : self::menu_primary();
         $attr  = !empty($item['new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : '';
         $links = is_array($links) ? $links : array();
-        $links['zpp_go_pro'] = '<a href="' . esc_url($item['url']) . '" class="zpp-go-pro-link" style="color:' . esc_attr($color) . ';font-weight:600"' . $attr . '>' . esc_html(wp_strip_all_tags($item['text'])) . '</a>';
+        $links['zappoppop_go_pro'] = '<a href="' . esc_url($item['url']) . '" class="zpp-go-pro-link" style="color:' . esc_attr($color) . ';font-weight:600"' . $attr . '>' . esc_html(wp_strip_all_tags($item['text'])) . '</a>';
         return $links;
     }
 
@@ -398,7 +398,7 @@ class ZapPopPop_Promo {
             echo '>';
             self::dismiss_button($item);
             if ($item['image'] !== '') {
-                echo self::image_link($item, '<img class="zpp-promo-img" src="' . esc_url($item['image']) . '" alt="" loading="lazy">', 'zpp-promo-img-link'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in image_link()
+                echo wp_kses_post(self::image_link($item, '<img class="zpp-promo-img" src="' . esc_url($item['image']) . '" alt="" loading="lazy">', 'zpp-promo-img-link'));
             }
             if ($item['title'] !== '') {
                 echo '<strong class="zpp-promo-title">' . esc_html($item['title']) . '</strong>';
@@ -428,7 +428,7 @@ class ZapPopPop_Promo {
                 self::print_vars($s);
                 echo ' role="group" aria-roledescription="slide" aria-label="' . esc_attr(($n + 1) . ' / ' . $total) . '"' . ($n === 0 ? '' : ' aria-hidden="true"') . '>';
                 if ($has) {
-                    echo self::image_link($s, '<img class="zpp-promo-bg" src="' . esc_url($s['image']) . '" alt="" loading="lazy">', 'zpp-promo-bg-link'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in image_link()
+                    echo wp_kses_post(self::image_link($s, '<img class="zpp-promo-bg" src="' . esc_url($s['image']) . '" alt="" loading="lazy">', 'zpp-promo-bg-link'));
                 }
                 echo '<div class="zpp-promo-slide-body">';
                 if ($s['title'] !== '') {

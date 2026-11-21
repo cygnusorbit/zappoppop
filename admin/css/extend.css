@@ -134,3 +134,9 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 .zpp-ext-cat-add:hover, .zpp-ext-cat-add:focus { background: var(--zpp-c-primary-hover, #a81f25); border-color: var(--zpp-c-primary-hover, #a81f25); color: var(--zpp-c-primary-text, #fff); outline: 0; }
 .zpp-ext-cat-add:focus-visible { -webkit-box-shadow: 0 0 0 2px var(--zpp-c-bg-card, #fff), 0 0 0 4px var(--zpp-c-primary, #c1272d); box-shadow: 0 0 0 2px var(--zpp-c-bg-card, #fff), 0 0 0 4px var(--zpp-c-primary, #c1272d); }
 .zpp-ext-cat-add .dashicons { width: 16px; height: 16px; margin: 0; font-size: 16px; line-height: 16px; }
+
+/* Add-ons section (separate plugins): cards reuse .zpp-ext-item, so they follow the Theme page variables. */
+.zpp-ext-addons { margin: 24px 0 0; }
+.zpp-ext-addons .zpp-ext-grid { margin-top: 4px; }
+.zpp-ext-addons .zpp-ext-item-actions { margin-top: auto; }
+#wpbody-content .zappoppop-extend-wrap .zpp-ext-addons .zpp-ext-item-actions a.button { text-decoration: none; }

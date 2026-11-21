@@ -43,7 +43,7 @@
         if (card && !card.querySelector('.zpp-ca-title')) {
             var h = document.createElement('div');
             h.className = 'zpp-ca-title';
-            h.textContent = 'Animation & Behavior';
+            h.textContent = 'Animation'; /* ZPP_ANIM_TITLE */
             card.insertBefore(h, card.firstChild);
             attach(h, 'anim', !!st.anim);
             card.classList.toggle(CLOSED, !!st.anim);
@@ -116,8 +116,11 @@
         btn.classList.remove('is-armed');
         btn.querySelector('span').textContent = 'Reset Content Settings';
     }
+    /* ZPP_LK_OWN_BLOCK: the link group (no data-prop) belongs to the layer types that carry it; Reset clears it, Save as Default keeps only the two switches */
+    var LINK_TYPES = ['shape', 'label', 'icon', 'html'], LINK_KEYS = ['linkUrl', 'url', 'linkBlank', 'targetBlank', 'nofollow'];
     function contentKeys(el) {
         var keys = {};
+        if (el && LINK_TYPES.indexOf(String(el.type || '').toLowerCase()) !== -1) { LINK_KEYS.forEach(function (k) { keys[k] = 1; }); }
         SHAPE_KEYS.forEach(function (k) { if (el && el.type === 'shape') { keys[k] = 1; } });
         Array.prototype.forEach.call(document.querySelectorAll('#insp-tab-basic [data-prop]'), function (n) {
             if (n.closest('#insp-section-layer-name')) { return; }
@@ -130,6 +133,7 @@
     window.ZapPopTabKeys = window.ZapPopTabKeys || {};
     window.ZapPopTabKeys.basic = function (el) {
         var keys = contentKeys(el);
+        delete keys.linkUrl; delete keys.url; /* a URL is per layer, never a default */
         Object.keys(ALWAYS).forEach(function (k) { keys[k] = 1; });
         Object.keys(IF_SET).forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } });
         LABEL_KEYS.forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } }); /* ZPP_LD_LABEL */
@@ -155,6 +159,7 @@
         $('#prop-gp-required-msg').val('');
         $('#prop-gp-autocomplete').val('off');
         if (window.ZapPopPopLayerDefaults) { window.ZapPopPopLayerDefaults.applyTo(el, 'basic'); window.ZapPopPopLayerDefaults.syncDom(el); } /* ZPP_LAYER_DEFAULTS */
+        if (window.ZapPopPopLinkGroup) { window.ZapPopPopLinkGroup.hydrate(); } /* ZPP_LK_OWN_BLOCK */
         var c = core();
         if (c && typeof c.pushHistory === 'function') { c.pushHistory('Reset Content Settings'); }
         var cv = window.ZapPopPopBuilderCanvas;

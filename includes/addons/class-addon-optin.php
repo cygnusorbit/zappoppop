@@ -97,7 +97,7 @@ class ZapPopPop_Addon_Optin {
             <meta charset="<?php bloginfo('charset'); ?>">
             <title><?php esc_html_e('Subscription Confirmed', 'zappoppop'); ?></title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <?php echo ZapPopPop_Libraries::style_tag('zappoppop-optin-confirm'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup printed by wp_print_styles() ?>
+            <?php ZapPopPop_Libraries::print_style('zappoppop-optin-confirm'); ?>
         </head>
         <body>
             <div class="card">

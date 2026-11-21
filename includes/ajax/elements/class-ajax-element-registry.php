@@ -94,12 +94,15 @@ class ZapPopPop_Ajax_Element_Registry {
             }
         }
 
-        foreach ( array( 'iconLeftColor', 'iconRightColor', 'fgColor' ) as $zappoppop_ic ) { /* ZAPPOPPOP_ICON_COLOR */
+        foreach ( array( 'iconLeftColor', 'iconRightColor', 'fgColor', 'textShadowColor' ) as $zappoppop_ic ) { /* ZAPPOPPOP_ICON_COLOR */
             if ( isset( $el[ $zappoppop_ic ] ) && ! is_array( $el[ $zappoppop_ic ] ) ) {
                 $zappoppop_icv = ZapPopPop_Color::sanitize( (string) $el[ $zappoppop_ic ] );
                 if ( $zappoppop_icv ) { $clean[ $zappoppop_ic ] = $zappoppop_icv; }
             }
         }
+
+        if ( isset( $clean['textTransform'] ) && ! in_array( $clean['textTransform'], array( 'none', 'uppercase', 'lowercase', 'capitalize' ), true ) ) { unset( $clean['textTransform'] ); } /* ZPP_TEXT_TRANSFORM */
+        if ( isset( $el['textShadowPos'] ) && ! is_array( $el['textShadowPos'] ) ) { $clean['textShadowPos'] = ( 'inset' === (string) $el['textShadowPos'] ) ? 'inset' : 'outset'; } /* ZPP_TEXT_SHADOW */
 
         $html_keys = array( 'content', 'options', 'titleText', 'paragraphText', 'text', 'label' );
         foreach ( $html_keys as$hk ) {
@@ -110,9 +113,9 @@ class ZapPopPop_Ajax_Element_Registry {
 
         $num_keys = array(
             'x', 'y', 'left', 'top', 'width', 'height', 'w', 'h', 'opacity',
-            'fontSize', 'lineHeight', 'letterSpacing',
+            'fontSize', 'lineHeight', 'letterSpacing', 'wordSpacing',
             'padTop', 'padRight', 'padBottom', 'padLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'padding',
-            'borderWidth', 'borderRadius', 'shadowX', 'shadowY', 'shadowBlur', 'shadowSpread',
+            'borderWidth', 'borderRadius', 'shadowX', 'shadowY', 'shadowBlur', 'shadowSpread', 'textShadowX', 'textShadowY', 'textShadowBlur',
             'animDuration', 'animDelay', 'iconLeftOffset', 'iconRightOffset',
             'strokeWidth', 'strokeWidthPrev', 'rotate', 'iconSize', 'cookieDays', 'progressValue', 'progressPercent', 'progressVal', 'gotoCanvas', 'goto_canvas', 'goto_screen',
             'maxLength', 'minLength', 'min', 'max', 'step', 'rows',
@@ -138,10 +141,10 @@ class ZapPopPop_Ajax_Element_Registry {
 
         if ( isset( $el['inlineStyles'] ) && is_array( $el['inlineStyles'] ) ) {$clean['inlineStyles'] = array();
             foreach ( $el['inlineStyles'] as$st ) {
-                if ( is_array( $st ) ) {$clean['inlineStyles'][] = array(
-                        'prop'  => isset( $st['prop'] ) ? sanitize_text_field( $st['prop'] ) : '',
-                        'value' => isset( $st['value'] ) ? sanitize_text_field( $st['value'] ) : '',
-                    );
+                if ( is_array( $st ) ) {$pair = ZapPopPop_Style_Pairs::clean( isset( $st['prop'] ) ? $st['prop'] : '', isset( $st['value'] ) ? $st['value'] : ( isset( $st['val'] ) ? $st['val'] : '' ) );
+                    if ( $pair ) {
+                        $clean['inlineStyles'][] = $pair;
+                    }
                 }
             }
         }

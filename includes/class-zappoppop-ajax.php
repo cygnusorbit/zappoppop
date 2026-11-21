@@ -14,6 +14,7 @@ class ZapPopPop_Ajax {
             'ZapPopPop_Ajax_Tools'       => 'class-ajax-tools.php',
             'ZapPopPop_Ajax_Dash_Layout' => 'class-ajax-dash-layout.php',
             'ZapPopPop_Ajax_Modules'     => 'class-ajax-modules.php',
+            'ZapPopPop_Ajax_Addons'      => 'class-ajax-addons.php',
             'ZapPopPop_Ajax_Template_Bundle' => 'class-ajax-template-bundle.php',
             'ZapPopPop_Ajax_Saved_Defaults' => 'class-ajax-saved-defaults.php',
             'ZapPopPop_Ajax_Guide' => 'class-ajax-guide.php',

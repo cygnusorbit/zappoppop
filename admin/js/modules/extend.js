@@ -1,6 +1,6 @@
 /**
- * ZapPopPop Extend page: lists uploads, uninstalled / deleted built-ins and locked modules;
- * upload a module.zip, install, uninstall and delete.
+ * ZapPopPop Extend page: lists bundled modules (core and companion plugins), uninstalled / deleted ones and locked ones;
+ * install, uninstall and delete. ZAPPOPPOP_UPLOADER_REMOVED: there is no upload.
  */
 (function ($) {
     'use strict';
@@ -18,8 +18,6 @@
         var cats = (M.vars.categories || []).slice();
         var cat = DEF;
         var query = '';
-        var selected = null;
-        var maxZip = Number(M.vars.max_zip) || 0;
 
         var $grid = $('#zpp-ext-grid');
         var $notice = $('#zpp-ext-notice');
@@ -27,10 +25,6 @@
         var $pager = $('#zpp-ext-pager');
         var $cats = $('#zpp-ext-cats');
         var $filters = $('#zpp-ext-filters'); /* ZAPPOPPOP_EXT_FILTERS */
-        var $drop = $('#zpp-ext-drop');
-        var $file = $('#zpp-ext-file');
-        var $name = $('#zpp-ext-file-name');
-        var $btn = $('#zpp-ext-upload-btn');
 
         function isAvail(m) { return !m.locked && (m.state === 'available' || m.state === 'deleted'); }
 
@@ -40,7 +34,6 @@
                 case 'installed': return m.state === 'installed';
                 case 'uninstalled': return m.state !== 'installed';
                 case 'builtin': return m.source === 'core';
-                case 'uploaded': return m.source === 'uploaded';
                 default: return true;
             }
         }
@@ -141,7 +134,7 @@
             var $head = $('<div class="zpp-ext-item-head"></div>').appendTo($top);
             $('<h3 class="zpp-ext-item-name"></h3>').text(m.name).appendTo($head);
             if (m.show_source !== false) {
-                $head.append(pill(m.source === 'core' ? M.t('builtin') : M.t('uploaded')));
+                $head.append(pill(m.source === 'core' ? M.t('builtin') : M.t('addon')));
             }
             if (m.show_state !== false) {
                 if (m.locked) {
@@ -311,7 +304,7 @@
                 done: function (r) {
                     if (!r.ok) { M.notice($notice, 'error', r.message); render(); return; }
                     if (action === 'delete') {
-                        if (m.source === 'uploaded') { items.splice(i, 1); } else { m.state = 'deleted'; }
+                        m.state = 'deleted';
                         M.notice($notice, 'success', r.data.message);
                     } else if (r.data.module) {
                         upsert(r.data.module);
@@ -424,86 +417,6 @@
             if (i !== -1) { editDialog(items[i]); }
         });
 
-        /* upload */
-        if (!$drop.length) { render(); return; }
-
-        function setFile(f) {
-            selected = null;
-            $name.text('');
-            if (f) {
-                if (!/\.zip$/i.test(f.name)) { M.notice($notice, 'error', M.t('not_zip')); }
-                else if (maxZip && f.size > maxZip) { M.notice($notice, 'error', M.fmt(M.t('too_big'), Math.round(maxZip / 1048576) + ' MB')); }
-                else { selected = f; $name.text(f.name); $notice.prop('hidden', true); }
-            }
-            $btn.prop('disabled', !selected);
-        }
-
-        $file.on('change', function () { setFile(this.files && this.files[0] ? this.files[0] : null); });
-        $drop.on('dragenter dragover', function (e) { e.preventDefault(); $drop.addClass('is-over'); });
-        $drop.on('dragleave dragend', function () { $drop.removeClass('is-over'); });
-        $drop.on('drop', function (e) {
-            e.preventDefault();
-            $drop.removeClass('is-over');
-            var dt = e.originalEvent && e.originalEvent.dataTransfer;
-            if (dt && dt.files && dt.files.length) { setFile(dt.files[0]); }
-        });
-
-        function compareBody(d) {
-            var $w = $('<div class="zpp-ext-cmp"></div>');
-            function col(label, m, cls) {
-                var $c = $('<div class="zpp-ext-cmp-col"></div>').addClass(cls).appendTo($w);
-                $('<span class="zpp-ext-cmp-tag"></span>').text(label).appendTo($c);
-                var $t = $('<div class="zpp-ext-cmp-top"></div>').appendTo($c);
-                $t.append(thumb(m.image));
-                $('<strong class="zpp-ext-cmp-name"></strong>').text(m.name).appendTo($t);
-                var $p = $('<p class="zpp-ext-cmp-line"></p>').appendTo($c);
-                $('<span class="zpp-mod-pill"></span>').text(M.fmt(M.t('version'), m.version)).appendTo($p);
-                $p.append(' ');
-                $('<span class="zpp-mod-pill"></span>').text(m.source === 'core' ? M.t('builtin') : M.t('uploaded')).appendTo($p);
-                if (m.author) { $('<p class="zpp-ext-cmp-line"></p>').text(M.fmt(M.t('by'), m.author)).appendTo($c); }
-                if (m.description) { $('<p class="zpp-ext-cmp-line"></p>').text(m.description).appendTo($c); }
-            }
-            col(M.t('cmp_current'), d.old, '');
-            $('<span class="zpp-ext-cmp-arrow dashicons dashicons-arrow-right-alt" aria-hidden="true"></span>').appendTo($w);
-            col(M.t('cmp_new'), d['new'], 'is-new');
-            return $w;
-        }
-
-        function send(replace) {
-            if (!selected) { M.notice($notice, 'error', M.t('pick_zip')); return; }
-            var label = $btn.text();
-            $btn.prop('disabled', true).text(M.t('uploading'));
-            M.upload(selected, replace, function (r) {
-                $btn.text(label);
-                if (!r.ok && r.code === 'exists' && r.data) {
-                    $btn.prop('disabled', false);
-                    var d = r.data;
-                    var both = !!(d.old && d['new']);
-                    M.dialog({
-                        title: M.t('replace_title'),
-                        message: both ? M.t(d.old.source === 'core' ? 'cmp_msg_core' : 'cmp_msg') : M.fmt(M.t('replace_msg'), d.name, d.old_version, d.new_version),
-                        body: both ? compareBody(d) : null,
-                        confirm: M.t('replace'),
-                        onConfirm: function () { send(true); }
-                    });
-                    return;
-                }
-                if (!r.ok) { $btn.prop('disabled', false); M.notice($notice, 'error', r.message); return; }
-                if (r.data.module) { upsert(r.data.module); }
-                selected = null;
-                $file.val('');
-                $name.text('');
-                M.notice($notice, 'success', r.data.message);
-                render();
-            });
-        }
-
-        $btn.on('click', function () { send(false); });
-        $('#zpp-ext-bar-upload').on('click', function () {
-            var card = document.getElementById('zpp-ext-upload-card');
-            if (card && card.scrollIntoView) { card.scrollIntoView(); }
-            $file.trigger('click');
-        });
 
         render();
     });

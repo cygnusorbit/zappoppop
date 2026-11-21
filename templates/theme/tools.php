@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 ?>
 <div class="zappoppop-box zpp-theme-box">
     <h3><?php esc_html_e('Export / Import', 'zappoppop'); ?></h3>
-    <textarea id="zpp-theme-json" name="zpp_theme_import" rows="6" spellcheck="false"></textarea>
+    <textarea id="zpp-theme-json" name="zappoppop_theme_import" rows="6" spellcheck="false"></textarea>
     <p>
         <button type="button" class="button" id="zpp-theme-export"><?php esc_html_e('Export current', 'zappoppop'); ?></button>
         <button type="submit" class="button" id="zpp-theme-import" data-action="import"><?php esc_html_e('Import JSON', 'zappoppop'); ?></button>

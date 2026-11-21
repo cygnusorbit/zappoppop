@@ -43,6 +43,7 @@ class ZapPopPop_Ajax_Frontend {
 
         foreach ($raw_fields as $key =>$val) {
             $clean_key = sanitize_key($key);
+            if (ZapPopPop_Submission_Files::is_path_key($clean_key)) { continue; } /* ZAPPOPPOP_SUBMISSION_FILES */
             if (is_array($val)) {$clean_fields[$clean_key] = array_map('sanitize_text_field',$val);
             } else {
                 $clean_val = sanitize_text_field($val);$clean_fields[$clean_key] =$clean_val;
@@ -66,7 +67,7 @@ class ZapPopPop_Ajax_Frontend {
                 $file_key = sanitize_key($file_key);
                 if ($file_key === '' || !is_array($file_data)) { continue; }
                 if (!empty($file_data['name']) &&$file_data['error'] === UPLOAD_ERR_OK) {
-                    $upload_overrides = ['test_form' => false];$movefile = wp_handle_upload($file_data,$upload_overrides);
+                    $movefile = ZapPopPop_Submission_Files::store($file_data);
                     if ($movefile && !isset($movefile['error'])) {
                         $clean_fields[$file_key] = esc_url_raw($movefile['url']);$clean_fields[$file_key . '_path'] = sanitize_text_field($movefile['file']);
                     }
@@ -87,6 +88,9 @@ class ZapPopPop_Ajax_Frontend {
         // 6. Database Persistence
         global $wpdb;
         $table_name = $wpdb->prefix . 'zappoppop_submissions';$popup_uid  = $this->resolve_popup_uid();
+        /* ZAPPOPPOP_LIVE_ONLY */ if ($popup_uid !== '' && !ZapPopPop_Tracking::is_live($popup_uid)) {
+            wp_send_json_error(['message' => __('Associated popup configuration was not found.', 'zappoppop')]);
+        }
 
         if (!empty($name)) { $clean_fields['_name'] = $name; }
         if (!empty($phone)) { $clean_fields['_phone'] = $phone; }
@@ -261,14 +265,7 @@ class ZapPopPop_Ajax_Frontend {
                 $payload = json_decode($row->payload, true);
                 if (is_array($payload)) {$upload_dir = wp_upload_dir();
                     $base_dir = realpath($upload_dir['basedir']);
-                    foreach ($payload as $key =>$val) {
-                        if (is_string($val) && (strpos($key, '_path') !== false || file_exists($val))) {
-                            $real_path = realpath($val);
-                            if ($real_path && strpos($real_path,$base_dir) === 0) {
-                                wp_delete_file( $real_path );
-                            }
-                        }
-                    }
+                    ZapPopPop_Submission_Files::delete_files($payload);
                 }
             }
         }
@@ -306,14 +303,7 @@ class ZapPopPop_Ajax_Frontend {
                 if ($row && !empty($row->payload)) {
                     $payload = json_decode($row->payload, true);
                     if (is_array($payload)) {
-                        foreach ($payload as $key =>$val) {
-                            if (is_string($val) && (strpos($key, '_path') !== false || file_exists($val))) {
-                                $real_path = realpath($val);
-                                if ($real_path && strpos($real_path,$base_dir) === 0) {
-                                    wp_delete_file( $real_path );
-                                }
-                            }
-                        }
+                        ZapPopPop_Submission_Files::delete_files($payload);
                     }
                 }
             }

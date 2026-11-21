@@ -67,5 +67,5 @@ if (!defined('ABSPATH')) exit;
         </div>
         <input type="range" id="prop-shape-rotate" class="zappoppop-gp-bind zappoppop-shape-range" data-prop="rotate" min="0" max="360" step="1" value="0">
     </div>
-    <?php $zpp_lk_id = 'shape'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
+    <?php $zappoppop_lk_id = 'shape'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
 </div>

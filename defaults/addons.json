@@ -1,0 +1,9 @@
+{
+  "_help": {
+    "about": "Add-ons listed on ZapPopPop > Modules > Add-ons. An add-on is a normal WordPress plugin; ZapPopPop only links to WordPress's own install and activate screens. Nothing is downloaded by ZapPopPop itself. The list is empty until add-ons are published.",
+    "fields": "slug = plugin slug (WordPress.org slug for kind wporg), file = folder/main-file.php as WordPress lists it, name (max 60), description (max 200), kind = wporg (Install button uses WordPress) or link (Get add-on opens url in a new tab; https only), url = only for kind link, icon = a dashicons class such as dashicons-cart, badge = short label (max 12).",
+    "example": {"slug": "zappoppop-example", "file": "zappoppop-example/zappoppop-example.php", "name": "Example add-on", "description": "What the add-on adds.", "kind": "wporg", "icon": "dashicons-admin-plugins", "badge": "Free"},
+    "note": "JSON does not allow comments or trailing commas. Keys starting with an underscore are ignored. Plugins can also add entries with the zappoppop_addon_catalog filter."
+  },
+  "addons": []
+}

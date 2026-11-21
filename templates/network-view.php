@@ -25,23 +25,23 @@ $net_more        = max(0, $net_total - count($net_sites));
     <div class="zpp-theme-layout">
         <div class="zpp-theme-main">
             <form method="post" action="<?php echo esc_url(network_admin_url('edit.php?action=' . ZapPopPop_Admin_Network::ACTION)); ?>">
-                <?php wp_nonce_field(ZapPopPop_Admin_Network::NONCE, 'zpp_network_nonce'); ?>
+                <?php wp_nonce_field(ZapPopPop_Admin_Network::NONCE, 'zappoppop_network_nonce'); ?>
                 <section class="zpp-theme-panel is-active">
                     <h2><?php esc_html_e('Defaults for new sites', 'zappoppop'); ?></h2>
                     <p class="description"><?php esc_html_e('These values are copied into every site created from now on. Existing sites keep their own settings.', 'zappoppop'); ?></p>
                     <div class="zpp-theme-fields">
                         <div class="zpp-theme-field">
                             <label for="zpp-net-sender-name"><?php esc_html_e('Sender name', 'zappoppop'); ?></label>
-                            <input type="text" id="zpp-net-sender-name" name="zpp_network[sender_name]" value="<?php echo esc_attr($net_values['sender_name']); ?>" placeholder="ZapPopPop">
+                            <input type="text" id="zpp-net-sender-name" name="zappoppop_network[sender_name]" value="<?php echo esc_attr($net_values['sender_name']); ?>" placeholder="ZapPopPop">
                         </div>
                         <div class="zpp-theme-field">
                             <label for="zpp-net-sender-email"><?php esc_html_e('Sender email', 'zappoppop'); ?></label>
-                            <input type="text" id="zpp-net-sender-email" name="zpp_network[sender_email]" value="<?php echo esc_attr($net_values['sender_email']); ?>" placeholder="<?php echo esc_attr(get_site_option('admin_email')); ?>">
+                            <input type="text" id="zpp-net-sender-email" name="zappoppop_network[sender_email]" value="<?php echo esc_attr($net_values['sender_email']); ?>" placeholder="<?php echo esc_attr(get_site_option('admin_email')); ?>">
                             <p class="description"><?php esc_html_e('Leave empty to use each site\'s admin email.', 'zappoppop'); ?></p>
                         </div>
                         <div class="zpp-theme-field is-wide is-bool">
                             <label for="zpp-net-clean"><?php esc_html_e('Remove data when the plugin is deleted (new sites)', 'zappoppop'); ?></label>
-                            <input type="checkbox" id="zpp-net-clean" name="zpp_network[clean_on_uninstall]" value="1" <?php checked(!empty($net_values['clean_on_uninstall'])); ?>>
+                            <input type="checkbox" id="zpp-net-clean" name="zappoppop_network[clean_on_uninstall]" value="1" <?php checked(!empty($net_values['clean_on_uninstall'])); ?>>
                         </div>
                         <p class="description zpp-theme-field is-wide"><?php esc_html_e('When on, deleting the plugin also drops the tables and settings of those sites, and removes these network settings.', 'zappoppop'); ?></p>
                     </div>

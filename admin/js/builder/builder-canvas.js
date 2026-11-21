@@ -749,6 +749,9 @@
             if (el.fontWeight) $div.css('fontWeight', el.fontWeight);
             if (el.lineHeight) $div.css('lineHeight', el.lineHeight);
             if (el.letterSpacing) $div.css('letterSpacing', el.letterSpacing + 'px');
+            $div.attr('data-zpp-tt', (el.textTransform && el.textTransform !== 'none') ? el.textTransform : null); /* ZPP_TEXT_TRANSFORM */
+            $div.css('wordSpacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
+            { var zppTsReg = window.ZapPopPopElementsRegistry; $div.css('text-shadow', zppTsReg && zppTsReg.textShadowCss ? zppTsReg.textShadowCss(el) : ''); } /* ZPP_TEXT_SHADOW */
             if (el.textAlign) $div.css('textAlign', el.textAlign);
             if (el.color) $div.css('color', el.color);
             if (el.bgColor && !el.transparentFill) $div.css('backgroundColor', el.bgColor);
@@ -1186,7 +1189,7 @@
             var newEl = {
                 id: id,
                 type: type,
-                name: (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(type) + ' ' + (elements.length + 1),
+                name: (function(s){s=String(s||'');return s==='label'?'Header':s.charAt(0).toUpperCase()+s.slice(1);})(type) + ' ' + (elements.length + 1),
                 top: (typeof spawnY === 'number' && !isNaN(spawnY)) ? spawnY : (50 + (elements.length * 15) % 150),
                 left: (typeof spawnX === 'number' && !isNaN(spawnX)) ? spawnX : (50 + (elements.length * 15) % 200),
                 width: 200,

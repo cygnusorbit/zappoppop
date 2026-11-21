@@ -75,9 +75,9 @@ foreach ($templates as $zappoppop_i => $zappoppop_t) {
     <?php include ZAPPOPPOP_PATH . 'templates/library/header.php'; ?>
 
     <!-- Responsive Template Cards Grid -->
-    <?php $zpp_pg_pos = 'top'; include ZAPPOPPOP_PATH . 'templates/library/pager.php'; ?>
+    <?php $zappoppop_pg_pos = 'top'; include ZAPPOPPOP_PATH . 'templates/library/pager.php'; ?>
     <?php include ZAPPOPPOP_PATH . 'templates/library/grid.php'; ?>
-    <?php $zpp_pg_pos = 'bottom'; include ZAPPOPPOP_PATH . 'templates/library/pager.php'; ?>
+    <?php $zappoppop_pg_pos = 'bottom'; include ZAPPOPPOP_PATH . 'templates/library/pager.php'; ?>
 
     <!-- Template Inspection & Preview Modal -->
     <?php include ZAPPOPPOP_PATH . 'templates/library/modal-preview.php'; ?>

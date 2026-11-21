@@ -106,6 +106,7 @@ class ZapPopPop_Admin_Theme {
                 'lh_base'      => $f(__('Line height (unitless)', 'zappoppop'), 'number', '1.5'),
                 'ls_label'     => $f(__('Label letter spacing', 'zappoppop'), 'size', '0.5px'),
                 'tt_label'     => $f(__('Label text transform', 'zappoppop'), 'enum', 'uppercase', ['options' => $transforms]),
+                'tt_accordion' => $f(__('Accordion title text transform', 'zappoppop'), 'enum', 'none', ['options' => $transforms]), /* ZPP_TT_ACCORDION: all Builder accordion titles */
                 'tt_badge'     => $f(__('Badge text transform', 'zappoppop'), 'enum', 'uppercase', ['options' => $transforms]),
             ]],
             'text' => ['label' => __('Text & Links', 'zappoppop'), 'fields' => [
@@ -228,6 +229,45 @@ class ZapPopPop_Admin_Theme {
         ];
     }
 
+    /**
+     * Grouped options for the theme font dropdowns: label => [value => label].
+     *
+     * @return array
+     */
+    public static function font_options() {
+        $system = array();
+        foreach (self::font_presets() as $preset) {
+            if ($preset === 'inherit') {
+                $label = __('Inherit', 'zappoppop');
+            } elseif (strpos($preset, '-apple-system') === 0) {
+                $label = __('System default (recommended)', 'zappoppop');
+            } elseif ($preset === 'system-ui, sans-serif') {
+                $label = __('System UI', 'zappoppop');
+            } else {
+                $parts = explode(',', $preset);
+                $label = trim($parts[0], " \t\"'");
+                if (strpos($preset, 'monospace') !== false && stripos($label, 'ui-monospace') !== false) {
+                    $label = __('System monospace', 'zappoppop');
+                }
+            }
+            $system[$preset] = $label;
+        }
+        $groups = array(__('System', 'zappoppop') => $system);
+        $bundled = array();
+        foreach (ZapPopPop_Font_Catalog::bundled() as $f) {
+            $bundled["'" . $f[0] . "', " . $f[1]] = $f[0];
+        }
+        $groups[__('Bundled fonts', 'zappoppop')] = $bundled;
+        $custom = array();
+        foreach (ZapPopPop_Font_Catalog::custom() as $value => $label) {
+            $custom[$value] = $label;
+        }
+        if ($custom) {
+            $groups[__('Custom fonts', 'zappoppop')] = $custom;
+        }
+        return $groups;
+    }
+
     public static function css_var($key) {
         return '--zpp-' . str_replace('_', '-', $key);
     }
@@ -278,12 +318,12 @@ class ZapPopPop_Admin_Theme {
             case 'enum':
                 return isset($field['options'][$value]) ? $value : $field['default'];
             case 'font':
-                return ($value !== '' && strlen($value) <= 250 && preg_match('/^[A-Za-z0-9 ,"\'\-_.]+$/', $value)) ? $value : $field['default'];
+                return ($value !== '' && strlen($value) <= 250 && preg_match('/^[\p{L}\p{N} ,"\'\-_.]+$/u', $value)) ? $value : $field['default'];
             case 'shadow':
                 return ($value !== '' && strlen($value) <= 200 && preg_match('/^(none|[0-9a-zA-Z\s.,#()%\-]+)$/', $value)) ? $value : $field['default'];
             case 'media':
-                $zpp_id = absint($value);
-                return ($zpp_id && strpos((string) get_post_mime_type($zpp_id), 'image/') === 0) ? $zpp_id : 0;
+                $zappoppop_id = absint($value);
+                return ($zappoppop_id && strpos((string) get_post_mime_type($zappoppop_id), 'image/') === 0) ? $zappoppop_id : 0;
             case 'textarea':
                 $value = wp_strip_all_tags($value);
                 return str_ireplace('</style', '', substr($value, 0, 20000));
@@ -377,16 +417,16 @@ class ZapPopPop_Admin_Theme {
         $g_c = isset($v['c_guide_color']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', (string) $v['c_guide_color']) ? $v['c_guide_color'] : '#7dd3fc';
         $css .= ':root{--zpp-guide-color:' . $g_c . ';--zpp-guide-width:' . $g_w . ';}';
         /* ZPP_BUILDER_GUIDE_TAB: Builder Guide colours (saved ones only) */
-        $zpp_saved = get_option(self::OPTION, []);
-        $zpp_tg = '';
-        if (is_array($zpp_saved) && isset(self::schema()['builder_guide'])) {
+        $zappoppop_saved = get_option(self::OPTION, []);
+        $zappoppop_tg = '';
+        if (is_array($zappoppop_saved) && isset(self::schema()['builder_guide'])) {
             foreach (self::schema()['builder_guide']['fields'] as $key => $field) {
-                if (array_key_exists($key, $zpp_saved) && isset($v[$key])) {
-                    $zpp_tg .= self::css_var($key) . ':' . $v[$key] . ';';
+                if (array_key_exists($key, $zappoppop_saved) && isset($v[$key])) {
+                    $zappoppop_tg .= self::css_var($key) . ':' . $v[$key] . ';';
                 }
             }
         }
-        if ($zpp_tg !== '') { $css .= ':root{' . $zpp_tg . '}'; }
+        if ($zappoppop_tg !== '') { $css .= ':root{' . $zappoppop_tg . '}'; }
         return $css;
     }
 
@@ -397,11 +437,27 @@ class ZapPopPop_Admin_Theme {
     public static function enqueue_global() {
         wp_enqueue_style('zappoppop-theme-global-css', ZAPPOPPOP_URL . 'admin/css/theme-global.css', [], self::version());
         wp_add_inline_style('zappoppop-theme-global-css', self::build_css());
+
+        /* Load the bundled font stylesheet only when a saved theme font uses one of its families. */
+        $zappoppop_uses_bundled = false;
+        $zappoppop_values = self::get_values();
+        foreach (ZapPopPop_Font_Catalog::bundled() as $zappoppop_bf) {
+            foreach (array('font_base', 'font_heading', 'font_mono') as $zappoppop_fk) {
+                if (isset($zappoppop_values[$zappoppop_fk]) && strpos((string) $zappoppop_values[$zappoppop_fk], "'" . $zappoppop_bf[0] . "'") === 0) {
+                    $zappoppop_uses_bundled = true;
+                    break 2;
+                }
+            }
+        }
+        if ($zappoppop_uses_bundled) {
+            wp_enqueue_style('zappoppop-bundled-fonts', ZapPopPop_Libraries::fonts_url(), array(), ZAPPOPPOP_VERSION);
+        }
     }
 
     public static function enqueue_page() {
         $v = self::version();
         wp_enqueue_style('dashicons');
+        wp_enqueue_style('zappoppop-bundled-fonts', ZapPopPop_Libraries::fonts_url(), array(), ZAPPOPPOP_VERSION); /* live preview of the font dropdowns */
         wp_enqueue_style('zappoppop-dashboard-css', ZAPPOPPOP_URL . 'admin/css/dashboard.css', [], $v);
         wp_enqueue_style('zappoppop-overview-css', ZAPPOPPOP_URL . 'admin/css/overview.css', [], $v);
         wp_enqueue_style('zappoppop-theme-css', ZAPPOPPOP_URL . 'admin/css/theme.css', ['zappoppop-dashboard-css', 'zappoppop-overview-css', 'zappoppop-theme-global-css'], $v);
@@ -427,7 +483,7 @@ class ZapPopPop_Admin_Theme {
 
     /* ---------------------------------------------------------- save */
     public function handle_post() {
-        if (!is_admin() || empty($_POST['zpp_theme_action'])) {
+        if (!is_admin() || empty($_POST['zappoppop_theme_action'])) {
             return;
         }
         if (!isset($_GET['page']) || sanitize_key(wp_unslash($_GET['page'])) !== self::PAGE) {
@@ -436,16 +492,16 @@ class ZapPopPop_Admin_Theme {
         if (!current_user_can('manage_options')) {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'zappoppop'));
         }
-        check_admin_referer(self::NONCE_ACTION, 'zpp_theme_nonce');
+        check_admin_referer(self::NONCE_ACTION, 'zappoppop_theme_nonce');
 
-        $action = sanitize_key(wp_unslash($_POST['zpp_theme_action']));
+        $action = sanitize_key(wp_unslash($_POST['zappoppop_theme_action']));
         $status = 'saved';
 
         if ($action === 'reset') {
             delete_option(self::OPTION);
             $status = 'reset';
         } elseif ($action === 'import') {
-            $data = ZapPopPop_Sanitizer::request_json('zpp_theme_import');
+            $data = ZapPopPop_Sanitizer::request_json('zappoppop_theme_import');
             if (!is_array($data)) {
                 $status = 'import_error';
             } else {
@@ -454,11 +510,11 @@ class ZapPopPop_Admin_Theme {
                 $status = 'imported';
             }
         } else {
-            $raw = ZapPopPop_Sanitizer::post_array('zpp_theme');
+            $raw = ZapPopPop_Sanitizer::post_array('zappoppop_theme');
             update_option(self::OPTION, self::sanitize_all($raw));
         }
 
-        wp_safe_redirect(add_query_arg(['page' => self::PAGE, 'zpp_status' => $status], admin_url('admin.php')));
+        wp_safe_redirect(add_query_arg(['page' => self::PAGE, 'zappoppop_status' => $status], admin_url('admin.php')));
         exit;
     }
 }

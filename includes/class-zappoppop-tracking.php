@@ -107,7 +107,7 @@ class ZapPopPop_Tracking {
     /** Fixed-limit per-minute throttle per IP and bucket. True = allowed. */
     public static function throttle($bucket, $limit) {
         $limit = max(1, (int) $limit);
-        $key   = 'zpp_rl_' . sanitize_key($bucket) . '_' . md5(self::client_ip());
+        $key   = 'zappoppop_rl_' . sanitize_key($bucket) . '_' . md5(self::client_ip());
         $n     = (int) get_transient($key);
         if ($n >= $limit) { return false; }
         set_transient($key, $n + 1, MINUTE_IN_SECONDS);
@@ -162,10 +162,20 @@ class ZapPopPop_Tracking {
         return self::cors(new WP_REST_Response($out, $code));
     }
 
+    /** True when a popup with this uid exists and is published. ZAPPOPPOP_LIVE_ONLY */
+    public static function is_live($uid) {
+        global $wpdb;
+        if (!is_string($uid) || $uid === '') {
+            return false;
+        }
+        /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one indexed lookup on the plugin's own table */
+        return (bool) $wpdb->get_var($wpdb->prepare("SELECT 1 FROM {$wpdb->prefix}zappoppop_items WHERE uid = %s AND status = 'publish' LIMIT 1", $uid));
+    }
+
     public static function record_impression($uid) {
         global $wpdb;
         $n = $wpdb->query($wpdb->prepare(
-            "UPDATE {$wpdb->prefix}zappoppop_items SET impressions = impressions + 1 WHERE uid = %s", $uid
+            "UPDATE {$wpdb->prefix}zappoppop_items SET impressions = impressions + 1 WHERE uid = %s AND status = 'publish'", $uid
         ));
         if (!$n) { return false; }
         do_action('zappoppop_impression_recorded', $uid);

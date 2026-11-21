@@ -81,7 +81,7 @@ class ZapPopPop_Admin_Network {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'zappoppop'));
         }
         $net_values = self::get();
-        $net_status = isset($_GET['zpp_status']) ? sanitize_key(wp_unslash($_GET['zpp_status'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only status flag after a redirect
+        $net_status = isset($_GET['zappoppop_status']) ? sanitize_key(wp_unslash($_GET['zappoppop_status'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only status flag after a redirect
         $net_sites  = $this->site_rows();
         $net_total  = (int) get_sites(array('count' => true, 'deleted' => 0));
         include ZAPPOPPOP_PATH . 'templates/network-view.php';
@@ -108,11 +108,11 @@ class ZapPopPop_Admin_Network {
         if (!current_user_can(self::CAP)) {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'zappoppop'), '', array('response' => 403));
         }
-        check_admin_referer(self::NONCE, 'zpp_network_nonce');
+        check_admin_referer(self::NONCE, 'zappoppop_network_nonce');
         if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
-        $raw = ZapPopPop_Sanitizer::post_array('zpp_network');
+        $raw = ZapPopPop_Sanitizer::post_array('zappoppop_network');
         update_site_option(self::OPTION, self::sanitize($raw));
-        wp_safe_redirect(add_query_arg(array('page' => self::PAGE, 'zpp_status' => 'saved'), network_admin_url('admin.php')));
+        wp_safe_redirect(add_query_arg(array('page' => self::PAGE, 'zappoppop_status' => 'saved'), network_admin_url('admin.php')));
         exit;
     }
 

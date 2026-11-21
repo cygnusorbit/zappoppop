@@ -5471,7 +5471,7 @@
     'use strict';
 
     var SECTION_ID = 'insp-section-text-align';
-    var ALIGNS = ['left', 'center', 'right'];
+    var ALIGNS = ['left', 'center', 'right', 'justify']; /* ZPP_ALIGN_JUSTIFY */
     var TARGET_TYPES = ['label', 'html'];
     function isTargetEl(el) {
         return !!el && TARGET_TYPES.indexOf(String(el.type || '').toLowerCase().trim()) !== -1;
@@ -5509,7 +5509,7 @@
         var $s = $(
             '<div class="zappoppop-insp-section" id="' + SECTION_ID + '" style="display:none; background:#0f172a; border:1px solid #1e293b; border-radius:0px; padding:12px; margin-bottom:12px;">' +
                 '<div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;">TEXT ALIGNMENT</div>' +
-                '<div id="zappoppop-label-align-group" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">' + btns + '</div>' +
+                '<div id="zappoppop-label-align-group" style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px;">' + btns + '</div>' +
             '</div>'
         );
 

@@ -19,6 +19,7 @@ class ZapPopPop_Ajax_Element_Typography {
         if (isset($el['textTransform'])) $clean['textTransform'] = sanitize_text_field($el['textTransform']);
         if (isset($el['lineHeight']))    $clean['lineHeight']    = sanitize_text_field($el['lineHeight']);
         if (isset($el['letterSpacing'])) $clean['letterSpacing'] = sanitize_text_field($el['letterSpacing']);
+        if (isset($el['wordSpacing']))   $clean['wordSpacing']   = (string) max(-10, min(50, (float) $el['wordSpacing'])); /* ZPP_WORD_SPACING */
         return $clean;
     }
 
@@ -26,6 +27,7 @@ class ZapPopPop_Ajax_Element_Typography {
         if (isset($el['tag']))           $clean['tag']           = sanitize_key($el['tag']);
         if (isset($el['lineHeight']))    $clean['lineHeight']    = sanitize_text_field($el['lineHeight']);
         if (isset($el['letterSpacing'])) $clean['letterSpacing'] = sanitize_text_field($el['letterSpacing']);
+        if (isset($el['wordSpacing']))   $clean['wordSpacing']   = (string) max(-10, min(50, (float) $el['wordSpacing'])); /* ZPP_WORD_SPACING */
         return $clean;
     }
 }

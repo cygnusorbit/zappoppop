@@ -135,7 +135,7 @@ class ZapPopPop_Ajax_Tools {
             return new WP_Error('size', __('Backup file is too large (10 MB maximum).', 'zappoppop'));
         }
         $decoded = json_decode($raw, true);
-        if (is_array($decoded)) { foreach (array('settings', 'theme') as $zpp_k) { if (isset($decoded[$zpp_k]) && is_array($decoded[$zpp_k])) { $decoded[$zpp_k] = ZapPopPop_Legacy_Import::convert($decoded[$zpp_k]); } } } /* accept exports from the previous generation */
+        if (is_array($decoded)) { foreach (array('settings', 'theme') as $zappoppop_k) { if (isset($decoded[$zappoppop_k]) && is_array($decoded[$zappoppop_k])) { $decoded[$zappoppop_k] = ZapPopPop_Legacy_Import::convert($decoded[$zappoppop_k]); } } } /* accept exports from the previous generation */
         $has_data = is_array($decoded) && !empty($decoded['items']);
         $has_data = (bool) apply_filters('zappoppop_import_has_data', $has_data, $decoded);
         if (!is_array($decoded) || !$has_data) {
@@ -154,7 +154,8 @@ class ZapPopPop_Ajax_Tools {
                 if ($title === '') { $title = __('Restored Popup', 'zappoppop'); }
                 $data = isset($item['data']) ? $item['data'] : '{}';
                 if (is_array($data) || is_object($data)) { $data = wp_json_encode($data); }
-                if (!is_string($data) || json_decode($data) === null) { $res['skipped']++; continue; }
+                $zappoppop_chk = is_string($data) ? json_decode($data) : null; /* ZAPPOPPOP_SUBMISSION_FILES */
+                if (!is_object($zappoppop_chk) && !is_array($zappoppop_chk)) { $res['skipped']++; continue; }
                 $obj = json_decode($data);
                 if (is_object($obj) || is_array($obj)) { $obj = ZapPopPop_Legacy_Import::convert($obj); } /* accept exports from the previous generation */
                 if (is_object($obj) || is_array($obj)) {
@@ -297,14 +298,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -341,14 +342,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -366,14 +367,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -390,14 +391,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -419,14 +420,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -454,14 +455,14 @@ class ZapPopPop_Ajax_Tools {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }

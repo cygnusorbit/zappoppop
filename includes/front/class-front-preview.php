@@ -156,8 +156,9 @@ class ZapPopPop_Front_Preview {
 
         try {
             ob_start();
-            echo $this->renderer->render_popup_markup($uid, $this->config, false, false); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup is escaped by the renderer
-            echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- buffered renderer output
+            $zappoppop_ret  = $this->renderer->render_popup_markup($uid, $this->config, false, false);
+            $zappoppop_html = ob_get_clean() . (is_string($zappoppop_ret) ? $zappoppop_ret : '');
+            echo ZapPopPop_Sanitizer::kses_render($zappoppop_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup markup goes through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render) ZAPPOPPOP_OUTPUT_KSES
         } catch (\Throwable $e) {
             if (ob_get_level() > 0) { ob_end_clean(); }
             echo '<div style="position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:1000002;background:#7f1d1d;color:#fff;padding:8px 14px;border-radius:8px;font:600 12px sans-serif;">Preview render error: ' . esc_html($e->getMessage()) . '</div>';

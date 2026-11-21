@@ -6,8 +6,8 @@
     var BOX = 'zpp-fl-box', DEF_COLOR = '#334155', LAYER_DEF = '#64748b', INSIDE_COLOR = '#64748b';
     /* ZPP_FL_POSITION: model key fieldLabelPosition = 'inside' | 'outside' (undefined = outside). Inside = label in the field's top-left; input-like types only. */
     var INPUTS = ['text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password'];
-    var STYLE_OUT = 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;';
-    var STYLE_IN = 'position:absolute;left:12px;top:4px;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:0;text-transform:none;line-height:1;pointer-events:none;text-shadow:none;';
+    var STYLE_OUT = 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1.2;pointer-events:none;text-shadow:none;';
+    var STYLE_IN = 'position:absolute;left:12px;top:4px;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1;pointer-events:none;text-shadow:none;';
     var POS_CSS = '.zpp-fld-in input,.zpp-fld-in select,.zpp-fld-in textarea{box-sizing:border-box!important;padding-top:20px!important;padding-bottom:4px!important}.zpp-fld-in textarea{padding-top:22px!important}.zpp-fld-in-stage>div:not(.ui-resizable-handle):not(.zappoppop-resize-handle){box-sizing:border-box!important;padding-top:20px!important;padding-bottom:4px!important}.zpp-fld-in-stage.zpp-fld-in-ta>div:not(.ui-resizable-handle):not(.zappoppop-resize-handle){padding-top:22px!important}.zpp-fld-in-stage>div [style*="top:50%"]{top:calc(50% + 8px)!important}/* ZPP_ICON_CENTER */html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #prop-fl-pos{height:28px;min-height:28px;max-width:150px;margin:0;padding:0 8px;font-size:12px}';
     var FORM = ['text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'multiselect', 'radio', 'radios', 'checkbox', 'checkboxes', 'checkboxgroup', 'date', 'time', 'upload', 'file', 'password', 'imageselect', 'tile', 'rating'];
 
@@ -128,7 +128,7 @@
                 old = document.createElement('span');
                 old.className = 'zpp-fld-label';
                 old.setAttribute('aria-hidden', 'true');
-                old.setAttribute('style', 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;');
+                old.setAttribute('style', 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1.2;pointer-events:none;text-shadow:none;');
                 node.appendChild(old);
                 node.style.setProperty('overflow', 'visible', 'important');
             }

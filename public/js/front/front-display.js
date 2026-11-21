@@ -615,6 +615,7 @@
     }
     doc.addEventListener('click', function (e) {
         var n = e.target.closest ? e.target.closest('.zappoppop-click-link[data-zpp-href]') : null;
+        if (n && e.target.closest('a[href]') && n.contains(e.target.closest('a[href]'))) { return; } /* a real inner link already navigates */
         if (n) { go(n, e); }
     });
     doc.addEventListener('keydown', function (e) {

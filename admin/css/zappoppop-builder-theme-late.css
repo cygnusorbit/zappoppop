@@ -1024,3 +1024,74 @@ html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic
 html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-tab-basic #insp-section-coords {
     margin-top: 12px !important;
 }
+
+/* ZPP_TOKEN_UI: "Insert WordPress value" button + menu (and the {token} chips) use theme colours instead of hard-coded dark slate */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-btn {
+    cursor: pointer; padding: 2px 8px; font-size: 12px; line-height: 18px; border-radius: 4px; box-shadow: none;
+    background: var(--zpp-builder-accordion-bg) !important; color: var(--zpp-builder-accordion-text, var(--zpp-builder-muted-text)) !important;
+    border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-btn:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-btn:focus-visible {
+    border-color: var(--zpp-builder-accent-color) !important; color: var(--zpp-builder-accent-color) !important; outline: 0;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-menu {
+    position: absolute; right: 0; top: 26px; z-index: 100000; min-width: 190px; max-height: 240px; overflow-y: auto; text-align: left; border-radius: 6px;
+    background: var(--zpp-builder-content-bg) !important; border: 1px solid var(--zpp-builder-border-color) !important; box-shadow: 0 8px 22px rgba(15, 23, 42, .18);
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-menu .zappoppop-token-item {
+    padding: 8px 12px; cursor: pointer; font-size: 12px; color: var(--zpp-builder-text-color) !important; background: transparent;
+    border-bottom: 1px solid var(--zpp-builder-border-color) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-menu .zappoppop-token-item:last-child { border-bottom: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-menu .zappoppop-token-item:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tok-menu .zappoppop-token-item:focus-visible {
+    background: var(--zpp-builder-accent-soft) !important; color: var(--zpp-builder-accent-color) !important; outline: 0;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-token-pill {
+    background: var(--zpp-builder-accent-soft) !important; color: var(--zpp-builder-accent-color) !important; border: 1px solid transparent !important;
+}
+
+/* ZPP_STAGE_FLD_UPPER: the builder wrapper forces text-transform:none on everything; the form field label on the stage keeps the uppercase label style the front end uses. */
+html body .zappoppop-builder-wrap .zpp-fld-label { text-transform: uppercase !important; }
+
+/* ZPP_FC_HEAD_CASE: Style-tab form section headers (Text Alignment, Input Icons & Offsets) use the same case and spacing as the other accordion headers. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #zappoppop-form-style-module .zpp-fc .zpp-fc-head.zpp-fc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fc-head.zpp-fc-head.zpp-fc-head {
+    text-transform: var(--zpp-tt-accordion, none) !important; letter-spacing: 0.5px !important;
+}
+
+/* ZPP_TSH_GRID: keep Text Shadow cells in their 2-column grid (the alpha picker otherwise spans the colour cell across the row) */
+html body #zappoppop-inspector-drawer #insp-row-text-shadow > div > div { grid-column: auto !important; min-width: 0; }
+
+/* ZPP_BUILDER_LABELS_THEME: every Builder field label (Layer Settings, Popup Settings, panels) follows Theme > Typography
+   (label size, weight, letter spacing, text transform). Stage/canvas labels, toggle switches and labels wrapping a checkbox or radio are excluded.
+   Browsers without :has() keep the previous look. */
+@supports selector(:has(*)) {
+    html body .zappoppop-builder-wrap label:not(.zappoppop-canvas-item label):not([class*="-head"]:not(.zpp-fl-head)):not(.zpp-sw):not(.zappoppop-gp-switch):not(.zappoppop-insp-switch):not(.zappoppop-shape-clear):not(.rt-lbl):not(:has(input[type="checkbox"])):not(:has(input[type="radio"])),
+    html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer :is(#insp-tab-basic, #insp-tab-style, #insp-tab-logic, #insp-tab-data, #insp-tab-advanced) label:not(.zappoppop-canvas-item label):not([class*="-head"]:not(.zpp-fl-head)):not(.zpp-sw):not(.zappoppop-gp-switch):not(.zappoppop-insp-switch):not(.zappoppop-shape-clear):not(.rt-lbl):not(:has(input[type="checkbox"])):not(:has(input[type="radio"])) {
+        font-size: var(--zpp-fs-label, 11px) !important;
+        font-weight: var(--zpp-fw-label, 700) !important;
+        letter-spacing: var(--zpp-ls-label, 0.5px) !important;
+        text-transform: var(--zpp-tt-label, uppercase) !important;
+    }
+}
+
+/* ZPP_TT_ACCORDION: every Builder accordion title follows Theme > Typography > Accordion title text transform. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ca-head.zpp-ca-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-acc-head.zpp-acc-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-sec-head.zappoppop-sec-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zappoppop-sec-title.zappoppop-sec-title,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-tb-head.zpp-tb-head,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fc-head.zpp-fc-head.zpp-fc-head,
+html body .zappoppop-builder-wrap .zappoppop-acc-header.zappoppop-acc-header,
+html body .zappoppop-settings-drawer .zappoppop-acc-header.zappoppop-acc-header,
+html body .zappoppop-builder-wrap .zappoppop-acc-header.zappoppop-acc-header * {
+    text-transform: var(--zpp-tt-accordion, none) !important;
+}
+
+/* ZPP_TEXT_TRANSFORM: stage text follows the layer Text Transform (the builder wrapper forces text-transform:none on everything else). Inputs and field labels keep their own look. */
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="uppercase"],
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="uppercase"] *:not(input):not(textarea):not(select):not(label) { text-transform: uppercase !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="lowercase"],
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="lowercase"] *:not(input):not(textarea):not(select):not(label) { text-transform: lowercase !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="capitalize"],
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="capitalize"] *:not(input):not(textarea):not(select):not(label) { text-transform: capitalize !important; }

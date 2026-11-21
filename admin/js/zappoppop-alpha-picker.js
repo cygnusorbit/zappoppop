@@ -247,8 +247,16 @@
         });
     }
 
+    /* ZPP_CP_EYEDROP: screen eyedropper via the native EyeDropper API (Chrome, Edge, Opera). Safari and Firefox do not ship it, so the button is only built where it works. */
+    function hasEye() { return typeof window.EyeDropper === 'function'; }
+    function eyeBtn() {
+        if (!hasEye()) { return ''; }
+        return '<button type="button" class="zpp-cp-eye" title="' + t('eyedrop', 'Pick colour from screen') + '" aria-label="' + t('eyedrop', 'Pick colour from screen') + '">' +
+            '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 7l6 6"/><path d="M4 16L15.7 4.3a1 1 0 0 1 1.4 0l2.6 2.6a1 1 0 0 1 0 1.4L8 20H4v-4z"/></svg></button>';
+    }
     function buildPop() {
         var p = el('div', 'zpp-cp-pop'), pct;
+        if (hasEye()) { p.className += ' has-eye'; }
         p.setAttribute('role', 'dialog');
         p.setAttribute('aria-label', t('pick', 'Pick colour'));
         p.innerHTML =
@@ -256,7 +264,7 @@
             '<div class="zpp-cp-bar zpp-cp-hue" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="360" aria-label="' + t('hue', 'Hue') + '"><div class="zpp-cp-thumb zpp-cp-hue-t"></div></div>' +
             '<div class="zpp-cp-bar zpp-cp-alpha" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-label="' + t('opacity', 'Opacity') + '"><div class="zpp-cp-alpha-fill"></div><div class="zpp-cp-thumb zpp-cp-alpha-t"></div></div>' +
             '<input type="text" class="zpp-cp-pop-hex" spellcheck="false" autocomplete="off" maxlength="40" aria-label="' + t('hex', 'Colour value') + '">' +
-            '<div class="zpp-cp-foot"><label class="zpp-cp-pct"><span>' + t('opacity', 'Opacity') + '</span><input type="number" class="zpp-cp-pct-in" min="0" max="100" step="1"><span>%</span></label>' +
+            '<div class="zpp-cp-foot">' + eyeBtn() + '<label class="zpp-cp-pct"><span>' + t('opacity', 'Opacity') + '</span><input type="number" class="zpp-cp-pct-in" min="0" max="100" step="1"><span>%</span></label>' +
             '<button type="button" class="zpp-cp-clear" title="' + t('clear', 'Transparent') + '" aria-label="' + t('clear', 'Transparent') + '">' + t('clear', 'Transparent') + '</button></div>';
         document.body.appendChild(p);
         pop = p;
@@ -264,7 +272,7 @@
             sv: p.querySelector('.zpp-cp-sv'), svT: p.querySelector('.zpp-cp-sv-t'),
             hue: p.querySelector('.zpp-cp-hue'), hueT: p.querySelector('.zpp-cp-hue-t'),
             al: p.querySelector('.zpp-cp-alpha'), alF: p.querySelector('.zpp-cp-alpha-fill'), alT: p.querySelector('.zpp-cp-alpha-t'),
-            pct: p.querySelector('.zpp-cp-pct-in'), clr: p.querySelector('.zpp-cp-clear'), hx: p.querySelector('.zpp-cp-pop-hex')
+            pct: p.querySelector('.zpp-cp-pct-in'), eye: p.querySelector('.zpp-cp-eye'), clr: p.querySelector('.zpp-cp-clear'), hx: p.querySelector('.zpp-cp-pop-hex')
         };
         drag(R.sv, function (x, y, f) { cur.st.s = x; cur.st.v = 1 - y; commit(cur, f); });
         drag(R.hue, function (x, y, f) { cur.st.h = x * 360; commit(cur, f); });
@@ -276,6 +284,22 @@
         pct.addEventListener('input', function () { if (!cur) { return; } cur.st.a = clamp(parseFloat(pct.value) || 0, 0, 100) / 100; commit(cur, false); });
         pct.addEventListener('change', function () { if (!cur) { return; } cur.st.a = clamp(parseFloat(pct.value) || 0, 0, 100) / 100; commit(cur, true); });
         R.clr.addEventListener('click', function () { if (!cur) { return; } cur.st.a = 0; commit(cur, true); });
+        if (R.eye) {
+            R.eye.addEventListener('click', function (e) {
+                var target = cur;
+                e.preventDefault();
+                if (!target || !hasEye()) { return; }
+                try {
+                    new window.EyeDropper().open().then(function (res) {
+                        var c = parse(res && res.sRGBHex);
+                        if (!c || cur !== target) { return; }
+                        c.a = target.st.a > 0 ? target.st.a : 1; /* keep the opacity; a fully transparent colour would hide the pick */
+                        setFrom(target.st, c);
+                        commit(target, true);
+                    }, function () { /* Esc / cancelled */ });
+                } catch (err) { /* blocked: ignore */ }
+            });
+        }
         R.hx.addEventListener('change', function () {
             var c;
             if (!cur) { return; }
@@ -326,7 +350,7 @@
         if (cur && cur !== ui) { close(true); }
         refresh(ui);
         cur = ui;
-        pop.className = 'zpp-cp-pop is-open';
+        pop.className = 'zpp-cp-pop is-open' + (R.eye ? ' has-eye' : '');
         ui.btn.setAttribute('aria-expanded', 'true');
         paintPop(); place();
         R.sv.focus();
@@ -335,7 +359,7 @@
         var u = cur;
         if (!u) { return; }
         cur = null;
-        pop.className = 'zpp-cp-pop';
+        pop.className = 'zpp-cp-pop' + (R.eye ? ' has-eye' : '');
         u.btn.setAttribute('aria-expanded', 'false');
         if (!noFocus) { u.btn.focus(); }
     }

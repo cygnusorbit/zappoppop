@@ -1,0 +1,55 @@
+<?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- template variables are local to the method that includes this file
+if (!defined('ABSPATH')) {
+    exit;
+}
+$zappoppop_addons = ZapPopPop_Addon_Catalog::items();
+if (!$zappoppop_addons) {
+    return;
+}
+?>
+<section class="zpp-ext-card zpp-ext-addons" aria-labelledby="zpp-ext-addons-title">
+    <div class="zpp-ext-card-head">
+        <span class="dashicons dashicons-admin-plugins" aria-hidden="true"></span>
+        <h3 id="zpp-ext-addons-title"><?php esc_html_e('Add-ons', 'zappoppop'); ?></h3>
+    </div>
+    <p class="zpp-ext-help"><?php esc_html_e('Add-ons are separate plugins. WordPress installs and updates them, so ZapPopPop never accepts uploaded code. Modules from an active add-on appear in the list above.', 'zappoppop'); ?></p>
+    <div class="zpp-ext-grid zpp-ext-addon-grid">
+        <?php foreach ($zappoppop_addons as $zappoppop_it) :
+            $zappoppop_status = ZapPopPop_Addon_Catalog::status($zappoppop_it);
+            $zappoppop_act    = ZapPopPop_Addon_Catalog::action($zappoppop_it, $zappoppop_status);
+            ?>
+            <div class="zpp-ext-item" data-addon="<?php echo esc_attr($zappoppop_it['slug']); ?>">
+                <div class="zpp-ext-item-top">
+                    <span class="zpp-ext-item-img is-empty"><span class="dashicons <?php echo esc_attr($zappoppop_it['icon']); ?>" aria-hidden="true"></span></span>
+                    <div class="zpp-ext-item-head">
+                        <h3 class="zpp-ext-item-name"><?php echo esc_html($zappoppop_it['name']); ?></h3>
+                        <?php if ($zappoppop_it['badge'] !== '') : ?>
+                            <span class="zpp-mod-pill"><?php echo esc_html($zappoppop_it['badge']); ?></span>
+                        <?php endif; ?>
+                        <?php if ($zappoppop_status === 'active') : ?>
+                            <span class="zpp-mod-pill is-ok"><?php esc_html_e('Active', 'zappoppop'); ?></span>
+                        <?php elseif ($zappoppop_status === 'inactive') : ?>
+                            <span class="zpp-mod-pill is-warn"><?php esc_html_e('Inactive', 'zappoppop'); ?></span>
+                        <?php else : ?>
+                            <span class="zpp-mod-pill is-lock"><?php esc_html_e('Not installed', 'zappoppop'); ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php if ($zappoppop_it['description'] !== '') : ?>
+                    <p class="zpp-ext-item-desc"><?php echo esc_html($zappoppop_it['description']); ?></p>
+                <?php endif; ?>
+                <?php if ($zappoppop_act) : ?>
+                    <div class="zpp-ext-item-actions">
+                        <a class="button<?php echo $zappoppop_act['primary'] ? ' button-primary' : ''; ?>" href="<?php echo esc_url($zappoppop_act['url']); ?>"<?php echo $zappoppop_act['external'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?><?php echo $zappoppop_act['act'] !== '' ? ' data-zpp-act="' . esc_attr($zappoppop_act['act']) . '"' : ''; ?>>
+                            <?php echo esc_html($zappoppop_act['label']); ?>
+                            <?php if ($zappoppop_act['external']) : ?>
+                                <span class="screen-reader-text"><?php esc_html_e('(opens in a new tab)', 'zappoppop'); ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>

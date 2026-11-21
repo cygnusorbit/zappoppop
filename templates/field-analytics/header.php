@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
         <label for="zappoppop-fa-popup-filter" style="font-size:12px;font-weight:600;color:#475569;"><?php esc_html_e('Filter Campaign:', 'zappoppop'); ?></label>
-        <select id="zappoppop-fa-popup-filter" onchange="location = this.value;" style="padding:6px 12px;font-size:13px;border-radius:4px;border:1px solid #cbd5e1;background:#fff;">
+        <select id="zappoppop-fa-popup-filter" data-zappoppop-nav="1" style="padding:6px 12px;font-size:13px;border-radius:4px;border:1px solid #cbd5e1;background:#fff;">
             <option value="<?php echo esc_url(admin_url('admin.php?page=zappoppop-field-analytics')); ?>"><?php esc_html_e('All Campaigns (Aggregated)', 'zappoppop'); ?></option>
             <?php foreach ($all_popups as $p) : ?>
                 <option value="<?php echo esc_url(admin_url('admin.php?page=zappoppop-field-analytics&popup_uid=' . $p->uid)); ?>" <?php selected($selected_uid, $p->uid); ?>>

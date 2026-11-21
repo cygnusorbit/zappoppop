@@ -8,13 +8,13 @@ if (!class_exists('ZapPopPop_Sanitizer')) {
 }
 
 /**
- * Module lifecycle endpoints: install, uninstall, delete, upload (module.zip), usage.
+ * Module lifecycle endpoints: install, uninstall, delete, usage, categories. ZAPPOPPOP_UPLOADER_REMOVED: there is no upload endpoint.
  * Every action requires manage_options and a valid nonce; file operations are further limited by the installer.
  */
 class ZapPopPop_Ajax_Modules {
 
     public function __construct() {
-        foreach (['install', 'uninstall', 'delete', 'upload', 'usage', 'cats_save', 'set_category'] as $a) {
+        foreach (['install', 'uninstall', 'delete', 'usage', 'cats_save', 'set_category'] as $a) {
             add_action('wp_ajax_zappoppop_module_' . $a, [$this, $a]);
         }
     }
@@ -76,23 +76,6 @@ class ZapPopPop_Ajax_Modules {
         wp_send_json_success(ZapPopPop_Modules_Installer::usage($slug));
     }
 
-    public function upload() {
-        $this->verify();
-        $f = ZapPopPop_Sanitizer::uploaded_file('module_zip');
-        if (!$f || !isset($f['error']) || is_array($f['error'])) {
-            wp_send_json_error(['code' => 'no_file', 'message' => __('Choose a module .zip file first.', 'zappoppop')]);
-        }
-        if ((int) $f['error'] !== UPLOAD_ERR_OK) {
-            wp_send_json_error(['code' => 'upload_error', 'message' => __('The upload failed. The file may exceed the server upload limit.', 'zappoppop')]);
-        }
-        $name = isset($f['name']) ? sanitize_file_name(wp_unslash($f['name'])) : '';
-        $tmp  = isset($f['tmp_name']) ? (string) $f['tmp_name'] : '';
-        if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) !== 'zip' || !is_uploaded_file($tmp)) {
-            wp_send_json_error(['code' => 'bad_file', 'message' => __('Only a .zip file can be uploaded.', 'zappoppop')]);
-        }
-        $this->respond(ZapPopPop_Modules_Installer::install_zip($tmp, $this->flag('replace')));
-    }
-
     /** Module Category manager: replaces the user category list (name, order). */
     public function cats_save() {
         $this->verify();
@@ -123,10 +106,8 @@ class ZapPopPop_Ajax_Modules {
         $m = ZapPopPop_Modules::get($slug);
         wp_send_json_success([
             'module'  => $m ? ZapPopPop_Modules_Installer::summary($m) : null,
-            'json'    => !empty($res['json']),
-            'message' => !empty($res['json'])
-                ? __('Module updated. The changes were saved to module.json.', 'zappoppop')
-                : __('Changes saved, but module.json is not writable on this server, so they were stored in the database only.', 'zappoppop'),
+            'json'    => false,
+            'message' => __('Module updated.', 'zappoppop'),
         ]);
     }
 }

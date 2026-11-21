@@ -3,8 +3,8 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-$zpp_pg_pos = isset($zpp_pg_pos) ? $zpp_pg_pos : 'top';
-if ($zpp_pg_pos === 'top') : ?>
+$zappoppop_pg_pos = isset($zappoppop_pg_pos) ? $zappoppop_pg_pos : 'top';
+if ($zappoppop_pg_pos === 'top') : ?>
 <div class="zpp-pg-bar" id="zpp-pg-bar">
     <span class="zpp-pg-info" id="zpp-pg-info" aria-live="polite"></span>
     <div class="zpp-pg-views" role="group" aria-label="<?php esc_attr_e('Cards per page', 'zappoppop'); ?>">

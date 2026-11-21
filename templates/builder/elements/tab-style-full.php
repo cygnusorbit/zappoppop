@@ -85,6 +85,12 @@ if (!defined('ABSPATH')) exit;
 <!-- D. TYPOGRAPHY & TEXT SPACING -->
 <div class="zappoppop-insp-section" id="insp-section-typography" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">
     <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;"><?php esc_html_e('Typography & Spacing', 'zappoppop'); ?></div>
+    <div style="margin-bottom:8px;">
+        <label for="prop-font-family" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Font Family', 'zappoppop'); ?></label>
+        <select id="prop-font-family" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="fontFamily" style="font-size:12px;">
+            <?php echo wp_kses(ZapPopPop_Font_Catalog::options_html(), array('optgroup' => array('label' => true), 'option' => array('value' => true, 'data-weights' => true))); ?>
+        </select>
+    </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Font Size (px)', 'zappoppop'); ?></label>
@@ -113,16 +119,54 @@ if (!defined('ABSPATH')) exit;
             <input type="number" id="prop-letter-spacing" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="letterSpacing" step="0.5" min="-5" max="20" value="0" style="font-size:12px;" />
         </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+    <!-- ZPP_WORD_SPACING -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+        <div>
+            <label for="prop-word-spacing" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Word Spacing (px)', 'zappoppop'); ?></label>
+            <input type="number" id="prop-word-spacing" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="wordSpacing" step="0.5" min="-10" max="50" value="0" style="font-size:12px;" />
+        </div>
+        <div><!-- ZPP_TEXT_TRANSFORM -->
+            <label for="prop-text-transform" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Text Transform', 'zappoppop'); ?></label>
+            <select id="prop-text-transform" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="textTransform" style="font-size:12px;">
+                <option value="none"><?php esc_html_e('None', 'zappoppop'); ?></option>
+                <option value="uppercase"><?php esc_html_e('UPPERCASE', 'zappoppop'); ?></option>
+                <option value="lowercase"><?php esc_html_e('lowercase', 'zappoppop'); ?></option>
+                <option value="capitalize"><?php esc_html_e('Capitalize', 'zappoppop'); ?></option>
+            </select>
+        </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr; gap:8px;">
         <div>
             <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Text Color', 'zappoppop'); ?></label>
             <input type="color" id="prop-color" class="widefat zappoppop-gp-bind" data-zpp-alpha="1" data-prop="color" value="#ffffff" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
         </div>
-        <div>
-            <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Foreground Color', 'zappoppop'); ?></label>
-            <div style="display:flex; gap:4px; align-items:center;">
-                <input type="color" data-zpp-alpha="compact" id="prop-fg-color" class="widefat zappoppop-gp-bind" data-prop="fgColor" value="#64748b" title="<?php esc_attr_e('Icons & accents', 'zappoppop'); ?>" style="flex:1; height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer; min-width:0;" />
-                <button type="button" id="prop-fg-color-reset" class="button" title="<?php esc_attr_e('Reset foreground color', 'zappoppop'); ?><?php esc_html_e('" aria-label="', 'zappoppop'); ?><?php esc_attr_e('Reset foreground color', 'zappoppop'); ?>" style="height:34px; min-width:30px; padding:0; font-size:11px;">&#8635;</button>
+    </div>
+    <!-- ZPP_TEXT_SHADOW -->
+    <div id="insp-row-text-shadow" style="margin-top:12px;">
+        <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Text Shadow', 'zappoppop'); ?></label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+                <label for="prop-tsh-color" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Shadow Color', 'zappoppop'); ?></label>
+                <input type="color" data-zpp-alpha="compact" id="prop-tsh-color" class="widefat zappoppop-gp-bind" data-prop="textShadowColor" value="#00000080" style="height:34px; padding:2px; background:#090d16; border:1px solid #1e293b; border-radius:6px; cursor:pointer;" />
+            </div>
+            <div>
+                <label for="prop-tsh-pos" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Position', 'zappoppop'); ?></label>
+                <select id="prop-tsh-pos" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="textShadowPos" style="font-size:12px;">
+                    <option value="outset"><?php esc_html_e('Outset', 'zappoppop'); ?></option>
+                    <option value="inset"><?php esc_html_e('Inset', 'zappoppop'); ?></option>
+                </select>
+            </div>
+            <div>
+                <label for="prop-tsh-x" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Horizontal (px)', 'zappoppop'); ?></label>
+                <input type="number" id="prop-tsh-x" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="textShadowX" min="-50" max="50" step="1" value="0" style="font-size:12px;" />
+            </div>
+            <div>
+                <label for="prop-tsh-y" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Vertical (px)', 'zappoppop'); ?></label>
+                <input type="number" id="prop-tsh-y" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="textShadowY" min="-50" max="50" step="1" value="0" style="font-size:12px;" />
+            </div>
+            <div>
+                <label for="prop-tsh-blur" style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px;"><?php esc_html_e('Blur (px)', 'zappoppop'); ?></label>
+                <input type="number" id="prop-tsh-blur" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="textShadowBlur" min="0" max="100" step="1" value="0" style="font-size:12px;" />
             </div>
         </div>
     </div>

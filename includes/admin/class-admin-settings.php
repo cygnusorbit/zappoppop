@@ -218,7 +218,7 @@ class ZapPopPop_Admin_Settings {
         $o['default_embed_type'] = $enum('default_embed_type', ['inline', 'onload'], 'inline');
 
         // 3. Typography & Libraries
-        $o['default_font']          = !empty($in['default_font']) ? sanitize_text_field($in['default_font']) : 'inherit';
+        $o['default_font']          = (!empty($in['default_font']) && ZapPopPop_Font_Catalog::is_valid(sanitize_text_field($in['default_font']))) ? sanitize_text_field($in['default_font']) : 'inherit';
         /* ZAPPOPPOP_DEFAULT_TYPO_SAVE */
         $o['default_font_weight']    = $enum('default_font_weight', ['inherit', '300', '400', '500', '600', '700'], 'inherit');
         $o['default_font_size']      = isset($in['default_font_size']) ? min(200, max(0, (int) $in['default_font_size'])) : 0;
@@ -229,7 +229,12 @@ class ZapPopPop_Admin_Settings {
         $o['google_fonts']          = $b('google_fonts');
         $o['disable_google_fonts']  = $b('disable_google_fonts');
         $o['font_awesome']          = $b('font_awesome');
-        $o['custom_fonts']          = isset($in['custom_fonts']) ? sanitize_textarea_field($in['custom_fonts']) : '';
+        /* ZAPPOPPOP_FONTS_CLEAN */ $__cf = ZapPopPop_Custom_Fonts::clean(isset($in['custom_fonts']) && is_string($in['custom_fonts']) ? $in['custom_fonts'] : '');
+        $o['custom_fonts']          = $__cf['text'];
+        if ($__cf['rejected'] > 0) {
+            add_settings_error('zappoppop_settings', 'invalid_custom_fonts',
+                __('Some custom font lines were not saved. Use one font per line, like: Font Name: url(https://example.com/font.woff2) (https links to .woff2, .woff, .ttf or .otf files only).', 'zappoppop'), 'error');
+        }
         $o['air_datepicker']  = $any('air_datepicker', 'load_air_datepicker');  $o['load_air_datepicker'] = $o['air_datepicker'];
         $o['jquery_mask']     = $any('jquery_mask', 'load_jquery_mask');        $o['load_jquery_mask']    = $o['jquery_mask'];
         $o['range_slider']    = $any('range_slider', 'load_range_slider');      $o['load_range_slider']   = $o['range_slider'];

@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
             <p style="margin:4px 0 0;color:#64748b;font-size:13px;"><?php esc_html_e('Audit integration dispatches, webhook payloads, SMS deliveries, and background processes.', 'zappoppop'); ?></p>
         </div>
         <div style="display:flex;gap:10px;align-items:center;">
-            <form method="post" onsubmit="return confirm('Are you sure you want to permanently clear all activity event logs?');" style="margin:0;">
+            <form method="post" data-zappoppop-confirm="<?php echo esc_attr__('Are you sure you want to permanently clear all activity event logs?', 'zappoppop'); ?>" style="margin:0;">
                 <?php wp_nonce_field('zappoppop_clear_logs_action', 'zappoppop_clear_logs_nonce'); ?>
                 <button type="submit" name="zappoppop_clear_logs" class="button" style="color:#ef4444;border-color:#fca5a5;display:inline-flex;align-items:center;gap:4px;">
                     <span class="dashicons dashicons-trash" style="font-size:16px;width:16px;height:16px;"></span> <?php esc_html_e('Clear Event Log', 'zappoppop'); ?>
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
     <!-- Filter & Search Toolbar -->
     <div style="display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap;">
         <label for="zappoppop-log-filter" style="font-size:12px;font-weight:600;color:#475569;"><?php esc_html_e('Filter Event:', 'zappoppop'); ?></label>
-        <select id="zappoppop-log-filter" onchange="location = this.value;" style="padding:6px 12px;font-size:13px;border-radius:4px;border:1px solid #cbd5e1;background:#fff;">
+        <select id="zappoppop-log-filter" data-zappoppop-nav="1" style="padding:6px 12px;font-size:13px;border-radius:4px;border:1px solid #cbd5e1;background:#fff;">
             <option value="<?php echo esc_url(admin_url('admin.php?page=zappoppop-log')); ?>"><?php esc_html_e('All Event Types', 'zappoppop'); ?></option>
             <option value="<?php echo esc_url(admin_url('admin.php?page=zappoppop-log&type=submission')); ?>" <?php selected($selected_type, 'submission'); ?>><?php esc_html_e('Submissions & Leads', 'zappoppop'); ?></option>
             <option value="<?php echo esc_url(admin_url('admin.php?page=zappoppop-log&type=optin_confirmed')); ?>" <?php selected($selected_type, 'optin_confirmed'); ?>><?php esc_html_e('Double Opt-In Confirmed', 'zappoppop'); ?></option>

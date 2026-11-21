@@ -146,7 +146,7 @@ if (!defined('ABSPATH')) exit;
                     <input type="text" id="prop-gp-required-msg" class="widefat zappoppop-input" placeholder="<?php echo esc_attr__( 'This field is required.', 'zappoppop' ); ?>" style="font-size:12px;">
                     <em style="display:block;font-size:11px;color:#94a3b8;margin-top:4px;"><?php esc_html_e( 'Default message: This field is required.', 'zappoppop' ); ?></em>
                 </div>
-                <?php $zpp_lk_id = 'anim'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
+                <?php /* ZPP_LK_OWN_BLOCK: the Link URL group lives in each element's own settings block (Shape, Header, Icon, HTML), not in Animation */ ?>
             </div>
 <div id="zappoppop-element-specific-settings">
                 <?php

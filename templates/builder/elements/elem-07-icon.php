@@ -38,6 +38,7 @@ if (!defined('ABSPATH')) exit;
             <input type="number" id="prop-icon-rotate" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="rotate" min="0" max="360" value="0" style="font-size:12px;">
         </div>
     </div>
+    <?php /* ZPP_LK_OWN_BLOCK */ $zappoppop_lk_id = 'icon'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
 </div>
 
 <?php

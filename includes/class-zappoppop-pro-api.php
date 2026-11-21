@@ -56,8 +56,61 @@ class ZapPopPop_Pro_API {
             if ($path === '' || $url === '' || !is_dir($path)) {
                 continue;
             }
+            if ($kind === 'module' && !self::in_plugin($path)) {
+                continue;
+            }
             $out[] = array('path' => $path, 'url' => trailingslashit($url));
         }
         return $out;
+    }
+
+    /** Real folders of installed plugins (plugins dir, must-use dir, and symlinked active plugins). */
+    protected static function plugin_roots() {
+        static $roots = null;
+        if ($roots !== null) {
+            return $roots;
+        }
+        $roots = array();
+        $bases = array(WP_PLUGIN_DIR);
+        if (defined('WPMU_PLUGIN_DIR')) {
+            $bases[] = WPMU_PLUGIN_DIR;
+        }
+        $active = (array) get_option('active_plugins', array());
+        if (is_multisite()) {
+            $active = array_merge($active, array_keys((array) get_site_option('active_sitewide_plugins', array())));
+        }
+        foreach ($active as $file) {
+            if (is_string($file) && strpos($file, '/') !== false) {
+                $bases[] = WP_PLUGIN_DIR . '/' . dirname($file);
+            }
+        }
+        foreach ($bases as $b) {
+            $real = realpath($b);
+            if ($real) {
+                $roots[] = trailingslashit(wp_normalize_path($real));
+            }
+        }
+        return $roots;
+    }
+
+    /** A module folder must sit inside a plugin. Uploads and every other writable content folder are refused. */
+    protected static function in_plugin($path) {
+        $real = realpath($path);
+        if (!$real) {
+            return false;
+        }
+        $real = trailingslashit(wp_normalize_path($real));
+        $up   = wp_upload_dir(null, false);
+        if (!empty($up['basedir']) && realpath($up['basedir'])) {
+            if (strpos($real, trailingslashit(wp_normalize_path(realpath($up['basedir'])))) === 0) {
+                return false;
+            }
+        }
+        foreach (self::plugin_roots() as $root) {
+            if (strpos($real, $root) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

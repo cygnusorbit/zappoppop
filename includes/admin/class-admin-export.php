@@ -288,8 +288,8 @@ class ZapPopPop_Admin_Export {
         header('Pragma: no-cache');
         header('Expires: 0');
 
-        $out = fopen('php://output', 'w');
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fwrite($out, "\xEF\xBB\xBF"); // UTF-8 BOM for Excel / Numbers
+        // ZAPPOPPOP_CORE_FILE_APIS: the CSV is echoed line by line (no stream handle).
+        echo "\xEF\xBB\xBF"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- UTF-8 BOM for Excel / Numbers
 
         $head = ['ID', 'Popup', 'Popup UID', 'Email', 'Status', 'Country', 'Date', 'Name', 'Phone', 'IP Address'];
         foreach ($keys as $hk) {
@@ -321,9 +321,9 @@ class ZapPopPop_Admin_Export {
             foreach ($pick as $ix) {
                 $head_p[] = $head[$ix];
             }
-            fputcsv($out, $head_p, $delimiter);
+            echo $this->csv_line($head_p, $delimiter); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV download, every field is quoted by csv_line()
         } else {
-            fputcsv($out, $head, $delimiter);
+            echo $this->csv_line($head, $delimiter); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV download, every field is quoted by csv_line()
         }
 
         foreach ((array) $rows as $i => $row) {
@@ -348,13 +348,25 @@ class ZapPopPop_Admin_Export {
                 foreach ($pick as $ix) {
                     $line_p[] = isset($line[$ix]) ? $line[$ix] : '';
                 }
-                fputcsv($out, $line_p, $delimiter);
+                echo $this->csv_line($line_p, $delimiter); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV download, every field is quoted by csv_line()
             } else {
-                fputcsv($out, $line, $delimiter);
+                echo $this->csv_line($line, $delimiter); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV download, every field is quoted by csv_line()
             }
         }
 
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($out);
         exit;
+    }
+
+    /** One CSV row (same quoting rules as fputcsv), ending in a newline. */
+    protected function csv_line(array $fields, $delimiter) {
+        $cells = [];
+        foreach ($fields as $v) {
+            $v = (string) $v;
+            if ($v !== '' && (preg_match('/["\r\n\t ]/', $v) || strpos($v, $delimiter) !== false || strpos($v, '\\') !== false)) {
+                $v = '"' . str_replace('"', '""', $v) . '"';
+            }
+            $cells[] = $v;
+        }
+        return implode($delimiter, $cells) . "\n";
     }
 }

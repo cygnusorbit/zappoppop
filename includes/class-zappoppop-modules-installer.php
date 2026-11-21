@@ -4,22 +4,18 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Module lifecycle: install / uninstall / delete / upload (module.zip).
+ * Module lifecycle: install / uninstall / delete of bundled modules (core and companion plugins).
+ * ZAPPOPPOP_UPLOADER_REMOVED: modules cannot be uploaded; only the one-time clean-up of the old uploads folder remains.
  *   Install   = state "installed" (module is active in the builder and on the frontend).
  *   Uninstall = state "available" (files and popup data are kept, one click to reinstall).
- *   Delete    = uploaded module: files removed. Built-in module: state "deleted" (hidden until restored from Extend).
+ *   Delete    = state "deleted" (hidden until restored from Extend).
  * Locked modules can never be uninstalled or deleted. Every method returns an array or a WP_Error.
  */
 class ZapPopPop_Modules_Installer {
 
-    const MAX_ZIP      = 5242880;
-    const MAX_FILES    = 200;
-    const MAX_FILE     = 2097152;
-    const MAX_UNPACKED = 10485760;
-    const MAX_DEPTH    = 4;
     const RENAMED      = ['acc-20-animation' => 'acc-animation', 'acc-16-popup-overlay' => 'acc-popup-overlay', 'acc-17-popup-overlay' => 'acc-popup-overlay', 'acc-21-popup-positions' => 'acc-popup-positions', 'acc-18-notifications' => 'acc-notifications', 'acc-17-double-optin' => 'acc-double-optin', 'acc-22-targeting-triggers' => 'acc-targeting-triggers', 'acc-19-success-celebration' => 'acc-success-celebration', 'acc-08-autoresponder' => 'acc-autoresponder', 'acc-04-side-tabs' => 'acc-side-tabs', 'acc-09-webhooks' => 'acc-webhooks', 'acc-13-woocommerce' => 'acc-woocommerce', 'acc-06-downloads' => 'acc-downloads', 'acc-03-logic-math' => 'logic-math', 'acc-05-payments' => 'logic-payments', 'acc-07-video' => 'acc-video', 'acc-10-sms' => 'acc-sms', 'acc-11-targeting' => 'acc-targeting', 'acc-15-quiz' => 'acc-quiz', 'acc-12-frequency' => 'acc-frequency', 'acc-14-custom-code' => 'acc-custom-code'];
-    const ALLOWED_EXT  = ['json', 'css', 'js', 'html', 'txt', 'md', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'woff', 'woff2'];
-    const BAD_SEGMENT  = '/^(php\d*|phtml|pht|phps|phar|cgi|pl|py|rb|sh|bash|asp|aspx|jsp|exe|dll|so|htaccess|htpasswd)$/i';
+    const LEGACY_OPT   = 'zappoppop_legacy_uploads_purged';
+    const NOTICE_OPT   = 'zappoppop_legacy_uploads_notice';
 
     protected static function err($code, $message, $data = null) {
         return new WP_Error($code, $message, $data);
@@ -33,11 +29,6 @@ class ZapPopPop_Modules_Installer {
 
     public static function can_manage() {
         return current_user_can('manage_options');
-    }
-
-    /** Uploading or physically deleting module files: single-site admins and network super admins only. */
-    public static function can_upload() {
-        return self::can_manage() && self::file_mods_allowed() && (!is_multisite() || is_super_admin());
     }
 
     /* ------------------------------------------------------ summaries */
@@ -353,8 +344,6 @@ class ZapPopPop_Modules_Installer {
             'nonce'      => wp_create_nonce('zappoppop_admin_nonce'),
             'extend_url' => admin_url('admin.php?page=zappoppop-extend'),
             'modules_url' => admin_url('admin.php?page=zappoppop-settings#module'),
-            'can_upload' => self::can_upload() && class_exists('ZipArchive'),
-            'max_zip'    => self::MAX_ZIP,
             'categories'   => ZapPopPop_Module_Categories::all(),
             'cat_max'      => ZapPopPop_Module_Categories::MAX,
             'cat_name_max' => ZapPopPop_Module_Categories::NAME_MAX,
@@ -366,39 +355,23 @@ class ZapPopPop_Modules_Installer {
                 'delete'          => __('Delete', 'zappoppop'),
                 'manage'          => __('Manage', 'zappoppop'),
                 'working'         => __('Working…', 'zappoppop'),
-                'uploading'       => __('Uploading…', 'zappoppop'),
-                'upload'          => __('Upload Module', 'zappoppop'),
                 'error_generic'   => __('Something went wrong. Please try again.', 'zappoppop'),
                 'uninstall_title' => __('Uninstall module', 'zappoppop'),
                 /* translators: %s: module name */
                 'uninstall_msg'   => __('Uninstall "%s"? It stops working in the builder and on the frontend. Its files and saved popup data are kept, and you can reinstall it from Modules.', 'zappoppop'),
                 'delete_title'    => __('Delete module', 'zappoppop'),
                 /* translators: %s: module name */
-                'delete_msg_uploaded' => __('Delete "%s"? Its files are removed from the uploads folder. This cannot be undone.', 'zappoppop'),
-                /* translators: %s: module name */
                 'delete_msg_core' => __('Delete "%s"? It is removed from your modules and can be restored from Modules.', 'zappoppop'),
                 'remove_data'     => __('Remove data: also erase this module\'s saved data from all popups', 'zappoppop'),
                 'in_use_title'    => __('Module is in use', 'zappoppop'),
                 'in_use_msg'      => __('Popups that use it will lose this feature until it is installed again. Continue?', 'zappoppop'),
                 'continue_anyway' => __('Continue', 'zappoppop'),
-                /* translators: 1: module name, 2: installed version, 3: new version */
-                'replace_msg'     => /* translators: 1: module name, 2: installed version, 3: new version. */ __('"%1$s" is already installed (version %2$s). Replace it with version %3$s? Its installed state and popup data are kept.', 'zappoppop'),
-                'replace'         => __('Replace', 'zappoppop'),
-                'replace_title'   => __('Replace module', 'zappoppop'),
-                'cmp_current'     => __('Current module', 'zappoppop'),
-                'cmp_new'         => __('Uploaded module', 'zappoppop'),
-                'cmp_msg'         => __('The uploaded module has the same slug and name as the module in the uploads folder. Replace it with the uploaded version? Its installed state and popup data are kept.', 'zappoppop'),
-                'cmp_msg_core'    => __('The uploaded module has the same slug and name as a module in /modules. Replace it? The older copies in /modules and in the uploads folder are removed, the uploaded one takes its place, and its installed state and popup data are kept.', 'zappoppop'),
-                'pick_zip'        => __('Choose a module .zip file first.', 'zappoppop'),
-                'not_zip'         => __('Only a .zip file can be uploaded.', 'zappoppop'),
-                /* translators: %s: maximum size */
-                'too_big'         => __('The zip is larger than the %s limit.', 'zappoppop'),
                 'installed_ok'    => __('Module installed.', 'zappoppop'),
                 'manage_link'     => __('Manage in Settings', 'zappoppop'),
                 'extend_link'     => __('Open Modules', 'zappoppop'),
                 'empty'           => __('No modules match.', 'zappoppop'),
                 'builtin'         => __('Built-in', 'zappoppop'),
-                'uploaded'        => __('Uploaded', 'zappoppop'),
+                'addon'            => __('Add-on', 'zappoppop'),
                 'locked'          => __('Locked', 'zappoppop'),
                 'deprecated'      => __('Deprecated', 'zappoppop'),
                 'st_available'    => __('Available', 'zappoppop'),
@@ -437,7 +410,7 @@ class ZapPopPop_Modules_Installer {
                 'edit'            => __('Edit', 'zappoppop'),
                 /* translators: %s: module name */
                 'edit_title'      => __('Edit %s', 'zappoppop'),
-                'edit_note'       => __('The category and image URL are saved to this module\'s module.json.', 'zappoppop'),
+                'edit_note'       => __('The category and image URL are saved in the database.', 'zappoppop'),
                 'edit_image'      => __('Image URL', 'zappoppop'),
                 'edit_img_bad'    => __('Enter a valid image URL or path.', 'zappoppop'),
                 'edit_save'       => __('Save', 'zappoppop'),
@@ -527,35 +500,13 @@ class ZapPopPop_Modules_Installer {
         if (isset($m['allow_delete']) && !$m['allow_delete']) {
             return self::err('no_delete', __('Deleting is disabled for this module in its module.json.', 'zappoppop'));
         }
-        if ($m['source'] === 'uploaded' && !self::can_upload()) {
-            return self::err('forbidden', __('You are not allowed to delete module files on this site.', 'zappoppop'));
-        }
         if (ZapPopPop_Modules::state($slug) === 'deleted') {
             return self::err('deleted', __('This module is already deleted.', 'zappoppop'));
         }
         if ($remove_data) {
             self::purge_data($slug);
         }
-        if ($m['source'] === 'uploaded') {
-            $dir  = $m['dir'];
-            $real = realpath($dir);
-            $root = realpath(ZapPopPop_Modules::uploads_dir());
-            if (!$real || !$root || is_link($dir) || $real === $root || strpos($real . '/', rtrim($root, '/') . '/') !== 0) {
-                return self::err('unsafe_path', __('Module folder is outside the modules directory.', 'zappoppop'));
-            }
-            self::rrmdir($dir);
-            if (is_dir($dir)) {
-                return self::err('delete_failed', __('Could not remove the module files. Check folder permissions.', 'zappoppop'));
-            }
-            ZapPopPop_Modules::forget_state($slug);
-            if ($remove_data || !$m['data_keys']) {
-                ZapPopPop_Modules::clear_orphan($slug);
-            } else {
-                ZapPopPop_Modules::set_orphan($slug, $m['data_keys']);
-            }
-        } else {
-            ZapPopPop_Modules::set_state($slug, 'deleted');
-        }
+        ZapPopPop_Modules::set_state($slug, 'deleted');
         do_action('zappoppop_module_deleted', $slug, (bool) $remove_data);
         return ['slug' => $slug, 'message' => __('Module deleted.', 'zappoppop')];
     }
@@ -626,9 +577,73 @@ class ZapPopPop_Modules_Installer {
         }
         self::migrate_renamed_state();
         self::migrate_renamed_settings();
+        self::purge_legacy_uploads();
+        add_action('admin_notices', [__CLASS__, 'legacy_notice']);
     }
 
-    /* ------------------------------------------------------ zip upload */
+    /** Folder written by older versions that accepted module uploads. Nothing is read from it any more. */
+    protected static function legacy_dir() {
+        $u = wp_upload_dir(null, false);
+        return empty($u['basedir']) ? '' : rtrim($u['basedir'], '/\\') . '/zappoppop-modules';
+    }
+
+    /**
+     * One-time clean-up. Older versions let administrators upload module zips (JS, CSS, HTML) into uploads/zappoppop-modules.
+     * That code is no longer loaded or accepted, so the folder is removed. Popup data saved by those modules is kept
+     * (their data keys stay protected by the orphan list); only the files and the stored module state go.
+     */
+    public static function purge_legacy_uploads() {
+        if (get_option(self::LEGACY_OPT) === 'done') {
+            return;
+        }
+        $dir   = self::legacy_dir();
+        $names = [];
+        if ($dir !== '' && is_dir($dir)) {
+            $base = realpath(dirname($dir));
+            $real = realpath($dir);
+            if (is_link($dir) || !$base || !$real || strpos($real . '/', rtrim($base, '/\\') . '/') !== 0 || $real === $base) {
+                return;
+            }
+            $dirs = glob($dir . '/*', GLOB_ONLYDIR);
+            foreach ((array) $dirs as $d) {
+                $m = self::read_uploaded($d);
+                if (!$m) {
+                    continue;
+                }
+                $names[] = $m['name'];
+                if (!ZapPopPop_Modules::get($m['slug'])) {
+                    if (!empty($m['data_keys'])) {
+                        ZapPopPop_Modules::set_orphan($m['slug'], $m['data_keys']);
+                    }
+                    ZapPopPop_Modules::forget_state($m['slug']);
+                }
+            }
+            self::rrmdir($dir);
+            ZapPopPop_Modules::flush();
+            if (is_dir($dir)) {
+                return;
+            }
+        }
+        if ($names) {
+            update_option(self::NOTICE_OPT, array_values(array_unique($names)), false);
+        }
+        update_option(self::LEGACY_OPT, 'done');
+    }
+
+    /** Shown once, right after the old uploads folder was removed. */
+    public static function legacy_notice() {
+        $names = get_option(self::NOTICE_OPT);
+        if (!is_array($names) || !$names || !current_user_can('manage_options')) {
+            return;
+        }
+        delete_option(self::NOTICE_OPT);
+        $names = array_map('wp_strip_all_tags', array_map('strval', $names));
+        /* translators: %s: comma separated module names */
+        $text = sprintf(__('ZapPopPop no longer loads modules uploaded as .zip files. These uploaded modules were removed: %s. Your popup data was kept.', 'zappoppop'), implode(', ', $names));
+        echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html($text) . '</p></div>';
+    }
+
+    /* ------------------------------------------------------ clean-up of the old uploads folder */
 
     protected static function rrmdir($dir) {
         if (!is_dir($dir) || is_link($dir)) {
@@ -666,308 +681,4 @@ class ZapPopPop_Modules_Installer {
         return $m ? $m : null;
     }
 
-    /** Uploaded (not yet installed) module as shown in the replace confirmation. Only absolute image URLs can be previewed. */
-    protected static function incoming($m) {
-        $img = isset($m['image']) ? (string) $m['image'] : '';
-        return [
-            'slug'        => $m['slug'],
-            'name'        => $m['name'],
-            'version'     => $m['version'],
-            'author'      => $m['author'],
-            'description' => $m['description'],
-            'source'      => 'uploaded',
-            'image'       => preg_match('#^(?:https?:)?//|^/(?!/)#i', $img) === 1 ? $img : '',
-        ];
-    }
-
-    protected static function rand_name($prefix) {
-        return $prefix . bin2hex(function_exists('random_bytes') ? random_bytes(6) : md5(uniqid('', true)));
-    }
-
-    /** Create the uploads/zappoppop-modules root with a silence file and a no-PHP rule. */
-    protected static function prepare_root($base) {
-        if (!is_dir($base) && !wp_mkdir_p($base) && !is_dir($base)) {
-            return false;
-        }
-        if (!file_exists($base . '/index.php')) {
-            /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort index.php guard; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($base . '/index.php', "<?php\n// Silence is golden.\n");
-        }
-        if (!file_exists($base . '/.htaccess')) {
-            $rule  = "# ZapPopPop modules: static assets only.\n";
-            $rule .= "<IfModule mod_authz_core.c>\n<FilesMatch \"\\.(php[0-9]*|phtml|pht|phar)$\">\nRequire all denied\n</FilesMatch>\n</IfModule>\n";
-            $rule .= "<IfModule !mod_authz_core.c>\n<FilesMatch \"\\.(php[0-9]*|phtml|pht|phar)$\">\nOrder allow,deny\nDeny from all\n</FilesMatch>\n</IfModule>\n";
-            /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort access rules; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($base . '/.htaccess', $rule);
-        }
-        return is_dir($base) && wp_is_writable($base);
-    }
-
-    protected static function junk($name) {
-        $base = strtolower(basename(rtrim($name, '/')));
-        return strpos($name, '__MACOSX/') === 0 || $base === '.ds_store' || $base === 'thumbs.db' || strpos($base, '._') === 0;
-    }
-
-    /** Normalised entry name, or null when it is unsafe. */
-    protected static function clean_name($name) {
-        if ($name === '' || strpos($name, "\0") !== false || strpos($name, '\\') !== false || $name[0] === '/' || preg_match('/^[a-zA-Z]:/', $name)) {
-            return null;
-        }
-        $dir = substr($name, -1) === '/';
-        foreach (explode('/', rtrim($name, '/')) as $seg) {
-            if ($seg === '' || strlen($seg) > 100 || !preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]*$/', $seg)) {
-                return null;
-            }
-        }
-        return rtrim($name, '/') . ($dir ? '/' : '');
-    }
-
-    protected static function extract($zip, $dest) {
-        $n = (int) $zip->numFiles;
-        if ($n < 1 || $n > self::MAX_FILES) {
-            return self::err('bad_zip', __('The zip is empty or contains too many files.', 'zappoppop'));
-        }
-        $entries = [];
-        for ($i = 0; $i < $n; $i++) {
-            $orig = $zip->getNameIndex($i, ZipArchive::FL_UNCHANGED);
-            if (!is_string($orig)) {
-                return self::err('bad_zip', __('The zip could not be read.', 'zappoppop'));
-            }
-            if (self::junk($orig)) {
-                continue;
-            }
-            $clean = self::clean_name($orig);
-            if ($clean === null) {
-                /* translators: %s: file name inside the zip */
-                return self::err('unsafe_path', sprintf(__('Unsafe file name in zip: %s', 'zappoppop'), substr(preg_replace('/[^\x20-\x7e]/', '?', $orig), 0, 80)));
-            }
-            $op   = 0;
-            $attr = 0;
-            if ($zip->getExternalAttributesIndex($i, $op, $attr) && $op === ZipArchive::OPSYS_UNIX && ((($attr >> 16) & 0170000) === 0120000)) {
-                return self::err('unsafe_path', __('Symbolic links are not allowed in a module zip.', 'zappoppop'));
-            }
-            $entries[] = ['orig' => $orig, 'name' => $clean, 'dir' => substr($clean, -1) === '/'];
-        }
-        $names  = array_column($entries, 'name');
-        $prefix = '';
-        if (!in_array('module.json', $names, true)) {
-            $tops = [];
-            foreach ($names as $nm) {
-                $tops[explode('/', $nm)[0]] = true;
-            }
-            $tops = array_keys($tops);
-            if (count($tops) !== 1 || !in_array($tops[0] . '/module.json', $names, true)) {
-                return self::err('no_manifest', __('module.json was not found at the top of the zip.', 'zappoppop'));
-            }
-            $prefix = $tops[0] . '/';
-        }
-        $total = 0;
-        $files = 0;
-        foreach ($entries as $e) {
-            $rel = substr($e['name'], strlen($prefix));
-            if ($rel === '' || $rel === false || ($prefix !== '' && $e['name'] === rtrim($prefix, '/'))) {
-                continue;
-            }
-            $segs = explode('/', rtrim($rel, '/'));
-            if (count($segs) > self::MAX_DEPTH) {
-                return self::err('too_deep', __('The zip has folders nested too deeply.', 'zappoppop'));
-            }
-            $target = $dest . '/' . rtrim($rel, '/');
-            if ($e['dir']) {
-                if (!is_dir($target) && !wp_mkdir_p($target)) {
-                    return self::err('write_failed', __('Could not create a folder for the module.', 'zappoppop'));
-                }
-                continue;
-            }
-            $file = end($segs);
-            foreach (explode('.', $file) as $part) {
-                if (preg_match(self::BAD_SEGMENT, $part)) {
-                    /* translators: %s: file name */
-                    return self::err('bad_type', sprintf(__('File type not allowed in a module: %s', 'zappoppop'), $file));
-                }
-            }
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($ext, self::ALLOWED_EXT, true)) {
-                /* translators: %s: file name */
-                return self::err('bad_type', sprintf(__('File type not allowed in a module: %s', 'zappoppop'), $file));
-            }
-            $parent = dirname($target);
-            if (!is_dir($parent) && !wp_mkdir_p($parent)) {
-                return self::err('write_failed', __('Could not create a folder for the module.', 'zappoppop'));
-            }
-            $in = $zip->getStream($e['orig']);
-            if (!$in) {
-                return self::err('bad_zip', __('The zip could not be read.', 'zappoppop'));
-            }
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ $out = @fopen($target, 'wb');
-            if (!$out) {
-                /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($in);
-                return self::err('write_failed', __('Could not write a module file.', 'zappoppop'));
-            }
-            $size = 0;
-            while (!feof($in)) {
-                /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ $buf = fread($in, 8192);
-                if ($buf === false || $buf === '') {
-                    break;
-                }
-                $size  += strlen($buf);
-                $total += strlen($buf);
-                if ($size > self::MAX_FILE || $total > self::MAX_UNPACKED) {
-                    /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($in);
-                    /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($out);
-                    return self::err('too_big', __('The module is too large once unpacked.', 'zappoppop'));
-                }
-                /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fwrite($out, $buf);
-            }
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($in);
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ fclose($out);
-            /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort permission normalisation; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @chmod($target, 0644);
-            $files++;
-        }
-        if ($files < 1 || !is_file($dest . '/module.json')) {
-            return self::err('no_manifest', __('module.json was not found at the top of the zip.', 'zappoppop'));
-        }
-        return true;
-    }
-
-    /**
-     * Install a module from an uploaded zip. The module lands as "Available"; it is activated only by Install.
-     * $replace = true overwrites an existing uploaded module with the same slug (its installed state is kept).
-     */
-    public static function install_zip($file, $replace = false) {
-        if (!self::can_upload()) {
-            return self::err('forbidden', __('You are not allowed to upload modules on this site.', 'zappoppop'));
-        }
-        if (!class_exists('ZipArchive')) {
-            return self::err('no_zip', __('The PHP zip extension is required to upload modules.', 'zappoppop'));
-        }
-        if (!is_string($file) || !is_file($file) || !is_readable($file)) {
-            return self::err('bad_file', __('The uploaded file could not be read.', 'zappoppop'));
-        }
-        $size = filesize($file);
-        if ($size < 1 || $size > self::MAX_ZIP) {
-            /* translators: %s: size limit */
-            return self::err('too_big', sprintf(__('The zip must be smaller than %s.', 'zappoppop'), size_format(self::MAX_ZIP)));
-        }
-        $base = ZapPopPop_Modules::uploads_dir();
-        if ($base === '' || !self::prepare_root($base)) {
-            return self::err('no_dir', __('The modules folder could not be created in uploads.', 'zappoppop'));
-        }
-        $tmp = $base . '/' . self::rand_name('.tmp-');
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ if (!@mkdir($tmp, 0755)) {
-            return self::err('no_dir', __('The modules folder is not writable.', 'zappoppop'));
-        }
-        $zip = new ZipArchive();
-        if ($zip->open($file) !== true) {
-            self::rrmdir($tmp);
-            return self::err('bad_zip', __('This is not a valid zip file.', 'zappoppop'));
-        }
-        $res = self::extract($zip, $tmp);
-        $zip->close();
-        if (is_wp_error($res)) {
-            self::rrmdir($tmp);
-            return $res;
-        }
-        $mf = $tmp . '/module.json';
-        if (is_link($mf) || filesize($mf) > ZapPopPop_Modules::MAX_JSON) {
-            self::rrmdir($tmp);
-            return self::err('bad_manifest', __('module.json is missing or too large.', 'zappoppop'));
-        }
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $raw  = json_decode((string) file_get_contents($mf), true);
-        $slug = (is_array($raw) && isset($raw['slug']) && is_string($raw['slug'])) ? $raw['slug'] : '';
-        if (!ZapPopPop_Modules::slug_valid($slug)) {
-            self::rrmdir($tmp);
-            return self::err('bad_slug', __('module.json needs a valid "slug" (lowercase letters, numbers and dashes).', 'zappoppop'));
-        }
-        if (!isset($raw['category']) || !is_string($raw['category']) || trim($raw['category']) === '') {
-            $raw['category'] = ZapPopPop_Module_Categories::DEFAULT_SLUG;
-            $json = wp_json_encode($raw, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            if (is_string($json) && $json !== '') {
-                /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort manifest write; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($mf, $json . "\n");
-            }
-        }
-        $m = ZapPopPop_Modules::normalize($raw, 'uploaded', $slug);
-        if (!$m) {
-            self::rrmdir($tmp);
-            return self::err('bad_manifest', __('module.json is not a valid ZapPopPop module manifest.', 'zappoppop'));
-        }
-        if (!empty($m['html']) && (!is_file($tmp . '/accordion.html') || is_link($tmp . '/accordion.html') || filesize($tmp . '/accordion.html') > ZapPopPop_Modules::MAX_HTML)) {
-            self::rrmdir($tmp);
-            return self::err('bad_manifest', __('accordion.html is missing or too large.', 'zappoppop'));
-        }
-        if (!empty($m['html']) && !empty($m['data_keys']) && (!is_file($tmp . '/admin.js') || is_link($tmp . '/admin.js'))) {
-            self::rrmdir($tmp);
-            return self::err('bad_manifest', __('This module saves settings, so it needs an admin.js.', 'zappoppop'));
-        }
-        $core_path = ZapPopPop_Modules::core_dir() . '/' . $slug;
-        $old_core  = null; // built-in modules are never replaced
-        if (is_dir($core_path)) {
-            // Built-in modules live in the plugin folder, which must never be modified.
-            self::rrmdir($tmp);
-            return self::err('core_slug', __('This slug belongs to a built-in module and cannot be uploaded. Use a different slug.', 'zappoppop'));
-        }
-        $dest   = $base . '/' . $slug;
-        $exists = is_dir($dest);
-        $old_up = $exists ? self::read_uploaded($dest) : null;
-        if ($old_up) {
-            if (strcasecmp(trim($old_up['name']), trim($m['name'])) !== 0) {
-                self::rrmdir($tmp);
-                /* translators: 1: module name in the uploads folder, 2: uploaded module name */
-                return self::err('name_mismatch', sprintf(__('The module with this slug in the uploads folder is named "%1$s", not "%2$s", so it cannot be replaced.', 'zappoppop'), $old_up['name'], $m['name']));
-            }
-            if (version_compare($m['version'], $old_up['version'], '<')) {
-                self::rrmdir($tmp);
-                /* translators: 1: module name, 2: version in the uploads folder, 3: uploaded version */
-                return self::err('older_version', sprintf(__('"%1$s" in the uploads folder is version %2$s, which is newer than the uploaded version %3$s.', 'zappoppop'), $old_up['name'], $old_up['version'], $m['version']));
-            }
-        }
-        if (($exists || $old_core) && !$replace) {
-            self::rrmdir($tmp);
-            $old = $old_core ? $old_core : ZapPopPop_Modules::get($slug);
-            return self::err('exists', __('A module with this slug is already installed.', 'zappoppop'), [
-                'slug'        => $slug,
-                'name'        => $m['name'],
-                'old_version' => $old ? $old['version'] : '',
-                'new_version' => $m['version'],
-                'old'         => $old ? self::summary($old) : null,
-                'new'         => self::incoming($m),
-            ]);
-        }
-        $prev_state = $old_core ? ZapPopPop_Modules::state($slug) : '';
-        /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort index.php guard; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($tmp . '/index.php', "<?php\n// Silence is golden.\n");
-        if ($exists) {
-            $old = $base . '/' . self::rand_name('.old-');
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ if (is_link($dest) || !@rename($dest, $old)) {
-                self::rrmdir($tmp);
-                return self::err('replace_failed', __('The existing module could not be replaced.', 'zappoppop'));
-            }
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ if (!@rename($tmp, $dest)) {
-                /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @rename($old, $dest);
-                self::rrmdir($tmp);
-                return self::err('replace_failed', __('The existing module could not be replaced.', 'zappoppop'));
-            }
-            self::rrmdir($old);
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ } elseif (!@rename($tmp, $dest)) {
-            self::rrmdir($tmp);
-            return self::err('write_failed', __('The module could not be moved into place.', 'zappoppop'));
-        }
-        ZapPopPop_Modules::flush();
-        ZapPopPop_Modules::clear_orphan($slug);
-        if ($old_core) {
-            ZapPopPop_Modules::set_state($slug, $prev_state);
-        } elseif (!$exists) {
-            ZapPopPop_Modules::set_state($slug, 'available');
-        }
-        if (!empty($m['category'])) {
-            ZapPopPop_Module_Categories::ensure($m['category']);
-        }
-        $exists = $exists || $old_core !== null;
-        do_action('zappoppop_module_uploaded', $slug, $exists);
-        $mod = ZapPopPop_Modules::get($slug);
-        return [
-            'module'   => $mod ? self::summary($mod) : null,
-            'replaced' => $exists,
-            'message'  => $old_core
-                ? __('Module updated. The older version was removed from /modules.', 'zappoppop')
-                : ($exists ? __('Module updated.', 'zappoppop') : __('Module uploaded. Click Install to activate it.', 'zappoppop')),
-        ];
-    }
 }

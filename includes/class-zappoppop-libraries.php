@@ -201,7 +201,7 @@ class ZapPopPop_Libraries {
 
         /* ZAPPOPPOP_LAYER_FONTS_BUILDER: editor stage must load the same fonts/weights as the front */
         $zappoppop_lf = self::get_layer_fonts_url(null);
-        if ($zappoppop_lf) {
+        if ($zappoppop_lf && !wp_style_is('zappoppop-google-fonts', 'enqueued') && !wp_style_is('zappoppop-bundled-fonts', 'enqueued')) {
             // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the font URL already identifies the requested families
             wp_enqueue_style('zappoppop-layer-fonts', $zappoppop_lf, [], null);
         }
@@ -229,7 +229,7 @@ class ZapPopPop_Libraries {
 
         $custom_fonts_css = self::generate_custom_fonts_css();
         if (!empty($custom_fonts_css)) {
-            echo self::inline_style_tag('custom-fonts', $custom_fonts_css); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- printed by wp_print_styles(), CSS text with tags stripped
+            self::print_inline_style('custom-fonts', $custom_fonts_css);
         }
     }
 
@@ -319,6 +319,31 @@ class ZapPopPop_Libraries {
     }
 
     /**
+     * ZAPPOPPOP_P19_PRINT_INLINE: same as inline_style_tag() but prints right away with wp_print_styles(); nothing is returned,
+     * so there is no variable to echo. A handle is printed once per request.
+     *
+     * @param string $handle
+     * @param string $css
+     * @param bool   $dedupe
+     * @return void
+     */
+    public static function print_inline_style($handle, $css, $dedupe = false) {
+        $css = trim(wp_strip_all_tags((string) $css));
+        if ($css === '') {
+            return;
+        }
+        $handle = 'zappoppop-' . preg_replace('/[^A-Za-z0-9_-]/', '', (string) $handle);
+        if ($dedupe) {
+            $handle .= '-' . substr(md5($css), 0, 10);
+        }
+        if (!wp_style_is($handle, 'registered')) {
+            wp_register_style($handle, false, [], ZAPPOPPOP_VERSION);
+        }
+        wp_add_inline_style($handle, $css);
+        wp_print_styles($handle);
+    }
+
+    /**
      * URL of the stylesheet that declares the bundled font families.
      *
      * @return string
@@ -339,14 +364,7 @@ class ZapPopPop_Libraries {
 
     /* ZAPPOPPOP_LAYER_FONTS: bundled font stylesheet when a layer uses one of the packaged families */
     public static function get_layer_fonts_url($config = null) {
-        $map = [
-            'inter'      => 'Inter:wght@300;400;500;600;700;800;900',
-            'roboto'     => 'Roboto:wght@300;400;500;700;900',
-            'montserrat' => 'Montserrat:wght@300;400;500;600;700;800;900',
-            'poppins'    => 'Poppins:wght@300;400;500;600;700;800;900',
-            'open sans'  => 'Open+Sans:wght@300;400;500;600;700;800',
-            'lato'       => 'Lato:wght@300;400;700;900',
-        ];
+        $map = ZapPopPop_Font_Catalog::weight_map();
         $settings = get_option('zappoppop_settings', []);
         if (is_array($settings) && !empty($settings['disable_google_fonts'])) {
             return '';
@@ -370,81 +388,20 @@ class ZapPopPop_Libraries {
     }
 
     /**
-     * Parse and compile custom font declarations into CSS @font-face blocks.
+     * @font-face blocks for the custom fonts, rebuilt from validated names and URLs only. ZAPPOPPOP_FONTS_CLEAN
      *
      * @return string
      */
     public static function generate_custom_fonts_css() {
-        $raw = function_exists('zappoppop_get_setting') ? zappoppop_get_setting('custom_fonts', '') : '';
-        if (empty(trim($raw))) {
-            $settings = get_option('zappoppop_settings', []);
-            $raw = !empty($settings['custom_fonts']) ? $settings['custom_fonts'] : '';
-        }
-
-        if (empty(trim($raw))) {
-            return '';
-        }
-
-        if (strpos($raw, '@font-face') !== false) {
-            return wp_strip_all_tags($raw);
-        }
-
-        $css = '';
-        $lines = explode("
-", str_replace("
-", '', $raw));
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if (empty($line)) {
-                continue;
-            }
-            if (strpos($line, ':') !== false) {
-                $parts = explode(':', $line, 2);
-                $font_name = trim(sanitize_text_field($parts[0]));
-                $font_src  = isset($parts[1]) ? trim($parts[1]) : '';
-                if (!empty($font_name) && !empty($font_src)) {
-                    $css .= "@font-face {\n  font-family: '" . esc_attr($font_name) . "';\n  src: " . esc_attr($font_src) . ";\n  font-display: swap;\n}\n";
-                }
-            }
-        }
-        return $css;
+        return ZapPopPop_Custom_Fonts::css();
     }
 
     /**
-     * Extract unique custom font family names for the Visual Builder font dropdown.
+     * Unique custom font family names for the Visual Builder font dropdown.
      *
      * @return array
      */
     public static function get_custom_font_families() {
-        $raw = function_exists('zappoppop_get_setting') ? zappoppop_get_setting('custom_fonts', '') : '';
-        if (empty(trim($raw))) {
-            $settings = get_option('zappoppop_settings', []);
-            $raw = !empty($settings['custom_fonts']) ? $settings['custom_fonts'] : '';
-        }
-
-        $names = [];
-        if (empty(trim($raw))) {
-            return $names;
-        }
-
-        $lines = explode("
-", str_replace("
-", '', $raw));
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if (empty($line)) {
-                continue;
-            }
-            if (preg_match("/font-family\s*:\s*['\"]?([^'\";]+)/i", $line, $matches)) {
-                $names[] = trim($matches[1]);
-            } elseif (strpos($line, ':') !== false) {
-                $parts = explode(':', $line, 2);
-                $names[] = trim(sanitize_text_field($parts[0]));
-            }
-        }
-
-        $filtered = array_filter($names);
-        $unique   = array_unique($filtered);
-        return array_values($unique);
+        return ZapPopPop_Custom_Fonts::families();
     }
 }

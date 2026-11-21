@@ -26,8 +26,8 @@ if (!class_exists('ZapPopPop_Ajax_Templates')) { require_once ZAPPOPPOP_PATH . '
 
     <div class="zappoppop-lib-categories zappoppop-library-categories">
         <button type="button" class="zappoppop-cat-btn active" data-cat="all"><?php esc_html_e('All Templates', 'zappoppop'); ?></button>
-        <?php foreach (ZapPopPop_Ajax_Templates::get_categories() as $zpp_cat) : ?>
-        <button type="button" class="zappoppop-cat-btn" data-cat="<?php echo esc_attr($zpp_cat['slug']); ?>"><?php echo esc_html($zpp_cat['label']); ?></button>
+        <?php foreach (ZapPopPop_Ajax_Templates::get_categories() as $zappoppop_cat) : ?>
+        <button type="button" class="zappoppop-cat-btn" data-cat="<?php echo esc_attr($zappoppop_cat['slug']); ?>"><?php echo esc_html($zappoppop_cat['label']); ?></button>
         <?php endforeach; ?>
     </div>
 </div>

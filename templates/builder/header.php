@@ -6,11 +6,11 @@ if (!defined('ABSPATH')) {
 ?>
 <?php ZapPopPop_Libraries::print_style('zappoppop-font-awesome'); ?>
 <?php
-$__zpp_set   = get_option('zappoppop_settings', []);
-$__zpp_set   = is_array($__zpp_set) ? $__zpp_set : [];
-$__zpp_vp_on = !empty($__zpp_set['builder_viewport_toggle']);
-$__zpp_zm_on = !empty($__zpp_set['builder_zoom_select']);
-$__zpp_tpl_on = !empty($__zpp_set['builder_save_template']);
+$__zappoppop_set   = get_option('zappoppop_settings', []);
+$__zappoppop_set   = is_array($__zappoppop_set) ? $__zappoppop_set : [];
+$__zappoppop_vp_on = !empty($__zappoppop_set['builder_viewport_toggle']);
+$__zappoppop_zm_on = !empty($__zappoppop_set['builder_zoom_select']);
+$__zappoppop_tpl_on = !empty($__zappoppop_set['builder_save_template']);
 ?>
 <div class="zappoppop-builder-header">
     <!-- Left Section: Navigation, Settings, Title -->
@@ -40,7 +40,7 @@ $__zpp_tpl_on = !empty($__zpp_set['builder_save_template']);
     <!-- Center Section: Canvas Label (Outside Workspace) & Sequence Tabs -->
     <div class="zappoppop-hdr-group zappoppop-hdr-center">
 
-        <div class="zappoppop-viewport-toggles"<?php echo $__zpp_vp_on ? '' : ' style="display:none !important;" aria-hidden="true"'; ?>>
+        <div class="zappoppop-viewport-toggles"<?php echo $__zappoppop_vp_on ? '' : ' style="display:none !important;" aria-hidden="true"'; ?>>
             <button type="button" class="zappoppop-viewport-btn active" data-mode="desktop" title="<?php esc_attr_e('Desktop Viewport (640px)', 'zappoppop'); ?>">
                 <span class="dashicons dashicons-desktop"></span>
             </button>
@@ -52,7 +52,7 @@ $__zpp_tpl_on = !empty($__zpp_set['builder_save_template']);
 
     <!-- Right Section: Preview, Embed, Save Actions (Clean Text Buttons) -->
     <div class="zappoppop-hdr-group zappoppop-hdr-right">
-        <select id="zappoppop-zoom-select" class="zappoppop-zoom-select"<?php echo $__zpp_zm_on ? '' : ' style="display:none !important;" aria-hidden="true" tabindex="-1"'; ?> autocomplete="off" title="<?php esc_attr_e('Stage Zoom', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Stage Zoom', 'zappoppop'); ?>">
+        <select id="zappoppop-zoom-select" class="zappoppop-zoom-select"<?php echo $__zappoppop_zm_on ? '' : ' style="display:none !important;" aria-hidden="true" tabindex="-1"'; ?> autocomplete="off" title="<?php esc_attr_e('Stage Zoom', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Stage Zoom', 'zappoppop'); ?>">
             <option value="0.5">50%</option>
             <option value="0.75">75%</option>
             <option value="1" selected>100%</option>
@@ -71,7 +71,7 @@ $__zpp_tpl_on = !empty($__zpp_set['builder_save_template']);
             <button type="button" id="zappoppop-btn-save-menu" class="zappoppop-save-caret" aria-haspopup="true" aria-expanded="false" aria-controls="zappoppop-save-menu" title="<?php esc_attr_e('More save options', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('More save options', 'zappoppop'); ?>"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="pointer-events:none;"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
             <div class="zappoppop-save-menu" id="zappoppop-save-menu" role="menu" aria-labelledby="zappoppop-btn-save-menu">
                 <button type="button" role="menuitem" class="zappoppop-save-menu-item" id="zappoppop-menu-save-draft" data-status="<?php echo esc_attr(($popup && isset($popup->status)) ? (string) $popup->status : ''); ?>"><span class="dashicons dashicons-edit" aria-hidden="true"></span><span class="zappoppop-save-menu-label"><?php esc_html_e('Save Draft', 'zappoppop'); ?></span><span class="zappoppop-save-menu-state"></span></button>
-                <?php if ($__zpp_tpl_on) : ?>
+                <?php if ($__zappoppop_tpl_on) : ?>
                 <button type="button" role="menuitem" class="zappoppop-save-menu-item" id="zappoppop-menu-save-template"><span class="dashicons dashicons-layout" aria-hidden="true"></span><span class="zappoppop-save-menu-label"><?php esc_html_e('Save as Template', 'zappoppop'); ?></span></button>
                 <?php endif; ?>
             </div>

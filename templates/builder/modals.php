@@ -150,8 +150,8 @@ if (!defined('ABSPATH')) {
                 <div class="wpt-a-cat">
                     <label class="wpt-l" for="zappoppop-tpl-category"><?php esc_html_e('Category', 'zappoppop'); ?></label>
                     <select class="wpt-in" id="zappoppop-tpl-category">
-                        <?php foreach (ZapPopPop_Ajax_Templates::get_categories() as $zpp_tc) : ?>
-                            <option value="<?php echo esc_attr($zpp_tc['slug']); ?>"<?php selected($zpp_tc['slug'], 'custom'); ?>><?php echo esc_html($zpp_tc['label']); ?></option>
+                        <?php foreach (ZapPopPop_Ajax_Templates::get_categories() as $zappoppop_tc) : ?>
+                            <option value="<?php echo esc_attr($zappoppop_tc['slug']); ?>"<?php selected($zappoppop_tc['slug'], 'custom'); ?>><?php echo esc_html($zappoppop_tc['label']); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

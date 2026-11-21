@@ -4,7 +4,7 @@
             "sender_name": "ZapPopPop",
             "csv_separator": ",",
             "user_uploads": "delete",
-            "powered_by_badge": 1,
+            "powered_by_badge": 0,
             "powered_by_badge_nolink": 0,
             "test_mode": 0,
             "preload_popups": 0,
@@ -336,7 +336,7 @@
             "geoip_service": "none",
             "geoip_api_service": "none"
         },
-        "saved": 1795207689
+        "saved": 1795279747
     },
     "theme": {
         "data": {
@@ -449,7 +449,7 @@
             "tg_close_hover": "#1d2327",
             "tg_focus": "#c1272d"
         },
-        "saved": 1795155970
+        "saved": 1795284814
     },
     "popup": {
         "data": {
@@ -533,21 +533,6 @@
     },
     "layers": {
         "data": {
-            "label": {
-                "style": {
-                    "textAlign": "center",
-                    "opacity": 1,
-                    "fontSize": 14,
-                    "fontWeight": "400",
-                    "lineHeight": 1,
-                    "letterSpacing": 0,
-                    "paddingTop": 0,
-                    "paddingRight": 0,
-                    "paddingBottom": 0,
-                    "paddingLeft": 0,
-                    "borderRadius": 0
-                }
-            },
             "icon": {
                 "basic": {
                     "rotate": "0",
@@ -1946,6 +1931,6 @@
                 }
             }
         },
-        "saved": 1795235363
+        "saved": 1795284814
     }
 }

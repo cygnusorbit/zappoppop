@@ -62,14 +62,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -167,14 +167,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -228,14 +228,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -275,14 +275,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -427,14 +427,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }
@@ -488,14 +488,14 @@ class ZapPopPop_Ajax_Templates {
             wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized user capability.', 'zappoppop' ) ), 403 );
             wp_die();
         }
-        $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+        $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
             || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
             || check_ajax_referer( 'zappoppop_nonce', 'security', false )
             || check_ajax_referer( 'zappoppop_builder_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_admin_nonce', 'nonce', false )
             || check_ajax_referer( 'zappoppop_settings_nonce', 'nonce', false );
-        if ( ! $zpp_verified ) {
+        if ( ! $zappoppop_verified ) {
             wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
             wp_die();
         }

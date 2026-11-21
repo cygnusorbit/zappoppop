@@ -92,6 +92,18 @@
         timer = window.setTimeout(function () { refresh(false); }, 0);
     }
 
+    /* ZAPPOPPOP_INLINE_ASSETS: first paint (replaces the inline script that used to sit under the grid): apply the saved 3 / 4 column view,
+       and never leave the grid in its pending state if the pager fails for any reason. */
+    (function () {
+        var g = document.querySelector('.zappoppop-library-grid');
+        if (!g) { return; }
+        try {
+            var v = parseInt(window.localStorage.getItem(KEY), 10);
+            if (v === 3 || v === 4) { g.setAttribute('data-cols', String(v)); }
+        } catch (e) {}
+        window.setTimeout(function () { g.className = g.className.replace(/\s*is-pg-pending/g, ''); }, 4000);
+    }());
+
     window.ZapPopPopLibPager = { reset: reset, refresh: refresh };
 
     $(function () {

@@ -96,14 +96,11 @@ class ZapPopPop_Template_Media {
         if (!wp_mkdir_p($dir)) {
             return '';
         }
-        if (!file_exists($dir . 'index.php')) {
-            /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort index.php guard; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($dir . 'index.php', "<?php\n// Silence is golden.\n");
-        }
-        $name = wp_unique_filename($dir, sanitize_file_name(basename($path)));
-        $dest = $dir . $name;
-        if (/* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- the result is checked and reported; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($dest, $bytes) === false) {
+        $stored = ZapPopPop_Template_Bundle::store($tplid, basename($path), $bytes);
+        if (!$stored) {
             return '';
         }
+        $dest = $stored['file'];
         $id = self::attach($dest, $tplid, $key);
         if (!$id) {
             return '';

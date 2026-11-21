@@ -184,7 +184,7 @@ class ZapPopPop_Front_Display {
                 } elseif ($zappoppop_forced && !$zappoppop_eligible && !$zappoppop_always) {
                     $zappoppop_html = preg_replace('/<div class="zappoppop-overlay/', '<div data-manual="1" class="zappoppop-overlay', $zappoppop_html, 1);
                 }
-                echo $zappoppop_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                echo ZapPopPop_Sanitizer::kses_render($zappoppop_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup markup goes through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render) ZAPPOPPOP_OUTPUT_KSES
             }
         }
     }

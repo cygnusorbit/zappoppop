@@ -168,7 +168,7 @@ class ZapPopPop_Front_Renderer {
         ";
         }
 
-        /* ZAPPOPPOP_CUSTOM_CODE_RENDER: an active Custom Code module adds the popup's own CSS (scoped to this popup) and queues its JS */
+        /* Extensions may append popup CSS through this filter; the extension sanitises what it adds, and the result is minified below. */
         $custom_inline_css = (string) apply_filters('zappoppop_popup_inline_css', $custom_inline_css, (isset($config['settings']) && is_array($config['settings'])) ? $config['settings'] : array(), $uid);
 
         if ($minify_css && function_exists('zappoppop_minify_css')) {
@@ -193,11 +193,11 @@ class ZapPopPop_Front_Renderer {
             <?php /* ZAPPOPPOP_LAYER_FONTS_FRONT */ $zappoppop_lf = ZapPopPop_Libraries::get_layer_fonts_url($config); if ($zappoppop_lf) : ?>
             <?php ZapPopPop_Libraries::print_style('zappoppop-layer-fonts'); ?>
             <?php endif; ?>
-            <?php echo ZapPopPop_Libraries::inline_style_tag('popup-css-' . $uid, $custom_inline_css); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- printed by wp_print_styles(), CSS text with tags stripped ?>
+            <?php echo ZapPopPop_Sanitizer::kses_render(ZapPopPop_Libraries::inline_style_tag('popup-css-' . $uid, $custom_inline_css)); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup markup goes through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render) ?>
 
             <?php if (!$is_inline): ?>
-            <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo $zappoppop_ov['layers']; ?>
+            <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup markup goes through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render)
+        echo ZapPopPop_Sanitizer::kses_render($zappoppop_ov['layers']); ?>
             <div class="zappoppop-backdrop" data-uid="<?php echo esc_attr($uid); ?>"></div>
             <?php endif; ?>
 
@@ -282,7 +282,7 @@ class ZapPopPop_Front_Renderer {
                                 $elements = $this->zappoppop_sequence_layer_anims($elements);
                                 foreach ($elements as $el) {
                                     if (is_array($el) && empty($el['hidden'])) {
-                                        /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- element markup is escaped inside the element renderers */ echo $this->zappoppop_apply_logic($this->zappoppop_apply_fg($this->render_canvas_element($this->zappoppop_fit_shape_to_edges($el, $c_width, $c_height, !$c_allow_ovf)), $el), $el); /* ZAPPOPPOP_LOGIC_ATTRS */
+                                        /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup markup goes through wp_kses() with the popup allowlist (ZapPopPop_Sanitizer::kses_render) */ echo ZapPopPop_Sanitizer::kses_render($this->zappoppop_apply_logic($this->zappoppop_apply_fg($this->render_canvas_element($this->zappoppop_fit_shape_to_edges($el, $c_width, $c_height, !$c_allow_ovf)), $el), $el)); /* ZAPPOPPOP_LOGIC_ATTRS */ /* ZAPPOPPOP_OUTPUT_KSES */
                                     }
                                 }
                             }
@@ -480,11 +480,11 @@ class ZapPopPop_Front_Renderer {
         $inside = isset($el['fieldLabelPosition']) && $el['fieldLabelPosition'] === 'inside' && in_array($t, array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password'), true);
         if ($inside && !(isset($el['fieldLabelTextColor']) && is_string($el['fieldLabelTextColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['fieldLabelTextColor']))) { $color = '#64748b'; }
         $lbl_pos = $inside
-            ? 'position:absolute;z-index:3;left:12px;top:4px;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:0;text-transform:none;line-height:1;pointer-events:none;text-shadow:none;'
-            : 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;line-height:1.2;pointer-events:none;text-shadow:none;';
+            ? 'position:absolute;z-index:3;left:12px;top:4px;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1;pointer-events:none;text-shadow:none;'
+            : 'position:absolute;left:0;bottom:100%;margin-bottom:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1.2;pointer-events:none;text-shadow:none;';
         $label = '<span class="zpp-fld-label" aria-hidden="true" style="' . $lbl_pos . 'color:' . esc_attr($color) . ';">' . esc_html($name) . '</span>';
         if ($inside) {
-            $label .= '<style>.zpp-fld-in input,.zpp-fld-in select,.zpp-fld-in textarea{box-sizing:border-box!important;padding-top:20px!important;padding-bottom:4px!important}.zpp-fld-in textarea{padding-top:22px!important}.zpp-fld-in [style*="top:50%"]:not(.zpp-fld-label){top:calc(50% + 8px)!important}</style>';
+            $label .= ZapPopPop_Libraries::inline_style_tag('field-label-inside', '.zpp-fld-in input,.zpp-fld-in select,.zpp-fld-in textarea{box-sizing:border-box!important;padding-top:20px!important;padding-bottom:4px!important}.zpp-fld-in textarea{padding-top:22px!important}.zpp-fld-in [style*="top:50%"]:not(.zpp-fld-label){top:calc(50% + 8px)!important}', true); /* ZAPPOPPOP_INLINE_ASSETS */
         }
         $n = 0;
         $out = preg_replace_callback('/^((?:\s*<style\b[^>]*>.*?<\/style>\s*)*<div\b[^>]*>)/is', function ($m) use ($label) { return $m[1] . $label; }, $html, 1, $n);
@@ -522,7 +522,7 @@ class ZapPopPop_Front_Renderer {
         if ($bg !== '') { $css .= '.zpp-fs-bg{background-color:transparent!important}'; /* ZPP_FS_OUTER */ $css .= '.zpp-fs-bg ' . $box . ',.zpp-fs-bg select,.zpp-fs-bg textarea,.zpp-fs-bg .zappoppop-ms-wrap,.zpp-fs-bg .zappoppop-upload-dropzone{background-color:var(--zpp-fs-bg)!important}'; }
         if ($bd !== '') { $css .= '.zpp-fs-bd{border-color:var(--zpp-fs-bd)!important}'; /* ZPP_FS_WRAP: wrapper border from the Style tab */ $css .= '.zpp-fs-bd ' . $box . ',.zpp-fs-bd select,.zpp-fs-bd textarea,.zpp-fs-bd .zappoppop-ms-wrap,.zpp-fs-bd .zappoppop-upload-dropzone{border-color:var(--zpp-fs-bd)!important}'; }
         if ($ph !== '') { $css .= '.zpp-fs-ph input::placeholder,.zpp-fs-ph textarea::placeholder{color:var(--zpp-fs-ph)!important;opacity:1!important}.zpp-fs-ph input::-moz-placeholder,.zpp-fs-ph textarea::-moz-placeholder{color:var(--zpp-fs-ph)!important;opacity:1!important}.zpp-fs-ph select:has(option[value=""]:checked){color:var(--zpp-fs-ph)!important}'; }
-        return $out2 . '<style>' . $css . '</style>';
+        return $out2 . ZapPopPop_Libraries::inline_style_tag('field-style', $css, true);
     }
 
     private function render_canvas_element(array $el, array $config = array()) {
@@ -686,6 +686,18 @@ class ZapPopPop_Front_Renderer {
         ];
 
         if (!empty($el['fontFamily']) && $el['fontFamily'] !== 'inherit') $style[] = 'font-family:' . esc_attr($el['fontFamily']);
+        /* ZPP_TEXT_SHADOW: structured X / Y / blur / colour, never free text; inherited by the text inside the layer */
+        $zpp_tsx = isset($el['textShadowX']) && is_numeric($el['textShadowX']) ? max(-50, min(50, (float) $el['textShadowX'])) : 0;
+        $zpp_tsy = isset($el['textShadowY']) && is_numeric($el['textShadowY']) ? max(-50, min(50, (float) $el['textShadowY'])) : 0;
+        $zpp_tsb = isset($el['textShadowBlur']) && is_numeric($el['textShadowBlur']) ? max(0, min(100, (float) $el['textShadowBlur'])) : 0;
+        if ($zpp_tsx != 0 || $zpp_tsy != 0 || $zpp_tsb != 0) {
+            $zpp_tsc = isset($el['textShadowColor']) ? ZapPopPop_Color::sanitize($el['textShadowColor'], '#00000080') : '#00000080';
+            if (isset($el['textShadowPos']) && 'inset' === $el['textShadowPos']) { $zpp_tsx = -$zpp_tsx; $zpp_tsy = -$zpp_tsy; } /* inset = engraved look: light comes from the opposite side */
+            $style[] = 'text-shadow:' . $zpp_tsx . 'px ' . $zpp_tsy . 'px ' . $zpp_tsb . 'px ' . esc_attr($zpp_tsc);
+        }
+        if (isset($el['textTransform']) && in_array($el['textTransform'], array('uppercase', 'lowercase', 'capitalize'), true)) $style[] = 'text-transform:' . $el['textTransform']; /* ZPP_TEXT_TRANSFORM: enum, inherited by the text inside the layer */
+        /* ZPP_WORD_SPACING: clamped number, inherited by the text inside the layer */
+        if (isset($el['wordSpacing']) && is_numeric($el['wordSpacing']) && (float) $el['wordSpacing'] != 0) $style[] = 'word-spacing:' . max(-10, min(50, (float) $el['wordSpacing'])) . 'px';
         if (!empty($el['fontSize'])) $style[] = 'font-size:' . intval($el['fontSize']) . 'px';
         if (!empty($el['fontWeight']) && preg_match('/^[0-9a-z]{3,10}$/i', (string) $el['fontWeight'])) $style[] = 'font-weight:' . $el['fontWeight']; /* ZAPPOPPOP_FRONT_FONT_WEIGHT: form inputs inherit this */
         if (!empty($el['color'])) $style[] = 'color:' . esc_attr($el['color']);
@@ -1076,7 +1088,7 @@ class ZapPopPop_Front_Renderer {
                 $sb_x = 'font-size:' . $sb_fs . 'px;font-weight:' . $sb_fw . ';color:' . $sb_fg . ';';
                 if (!empty($el['lineHeight']) && is_numeric($el['lineHeight'])) { $sb_x .= 'line-height:' . floatval($el['lineHeight']) . ';'; }
                 if (isset($el['letterSpacing']) && is_numeric($el['letterSpacing']) && floatval($el['letterSpacing']) != 0) { $sb_x .= 'letter-spacing:' . floatval($el['letterSpacing']) . 'px;'; }
-                if (!empty($el['fontFamily']) && $el['fontFamily'] !== 'inherit' && preg_match('/^[A-Za-z0-9 ,\'"-]+$/', (string) $el['fontFamily'])) { $sb_x .= 'font-family:' . esc_attr($el['fontFamily']) . ';'; }
+                if (!empty($el['fontFamily']) && $el['fontFamily'] !== 'inherit' && preg_match('/^[\p{L}\p{N} _,\'"-]+$/u', (string) $el['fontFamily'])) { $sb_x .= 'font-family:' . esc_attr($el['fontFamily']) . ';'; }
                 $sb_data = ' data-submit-action="' . esc_attr($sb_act) . '" data-loading-text="' . esc_attr($sb_loading) . '"';
                 if ($sb_act === 'next_canvas') { $sb_data .= ' data-goto-canvas="' . $sb_canvas . '"'; }
                 if ($sb_act === 'redirect' && $sb_url !== '') { $sb_data .= ' data-redirect-url="' . esc_attr($sb_url) . '"'; }

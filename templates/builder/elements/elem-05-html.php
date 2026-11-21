@@ -23,4 +23,5 @@ if (!defined('ABSPATH')) exit;
             </select>
         </div>
     </div>
+    <?php /* ZPP_LK_OWN_BLOCK */ $zappoppop_lk_id = 'html'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
 </div>

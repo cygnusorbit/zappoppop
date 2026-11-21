@@ -222,7 +222,7 @@
                 var isHidden = !!el.hidden;
 
                 var iconClass = self.getLayerIcon(el.type || 'text');
-                var defaultLabel = (el.type === 'text' || el.type === 'paragraph') ? 'Paragraph' : (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(el.type || 'Element');
+                var defaultLabel = (el.type === 'text' || el.type === 'paragraph') ? 'Paragraph' : (function(s){s=String(s||'');return s==='label'?'Header':s.charAt(0).toUpperCase()+s.slice(1);})(el.type || 'Element');
                 var layerTitle = el.name || defaultLabel;
 
                 var $item = $('<div>')
@@ -574,7 +574,7 @@
             var newId = 'layer_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 4);
             clone.id = newId;
 
-            var baseLabel = (el.type === 'text' || el.type === 'paragraph') ? 'Paragraph' : (el.name || (function(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1);})(el.type));
+            var baseLabel = (el.type === 'text' || el.type === 'paragraph') ? 'Paragraph' : (el.name || (function(s){s=String(s||'');return s==='label'?'Header':s.charAt(0).toUpperCase()+s.slice(1);})(el.type));
             clone.name = baseLabel + ' (Copy)';
 
             clone.top = (parseInt(el.top, 10) || 0) + 15;

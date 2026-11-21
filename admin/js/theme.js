@@ -45,7 +45,8 @@
         /* ---- Per-field reset ---- */
         $all('.zpp-theme-field-reset', form).forEach(function (btn) {
             btn.addEventListener('click', function () {
-                var text = btn.parentNode.querySelector('input[type="text"][data-zpp-var]');
+                var text = btn.parentNode.querySelector('input[type="text"][data-zpp-var], select[data-zpp-var]');
+                if (!text) { return; }
                 text.value = text.getAttribute('data-default') || '';
                 text.dispatchEvent(new Event('input', { bubbles: true }));
             });
@@ -122,8 +123,8 @@
         if (exportBtn && json) {
             exportBtn.addEventListener('click', function () {
                 var out = {};
-                $all('[name^="zpp_theme["]', form).forEach(function (el) {
-                    var key = el.name.replace(/^zpp_theme\[|\]$/g, '');
+                $all('[name^="zappoppop_theme["]', form).forEach(function (el) {
+                    var key = el.name.replace(/^zappoppop_theme\[|\]$/g, '');
                     out[key] = el.type === 'checkbox' ? (el.checked ? 1 : 0) : el.value;
                 });
                 json.value = JSON.stringify(out, null, 2);

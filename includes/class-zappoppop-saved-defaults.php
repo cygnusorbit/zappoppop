@@ -58,27 +58,16 @@ class ZapPopPop_Saved_Defaults {
         return (bool) apply_filters('zappoppop_defaults_dev_mode', is_dir(ZAPPOPPOP_PATH . '.dev'));
     }
 
-    /** Development only: writes the whole store to defaults/defaults.json (temp file + rename, so a half-written file is never read). */
+    /** Development only: the write itself lives in .dev/defaults-writer.php, a folder that is never shipped. ZAPPOPPOP_NO_CODE_WRITES */
     protected static function write_file(array $store) {
         if (!self::dev_mode() || !self::file_writable()) {
             return false;
         }
-        $json = wp_json_encode((object) $store, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        if (!is_string($json) || $json === '') {
-            return false;
+        $writer = ZAPPOPPOP_PATH . '.dev/defaults-writer.php';
+        if (is_file($writer)) {
+            require_once $writer;
         }
-        $file = self::file_path();
-        $tmp  = $file . '.tmp';
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- development only: writes the plugin's own defaults file, not a remote URL */ $ok = file_put_contents($tmp, $json . "\n", LOCK_EX);
-        if ($ok === false) {
-            return false;
-        }
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- same-folder rename of the file written above */ if (!rename($tmp, $file)) {
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- fallback when rename is not possible */ $ok = file_put_contents($file, $json . "\n", LOCK_EX);
-            /* phpcs:ignore WordPress.WP.AlternativeFunctions -- remove the leftover temp file */ @unlink($tmp);
-            return $ok !== false;
-        }
-        return true;
+        return (bool) apply_filters('zappoppop_defaults_write_file', false, $store, self::file_path());
     }
 
     /* ------------------------------------------------------------ storage */
@@ -596,12 +585,12 @@ class ZapPopPop_Saved_Defaults {
             }
         }
         /* ZPP_HIDE_LABEL_DEFAULT: Settings > Builder > "Hide Field Labels by Default" (off = labels shown). Only when on, new form layers start with showFieldLabel=false. */
-        $zpp_set = get_option('zappoppop_settings', []);
-        if (is_array($zpp_set) && !empty($zpp_set['builder_hide_field_labels'])) {
-            foreach (array('text', 'email', 'number', 'phone', 'textarea', 'select', 'multiselect', 'radio', 'checkbox', 'checkboxgroup', 'date', 'time', 'upload', 'password', 'imageselect', 'tile', 'rating') as $zpp_t) {
-                if (!isset($out[$zpp_t]) || !is_array($out[$zpp_t])) { $out[$zpp_t] = []; }
-                if (!isset($out[$zpp_t]['basic']) || !is_array($out[$zpp_t]['basic'])) { $out[$zpp_t]['basic'] = []; }
-                $out[$zpp_t]['basic']['showFieldLabel'] = false;
+        $zappoppop_set = get_option('zappoppop_settings', []);
+        if (is_array($zappoppop_set) && !empty($zappoppop_set['builder_hide_field_labels'])) {
+            foreach (array('text', 'email', 'number', 'phone', 'textarea', 'select', 'multiselect', 'radio', 'checkbox', 'checkboxgroup', 'date', 'time', 'upload', 'password', 'imageselect', 'tile', 'rating') as $zappoppop_t) {
+                if (!isset($out[$zappoppop_t]) || !is_array($out[$zappoppop_t])) { $out[$zappoppop_t] = []; }
+                if (!isset($out[$zappoppop_t]['basic']) || !is_array($out[$zappoppop_t]['basic'])) { $out[$zappoppop_t]['basic'] = []; }
+                $out[$zappoppop_t]['basic']['showFieldLabel'] = false;
             }
         }
         $out = apply_filters('zappoppop_layer_factory_defaults', $out);

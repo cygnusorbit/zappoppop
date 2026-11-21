@@ -10,8 +10,12 @@
 .wp-env
 .wp-env.json
 .patch-backups
-scripts
+/scripts
 node_modules
 Thumbs.db
 *.bak
 *.log
+*.tmp
+*.patch
+.zpp-*
+/vendor

@@ -1,6 +1,6 @@
 /**
  * ZapPopPop modules: shared client API (Module tab + Extend page).
- * post / upload talk to the zappoppop_module_* AJAX endpoints; act() runs the
+ * post talks to the zappoppop_module_* AJAX endpoints (ZAPPOPPOP_UPLOADER_REMOVED: no upload helper); act() runs the
  * install / uninstall / delete flows incl. confirm dialogs, "Remove data" and the in-use warning.
  */
 (function (window, $) {
@@ -44,17 +44,6 @@
             data: $.extend({ action: 'zappoppop_module_' + action, nonce: V.nonce }, data || {})
         }).done(function (res) { done(parse(res)); })
           .fail(function (xhr) { onFail(xhr, done); });
-    }
-
-    function upload(file, replace, done) {
-        var fd = new window.FormData();
-        fd.append('action', 'zappoppop_module_upload');
-        fd.append('nonce', V.nonce);
-        fd.append('module_zip', file, file.name);
-        if (replace) { fd.append('replace', '1'); }
-        $.ajax({ url: V.ajax_url, type: 'POST', data: fd, processData: false, contentType: false, dataType: 'json' })
-            .done(function (res) { done(parse(res)); })
-            .fail(function (xhr) { onFail(xhr, done); });
     }
 
     function notice($el, type, message, link) {
@@ -156,7 +145,7 @@
         dialog({
             title: isDelete ? t('delete_title') : t('uninstall_title'),
             message: isDelete
-                ? fmt(mod.source === 'uploaded' ? t('delete_msg_uploaded') : t('delete_msg_core'), name)
+                ? fmt(t('delete_msg_core'), name)
                 : fmt(t('uninstall_msg'), name),
             checkbox: t('remove_data'),
             confirm: isDelete ? t('delete') : t('uninstall'),
@@ -165,5 +154,5 @@
         });
     }
 
-    window.ZapPopPopModules = { vars: V, t: t, fmt: fmt, post: post, upload: upload, dialog: dialog, notice: notice, act: act };
+    window.ZapPopPopModules = { vars: V, t: t, fmt: fmt, post: post, dialog: dialog, notice: notice, act: act };
 })(window, jQuery);

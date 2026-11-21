@@ -5,12 +5,15 @@ if (!defined('ABSPATH')) {
 
 class ZapPopPop_Rest_Submissions {
     public function register_routes() {
+        /* ZAPPOPPOP_LIVE_ONLY: public on purpose (visitors submit forms). Protected by the front nonce, rate limit, honeypot and
+         * submission gates, and it only accepts popups that are published. */
         register_rest_route('zappoppop/v1', '/submit', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'handle_submission'],
             'permission_callback' => '__return_true',
         ]);
 
+        // Public on purpose (anonymous page views): front nonce + rate limit, and only published popups are counted.
         register_rest_route('zappoppop/v1', '/impression', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [$this, 'handle_impression'],
@@ -62,7 +65,7 @@ class ZapPopPop_Rest_Submissions {
         $clean = [];
         foreach ((array) $fields as $fk => $fv) {
             $ck = sanitize_key($fk);
-            if ($ck === '') { continue; }
+            if ($ck === '' || ZapPopPop_Submission_Files::is_path_key($ck)) { continue; } /* ZAPPOPPOP_SUBMISSION_FILES */
             $clean[$ck] = is_array($fv) ? array_map('sanitize_text_field', $fv)
                 : (($ck === 'signature' && is_string($fv) && strpos($fv, 'data:image/') === 0) ? $fv : sanitize_text_field($fv));
         }
@@ -75,7 +78,7 @@ class ZapPopPop_Rest_Submissions {
         $items_table = $wpdb->prefix . 'zappoppop_items';
         $subs_table  = $wpdb->prefix . 'zappoppop_submissions';
 
-        /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix and every value is prepared */ $row = $wpdb->get_row($wpdb->prepare("SELECT title, data FROM {$items_table} WHERE uid = %s", $uid), ARRAY_A);
+        /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name is built from $wpdb->prefix and every value is prepared */ $row = $wpdb->get_row($wpdb->prepare("SELECT title, data FROM {$items_table} WHERE uid = %s AND status = 'publish'", $uid), ARRAY_A);
         if (!$row) {
             return new WP_Error('popup_not_found', __('Associated popup configuration was not found.', 'zappoppop'), ['status' => 404]);
         }

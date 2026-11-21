@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     <p class="description"><?php esc_html_e('Changes apply instantly to this whole page before saving.', 'zappoppop'); ?></p>
     <div class="zappoppop-kpi-card"><span class="kpi-label"><?php esc_html_e('Views', 'zappoppop'); ?></span><span class="kpi-val">1,284</span></div>
     <p>
-        <a href="#" onclick="return false;"><?php esc_html_e('Sample link', 'zappoppop'); ?></a>
+        <a href="#" data-zappoppop-noop="1"><?php esc_html_e('Sample link', 'zappoppop'); ?></a>
         <span class="zappoppop-status-badge status-publish"><?php esc_html_e('Publish', 'zappoppop'); ?></span>
         <span class="zappoppop-status-badge status-draft"><?php esc_html_e('Draft', 'zappoppop'); ?></span>
         <span class="zappoppop-shortcode-chip"><?php esc_html_e('[zappoppop id="abc"]', 'zappoppop'); ?></span>

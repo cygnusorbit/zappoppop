@@ -130,10 +130,14 @@ class ZapPopPop_Front_Decomposed_26 {
                 $tf = !empty($el['textTransform']) ? 'text-transform:' . esc_attr($el['textTransform']) . ';' : '';
                 $content = isset($el['content']) ? wp_kses_post($el['content']) : '';
                 $content = self::resolve_wp_tokens($content);
-                $label_url = !empty($el['url']) ? esc_url($el['url']) : '';
+                $label_raw = !empty($el['linkUrl']) ? $el['linkUrl'] : (!empty($el['url']) ? $el['url'] : '');
+                $label_url = is_string($label_raw) && $label_raw !== '' ? esc_url($label_raw) : '';
                 if ($label_url !== '') {
-                    $blank_on = !empty($el['targetBlank']) && $el['targetBlank'] !== 'false';
-                    $content = '<a class="zappoppop-label-link" href="' . $label_url . '"' . ($blank_on ? ' target="_blank" rel="noopener noreferrer"' : '') . ' style="color:inherit;text-decoration:inherit;display:block;width:100%;">' . $content . '</a>';
+                    $blank_on = (!empty($el['targetBlank']) && $el['targetBlank'] !== 'false') || (!empty($el['linkBlank']) && $el['linkBlank'] !== 'false');
+                    $label_rel = array();
+                    if ($blank_on) { $label_rel[] = 'noopener'; $label_rel[] = 'noreferrer'; }
+                    if (!empty($el['nofollow']) && $el['nofollow'] !== 'false') { $label_rel[] = 'nofollow'; }
+                    $content = '<a class="zappoppop-label-link" href="' . $label_url . '"' . ($blank_on ? ' target="_blank"' : '') . (!empty($label_rel) ? ' rel="' . esc_attr(implode(' ', $label_rel)) . '"' : '') . ' style="color:inherit;text-decoration:inherit;display:block;width:100%;">' . $content . '</a>';
                 }
                 return '<' . $tag . ' class="zappoppop-front-label" style="margin:0;padding:0;box-sizing:border-box;width:100%;height:100%;display:flex;align-items:center;' . self::label_typo($el) . $tf . '">' . $content . '</' . $tag . '>';
 

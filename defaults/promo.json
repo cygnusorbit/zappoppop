@@ -26,7 +26,7 @@
       "new_tab": true,
       "start": "",
       "end": "",
-      "reshow_days": 1,
+      "reshow_days": 14,
       "text_color": "",
       "bg_color": "",
       "cta_text_color": "",
@@ -34,7 +34,7 @@
     },
     "builder_box": {
       "enabled": true,
-      "show_close": false,
+      "show_close": true,
       "title": "Need more power?",
       "text": "Upgrade to Pro for extra elements, triggers and templates.",
       "cta": "See Pro features",
@@ -43,7 +43,7 @@
       "image": "",
       "start": "",
       "end": "",
-      "reshow_days": 1,
+      "reshow_days": 14,
       "text_color": "",
       "bg_color": "",
       "cta_text_color": "",
@@ -52,7 +52,7 @@
     },
     "dashboard_slider": {
       "enabled": true,
-      "show_close": false,
+      "show_close": true,
       "interval": 5000,
       "start": "",
       "end": "",
@@ -94,7 +94,7 @@
           "image_url": "https://zappoppop.com"
         }
       ],
-      "reshow_days": 1,
+      "reshow_days": 14,
       "text_color": "",
       "bg_color": "#b42d7b",
       "cta_text_color": "",

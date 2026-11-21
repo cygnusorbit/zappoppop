@@ -26,13 +26,14 @@ $range_slider          = (!empty($settings['range_slider']) || !empty($settings[
             <th scope="row"><label for="setting-default-font"><?php esc_html_e('Default Font Family', 'zappoppop'); ?></label></th>
             <td>
                 <select id="setting-default-font" name="settings[default_font]">
-                    <option value="inherit" <?php selected($default_font, 'inherit'); ?>><?php esc_html_e('Theme Inherited (Default)', 'zappoppop'); ?></option>
-                    <option value="Inter, sans-serif" <?php selected($default_font, 'Inter, sans-serif'); ?>><?php esc_html_e('Inter', 'zappoppop'); ?></option>
-                    <option value="Roboto, sans-serif" <?php selected($default_font, 'Roboto, sans-serif'); ?>><?php esc_html_e('Roboto', 'zappoppop'); ?></option>
-                    <option value="Montserrat, sans-serif" <?php selected($default_font, 'Montserrat, sans-serif'); ?>><?php esc_html_e('Montserrat', 'zappoppop'); ?></option>
-                    <option value="Poppins, sans-serif" <?php selected($default_font, 'Poppins, sans-serif'); ?>><?php esc_html_e('Poppins', 'zappoppop'); ?></option>
-                    <option value="Open Sans, sans-serif" <?php selected($default_font, 'Open Sans, sans-serif'); ?>><?php esc_html_e('Open Sans', 'zappoppop'); ?></option>
-                    <option value="Lato, sans-serif" <?php selected($default_font, 'Lato, sans-serif'); ?>><?php esc_html_e('Lato', 'zappoppop'); ?></option>
+                    <?php foreach (ZapPopPop_Font_Catalog::groups() as $zappoppop_fg_key => $zappoppop_fg_items) : ?>
+                        <?php if (empty($zappoppop_fg_items)) { continue; } ?>
+                        <optgroup label="<?php echo esc_attr($zappoppop_fg_key === 'system' ? __('System', 'zappoppop') : ($zappoppop_fg_key === 'bundled' ? __('Bundled fonts', 'zappoppop') : __('Custom fonts', 'zappoppop'))); ?>">
+                            <?php foreach ($zappoppop_fg_items as $zappoppop_fv => $zappoppop_fl) : ?>
+                                <option value="<?php echo esc_attr($zappoppop_fv); ?>" <?php selected($default_font, $zappoppop_fv); ?>><?php echo esc_html($zappoppop_fl); ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
                 </select>
                 <p class="description"><?php esc_html_e('Fallback typography applied to campaign elements when no specific custom font is defined.', 'zappoppop'); ?></p>
             </td>
@@ -100,7 +101,7 @@ $range_slider          = (!empty($settings['range_slider']) || !empty($settings[
             <th scope="row"><label for="setting-custom-fonts"><?php esc_html_e('Custom Fonts Definitions', 'zappoppop'); ?></label></th>
             <td>
                 <textarea id="setting-custom-fonts" name="settings[custom_fonts]" rows="3" class="large-text" placeholder="<?php esc_attr_e('FontName: url(https://.../font.woff2)', 'zappoppop'); ?>"><?php echo esc_textarea($custom_fonts); ?></textarea>
-                <p class="description"><?php esc_html_e('Custom web font declarations (one declaration per line) for the visual builder dropdown.', 'zappoppop'); ?></p>
+                <p class="description"><?php esc_html_e('Custom web fonts, one per line: Font Name: url(https://example.com/font.woff2). Only https links to .woff2, .woff, .ttf or .otf files are accepted.', 'zappoppop'); ?></p>
             </td>
         </tr>
         <tr>

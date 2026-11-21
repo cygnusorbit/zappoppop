@@ -694,7 +694,8 @@
                     if (el.fontSize) $node.css('font-size', el.fontSize + 'px');
                     if (el.fontWeight) $node.css('font-weight', el.fontWeight);
                     if (el.lineHeight) $node.css('line-height', el.lineHeight);
-                    if (el.letterSpacing !== undefined) $node.css('letter-spacing', el.letterSpacing + 'px');
+                    if (el.letterSpacing !== undefined) $node.css('letter-spacing', el.letterSpacing + 'px'); $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
+                    if (window.ZapPopPopElementsRegistry && window.ZapPopPopElementsRegistry.textShadowCss) $node.css('text-shadow', window.ZapPopPopElementsRegistry.textShadowCss(el)); /* ZPP_TEXT_SHADOW */
                     if (el.borderRadius !== undefined) $node.css('border-radius', el.borderRadius + 'px');
                     if (el.borderWidth !== undefined) $node.css('border', el.borderWidth + 'px ' + (el.borderStyle || 'solid') + ' ' + (el.borderColor || '#334155'));
                 }

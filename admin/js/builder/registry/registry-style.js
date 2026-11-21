@@ -43,6 +43,9 @@
         if (el.letterSpacing !== undefined) $node.css('letter-spacing', parseFloat(el.letterSpacing) + 'px');
         if (el.textAlign) $node.css('text-align', el.textAlign);
         if (el.color) $node.css('color', el.color);
+        $node.css('text-shadow', Reg.textShadowCss ? Reg.textShadowCss(el) : ''); /* ZPP_TEXT_SHADOW */
+        $node.attr('data-zpp-tt', (el.textTransform && el.textTransform !== 'none') ? el.textTransform : null); /* ZPP_TEXT_TRANSFORM */
+        $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
         /* ZAPPOPPOP_FG_COLOR: foreground colour for icons & accents */
         if (/^#[0-9a-fA-F]{3,8}$/.test(el.fgColor || '')) { $node[0].style.setProperty('--zappoppop-fg', el.fgColor); $node.attr('data-zpp-fg', '1'); }
         else { $node[0].style.removeProperty('--zappoppop-fg'); $node.removeAttr('data-zpp-fg'); }
@@ -158,6 +161,7 @@
         $('#prop-font-family').val(el.fontFamily || 'inherit');
         $('#prop-font-size').val(parseInt(el.fontSize, 10) || 16);
         $('#prop-font-weight').val(el.fontWeight || '400');
+        if (window.zappoppopSyncFontWeights) { window.zappoppopSyncFontWeights(false); } /* ZPP_FONT_WEIGHTS */
         $('#prop-line-height').val(el.lineHeight !== undefined ? el.lineHeight : 1.4);
         $('#prop-letter-spacing').val(el.letterSpacing !== undefined ? el.letterSpacing : 0);
         $('#prop-text-align').val(el.textAlign || 'left');
@@ -387,3 +391,179 @@
         });
 })(window, jQuery);
 /* === ZAPPOPPOP_FG_COLOR_BIND_END === */
+
+/* ZPP_FONT_WEIGHTS: Font Weight options follow the selected bundled family */
+(function ($) {
+    'use strict';
+    if (!$) { return; }
+    function fire(node, type) {
+        var e;
+        if (typeof Event === 'function') { e = new Event(type, { bubbles: true }); } else { e = document.createEvent('Event'); e.initEvent(type, true, true); }
+        node.dispatchEvent(e);
+    }
+    window.zappoppopSyncFontWeights = function (commit) {
+        var fam = document.getElementById('prop-font-family');
+        var sel = document.getElementById('prop-font-weight');
+        if (!fam || !sel) { return; }
+        var opt = fam.options[fam.selectedIndex];
+        var list = opt ? String(opt.getAttribute('data-weights') || '') : '';
+        var ok = list ? list.split(',').map(function (n) { return parseInt(n, 10); }) : null;
+        var i, o, w, best = null, cur = parseInt(sel.value, 10) || 400;
+        for (i = 0; i < sel.options.length; i++) {
+            o = sel.options[i];
+            w = parseInt(o.value, 10);
+            o.disabled = !!(ok && ok.indexOf(w) === -1);
+        }
+        if (ok && ok.indexOf(cur) === -1) {
+            for (i = 0; i < ok.length; i++) { if (best === null || Math.abs(ok[i] - cur) < Math.abs(best - cur)) { best = ok[i]; } }
+            if (best !== null) {
+                sel.value = String(best);
+                if (commit) { fire(sel, 'input'); fire(sel, 'change'); }
+            }
+        }
+    };
+    $(document).on('change', '#prop-font-family', function () { window.zappoppopSyncFontWeights(true); });
+}(window.jQuery));
+
+/* === ZPP_TEXT_SHADOW_BIND_START === */
+/* Layer Settings > Style > Typography: Text Shadow (X / Y / blur / colour). Model keys textShadowX, textShadowY, textShadowBlur, textShadowColor. */
+(function (window, $) {
+    'use strict';
+    if (!$) { return; }
+    var Reg = window.ZapPopPopElementsRegistry = window.ZapPopPopElementsRegistry || {};
+    var DEF_COLOR = '#00000080';
+    function pos(v) { return v === 'inset' ? 'inset' : 'outset'; }
+    function num(v, lo, hi) { var n = parseFloat(v); if (isNaN(n)) { n = 0; } return Math.max(lo, Math.min(hi, n)); }
+    function okColor(c) { return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(c || ''); }
+    Reg.textShadowCss = function (el) {
+        if (!el) { return ''; }
+        var x = num(el.textShadowX, -50, 50), y = num(el.textShadowY, -50, 50), b = num(el.textShadowBlur, 0, 100);
+        if (!x && !y && !b) { return ''; }
+        if (el.textShadowPos === 'inset') { x = -x; y = -y; }
+        return x + 'px ' + y + 'px ' + b + 'px ' + (okColor(el.textShadowColor) ? el.textShadowColor : DEF_COLOR);
+    };
+    function resolve() { return (typeof Reg.resolveElement === 'function') ? Reg.resolveElement() : null; }
+    function paint(el) {
+        if (typeof Reg.applyStyleToStageNode === 'function') { Reg.applyStyleToStageNode(el); }
+        var cv = window.ZapPopPopBuilderCanvas;
+        if (cv && typeof cv.renderCanvas === 'function' && !Reg.getStageNode) { cv.renderCanvas(); }
+    }
+    $(document).off('input.zppTsh change.zppTsh', '#prop-tsh-x, #prop-tsh-y, #prop-tsh-blur, #prop-tsh-color, #prop-tsh-pos')
+        .on('input.zppTsh change.zppTsh', '#prop-tsh-x, #prop-tsh-y, #prop-tsh-blur, #prop-tsh-color, #prop-tsh-pos', function (e) {
+            var el = resolve();
+            if (!el) { return; }
+            el.textShadowX = num($('#prop-tsh-x').val(), -50, 50);
+            el.textShadowY = num($('#prop-tsh-y').val(), -50, 50);
+            el.textShadowBlur = num($('#prop-tsh-blur').val(), 0, 100);
+            el.textShadowPos = pos($('#prop-tsh-pos').val());
+            var c = $('#prop-tsh-color').val();
+            el.textShadowColor = okColor(c) ? c : DEF_COLOR;
+            paint(el);
+            if (e.type === 'change' && window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') { window.ZapPopPopBuilderCore.pushHistory(); }
+        });
+    function hydrate(el) {
+        if (!el) { el = resolve(); }
+        if (!el) { return; }
+        $('#prop-tsh-x').val(num(el.textShadowX, -50, 50));
+        $('#prop-tsh-y').val(num(el.textShadowY, -50, 50));
+        $('#prop-tsh-blur').val(num(el.textShadowBlur, 0, 100));
+        $('#prop-tsh-color').val(okColor(el.textShadowColor) ? el.textShadowColor : DEF_COLOR);
+        $('#prop-tsh-pos').val(pos(el.textShadowPos));
+    }
+    if (typeof Reg.hydrateCoreAndStyleFields === 'function' && !Reg._tshHooked) {
+        Reg._tshHooked = true;
+        var orig = Reg.hydrateCoreAndStyleFields;
+        Reg.hydrateCoreAndStyleFields = function (el) { var r = orig.apply(this, arguments); hydrate(el); return r; };
+    }
+    (Reg._zppActiveHydrators = Reg._zppActiveHydrators || []).push(hydrate);
+    $(document).off('click.zppTshHydrate', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]')
+        .on('click.zppTshHydrate', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', function () {
+            [60, 250, 600].forEach(function (ms) { setTimeout(function () { hydrate(); }, ms); });
+        });
+})(window, window.jQuery);
+/* === ZPP_TEXT_SHADOW_BIND_END === */
+
+/* === ZPP_WORD_SPACING_BIND_START === */
+/* Layer Settings > Style > Typography: Word Spacing. Model key wordSpacing (px, -10..50). */
+(function (window, $) {
+    'use strict';
+    if (!$) { return; }
+    var Reg = window.ZapPopPopElementsRegistry = window.ZapPopPopElementsRegistry || {};
+    function num(v) { var n = parseFloat(v); if (isNaN(n)) { n = 0; } return Math.max(-10, Math.min(50, n)); }
+    function resolve() { return (typeof Reg.resolveElement === 'function') ? Reg.resolveElement() : null; }
+    $(document).off('input.zppWsp change.zppWsp', '#prop-word-spacing')
+        .on('input.zppWsp change.zppWsp', '#prop-word-spacing', function (e) {
+            var el = resolve();
+            if (!el) { return; }
+            el.wordSpacing = num($(this).val());
+            if (typeof Reg.applyStyleToStageNode === 'function') { Reg.applyStyleToStageNode(el); }
+            if (e.type === 'change' && window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') { window.ZapPopPopBuilderCore.pushHistory(); }
+        });
+    function hydrate(el) {
+        if (!el) { el = resolve(); }
+        if (!el) { return; }
+        $('#prop-word-spacing').val(num(el.wordSpacing));
+    }
+    if (typeof Reg.hydrateCoreAndStyleFields === 'function' && !Reg._wspHooked) {
+        Reg._wspHooked = true;
+        var orig = Reg.hydrateCoreAndStyleFields;
+        Reg.hydrateCoreAndStyleFields = function (el) { var r = orig.apply(this, arguments); hydrate(el); return r; };
+    }
+    (Reg._zppActiveHydrators = Reg._zppActiveHydrators || []).push(hydrate);
+    $(document).off('click.zppWspHydrate', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]')
+        .on('click.zppWspHydrate', '.zappoppop-canvas-item, .zappoppop-layer-item, #zappoppop-inspector-drawer [data-tab]', function () {
+            [60, 250, 600].forEach(function (ms) { setTimeout(function () { hydrate(); }, ms); });
+        });
+})(window, window.jQuery);
+/* === ZPP_WORD_SPACING_BIND_END === */
+
+/* === ZPP_ACTIVE_LAYER_WATCH_START === */
+/* Layer rows stop click propagation, so document-level click hydration can miss a selection change: re-hydrate typography extras whenever the active layer id changes. */
+(function (window) {
+    'use strict';
+    var Reg = window.ZapPopPopElementsRegistry = window.ZapPopPopElementsRegistry || {};
+    if (Reg._zppActiveWatch) { return; }
+    Reg._zppActiveWatch = true;
+    var last = null;
+    window.setInterval(function () {
+        var core = window.ZapPopPopBuilderCore;
+        var id = core && core.state ? core.state.activeId : null;
+        if (id === last) { return; }
+        last = id;
+        [40, 200, 500].forEach(function (ms) {
+            window.setTimeout(function () { (Reg._zppActiveHydrators || []).forEach(function (fn) { try { fn(); } catch (e) {} }); }, ms);
+        });
+    }, 150);
+})(window);
+/* === ZPP_ACTIVE_LAYER_WATCH_END === */
+
+/* === ZPP_TEXT_TRANSFORM_BIND_START === */
+/* Layer Settings > Style > Typography: Text Transform. Same model key as the Header content-tab control (textTransform). */
+(function (window, $) {
+    'use strict';
+    if (!$) { return; }
+    var Reg = window.ZapPopPopElementsRegistry = window.ZapPopPopElementsRegistry || {};
+    var OK = { none: 1, uppercase: 1, lowercase: 1, capitalize: 1 };
+    function val(v) { return OK[v] ? v : 'none'; }
+    function resolve() { return (typeof Reg.resolveElement === 'function') ? Reg.resolveElement() : null; }
+    $(document).off('change.zppTt', '#prop-text-transform').on('change.zppTt', '#prop-text-transform', function () {
+        var el = resolve();
+        if (!el) { return; }
+        el.textTransform = val($(this).val());
+        $('#prop-label-transform, #prop-title-transform').val(el.textTransform);
+        if (typeof Reg.applyStyleToStageNode === 'function') { Reg.applyStyleToStageNode(el); }
+        if (window.ZapPopPopBuilderCore && typeof window.ZapPopPopBuilderCore.pushHistory === 'function') { window.ZapPopPopBuilderCore.pushHistory(); }
+    });
+    function hydrate(el) {
+        if (!el) { el = resolve(); }
+        if (!el) { return; }
+        $('#prop-text-transform').val(val(el.textTransform));
+    }
+    if (typeof Reg.hydrateCoreAndStyleFields === 'function' && !Reg._ttHooked) {
+        Reg._ttHooked = true;
+        var orig = Reg.hydrateCoreAndStyleFields;
+        Reg.hydrateCoreAndStyleFields = function (el) { var r = orig.apply(this, arguments); hydrate(el); return r; };
+    }
+    (Reg._zppActiveHydrators = Reg._zppActiveHydrators || []).push(hydrate);
+})(window, window.jQuery);
+/* === ZPP_TEXT_TRANSFORM_BIND_END === */

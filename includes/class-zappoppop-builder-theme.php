@@ -380,28 +380,28 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 $presets[ $p_key ] = array_merge( $defaults, $p_data );
             }
 
-            foreach ( $presets as $zpp_pk => $zpp_pv ) {
-                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
-                    if ( ! isset( $presets[ $zpp_pk ][ 'area_' . $zpp_sfx ] ) && isset( $zpp_pv[ 'accordion_' . $zpp_sfx ] ) ) {
-                        $presets[ $zpp_pk ][ 'area_' . $zpp_sfx ] = $zpp_pv[ 'accordion_' . $zpp_sfx ];
+            foreach ( $presets as $zappoppop_pk => $zappoppop_pv ) {
+                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zappoppop_sfx ) {
+                    if ( ! isset( $presets[ $zappoppop_pk ][ 'area_' . $zappoppop_sfx ] ) && isset( $zappoppop_pv[ 'accordion_' . $zappoppop_sfx ] ) ) {
+                        $presets[ $zappoppop_pk ][ 'area_' . $zappoppop_sfx ] = $zappoppop_pv[ 'accordion_' . $zappoppop_sfx ];
                     }
                 }
             }
-            foreach ( $presets as $zpp_pk => $zpp_pv ) {
-                foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zpp_new => $zpp_src ) {
-                    foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
-                        if ( ! isset( $presets[ $zpp_pk ][ $zpp_new . '_' . $zpp_sfx ] ) && isset( $zpp_pv[ $zpp_src . '_' . $zpp_sfx ] ) ) {
-                            $presets[ $zpp_pk ][ $zpp_new . '_' . $zpp_sfx ] = $zpp_pv[ $zpp_src . '_' . $zpp_sfx ];
+            foreach ( $presets as $zappoppop_pk => $zappoppop_pv ) {
+                foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zappoppop_new => $zappoppop_src ) {
+                    foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zappoppop_sfx ) {
+                        if ( ! isset( $presets[ $zappoppop_pk ][ $zappoppop_new . '_' . $zappoppop_sfx ] ) && isset( $zappoppop_pv[ $zappoppop_src . '_' . $zappoppop_sfx ] ) ) {
+                            $presets[ $zappoppop_pk ][ $zappoppop_new . '_' . $zappoppop_sfx ] = $zappoppop_pv[ $zappoppop_src . '_' . $zappoppop_sfx ];
                         }
                     }
                 }
             }
             /* ZPP_DAY_PRESET: the Day Mode button applies the user's saved Day Mode when there is one */
-            $zpp_day = get_option( self::DAY_OPTION, array() );
-            if ( is_array( $zpp_day ) && ! empty( $zpp_day ) && isset( $presets['day_light'] ) ) {
-                $zpp_label = $presets['day_light']['label'];
-                $presets['day_light'] = array_merge( $presets['day_light'], $zpp_day );
-                $presets['day_light']['label'] = $zpp_label;
+            $zappoppop_day = get_option( self::DAY_OPTION, array() );
+            if ( is_array( $zappoppop_day ) && ! empty( $zappoppop_day ) && isset( $presets['day_light'] ) ) {
+                $zappoppop_label = $presets['day_light']['label'];
+                $presets['day_light'] = array_merge( $presets['day_light'], $zappoppop_day );
+                $presets['day_light']['label'] = $zappoppop_label;
             }
             return $presets;
         }
@@ -418,16 +418,16 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 $saved = array_merge( $parent_theme['builder'], $saved );
             }
 
-            foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
-                if ( ! isset( $saved[ 'area_' . $zpp_sfx ] ) && isset( $saved[ 'accordion_' . $zpp_sfx ] ) ) {
-                    $saved[ 'area_' . $zpp_sfx ] = $saved[ 'accordion_' . $zpp_sfx ];
+            foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zappoppop_sfx ) {
+                if ( ! isset( $saved[ 'area_' . $zappoppop_sfx ] ) && isset( $saved[ 'accordion_' . $zappoppop_sfx ] ) ) {
+                    $saved[ 'area_' . $zappoppop_sfx ] = $saved[ 'accordion_' . $zappoppop_sfx ];
                 }
             }
 
-            foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zpp_new => $zpp_src ) {
-                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zpp_sfx ) {
-                    if ( ! isset( $saved[ $zpp_new . '_' . $zpp_sfx ] ) && isset( $saved[ $zpp_src . '_' . $zpp_sfx ] ) ) {
-                        $saved[ $zpp_new . '_' . $zpp_sfx ] = $saved[ $zpp_src . '_' . $zpp_sfx ];
+            foreach ( array( 'layers_title' => 'accordion', 'layers_area' => 'content', 'ribbon' => 'header' ) as $zappoppop_new => $zappoppop_src ) {
+                foreach ( array( 'bg_color', 'bg_opacity', 'text_color', 'border_color' ) as $zappoppop_sfx ) {
+                    if ( ! isset( $saved[ $zappoppop_new . '_' . $zappoppop_sfx ] ) && isset( $saved[ $zappoppop_src . '_' . $zappoppop_sfx ] ) ) {
+                        $saved[ $zappoppop_new . '_' . $zappoppop_sfx ] = $saved[ $zappoppop_src . '_' . $zappoppop_sfx ];
                     }
                 }
             }
@@ -683,23 +683,23 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
             wp_enqueue_style( 'zappoppop-builder-theme-late', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/zappoppop-builder-theme-late.css', array( 'zappoppop-builder-theme' ), file_exists( $late_file ) ? (string) filemtime( $late_file ) : '1.0' );
             wp_add_inline_style( 'zappoppop-builder-theme-late', ':root, html, body, body.wp-admin { ' . wp_strip_all_tags( $vars_css ) . ' }' );
             /* ZPP_SETTINGS_SWITCHES: Popup Settings theme bridge + slide-toggles (needs the theme variables printed above) */
-            $zpp_sw_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/settings-switches.css';
-            wp_enqueue_style( 'zappoppop-builder-settings-switches', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/settings-switches.css', array( 'zappoppop-builder-theme-late' ), file_exists( $zpp_sw_file ) ? (string) filemtime( $zpp_sw_file ) : ( defined( 'ZAPPOPPOP_VERSION' ) ? ZAPPOPPOP_VERSION : '1.0' ) );
+            $zappoppop_sw_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/settings-switches.css';
+            wp_enqueue_style( 'zappoppop-builder-settings-switches', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/settings-switches.css', array( 'zappoppop-builder-theme-late' ), file_exists( $zappoppop_sw_file ) ? (string) filemtime( $zappoppop_sw_file ) : ( defined( 'ZAPPOPPOP_VERSION' ) ? ZAPPOPPOP_VERSION : '1.0' ) );
             /* ZPP_INSPECTOR_THEME_BRIDGE: Inspector frames / labels / switches follow the Theme > Builder tokens */
-            $zpp_br_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/inspector-theme-bridge.css';
-            wp_enqueue_style( 'zappoppop-builder-inspector-theme-bridge', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/inspector-theme-bridge.css', array( 'zappoppop-builder-settings-switches' ), file_exists( $zpp_br_file ) ? (string) filemtime( $zpp_br_file ) : '1.0' );
+            $zappoppop_br_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/inspector-theme-bridge.css';
+            wp_enqueue_style( 'zappoppop-builder-inspector-theme-bridge', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/inspector-theme-bridge.css', array( 'zappoppop-builder-settings-switches' ), file_exists( $zappoppop_br_file ) ? (string) filemtime( $zappoppop_br_file ) : '1.0' );
             /* ZPP_CONTENT_TAB: framed accordion blocks, compact fields, bottom Reset */
-            $zpp_ct_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/content-tab.css';
-            wp_enqueue_style( 'zappoppop-builder-content-tab', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/content-tab.css', array( 'zappoppop-builder-inspector-theme-bridge' ), file_exists( $zpp_ct_file ) ? (string) filemtime( $zpp_ct_file ) : '1.0' );
+            $zappoppop_ct_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/content-tab.css';
+            wp_enqueue_style( 'zappoppop-builder-content-tab', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/content-tab.css', array( 'zappoppop-builder-inspector-theme-bridge' ), file_exists( $zappoppop_ct_file ) ? (string) filemtime( $zappoppop_ct_file ) : '1.0' );
             /* ZPP_LINK_GROUP */
-            $zpp_lk_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/link-group.css';
-            wp_enqueue_style( 'zappoppop-builder-link-group', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/link-group.css', array( 'zappoppop-builder-content-tab' ), file_exists( $zpp_lk_file ) ? (string) filemtime( $zpp_lk_file ) : '1.0' );
+            $zappoppop_lk_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/link-group.css';
+            wp_enqueue_style( 'zappoppop-builder-link-group', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/link-group.css', array( 'zappoppop-builder-content-tab' ), file_exists( $zappoppop_lk_file ) ? (string) filemtime( $zappoppop_lk_file ) : '1.0' );
             /* ZPP_TAB_BLOCKS */
-            $zpp_tb_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/tab-blocks.css';
-            wp_enqueue_style( 'zappoppop-builder-tab-blocks', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/tab-blocks.css', array( 'zappoppop-builder-link-group' ), file_exists( $zpp_tb_file ) ? (string) filemtime( $zpp_tb_file ) : '1.0' );
+            $zappoppop_tb_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/tab-blocks.css';
+            wp_enqueue_style( 'zappoppop-builder-tab-blocks', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/tab-blocks.css', array( 'zappoppop-builder-link-group' ), file_exists( $zappoppop_tb_file ) ? (string) filemtime( $zappoppop_tb_file ) : '1.0' );
             /* ZPP_LAYERS_THEME */
-            $zpp_lt_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/layers-panel-theme.css';
-            wp_enqueue_style( 'zappoppop-builder-layers-panel-theme', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/layers-panel-theme.css', array( 'zappoppop-builder-tab-blocks' ), file_exists( $zpp_lt_file ) ? (string) filemtime( $zpp_lt_file ) : '1.0' );
+            $zappoppop_lt_file = dirname( dirname( __FILE__ ) ) . '/admin/css/builder/layers-panel-theme.css';
+            wp_enqueue_style( 'zappoppop-builder-layers-panel-theme', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/builder/layers-panel-theme.css', array( 'zappoppop-builder-tab-blocks' ), file_exists( $zappoppop_lt_file ) ? (string) filemtime( $zappoppop_lt_file ) : '1.0' );
         }
 
         private static function verify_request_security() {
@@ -710,7 +710,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 wp_die( esc_html__( 'Unauthorized user capability.', 'zappoppop' ), 403 );
             }
 
-            $zpp_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
+            $zappoppop_verified = check_ajax_referer( 'zappoppop_nonce', 'nonce', false )
                 || check_ajax_referer( 'zappoppop_nonce', '_ajax_nonce', false )
                 || check_ajax_referer( 'zappoppop_admin', 'nonce', false )
                 || check_ajax_referer( 'zappoppop_nonce', 'security', false )
@@ -718,7 +718,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 || ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'zappoppop_admin' ) )
                 || ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'zappoppop_theme_nonce' ) );
 
-            if ( ! $zpp_verified ) {
+            if ( ! $zappoppop_verified ) {
                 if ( wp_doing_ajax() ) {
                     wp_send_json_error( array( 'message' => esc_html__( 'Invalid security token.', 'zappoppop' ) ), 403 );
                 }
@@ -785,7 +785,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
         }
 
         public static function maybe_handle_post_save() {
-            if ( ! isset( $_POST['zpp_builder_theme'] ) || ! is_array( $_POST['zpp_builder_theme'] ) ) {
+            if ( ! isset( $_POST['zappoppop_builder_theme'] ) || ! is_array( $_POST['zappoppop_builder_theme'] ) ) {
                 return;
             }
             if ( ! current_user_can( 'manage_options' ) ) {
@@ -797,7 +797,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
 
             if ( $verified ) {
                 if (!class_exists('ZapPopPop_Sanitizer')) { require_once ZAPPOPPOP_PATH . 'includes/class-zappoppop-sanitizer.php'; }
-                $raw = ZapPopPop_Sanitizer::post_array( 'zpp_builder_theme' );
+                $raw = ZapPopPop_Sanitizer::post_array( 'zappoppop_builder_theme' );
                 $sanitized = self::sanitize_settings( $raw );
                 self::persist_settings( $sanitized );
             }
@@ -1018,7 +1018,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                 <div class="zpp-bt-row-controls">
                     <div class="zpp-bt-image-pill">
                         <span class="zpp-bt-image-thumb" style="<?php echo esc_attr( $thumb ); ?>"></span>
-                        <input type="text" id="zpp-bt-<?php echo esc_attr( $i_key ); ?>" class="zpp-bt-image-url" name="zpp_builder_theme[<?php echo esc_attr( $i_key ); ?>]" data-image-key="<?php echo esc_attr( $i_key ); ?>" value="<?php echo esc_attr( $i_val ); ?>" placeholder="<?php echo esc_attr__( 'https://… or choose from the Media Library', 'zappoppop' ); ?>" spellcheck="false" />
+                        <input type="text" id="zpp-bt-<?php echo esc_attr( $i_key ); ?>" class="zpp-bt-image-url" name="zappoppop_builder_theme[<?php echo esc_attr( $i_key ); ?>]" data-image-key="<?php echo esc_attr( $i_key ); ?>" value="<?php echo esc_attr( $i_val ); ?>" placeholder="<?php echo esc_attr__( 'https://… or choose from the Media Library', 'zappoppop' ); ?>" spellcheck="false" />
                         <button type="button" class="button zpp-bt-image-choose"><?php echo esc_html__( 'Choose Image', 'zappoppop' ); ?></button>
                         <button type="button" class="button zpp-bt-image-builtin"><?php echo esc_html__( 'Space Starfield', 'zappoppop' ); ?></button>
                         <button type="button" class="button zpp-bt-image-remove"><?php echo esc_html__( 'Remove', 'zappoppop' ); ?></button>
@@ -1027,7 +1027,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                         <span class="zpp-bt-op-lbl"><?php echo esc_html__( 'Opacity', 'zappoppop' ); ?></span>
                         <input type="range" class="zpp-bt-opacity-range" data-opacity-key="<?php echo esc_attr( $o_key ); ?>" data-paired-color="stage_bg_color" min="0" max="100" step="1" value="<?php echo esc_attr( $o_val ); ?>" />
                         <div class="zpp-bt-opacity-num-box">
-                            <input type="number" name="zpp_builder_theme[<?php echo esc_attr( $o_key ); ?>]" class="zpp-bt-opacity-number" data-opacity-num-for="<?php echo esc_attr( $o_key ); ?>" data-paired-color="stage_bg_color" min="0" max="100" step="1" value="<?php echo esc_attr( $o_val ); ?>" />
+                            <input type="number" name="zappoppop_builder_theme[<?php echo esc_attr( $o_key ); ?>]" class="zpp-bt-opacity-number" data-opacity-num-for="<?php echo esc_attr( $o_key ); ?>" data-paired-color="stage_bg_color" min="0" max="100" step="1" value="<?php echo esc_attr( $o_val ); ?>" />
                             <span>%</span>
                         </div>
                     </div>
@@ -1116,7 +1116,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                             />
                                             <input
                                                 type="text"
-                                                name="zpp_builder_theme[<?php echo esc_attr( $c_key ); ?>]"
+                                                name="zappoppop_builder_theme[<?php echo esc_attr( $c_key ); ?>]"
                                                 class="zpp-bt-hex-text"
                                                 data-hex-for="<?php echo esc_attr( $c_key ); ?>"
                                                 value="<?php echo esc_attr( $c_val ); ?>"
@@ -1141,7 +1141,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                                 />
                                                 <input
                                                     type="text"
-                                                    name="zpp_builder_theme[<?php echo esc_attr( $tc_key ); ?>]"
+                                                    name="zappoppop_builder_theme[<?php echo esc_attr( $tc_key ); ?>]"
                                                     class="zpp-bt-hex-text"
                                                     data-hex-for="<?php echo esc_attr( $tc_key ); ?>"
                                                     value="<?php echo esc_attr( $tc_val ); ?>"
@@ -1167,7 +1167,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                                 />
                                                 <input
                                                     type="text"
-                                                    name="zpp_builder_theme[<?php echo esc_attr( $bc_key ); ?>]"
+                                                    name="zappoppop_builder_theme[<?php echo esc_attr( $bc_key ); ?>]"
                                                     class="zpp-bt-hex-text"
                                                     data-hex-for="<?php echo esc_attr( $bc_key ); ?>"
                                                     value="<?php echo esc_attr( $bc_val ); ?>"
@@ -1184,7 +1184,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                             <div class="zpp-bt-color-pill zpp-bt-extra-pill" title="<?php echo esc_attr( $x_tag ); ?>">
                                                 <span class="zpp-bt-mini-tag"><?php echo esc_html( $x_tag ); ?></span>
                                                 <input type="color" id="zpp-bt-<?php echo esc_attr( $x_key ); ?>" class="zpp-bt-color-picker" data-key="<?php echo esc_attr( $x_key ); ?>" value="<?php echo esc_attr( $x_val ); ?>" />
-                                                <input type="text" name="zpp_builder_theme[<?php echo esc_attr( $x_key ); ?>]" class="zpp-bt-hex-text" data-hex-for="<?php echo esc_attr( $x_key ); ?>" value="<?php echo esc_attr( $x_val ); ?>" maxlength="7" spellcheck="false" />
+                                                <input type="text" name="zappoppop_builder_theme[<?php echo esc_attr( $x_key ); ?>]" class="zpp-bt-hex-text" data-hex-for="<?php echo esc_attr( $x_key ); ?>" value="<?php echo esc_attr( $x_val ); ?>" maxlength="7" spellcheck="false" />
                                             </div>
                                         <?php endforeach; endif; ?>
 
@@ -1204,7 +1204,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                                 <div class="zpp-bt-opacity-num-box">
                                                     <input
                                                         type="number"
-                                                        name="zpp_builder_theme[<?php echo esc_attr( $o_key ); ?>]"
+                                                        name="zappoppop_builder_theme[<?php echo esc_attr( $o_key ); ?>]"
                                                         class="zpp-bt-opacity-number"
                                                         data-opacity-num-for="<?php echo esc_attr( $o_key ); ?>"
                                                         data-paired-color="<?php echo esc_attr( $c_key ); ?>"
@@ -1411,7 +1411,7 @@ if ( ! class_exists( 'ZapPopPop_Builder_Theme' ) ) {
                                                 </div>
                                             </div>
                                             <div class="zpp-pv-acc-item zpp-pv-blk">
-                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion"><span data-pv-role="accordion-text">Animation &amp; Behavior</span><i data-pv-role="accordion-text">&#8964;</i></div>
+                                                <div class="zpp-pv-acc-hdr" data-pv-role="accordion"><span data-pv-role="accordion-text">Animation</span><i data-pv-role="accordion-text">&#8964;</i></div>
                                                 <div class="zpp-pv-acc-body" data-pv-role="area" style="display:none">
                                                     <span class="zpp-pv-lbl" data-pv-role="area-text">Animation</span>
                                                     <div class="zpp-pv-inp-box zpp-pv-select" data-pv-role="field"><span>None</span><i data-pv-role="icon">&#9662;</i></div>

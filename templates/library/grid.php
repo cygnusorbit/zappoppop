@@ -26,10 +26,10 @@ if (!defined('ABSPATH')) {
                     <?php echo esc_html($tpl['cat_label']); ?>
                 </span>
                 <?php if (!empty($tpl['badge']) && is_array($tpl['badge']) && empty($tpl['badge']['hide'])) :
-                    $zpp_b  = $tpl['badge'];
-                    $zpp_bs = (!empty($zpp_b['bg']) ? 'background:' . $zpp_b['bg'] . ';' : '') . (!empty($zpp_b['color']) ? 'color:' . $zpp_b['color'] . ';' : '');
+                    $zappoppop_b  = $tpl['badge'];
+                    $zappoppop_bs = (!empty($zappoppop_b['bg']) ? 'background:' . $zappoppop_b['bg'] . ';' : '') . (!empty($zappoppop_b['color']) ? 'color:' . $zappoppop_b['color'] . ';' : '');
                     ?>
-                    <span class="zpp-tier-badge zpp-tier-<?php echo (isset($tpl['tier']) && $tpl['tier'] === 'pro') ? 'pro' : 'core'; ?>"<?php echo $zpp_bs !== '' ? ' style="' . esc_attr($zpp_bs) . '"' : ''; ?>><?php echo esc_html($zpp_b['text']); ?></span>
+                    <span class="zpp-tier-badge zpp-tier-<?php echo (isset($tpl['tier']) && $tpl['tier'] === 'pro') ? 'pro' : 'core'; ?>"<?php echo $zappoppop_bs !== '' ? ' style="' . esc_attr($zappoppop_bs) . '"' : ''; ?>><?php echo esc_html($zappoppop_b['text']); ?></span>
                 <?php endif; ?>
             </div>
 
@@ -64,5 +64,4 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     <?php endforeach; ?>
-    <script>(function(){var g=document.currentScript&&document.currentScript.parentNode;if(!g){return;}try{var v=parseInt(window.localStorage.getItem('zappoppop_lib_view'),10);if(v===3||v===4){g.setAttribute('data-cols',String(v));}}catch(e){}window.setTimeout(function(){g.className=g.className.replace(/\s*is-pg-pending/g,'');},4000);})();</script>
 </div>

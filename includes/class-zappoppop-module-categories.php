@@ -169,48 +169,9 @@ class ZapPopPop_Module_Categories {
         return isset($module['image']) && is_string($module['image']) ? $module['image'] : '';
     }
 
-    /** Writes "category" (and "image" when given; '' removes it) into a module's module.json. False when the file cannot be updated. */
-    protected static function write_manifest($m, $value, $image = null) {
-        $dir  = (is_array($m) && !empty($m['dir'])) ? $m['dir'] : '';
-        $file = $dir . '/module.json';
-        if ($dir === '' || !is_array($m) || empty($m['source']) || $m['source'] !== 'uploaded' || is_link($file) || !is_file($file) || !wp_is_writable($file) || filesize($file) > ZapPopPop_Modules::MAX_JSON) {
-            return false;
-        }
-        /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $raw = json_decode((string) file_get_contents($file));
-        if (!is_object($raw)) {
-            return false;
-        }
-        $img = ($image !== null) ? $image : ((isset($raw->image) && is_string($raw->image)) ? $raw->image : '');
-        $out = new stdClass();
-        foreach (get_object_vars($raw) as $k => $v) {
-            if ($k === 'category' || $k === 'image') {
-                continue;
-            }
-            $out->$k = $v;
-            if ($k === 'description') {
-                $out->category = $value;
-                if ($img !== '') {
-                    $out->image = $img;
-                }
-            }
-        }
-        if (!isset($out->category)) {
-            $out->category = $value;
-        }
-        if ($img !== '' && !isset($out->image)) {
-            $out->image = $img;
-        }
-        $json = wp_json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        if (!is_string($json) || $json === '') {
-            return false;
-        }
-        return /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort write, the result is checked; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($file, $json . "\n", LOCK_EX) !== false;
-    }
-
     /**
-     * Edit a module's category. module.json gets the category (its name, or the default slug) so the choice travels with the
-     * module; the database keeps the stable slug so renaming a category never detaches its modules.
-     * Returns ['category' => slug, 'json' => bool] or WP_Error.
+     * Edit a module's category. The database keeps the stable slug so renaming a category never detaches its modules.
+     * Returns ['category' => slug, 'json' => false] or WP_Error. (ZAPPOPPOP_UPLOADER_REMOVED: module.json is never written.)
      */
     public static function assign($module_slug, $cat, $image = null) {
         $m = ZapPopPop_Modules::slug_valid($module_slug) ? ZapPopPop_Modules::get($module_slug) : null;
@@ -221,12 +182,6 @@ class ZapPopPop_Module_Categories {
         if ($cat === '') {
             return new WP_Error('bad_category', __('That category no longer exists. Reload the page.', 'zappoppop'));
         }
-        $value = self::DEFAULT_SLUG;
-        foreach (self::all() as $c) {
-            if ($c['slug'] === $cat && empty($c['locked'])) {
-                $value = $c['name'];
-            }
-        }
         if ($image !== null) {
             $image = trim((string) $image);
             if ($image !== '' && ZapPopPop_Modules::image_url(['image' => $image]) === '') {
@@ -234,7 +189,6 @@ class ZapPopPop_Module_Categories {
             }
             $image = ZapPopPop_Modules::image_url(['image' => $image]);
         }
-        $json              = self::write_manifest($m, $value, $image);
         $map               = self::map();
         $map[$module_slug] = $cat;
         update_option(self::MAP_OPT, $map, false);
@@ -245,6 +199,6 @@ class ZapPopPop_Module_Categories {
             update_option(self::IMG_OPT, $imgs, false);
         }
         ZapPopPop_Modules::flush();
-        return ['category' => $cat, 'json' => $json];
+        return ['category' => $cat, 'json' => false];
     }
 }

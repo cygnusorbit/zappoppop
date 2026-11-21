@@ -23,7 +23,7 @@
         $.each(TOKENS, function(i, o) {
             $m.append($('<div class="zappoppop-token-item" role="menuitem" tabindex="0"></div>')
                 .attr("data-token", o.t).text(o.l)
-                .css({ padding: "8px 12px", cursor: "pointer", color: "#e2e8f0", fontSize: "12px", borderBottom: "1px solid #1e293b" }));
+                ); /* ZPP_TOKEN_UI: colours come from the theme CSS (late stylesheet), no dark inline colours */
         });
     }
 
@@ -55,11 +55,6 @@
             ev.preventDefault(); ev.stopPropagation();
             insertAtCursor($(this).attr("data-token"));
             $("#zappoppop-label-token-menu").hide();
-        });
-        $(document).on("mouseenter.zappoppopLabelTok", "#zappoppop-label-token-menu .zappoppop-token-item", function() {
-            $(this).css("background", "#a8325e");
-        }).on("mouseleave.zappoppopLabelTok", "#zappoppop-label-token-menu .zappoppop-token-item", function() {
-            $(this).css("background", "transparent");
         });
         $(document).on("click.zappoppopLabelTok", function(ev) {
             if (!$(ev.target).closest("#zappoppop-label-token-btn, #zappoppop-label-token-menu").length) {

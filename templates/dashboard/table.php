@@ -104,13 +104,11 @@ $list_table->prepare_items();
         <?php wp_nonce_field('bulk-popups'); ?>
         <?php
         /* ZAPPOPPOP_LIST_TOOLBAR: status filter + search on one row */
-        ob_start();
+        /* ZAPPOPPOP_P19_TOOLBAR: WP_List_Table prints its own escaped markup; nothing is buffered or echoed from a variable */
+        echo '<div class="zappoppop-list-toolbar">';
         $list_table->views();
-        $zappoppop_views_html = ob_get_clean();
-        ob_start();
         $list_table->search_box(__('Search Popups', 'zappoppop'), 'zappoppop');
-        $zappoppop_search_html = ob_get_clean();
-        /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WP_List_Table views and search box markup, escaped by core */ echo '<div class="zappoppop-list-toolbar">' . $zappoppop_views_html . $zappoppop_search_html . '</div>';
+        echo '</div>';
         $list_table->display();
         ?>
     </form>

@@ -66,7 +66,7 @@ if (!function_exists('zappoppop_uninstall_site')) {
 
         // 4. Remove the uploaded data and module folders of this site (symlinks are unlinked, never followed).
         $zappoppop_upload_dir = wp_upload_dir();
-        foreach (['zappoppop', 'zappoppop-modules'] as $zappoppop_sub) {
+        foreach (['zappoppop', 'zappoppop-modules', 'zappoppop-submissions'] as $zappoppop_sub) {
             $zappoppop_root = $zappoppop_upload_dir['basedir'] . '/' . $zappoppop_sub;
             if (!is_dir($zappoppop_root) || is_link($zappoppop_root)) {
                 continue;

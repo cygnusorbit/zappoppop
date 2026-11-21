@@ -292,15 +292,26 @@ class ZapPopPop_Modules_Engine {
         }
     }
 
+    /** wp_json_encode() for an inline script: no flags argument; < > & ' are \u-escaped afterwards (they only occur inside JSON strings). ZAPPOPPOP_OUTPUT_KSES */
+    protected static function js_json($value) {
+        $j = wp_json_encode($value);
+        if (!is_string($j) || $j === '') {
+            return 'null';
+        }
+        return strtr($j, array('<' => '\u003c', '>' => '\u003e', '&' => '\u0026', "'" => '\u0027'));
+    }
+
     protected static function emit($uid, $m, $vals) {
         if (!wp_script_is('zappoppop-ext', 'registered')) {
             wp_register_script('zappoppop-ext', ZAPPOPPOP_URL . 'public/js/front/front-ext.js', ['jquery'], ZAPPOPPOP_VERSION, true);
         }
         wp_enqueue_script('zappoppop-ext');
-        $flags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+        $zappoppop_ju = self::js_json($uid);
+        $zappoppop_js = self::js_json($m['slug']);
+        $zappoppop_jv = self::js_json($vals);
         wp_add_inline_script(
             'zappoppop-ext',
-            'window.ZapPopPopExt=window.ZapPopPopExt||{data:{},h:{}};(ZapPopPopExt.data[' . wp_json_encode($uid, $flags) . ']=ZapPopPopExt.data[' . wp_json_encode($uid, $flags) . ']||{})[' . wp_json_encode($m['slug'], $flags) . ']=' . wp_json_encode($vals, $flags) . ';',
+            'window.ZapPopPopExt=window.ZapPopPopExt||{data:{},h:{}};(ZapPopPopExt.data[' . $zappoppop_ju . ']=ZapPopPopExt.data[' . $zappoppop_ju . ']||{})[' . $zappoppop_js . ']=' . $zappoppop_jv . ';',
             'before'
         );
         if (isset(self::$front_ready[$m['slug']])) {

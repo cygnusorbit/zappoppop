@@ -3,7 +3,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-$zpp_zip_ok = class_exists('ZapPopPop_Template_Bundle') && ZapPopPop_Template_Bundle::zip_available();
+$zappoppop_zip_ok = class_exists('ZapPopPop_Template_Bundle') && ZapPopPop_Template_Bundle::zip_available();
 ?>
 <div class="zpp-imp-card" id="zappoppop-lib-import-card">
     <div class="zpp-imp-cols">
@@ -11,7 +11,7 @@ $zpp_zip_ok = class_exists('ZapPopPop_Template_Bundle') && ZapPopPop_Template_Bu
             <div class="zpp-imp-drop" id="zappoppop-lib-drop">
                 <span class="dashicons dashicons-media-archive"></span>
                 <span class="zpp-imp-drop-text">
-                    <?php echo $zpp_zip_ok ? esc_html__('Drag a template .zip here, or', 'zappoppop') : esc_html__('Drag a template .json here, or', 'zappoppop'); ?>
+                    <?php echo $zappoppop_zip_ok ? esc_html__('Drag a template .zip here, or', 'zappoppop') : esc_html__('Drag a template .json here, or', 'zappoppop'); ?>
                     <button type="button" class="zpp-imp-browse" id="zappoppop-lib-drop-pick"><?php esc_html_e('browse', 'zappoppop'); ?></button>
                 </span>
                 <input type="file" id="zappoppop-lib-file" class="zpp-imp-file" accept=".zip,.json,application/zip,application/json" multiple tabindex="-1" aria-hidden="true">
@@ -24,7 +24,7 @@ $zpp_zip_ok = class_exists('ZapPopPop_Template_Bundle') && ZapPopPop_Template_Bu
             </div>
             <p class="zpp-imp-help">
                 <?php
-                echo $zpp_zip_ok
+                echo $zappoppop_zip_ok
                     ? esc_html__('Import a template .zip (template.json plus its images) or a .json file. Images are added to your Media Library so the links never break. Imported templates appear under My Templates.', 'zappoppop')
                     : esc_html__('Import a template .json file. The PHP Zip extension is not available on this server, so .zip files cannot be imported. Imported templates appear under My Templates.', 'zappoppop');
                 ?>

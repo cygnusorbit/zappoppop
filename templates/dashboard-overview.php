@@ -96,7 +96,7 @@ $builder_url = admin_url('admin.php?page=zappoppop-builder');
         if ($zappoppop_promo_html !== '') { $zappoppop_present[] = 'promo'; }
         foreach (ZapPopPop_Ajax_Dash_Layout::get_columns($zappoppop_present) as $zappoppop_ci => $zappoppop_col) : ?>
         <div class="zappoppop-dash-col" data-col="<?php echo (int) $zappoppop_ci; ?>"><?php foreach ($zappoppop_col as $zappoppop_bk) {
-            if ($zappoppop_bk === 'promo') { echo $zappoppop_promo_html; continue; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside ZapPopPop_Promo::render()
+            if ($zappoppop_bk === 'promo') { ZapPopPop_Promo::render('dashboard_slider'); continue; }
             if (isset($zappoppop_boxes[$zappoppop_bk])) { echo wp_kses_post( $zappoppop_boxes[$zappoppop_bk] ); }
         } ?></div>
         <?php endforeach; ?>

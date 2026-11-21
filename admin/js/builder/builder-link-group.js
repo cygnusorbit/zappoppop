@@ -5,9 +5,10 @@
 
     /* ZPP_LK_SCOPE: which layer gets which Link group.
        Shape  -> only the one inside its own Shape block (never in Animation).
-       Icon / Label / HTML -> the one in Animation & Behavior (they have no block of their own for it).
+       Header / Icon / HTML -> the one in their own settings block.
        Form fields (Text, Email ...), Button, Image and the rest -> none (a field is not a link; Button / Image have their own URL setting). */
-    var SCOPE = { shape: ['shape'], anim: ['icon', 'label', 'html'] };
+    /* ZPP_LK_OWN_BLOCK: each of Shape / Header (label) / Icon / HTML carries the group inside its own settings block; the Animation block has none any more. */
+    var SCOPE = { shape: ['shape'], label: ['label'], icon: ['icon'], html: ['html'] };
     var TYPES = ['shape', 'icon', 'label', 'html'];
 
     function core() { return window.ZapPopPopBuilderCore || null; }
@@ -48,6 +49,7 @@
             }
         });
     }
+    window.ZapPopPopLinkGroup = { hydrate: function () { hydrate(); } }; /* ZPP_LK_OWN_BLOCK: Reset Content Settings re-syncs the controls */
     function sched() { [0, 60, 200, 350, 700, 1200].forEach(function (ms) { setTimeout(hydrate, ms); }); }
 
     function mirror(el) {

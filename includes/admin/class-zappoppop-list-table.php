@@ -203,10 +203,10 @@ class ZapPopPop_List_Table extends WP_List_Table {
                 admin_url('admin.php?page=zappoppop&action=empty_trash'),
                 'zappoppop_empty_trash'
             );
-            $empty_prompt = esc_attr(wp_json_encode(__('Are you sure you want to permanently empty the trash? This cannot be undone.', 'zappoppop')));
+            $empty_prompt = __('Are you sure you want to permanently empty the trash? This cannot be undone.', 'zappoppop');
             ?>
             <div class="alignleft actions">
-                <a href="<?php echo esc_url($empty_trash_url); ?>" class="button button-secondary apply" onclick="return confirm(<?php echo wp_kses_post( $empty_prompt ); ?>);">
+                <a href="<?php echo esc_url($empty_trash_url); ?>" class="button button-secondary apply" data-zappoppop-confirm="<?php echo esc_attr( $empty_prompt ); ?>">
                     <?php esc_html_e('Empty Trash', 'zappoppop'); ?>
                 </a>
             </div>
@@ -251,9 +251,9 @@ class ZapPopPop_List_Table extends WP_List_Table {
                 );
                 $confirm_prompt = /* translators: popup title. */ sprintf(__('Are you sure you want to permanently delete "%s"? This action cannot be undone.', 'zappoppop'), $title);
                 $actions['delete'] = sprintf(
-                    '<a href="%s" class="submitdelete" onclick="return confirm(%s);">%s</a>',
+                    '<a href="%s" class="submitdelete" data-zappoppop-confirm="%s">%s</a>',
                     esc_url($delete_url),
-                    esc_attr(wp_json_encode($confirm_prompt)),
+                    esc_attr($confirm_prompt),
                     __('Delete Permanently', 'zappoppop')
                 );
             }

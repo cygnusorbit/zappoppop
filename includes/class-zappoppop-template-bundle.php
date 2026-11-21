@@ -65,16 +65,13 @@ class ZapPopPop_Template_Bundle {
         return '~https?://[^\s"\'<>()\\\\\[\]{},|^`]+?\.(?:jpe?g|png|gif|webp|avif|svg)(?=$|[\s"\'<>()\\\\\[\]{},;?#])~i';
     }
 
-    /** Raster images must really be that type; SVG must not carry scripts. */
+    /** Raster images must really be that type. SVG is never imported (it can carry scripts). ZAPPOPPOP_NO_CODE_WRITES */
     public static function valid_image_bytes($bytes, $ext) {
         if (!is_string($bytes) || $bytes === '') {
             return false;
         }
         if ($ext === 'svg') {
-            if (stripos($bytes, '<svg') === false) {
-                return false;
-            }
-            return !preg_match('/<\s*(script|foreignobject|iframe|embed|object)\b|\bon[a-z]+\s*=|javascript:|data:\s*text\/html/i', $bytes);
+            return false;
         }
         if ($ext === 'avif') {
             return preg_match('/^ftyp(avif|avis)/', substr($bytes, 4, 8)) === 1;
@@ -406,6 +403,27 @@ class ZapPopPop_Template_Bundle {
         return array($meta, $data);
     }
 
+    /**
+     * Saves one validated image into uploads/zappoppop-templates/<id>/ with WordPress's own upload function. ZAPPOPPOP_CORE_FILE_APIS
+     * @return array|null file (absolute path), url - or null when WordPress refuses the file
+     */
+    public static function store($tplid, $name, $bytes) {
+        $sub = '/' . self::SUBDIR . '/' . sanitize_key($tplid);
+        $cb  = function ($d) use ($sub) {
+            $d['subdir'] = $sub;
+            $d['path']   = $d['basedir'] . $sub;
+            $d['url']    = $d['baseurl'] . $sub;
+            return $d;
+        };
+        add_filter('upload_dir', $cb);
+        $r = wp_upload_bits(sanitize_file_name($name), null, $bytes);
+        remove_filter('upload_dir', $cb);
+        if (!is_array($r) || !empty($r['error']) || empty($r['file']) || empty($r['url'])) {
+            return null;
+        }
+        return array('file' => $r['file'], 'url' => $r['url']);
+    }
+
     protected static function dest($tplid) {
         $up = wp_get_upload_dir();
         if (!empty($up['error']) || empty($up['basedir'])) {
@@ -415,11 +433,6 @@ class ZapPopPop_Template_Bundle {
         $dir  = $root . $tplid . '/';
         if (!wp_mkdir_p($dir)) {
             return new WP_Error('upload', __('Could not create the template image folder in uploads.', 'zappoppop'));
-        }
-        foreach (array($root, $dir) as $d) {
-            if (!file_exists($d . 'index.php')) {
-                /* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- best-effort index.php guard; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($d . 'index.php', "<?php\n// Silence is golden.\n");
-            }
         }
         return array('dir' => $dir, 'url' => trailingslashit($up['baseurl']) . self::SUBDIR . '/' . $tplid . '/');
     }
@@ -537,11 +550,13 @@ class ZapPopPop_Template_Bundle {
                     continue;
                 }
                 $name = self::unique_name(basename($rel), $used);
-                $path = $dest['dir'] . $name;
-                if (/* phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions -- the result is checked and reported; local file or stream handle owned by this plugin; WP_Filesystem would need FTP credentials */ @file_put_contents($path, $bytes) === false) {
+                $stored = self::store($tplid, $name, $bytes);
+                if (!$stored) {
                     $skipped++;
                     continue;
                 }
+                $path = $stored['file'];
+                $name = wp_basename($path);
                 $total     += strlen($bytes);
                 $map[$rel]  = $dest['url'] . rawurlencode($name);
                 $done++;

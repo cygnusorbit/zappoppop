@@ -531,7 +531,6 @@
                 /* Targeting (settings.targeting) lives in the module package: admin.js */
                 /* Frequency Capping (settings.frequency) lives in the module package: admin.js */
                 /* WooCommerce (settings.woocommerce) lives in the module package: admin.js */
-                /* Custom Scoped CSS & JS (settings.custom_code) lives in the module package: admin.js */
                 /* Quiz & Lead Scoring (settings.quiz) lives in the module package: admin.js */
             };
         },

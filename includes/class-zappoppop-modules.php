@@ -6,8 +6,9 @@ if (!defined('ABSPATH')) {
 /**
  * Module registry.
  *
- * Merges built-in manifests (modules/<slug>/module.json) with uploaded ones
- * (uploads/zappoppop-modules/<slug>/module.json) into one validated list.
+ * Merges built-in manifests (modules/<slug>/module.json) with those of companion plugins
+ * (registered through the zappoppop_module_roots filter) into one validated list.
+ * ZAPPOPPOP_UPLOADER_REMOVED: nothing is ever read from the uploads folder.
  * Read-only: nothing here installs, deletes or renders a module.
  *
  * Manifest schema v1: slug (= folder name), name, version, author, description,
@@ -32,11 +33,6 @@ class ZapPopPop_Modules {
 
     public static function core_dir() {
         return ZAPPOPPOP_PATH . 'modules';
-    }
-
-    public static function uploads_dir() {
-        $u = wp_upload_dir(null, false);
-        return empty($u['basedir']) ? '' : rtrim($u['basedir'], '/\\') . '/zappoppop-modules';
     }
 
     public static function flush() {
@@ -408,11 +404,6 @@ class ZapPopPop_Modules {
         return $m;
     }
 
-    public static function uploads_url() {
-        $u = wp_upload_dir(null, false);
-        return empty($u['baseurl']) ? '' : rtrim($u['baseurl'], '/') . '/zappoppop-modules';
-    }
-
     /** Public URL of a module folder (trailing slash). */
     public static function module_url($m) {
         if (!is_array($m) || empty($m['slug'])) {
@@ -421,8 +412,10 @@ class ZapPopPop_Modules {
         if ($m['source'] === 'pro') {
             return empty($m['base_url']) ? '' : $m['base_url'] . $m['slug'] . '/';
         }
-        $base = ($m['source'] === 'core') ? ZAPPOPPOP_URL . 'modules' : self::uploads_url();
-        return $base === '' ? '' : $base . '/' . $m['slug'] . '/';
+        if ($m['source'] !== 'core') {
+            return '';
+        }
+        return ZAPPOPPOP_URL . 'modules/' . $m['slug'] . '/';
     }
 
     /** True unless the module is known AND not installed (gate for backend/front features). */
@@ -452,7 +445,7 @@ class ZapPopPop_Modules {
         return $out;
     }
 
-    /** Every valid module, sorted by manifest order. A built-in slug cannot be shadowed by an upload. */
+    /** Every valid module, sorted by manifest order. A built-in slug cannot be shadowed by a companion plugin. */
     public static function all() {
         if (self::$cache !== null) {
             return self::$cache;
@@ -466,11 +459,6 @@ class ZapPopPop_Modules {
                 if (!isset($out[$m['slug']])) {
                     $out[$m['slug']] = $m;
                 }
-            }
-        }
-        foreach (self::scan(self::uploads_dir(), 'uploaded') as $m) {
-            if (!isset($out[$m['slug']])) {
-                $out[$m['slug']] = $m;
             }
         }
         uasort($out, function ($a, $b) {
