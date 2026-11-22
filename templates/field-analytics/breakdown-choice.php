@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
                         <strong style="font-size:14px;color:#1e293b;text-transform:capitalize;"><?php echo esc_html(str_replace('_', ' ', $field_name)); ?></strong>
                         <span style="font-size:11px;font-weight:600;color:#64748b;background:#f1f5f9;padding:2px 8px;border-radius:4px;">
-                            <?php echo number_format($field_total); ?> answers
+                            <?php /* translators: %s: number of answers */ echo esc_html( sprintf( _n( '%s answer', '%s answers', (int) $field_total, 'zappoppop' ), number_format_i18n( $field_total ) ) ); ?>
                         </span>
                     </div>
 

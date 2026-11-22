@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     <div class="zappoppop-prop-row" id="insp-row-gp-animation">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
             <label class="zappoppop-prop-label" style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;margin:0;"><?php esc_html_e('Animation', 'zappoppop'); ?></label>
-            <button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;line-height:1.8;padding:0 8px;height:22px;cursor:pointer;">&#9654; Play</button>
+            <button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;line-height:1.8;padding:0 8px;height:22px;cursor:pointer;">&#9654; <?php esc_html_e( 'Play', 'zappoppop' ); ?></button>
         </div>
         <div class="zappoppop-gp-2col-grid">
             <div class="zappoppop-gp-col" style="grid-column:1 / -1;">

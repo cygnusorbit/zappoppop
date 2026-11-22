@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) exit;
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-checkbox" data-elem-family="form" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
     <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Agreement Checkbox & GDPR Consent', 'zappoppop'); ?></div>
     <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Checkbox Options / Consent Label (One per Line)', 'zappoppop'); ?></label>
-    <textarea id="prop-checkbox-options" rows="3" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="optionsList" placeholder="I agree to the Terms &amp; Privacy Policy" style="margin-bottom:10px;font-size:12px;"></textarea>
+    <textarea id="prop-checkbox-options" rows="3" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="optionsList" placeholder="<?php esc_attr_e( 'I agree to the Terms & Privacy Policy', 'zappoppop' ); ?>" style="margin-bottom:10px;font-size:12px;"></textarea>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div>
             <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Layout Direction', 'zappoppop'); ?></label>

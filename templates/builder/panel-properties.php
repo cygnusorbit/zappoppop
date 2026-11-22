@@ -82,7 +82,7 @@ if (!defined('ABSPATH')) {
             <label style="margin-top:10px;display:block;"><?php esc_html_e('Field Name / Param Key', 'zappoppop'); ?></label>
             <input type="text" id="zappoppop-prop-fieldname" class="widefat" placeholder="<?php esc_attr_e('e.g. email or qty', 'zappoppop'); ?>">
             <label style="margin-top:10px;display:block;"><?php esc_html_e('OPTIONS (For Select, Radio, Wheel, Scratch)', 'zappoppop'); ?></label>
-            <textarea id="zappoppop-prop-options" class="widefat" rows="4" placeholder="Option 1:10&#10;Option 2:20"></textarea>
+            <textarea id="zappoppop-prop-options" class="widefat" rows="4" placeholder="<?php echo esc_attr( implode( "\n", array( __( 'Option 1', 'zappoppop' ) . ':10', __( 'Option 2', 'zappoppop' ) . ':20' ) ) ); ?>"></textarea>
         </div>
     </div>
 </div>

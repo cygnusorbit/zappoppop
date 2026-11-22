@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) exit;
                 <!-- CANONICAL ANIMATION & REQUIRED CONTROLS -->
             <div class="zappoppop-insp-card" id="insp-section-gp-basic-Shared">
                 <div class="zappoppop-prop-row" id="insp-row-gp-animation">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><label class="zappoppop-prop-label" style="margin:0;"><?php esc_html_e( 'Animation', 'zappoppop' ); ?></label><button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;height:22px;padding:0 8px;cursor:pointer;">&#9654; Play</button></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><label class="zappoppop-prop-label" style="margin:0;"><?php esc_html_e( 'Animation', 'zappoppop' ); ?></label><button type="button" id="zappoppop-btn-play-elem-anim" class="button button-small" style="background:#1e293b;border:1px solid #334155;color:#38bdf8;font-size:10px;height:22px;padding:0 8px;cursor:pointer;">&#9654; <?php esc_html_e( 'Play', 'zappoppop' ); ?></button></div>
                     <div class="zappoppop-gp-2col-grid">
                         <div class="zappoppop-gp-col" style="grid-column:1 / -1;">
                             <select id="prop-anim-in" class="zappoppop-select">
@@ -319,7 +319,7 @@ if (!defined('ABSPATH')) exit;
                 <!-- WHEEL -->
                 <div class="element-panel" id="panel-elem-wheel" style="display:none;">
                     <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Prize Slices (Comma Separated)', 'zappoppop'); ?></label>
-                    <textarea id="prop-wheel-slices" rows="4" class="widefat" placeholder="10% OFF, FREE SHIPPING, 25% OFF, JACKPOT" style="font-size:12px;margin-bottom:8px;"></textarea>
+                    <textarea id="prop-wheel-slices" rows="4" class="widefat" placeholder="<?php esc_attr_e( '10% OFF, FREE SHIPPING, 25% OFF, JACKPOT', 'zappoppop' ); ?>" style="font-size:12px;margin-bottom:8px;"></textarea>
                     <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Spin Button Label', 'zappoppop'); ?></label>
                     <input type="text" id="prop-wheel-btn-text" value="SPIN TO WIN!" class="widefat" style="font-size:12px;margin-bottom:8px;">
                     <label style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;"><?php esc_html_e('Win Message', 'zappoppop'); ?></label>

@@ -17,7 +17,7 @@ if (!function_exists('zappoppop_subs_bulk_bar')) {
                     <option value="delete"><?php esc_html_e('Delete', 'zappoppop'); ?></option>
                     <option value="anonymize"><?php esc_html_e('Anonymize (GDPR)', 'zappoppop'); ?></option>
                     <?php foreach ((array) $labels as $l) : if (empty($l['id'])) { continue; } ?>
-                        <option value="label:<?php echo esc_attr($l['id']); ?>">Add label: <?php echo esc_html($l['name']); ?></option>
+                        <option value="label:<?php echo esc_attr($l['id']); ?>"><?php /* translators: %s: label name */ echo esc_html( sprintf( __( 'Add label: %s', 'zappoppop' ), $l['name'] ) ); ?></option>
                     <?php endforeach; ?>
                     <option value="unlabel"><?php esc_html_e('Remove all labels', 'zappoppop'); ?></option>
                 </select>

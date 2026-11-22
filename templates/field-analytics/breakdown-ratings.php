@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
                 <div style="color:#f59e0b;font-size:20px;margin:6px 0;">
                     &#9733;&#9733;&#9733;&#9733;&#9733;
                 </div>
-                <span style="font-size:12px;color:#64748b;">Based on <?php echo number_format($total_rating_count); ?> ratings</span>
+                <span style="font-size:12px;color:#64748b;"><?php /* translators: %s: number of ratings */ printf( esc_html__( 'Based on %s ratings', 'zappoppop' ), esc_html( number_format_i18n( $total_rating_count ) ) ); ?></span>
             </div>
 
             <!-- 5-Star Histogram Distribution -->
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
                     $star_pct   = $total_rating_count > 0 ? round(($star_votes / $total_rating_count) * 100, 1) : 0;
                     ?>
                     <div style="display:flex;align-items:center;gap:10px;font-size:12px;">
-                        <span style="width:50px;font-weight:600;color:#334155;"><?php echo esc_html($star); ?> Stars</span>
+                        <span style="width:50px;font-weight:600;color:#334155;"><?php /* translators: %d: star rating from 1 to 5 */ echo esc_html( sprintf( _n( '%d Star', '%d Stars', (int) $star, 'zappoppop' ), (int) $star ) ); ?></span>
                         <div style="flex:1;height:10px;background:#f1f5f9;border-radius:5px;overflow:hidden;">
                             <div style="width:<?php echo esc_attr($star_pct); ?>%;height:100%;background:#f59e0b;border-radius:5px;transition:width 0.4s ease;"></div>
                         </div>

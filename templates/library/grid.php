@@ -40,7 +40,7 @@ if (!defined('ABSPATH')) {
                 
                 <div class="zpp-tpl-foot" style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid #f1f5f9;margin-top:auto;">
                     <span class="zpp-tpl-meta" style="font-size:11px;color:#94a3b8;font-weight:600;">
-                        <?php echo count($tpl['config']['elements']); ?> Elements &bull; <?php echo esc_html($tpl['config']['meta']['width']); ?>x<?php echo esc_html($tpl['config']['meta']['height']); ?>px
+                        <?php /* translators: 1: number of elements, 2: canvas width in pixels, 3: canvas height in pixels */ printf( esc_html__( '%1$d Elements • %2$sx%3$spx', 'zappoppop' ), (int) count( $tpl['config']['elements'] ), esc_html( $tpl['config']['meta']['width'] ), esc_html( $tpl['config']['meta']['height'] ) ); ?>
                     </span>
                     <div style="display:flex;gap:6px;">
                         <button type="button" class="button button-small zappoppop-tpl-preview-btn" 

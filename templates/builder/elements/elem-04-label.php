@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) exit;
         <button type="button" id="zappoppop-label-token-btn" title="<?php esc_attr_e('Insert WordPress value', 'zappoppop'); ?>" aria-haspopup="true" class="zpp-tok-btn">&lt;/&gt;</button>
         <div id="zappoppop-label-token-menu" role="menu" class="zpp-tok-menu" style="display:none;"></div>
     </div>
-    <textarea id="prop-label-content" rows="3" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="content" placeholder="Hello World" style="margin-bottom:10px;font-size:12px;"></textarea>
+    <textarea id="prop-label-content" rows="3" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="content" placeholder="<?php esc_attr_e( 'Hello World', 'zappoppop' ); ?>" style="margin-bottom:10px;font-size:12px;"></textarea>
     <input type="hidden" id="prop-title-text" class="zappoppop-gp-alias" data-prop="content">
     <input type="hidden" id="prop-paragraph-text" class="zappoppop-gp-alias" data-prop="content">
     <input type="hidden" id="prop-text-content" class="zappoppop-gp-alias" data-prop="content">
