@@ -205,7 +205,7 @@
             $('#zappoppop-layers-count').text(elements ? elements.length : 0);
 
             if (!elements || elements.length === 0) {
-                $list.html('<div style="padding:14px 10px;text-align:center;color:#94a3b8;font-size:11px;font-style:italic;">No layers on this canvas. Click an element in the Ribbon Bar to add one.</div>');
+                $list.html('<div style="padding:14px 10px;text-align:center;color:#94a3b8;font-size:11px;font-style:italic;">' + $('<div></div>').text(wp.i18n.__('No layers on this canvas. Click an element in the Ribbon Bar to add one.', 'zappoppop')).html() + '</div>');
                 return;
             }
 

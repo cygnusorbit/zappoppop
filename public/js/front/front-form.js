@@ -4,6 +4,8 @@
  */
 (function(window, $) {
     'use strict';
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
+    var sprintf = (window.wp && wp.i18n && wp.i18n.sprintf) ? wp.i18n.sprintf : function (t) { var a = Array.prototype.slice.call(arguments, 1), i = 0; return String(t).replace(/%(\d+\$)?[sd]/g, function () { return a[i++]; }); };
 
     var vars = window.zappoppop_front_vars || {
         ajax_url: '',
@@ -60,13 +62,13 @@
             if (hasEmail && emailVal) {
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailVal)) {
-                    self.showError($canvas, 'Please enter a valid email address.');
+                    self.showError($canvas, __('Please enter a valid email address.', 'zappoppop'));
                     return;
                 }
             }
 
             var origText = $btn.text();
-            $btn.prop('disabled', true).text($btn.attr('data-loading-text') || 'Submitting...'); /* ZAPPOPPOP_SUBMIT_LOADING */
+            $btn.prop('disabled', true).text($btn.attr('data-loading-text') || __('Submitting...', 'zappoppop')); /* ZAPPOPPOP_SUBMIT_LOADING */
 
             if (vars.enable_recaptcha && vars.recaptcha_site_key && typeof window.grecaptcha !== 'undefined') {
                 window.grecaptcha.ready(function() {
@@ -127,7 +129,7 @@
                         if (res.data && res.data.redirect_url) {
                             window.location.href = res.data.redirect_url;
                         } else {
-                            var successMsg = (res.data && res.data.double_optin && res.data.message) ? res.data.message : ($btn.attr('data-confirm-message') || ((res.data && res.data.message) ? res.data.message : 'Thank you for your submission!')); /* ZAPPOPPOP_SUBMIT_CONFIRM + ZAPPOPPOP_DOI_AJAX */
+                            var successMsg = (res.data && res.data.double_optin && res.data.message) ? res.data.message : ($btn.attr('data-confirm-message') || ((res.data && res.data.message) ? res.data.message : __('Thank you for your submission!', 'zappoppop'))); /* ZAPPOPPOP_SUBMIT_CONFIRM + ZAPPOPPOP_DOI_AJAX */
                             self.showSuccess($canvas, successMsg, $popup);
                             setTimeout(function() {
                                 if (window.ZapPopPopFrontDisplay) {
@@ -136,13 +138,13 @@
                             }, 2200);
                         }
                     } else {
-                        var errMsg = (res && res.data && res.data.message) ? res.data.message : 'Submission failed. Please try again.';
+                        var errMsg = (res && res.data && res.data.message) ? res.data.message : __('Submission failed. Please try again.', 'zappoppop');
                         self.showError($canvas, errMsg);
                     }
                 },
                 error: function() {
                     $btn.prop('disabled', false).text(origText);
-                    self.showError($canvas, 'Network error. Please try again.');
+                    self.showError($canvas, __('Network error. Please try again.', 'zappoppop'));
                 }
             });
         },
@@ -181,6 +183,8 @@
 /* === ZAPPOPPOP_PHASE5_FRONT_RUNTIME_START === */
 (function(window, $) {
     'use strict';
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
+    var sprintf = (window.wp && wp.i18n && wp.i18n.sprintf) ? wp.i18n.sprintf : function (t) { var a = Array.prototype.slice.call(arguments, 1), i = 0; return String(t).replace(/%(\d+\$)?[sd]/g, function () { return a[i++]; }); };
 
     function ingestDynamicUrlParameters() {
         if (typeof URLSearchParams === 'undefined') return;
@@ -266,7 +270,7 @@
             var $inp =$(this).siblings('input.zappoppop-input-password');
             if (!$inp.length) return;
             var curType = $inp.attr('type'); var nextType = (curType === 'password') ? 'text' : 'password'; $inp.attr('type', nextType); /* ZAPPOPPOP_PW_EYE_STATE */
-            $(this).attr('aria-pressed', nextType === 'text' ? 'true' : 'false').attr('aria-label', nextType === 'text' ? 'Hide password' : 'Show password').find('i').toggleClass('fa-eye', nextType === 'password').toggleClass('fa-eye-slash', nextType === 'text');
+            $(this).attr('aria-pressed', nextType === 'text' ? 'true' : 'false').attr('aria-label', nextType === 'text' ? __('Hide password', 'zappoppop') : __('Show password', 'zappoppop')).find('i').toggleClass('fa-eye', nextType === 'password').toggleClass('fa-eye-slash', nextType === 'text');
         });
 
         // 4. File Upload Dropzone Filename Display (Element 23)
@@ -523,25 +527,25 @@
             var custom = t.getAttribute('data-invalid-msg');
             function fail(m) { bad = $f; msg = m; return false; }
             if (!v) {
-                if (req) return fail(t.getAttribute('data-error-msg') || custom || 'This field is required.');
+                if (req) return fail(t.getAttribute('data-error-msg') || custom || __('This field is required.', 'zappoppop'));
                 return;
             }
             if (rules.indexOf('email') !== -1 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-                return fail(custom || 'Please enter a valid email address.');
+                return fail(custom || __('Please enter a valid email address.', 'zappoppop'));
             }
             if (t.type === 'number') { /* ZAPPOPPOP_NUMBER_RANGE */
                 var nv2 = parseFloat(v), mn = t.getAttribute('min'), mx = t.getAttribute('max');
-                if (isNaN(nv2)) return fail(custom || 'Please enter a valid number.');
-                if (mn !== null && mn !== '' && nv2 < parseFloat(mn)) return fail(custom || ('Value must be at least ' + mn + '.'));
-                if (mx !== null && mx !== '' && nv2 > parseFloat(mx)) return fail(custom || ('Value must be at most ' + mx + '.'));
+                if (isNaN(nv2)) return fail(custom || __('Please enter a valid number.', 'zappoppop'));
+                if (mn !== null && mn !== '' && nv2 < parseFloat(mn)) return fail(custom || sprintf(__('Value must be at least %s.', 'zappoppop'), mn));
+                if (mx !== null && mx !== '' && nv2 > parseFloat(mx)) return fail(custom || sprintf(__('Value must be at most %s.', 'zappoppop'), mx));
             }
             if (rules.indexOf('equal') !== -1) {
                 var eq = t.getAttribute('data-equal-value');
-                if (eq !== null && v !== eq) return fail(custom || 'Value does not match.');
+                if (eq !== null && v !== eq) return fail(custom || __('Value does not match.', 'zappoppop'));
             }
             if (rules.indexOf('inarray') !== -1) {
                 var list = String(t.getAttribute('data-in-list') || '').split(',').map(function(x) { return $.trim(x).toLowerCase(); }).filter(Boolean);
-                if (list.length && list.indexOf(v.toLowerCase()) === -1) return fail(custom || 'Value is not in the allowed list.');
+                if (list.length && list.indexOf(v.toLowerCase()) === -1) return fail(custom || __('Value is not in the allowed list.', 'zappoppop'));
             }
             if (rules.indexOf('noduplicates') !== -1) {
                 var dup = false;
@@ -550,7 +554,7 @@
                     if (!$(this).is(':visible')) return;
                     if (String($(this).val() || '').toLowerCase() === v.toLowerCase()) { dup = true; return false; }
                 });
-                if (dup) return fail(custom || 'This value is already used in another field.');
+                if (dup) return fail(custom || __('This value is already used in another field.', 'zappoppop'));
             }
         });
         return bad ? { field: bad, msg: msg } : null;
@@ -673,7 +677,7 @@
             });
             $('<span class="zappoppop-upload-item-name"></span>').text(files[i].name).css({ flex: '1 1 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }).appendTo($row);
             $('<span></span>').text(fmtSize(files[i].size)).css({ fontSize: '9px', color: '#94a3b8', flexShrink: 0 }).appendTo($row);
-            $('<button type="button" class="zappoppop-upload-remove" aria-label="Remove file"></button>').text('\u00d7').attr('data-idx', i).css({
+            $('<button type="button" class="zappoppop-upload-remove"></button>').attr('aria-label', __('Remove file', 'zappoppop')).text('\u00d7').attr('data-idx', i).css({
                 border: 'none', background: '#fee2e2', color: '#b91c1c', borderRadius: '50%', width: '16px', height: '16px',
                 lineHeight: '14px', padding: 0, cursor: 'pointer', fontSize: '13px', flexShrink: 0
             }).appendTo($row);
@@ -688,7 +692,7 @@
         var multi = inp.hasAttribute('multiple');
         var maxMb = parseInt(inp.getAttribute('data-max-size'), 10) || 0;
         var maxFiles = parseInt(inp.getAttribute('data-max-files'), 10) || 0;
-        var msgTpl = inp.getAttribute('data-size-msg') || 'File too large. Maximum size is {max}MB.';
+        var msgTpl = inp.getAttribute('data-size-msg') || __('File too large. Maximum size is {max}MB.', 'zappoppop');
         var allowed = String(inp.getAttribute('accept') || '').toLowerCase().split(',').map(function(x) { return x.trim(); }).filter(Boolean);
         var prev = multi ? (inp._zppKept || []) : [];
         var err = '', ok = [];
@@ -735,7 +739,7 @@
     function setState(btn, inp, show) {
         inp.type = show ? 'text' : 'password';
         btn.setAttribute('aria-pressed', show ? 'true' : 'false');
-        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        btn.setAttribute('aria-label', show ? __('Hide password', 'zappoppop') : __('Show password', 'zappoppop'));
         var ic = btn.querySelector('.dashicons');
         if (ic) {
             ic.classList.toggle('dashicons-visibility', !show);
@@ -806,7 +810,7 @@
         if (!empty) return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        bubble(empty, btn.getAttribute('data-empty-msg') || 'Please fill in all fields before submitting.');
+        bubble(empty, btn.getAttribute('data-empty-msg') || __('Please fill in all fields before submitting.', 'zappoppop'));
     }, true);
 })(jQuery);
 /* === ZAPPOPPOP_BLOCK_EMPTY_SUBMIT_END === */

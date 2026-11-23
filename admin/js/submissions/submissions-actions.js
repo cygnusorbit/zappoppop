@@ -164,7 +164,8 @@
             if (uid) {
                 $f.find('option').each(function() { if (this.value === uid) { uname = $.trim($(this).text()); return false; } });
             }
-            $('#wex-sub').text(uid ? ('Popup: ' + (uname || uid) + (uname && uname !== uid ? '  (' + uid + ')' : '')) : 'All popups');
+            /* translators: %s: popup name and uid */
+            $('#wex-sub').text(uid ? wp.i18n.sprintf(wp.i18n.__('Popup: %s', 'zappoppop'), (uname || uid) + (uname && uname !== uid ? '  (' + uid + ')' : '')) : 'All popups');
             $('#wex-body').html('<div class="wex-msg">Loading columns...</div>');
             $m.addClass('is-open');
             var v = vars();

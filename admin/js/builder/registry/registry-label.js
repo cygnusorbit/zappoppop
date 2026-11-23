@@ -7,7 +7,7 @@
 
     var TOKENS = [
         { t: "{{record-id}}", l: "Record ID" },
-        { t: "{{ip}}", l: "IP Address" },
+        { t: "{{ip}}", l: wp.i18n.__("IP Address", 'zappoppop') },
         { t: "{{user-agent}}", l: "User Agent" },
         { t: "{{date}}", l: "Date" },
         { t: "{{time}}", l: "Time" },

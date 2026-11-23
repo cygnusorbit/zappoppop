@@ -1,5 +1,7 @@
 (function(window, $) {
     'use strict';
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
+    var sprintf = (window.wp && wp.i18n && wp.i18n.sprintf) ? wp.i18n.sprintf : function (t) { var a = Array.prototype.slice.call(arguments, 1), i = 0; return String(t).replace(/%(\d+\$)?[sd]/g, function () { return a[i++]; }); };
     window.ZapPopPopFront = window.ZapPopPopFront || {};
 
     var Submit = {
@@ -100,7 +102,7 @@
                 var $input = $(this).find('input, select, textarea');
                 var val = $input.val();
                 if (!val || (Array.isArray(val) && val.length === 0) || ($input.is(':checkbox') && !$input.is(':checked'))) {
-                    self.showErrorBubble($input, $(this).data('error-msg') || 'This field is required');
+                    self.showErrorBubble($input, $(this).data('error-msg') || __('This field is required', 'zappoppop'));
                     isValid = false;
                     return false;
                 }
@@ -112,7 +114,7 @@
                 var v = $f.val();
                 var empty = !v || (Array.isArray(v) && !v.length) || ($f.is(':checkbox') && !$f.is(':checked'));
                 if (empty && $f.is(':visible')) {
-                    self.showErrorBubble($f, $f.attr('data-error-msg') || 'This field is required.');
+                    self.showErrorBubble($f, $f.attr('data-error-msg') || __('This field is required.', 'zappoppop'));
                     isValid = false;
                     return false;
                 }
@@ -126,12 +128,12 @@
                 var emailVal = $emailInput.val().trim();
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if ((emailVal !== '' || $emailInput.first().is('[required]')) && !emailRegex.test(emailVal)) { /* ZAPPOPPOP_EMAIL_JS */
-                    self.showErrorBubble($emailInput, 'Please enter a valid email address.');
+                    self.showErrorBubble($emailInput, __('Please enter a valid email address.', 'zappoppop'));
                     return false;
                 }
                 var domain = emailVal.split('@')[1] ? emailVal.split('@')[1].toLowerCase() : '';
                 if ($emailInput.first().attr('data-block-disposable') === '1' && disposableDomains.indexOf(domain) !== -1) {
-                    self.showErrorBubble($emailInput, 'Disposable and temporary email addresses are not allowed.');
+                    self.showErrorBubble($emailInput, __('Disposable and temporary email addresses are not allowed.', 'zappoppop'));
                     return false;
                 }
             }
@@ -145,7 +147,7 @@
 
             var uid = $popup.data('uid');
             var $btn = $popup.find('.zappoppop-submit-trigger');
-            $btn.prop('disabled', true).text('Submitting...');
+            $btn.prop('disabled', true).text(__('Submitting...', 'zappoppop'));
 
             var fields = {};
             $popup.find('input, select, textarea').each(function() {
@@ -170,7 +172,7 @@
             };
 
             function handleSuccess(res) {
-                $btn.prop('disabled', false).text('Submitted');
+                $btn.prop('disabled', false).text(__('Submitted', 'zappoppop'));
 
                 // Mark submission cookie
                 window.ZapPopPopFront.Display.setCookie('zappoppop_sub_' + uid, '1', 365);
@@ -192,7 +194,7 @@
 
                 // Show status overlay
                 var $status = $popup.find('.zappoppop-status-overlay');
-                $status.find('.zappoppop-status-message').text((res.data && res.data.message) || res.message || 'Thank you! Submitted successfully.');
+                $status.find('.zappoppop-status-message').text((res.data && res.data.message) || res.message || __('Thank you! Submitted successfully.', 'zappoppop'));
                 $status.fadeIn(200);
 
                 // WooCommerce: the server issued a coupon for this subscriber (module acc-woocommerce)
@@ -258,7 +260,7 @@
             var cur = $btn.data('currency') || 'USD';
             var ajaxUrl = (window.zappoppop_front_vars && window.zappoppop_front_vars.ajax_url) || '';
 
-            $btn.prop('disabled', true).text('Processing Payment...');
+            $btn.prop('disabled', true).text(__('Processing Payment...', 'zappoppop'));
 
             $.post(ajaxUrl, {
                 action: 'zappoppop_process_payment',
@@ -273,7 +275,7 @@
                     window.ZapPopPopFront.Display.close($popup, config);
                 }
             }).always(function() {
-                $btn.prop('disabled', false).text('Pay ' + amt + ' ' + cur);
+                $btn.prop('disabled', false).text(sprintf(__('Pay %1$s %2$s', 'zappoppop'), amt, cur));
             });
         }
     };

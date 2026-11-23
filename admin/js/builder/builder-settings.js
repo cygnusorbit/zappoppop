@@ -218,7 +218,8 @@
             var elements = (core.state.canvases && core.state.canvases[cur]) ? core.state.canvases[cur] : [];
             var count = elements.length;
 
-            $('#set-canvas-element-count-badge').text(count + (count === 1 ? ' Element' : ' Elements'));
+            /* translators: %s: number of elements on the canvas */
+            $('#set-canvas-element-count-badge').text(wp.i18n.sprintf(wp.i18n._n('%s Element', '%s Elements', count, 'zappoppop'), count));
 
             var $toggle = $('#set-canvas-logic-enable');
             var $notice = $('#set-canvas-logic-disabled-notice');

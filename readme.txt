@@ -5,7 +5,7 @@ Tags: popup, modal, popup builder, optin, lead generation
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,5 +73,5 @@ ZapPopPop does not send visitor data to any third-party service and makes no out
 
 == Changelog ==
 
-= 1.0.10 =
+= 1.0.11 =
 * Initial release of ZapPopPop.

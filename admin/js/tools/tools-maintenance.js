@@ -33,7 +33,7 @@
                 $.ajax({ url: v.url, type: 'POST', dataType: 'json', data: data })
                     .done(function(res) {
                         if (res && res.success) {
-                            notice('success', res.data.message || 'Done.');
+                            notice('success', res.data.message || wp.i18n.__('Done.', 'zappoppop'));
                             if (res.data.tables) {
                                 $.each(res.data.tables, function(key, t) {
                                     var $row = $('#zappoppop-table-row-' + key);

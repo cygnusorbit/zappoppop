@@ -11,10 +11,10 @@
 
     function decorate() {
         $('.zappoppop-tpl-preview-btn').each(function () { label($(this), 'Preview'); });
-        $('.zappoppop-tpl-import-btn').each(function () { label($(this), 'Import & Edit'); });
+        $('.zappoppop-tpl-import-btn').each(function () { label($(this), wp.i18n.__('Import & Edit', 'zappoppop')); });
         $('.zappoppop-usertpl-use').each(function () {
             var $use = $(this), id = $use.attr('data-id');
-            label($use, 'Import & Edit');
+            label($use, wp.i18n.__('Import & Edit', 'zappoppop'));
             if ($use.closest('.zappoppop-tpl-card').attr('data-preset') === '1') { return; }
             if (!$use.siblings('.zappoppop-usertpl-edit').length) {
                 $('<button type="button" class="button button-small zappoppop-usertpl-edit"></button>').attr('data-id', id).insertAfter($use);

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZapPopPop 1.0.09\n"
+"Project-Id-Version: ZapPopPop 1.0.10\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/zappoppop\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-22T10:00:29+00:00\n"
+"POT-Creation-Date: 2026-11-23T07:55:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: scripts/make-pot.py\n"
 "X-Domain: zappoppop\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "https://profiles.wordpress.org/wppoppop/"
 msgstr ""
 
-#: .patch-backups/class-zappoppop-disposable.php:71 includes/class-zappoppop-disposable.php:71
+#: .patch-backups/class-zappoppop-disposable.php:71 includes/class-zappoppop-disposable.php:71 public/js/front/front-submit.js:136
 msgid "Disposable and temporary email addresses are not allowed."
 msgstr ""
 
@@ -55,6 +55,10 @@ msgstr ""
 msgid "This layer uses a different click action. Change it in Logic > Action & Click Routing."
 msgstr ""
 
+#: admin/js/dash-layout.js:53
+msgid "Drag to rearrange (or use the arrow keys)"
+msgstr ""
+
 #: admin/js/dash-layout.js:89
 msgid "Layout saved"
 msgstr ""
@@ -63,7 +67,7 @@ msgstr ""
 msgid "Could not save the layout"
 msgstr ""
 
-#: admin/js/theme-logo.js:30
+#: admin/js/theme-logo.js:30 admin/js/zappoppop-i18n-catalog.js:575
 msgid "WordPress Media is unavailable on this screen."
 msgstr ""
 
@@ -75,6 +79,2309 @@ msgstr ""
 msgid "Type RESET to confirm."
 msgstr ""
 
+#: admin/js/zappoppop-i18n-catalog.js:10
+msgid "-- Select Field --"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:11
+msgid "ACTION"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:12 includes/admin/class-zappoppop-list-table.php:298
+msgid "ACTIVE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:13
+msgid "ACTIVE STAR COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:14
+msgid "ADVANCED"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:15
+msgid "ALLOWED EXTENSIONS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:16
+msgid "ALT TEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:17
+msgid "ASPECT RATIO"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:18
+msgid "AUTOCOMPLETE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:19
+msgid "AUTOCOMPLETE ATTRIBUTE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:20
+msgid "Above field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:21 includes/addons/class-addon-catalog.php:127 includes/admin/class-admin-assets.php:520
+msgid "Activate"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:22 includes/admin/class-admin-assets.php:519
+msgid "Activating…"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:23 templates/builder/header.php:36
+msgid "Add Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:24 admin/js/builder/builder-shortcuts.js:34
+msgid "Add a box to the selection"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:25
+msgid "Add a choice below"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:26
+msgid "Add another canvas first"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:27
+msgid "Add file"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:28
+msgid "Add preset color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:29 includes/admin/class-admin-assets.php:523
+msgid "Add-on installed. Click Activate to turn it on."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:30
+msgid "Advance to Next Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:31
+msgid "Advance to Target Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:32 includes/class-zappoppop-layer-settings.php:23 templates/builder/drawer-inspector.php:20
+msgid "Advanced"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:33
+msgid "After double opt-in confirmation (needs Double Opt-In)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:34
+msgid "After successful form submission"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:35 includes/class-zappoppop-layer-settings.php:43
+msgid "Agreement Checkbox"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:36
+msgid "All form data"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:37 admin/js/builder/builder-shortcuts.js:27
+msgid "Also moves a whole box selection"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:38 templates/builder/elements/elem-02-image.php:23
+msgid "Alt Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:39
+msgid "Anchor ID on the page"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:40 includes/class-zappoppop-builder-theme.php:1414 includes/class-zappoppop-builder-theme.php:1416 templates/builder/drawer-inspector.php:36 templates/builder/elements/tab-basic-footer.php:8
+msgid "Animation"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:41 includes/ajax/class-ajax-templates.php:365
+msgid "Announcements"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:42
+msgid "Apply Icon Preset (40 x 40)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:43
+msgid "Apply Icon Size Preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:44
+msgid "Apply Saved Layer Defaults"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:45
+msgid "Apply Video Preset (200 x 150)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:46
+msgid "Apply Video Size Preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:47
+msgid "Apply preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:48
+msgid "Are you sure you want to reset all settings to defaults?"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:49 templates/builder/elements/elem-03-video.php:27
+msgid "Aspect Ratio"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:50
+msgid "Attach"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:51
+msgid "Attachments"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:52 templates/tools/system-info.php:78
+msgid "Attention"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:53 templates/builder/elements/elem-03-video.php:49
+msgid "Autoplay"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:54
+msgid "Autoplay Video"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:55
+msgid "BACKGROUND COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:56
+msgid "BAR FILL COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:57
+msgid "BLUR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:58
+msgid "BORDER COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:59
+msgid "BOTTOM"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:60
+msgid "BOX SHADOW"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:61
+msgid "BUTTON"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:62
+msgid "BUTTON HOVER STATE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:63
+msgid "BUTTON ICON CLASS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:64
+msgid "BUTTON LABEL TEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:65 includes/admin/class-admin-guide.php:448
+msgid "Back"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:66 templates/builder/panel-properties.php:65
+msgid "Background"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:67 includes/class-zappoppop-element-opacity.php:425 includes/class-zappoppop-layer-settings.php:174 templates/builder/elements/tab-style-full.php:76
+msgid "Background Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:68 includes/class-zappoppop-element-opacity.php:426
+msgid "Background Opacity"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:69
+msgid "Border"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:70
+msgid "Bouncing"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:71 admin/js/builder/builder-shortcuts.js:32
+msgid "Box select"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:72
+msgid "Builder Theme reset to defaults."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:73
+msgid "Builder Theme saved & synced to Builder!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:74 templates/builder/ribbon.php:14
+msgid "Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:75 templates/builder/elements/elem-09-button.php:7
+msgid "Button Label Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:76
+msgid "CLOSE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:77
+msgid "COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:78
+msgid "CONDITIONAL VISIBILITY LOGIC"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:79
+msgid "COORDINATES"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:80
+msgid "CSS STYLES REPEATER"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:81
+msgid "CUSTOM CSS CLASS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:82
+msgid "CUSTOM CSS SCOPING"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:83
+msgid "CUSTOM FIELD ID"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:84 includes/class-zappoppop-modules-installer.php:351 includes/admin/class-admin-assets.php:406 templates/builder/modals.php:174 templates/dashboard/modal-import.php:20 templates/dashboard/table.php:153 templates/library/modal-categories.php:24 templates/library/modal-template-edit.php:47 templates/settings/modal-module-categories.php:25 templates/submissions/modal-export.php:18
+msgid "Cancel"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:85 includes/admin/class-admin-theme.php:68 templates/builder/elements/tab-style-full.php:134
+msgid "Capitalize"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:86 templates/builder/drawer-inspector.php:307 templates/builder/elements/tab-style-form.php:21 templates/builder/elements/tab-style-full.php:24 templates/settings/tab-libraries.php:71
+msgid "Center"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:87
+msgid "Change Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:88
+msgid "Change Button Hover"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:89
+msgid "Change Button Target Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:90
+msgid "Change Click Action"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:91
+msgid "Change Click Label"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:92
+msgid "Change Click Value"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:93
+msgid "Change Close Hover State"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:94
+msgid "Change Close Icon Glyph"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:95
+msgid "Change Heading Tag"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:96
+msgid "Change Icon Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:97
+msgid "Change Link Nofollow"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:98
+msgid "Change Link Target"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:99
+msgid "Change Link URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:100
+msgid "Change Submit Text Alignment"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:101
+msgid "Change Target Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:102
+msgid "Change Text Alignment"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:103
+msgid "Change Text Transform"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:104 includes/admin/class-admin-assets.php:400
+msgid "Check the template below, then click Import to add it to My Templates."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:105 includes/class-zappoppop-layer-settings.php:44 templates/builder/ribbon.php:23
+msgid "Checkbox"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:106
+msgid "Checkboxgroup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:107
+msgid "Choose File or Drop Here"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:108
+msgid "Choose builder background image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:109 includes/front/elements/class-front-decomposed-26.php:576 templates/builder/elements/elem-23-upload.php:8
+msgid "Choose file or drag here..."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:110
+msgid "Choose image from Media Library"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:111
+msgid "Circle"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:112 public/js/front/front-display.js:337 templates/tools/saved-defaults.php:80
+msgid "Clear"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:113
+msgid "Click + to save a preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:114
+msgid "Click Again To Clear"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:115 admin/js/builder/builder-shortcuts.js:60
+msgid "Click a layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:116
+msgid "Click again to reset everything"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:117 admin/js/builder/builder-shortcuts.js:62
+msgid "Click and drag"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:118 admin/js/builder/builder-shortcuts.js:59
+msgid "Click and drag on empty canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:119
+msgid "Click to toggle pre-validation input sanitizers:"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:120 admin/js/builder/builder-shortcuts.js:154 includes/front/class-front-renderer.php:274 templates/builder/modals.php:23 templates/builder/modals.php:133 templates/builder/ribbon.php:12 templates/dashboard/modal-embed.php:10 templates/library/modal-categories.php:10 templates/library/modal-preview.php:10 templates/library/modal-preview.php:22 templates/library/modal-template-edit.php:10 templates/log/modal-payload.php:24 templates/payments/modal-receipt.php:63 templates/settings/modal-module-categories.php:11 templates/submissions/modal-editor.php:58 templates/submissions/modal-table-options.php:13
+msgid "Close"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:121 includes/class-zappoppop-layer-settings.php:34
+msgid "Close Icon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:122
+msgid "Close Label Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:123 templates/builder/drawer-inspector.php:344 templates/builder/panel-properties.php:43 templates/builder/elements/elem-09-button.php:16 templates/builder/elements/tab-logic-conditional.php:47
+msgid "Close Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:124
+msgid "Close Trigger Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:125 admin/js/builder/builder-shortcuts.js:24
+msgid "Closes Layer Settings, clears a box selection, exits Preview"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:126 includes/class-zappoppop-element-opacity.php:424
+msgid "Color Opacity"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:127 includes/admin/class-admin-assets.php:125 includes/admin/class-admin-theme.php:470
+msgid "Colour value"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:128
+msgid "Contain"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:129
+msgid "Contains"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:130 includes/class-zappoppop-builder-theme.php:1392 includes/class-zappoppop-layer-settings.php:19 templates/builder/drawer-inspector.php:16
+msgid "Content"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:131
+msgid "Cookie cache reset successfully!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:132
+msgid "Copied!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:133
+msgid "Copy this choice"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:134
+msgid "Could Not Save All Tabs"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:135
+msgid "Could not load columns."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:136
+msgid "Could not save Day Mode."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:137
+msgid "Counters Reset!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:138
+msgid "Cover"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:139
+msgid "Cross"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:140 templates/builder/drawer-inspector.php:255
+msgid "Currency"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:141
+msgid "Current Page Title"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:142
+msgid "Current URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:143
+msgid "Current settings saved as Day Mode."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:144
+msgid "Custom HTML Block"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:145
+msgid "Custom Shadow"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:146 includes/class-zappoppop-layer-settings.php:218 templates/builder/elements/tab-advanced-form.php:48
+msgid "Custom Validation Error Message"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:147
+msgid "DATA"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:148
+msgid "DIAL PREFIX"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:149 templates/builder/elements/tab-style-full.php:210
+msgid "Dashed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:150 includes/class-zappoppop-layer-settings.php:22 templates/builder/drawer-inspector.php:19
+msgid "Data"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:151 templates/builder/ribbon.php:26 templates/payments/table.php:26
+msgid "Date"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:152 includes/class-zappoppop-builder-theme.php:226 templates/builder/header.php:19
+msgid "Day Mode"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:153 includes/class-zappoppop-layer-settings.php:200 templates/builder/elements/setting-form-data-adv.php:10 templates/builder/elements/tab-data-form.php:8
+msgid "Default Value"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:154 includes/class-zappoppop-modules-installer.php:355 templates/settings/tab-module.php:81 templates/submissions/table.php:17 templates/submissions/table.php:163
+msgid "Delete"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:155 templates/builder/header.php:34
+msgid "Delete Canvas"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:156
+msgid "Delete Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:157
+msgid "Delete Layers"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:158 admin/js/builder/builder-shortcuts.js:23
+msgid "Delete layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:159
+msgid "Delete notification"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:160
+msgid "Delete this choice"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:161
+msgid "Delete this notification?"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:162 templates/builder/top-bar.php:11 templates/library/modal-preview.php:13
+msgid "Desktop"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:163
+msgid "Destination Canvas Step"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:164
+msgid "Destination Redirect URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:165 includes/class-zappoppop-layer-settings.php:193 templates/builder/elements/elem-09-button.php:27 templates/builder/elements/tab-logic-conditional.php:53
+msgid "Destination URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:166
+msgid "Diamond"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:167
+msgid "Direct MP4"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:168
+msgid "Dismissal Behavior"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:169
+msgid "Distribute Horizontally"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:170
+msgid "Distribute Vertically"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:171
+msgid "Divider"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:172
+msgid "Divider Line"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:173 templates/builder/drawer-inspector.php:274
+msgid "Divider Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:174
+msgid "Does Not Contain"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:175 templates/builder/elements/tab-style-full.php:211
+msgid "Dotted"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:176 templates/builder/elements/tab-style-full.php:212
+msgid "Double"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:177
+msgid "Down"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:178
+msgid "Download"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:179
+msgid "Download Started!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:180 includes/admin/class-zappoppop-list-table.php:316 templates/dashboard/table.php:146 templates/theme/preview.php:16 templates/theme/preview.php:28
+msgid "Draft"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:181
+msgid "Draft saved!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:182 admin/js/builder/builder-shortcuts.js:61
+msgid "Drag a selection box"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:183 templates/settings/builder-layer-settings.php:67 templates/settings/tab-module.php:65 templates/settings/tab-pages.php:25
+msgid "Drag to reorder"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:184
+msgid "Drag to reorder layer depth"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:185 admin/js/builder/builder-shortcuts.js:29
+msgid "Drop a copy"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:186
+msgid "Duplicate Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:187 templates/builder/elements/setting-form-data-adv.php:17
+msgid "Dynamic Default Value"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:188
+msgid "Dynamic URL Parameter Population"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:189 includes/class-zappoppop-modules-installer.php:410 includes/admin/class-zappoppop-list-table.php:267 templates/dashboard-overview.php:38
+msgid "Edit"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:190 admin/js/builder/builder-shortcuts.js:17
+msgid "Editing"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:191
+msgid "Element"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:192 includes/class-zappoppop-element-opacity.php:423
+msgid "Element Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:193 includes/class-zappoppop-element-opacity.php:422
+msgid "Element Opacity"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:194 templates/builder/ribbon.php:18
+msgid "Email"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:195
+msgid "Email Field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:196 templates/submissions/context.php:51
+msgid "Email address"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:197 admin/js/widget/widget-block.js:57
+msgid "Embed Type"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:198 admin/js/widget/widget-block.js:28
+msgid "Embed a popup inline or open it on page load."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:199
+msgid "Enable conditional logic"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:200 templates/tools/system-info.php:31 templates/tools/system-info.php:33
+msgid "Enabled"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:201
+msgid "Equals"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:202
+msgid "Equals (==)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:203 templates/builder/canvas.php:15
+msgid "Exit Preview"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:204
+msgid "FIELD IDENTIFIER"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:205
+msgid "FONT AWESOME CLASS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:206
+msgid "FONT WEIGHT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:207
+msgid "FORMAT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:208
+msgid "Fading"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:209
+msgid "Failed to reset cookies."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:210
+msgid "Failed to save settings."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:211
+msgid "Field identifier used in submissions and merge tokens"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:212
+msgid "Files"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:213 includes/class-zappoppop-builder-theme.php:1405 templates/builder/elements/elem-01-shape.php:37
+msgid "Fill Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:214
+msgid "Fit Image Frame"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:215
+msgid "Flippers"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:216
+msgid "Form fields"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:217
+msgid "Form values"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:218
+msgid "Format"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:219
+msgid "From"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:220
+msgid "GRID COLUMNS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:221 includes/ajax/class-ajax-templates.php:363
+msgid "Gamified & Interactive"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:222 includes/admin/class-admin-theme.php:75
+msgid "General"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:223
+msgid "Global from email"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:224
+msgid "Global from name"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:225
+msgid "Glyph Style"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:226
+msgid "Greater (>)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:227
+msgid "HOVER BG"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:228
+msgid "HOVER BORDER"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:229
+msgid "HOVER TEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:230 templates/builder/ribbon.php:10
+msgid "Header"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:231
+msgid "Heading Tag"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:232
+msgid "Headline"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:233
+msgid "Headline Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:234
+msgid "Headline Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:235
+msgid "Headline or Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:236 templates/builder/elements/elem-01-shape.php:22 templates/builder/elements/elem-07-icon.php:20
+msgid "Heart"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:237 templates/builder/elements/elem-01-shape.php:20
+msgid "Hexagon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:238
+msgid "Hidden"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:239 templates/builder/ribbon.php:55
+msgid "Hide Elements Ribbon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:240
+msgid "Hide Label"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:241 templates/builder/elements/tab-logic-conditional.php:17
+msgid "Hide Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:242
+msgid "Hide for Browser Session"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:243 public/js/front/front-form.js:273 public/js/front/front-form.js:742
+msgid "Hide password"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:244
+msgid "Hide this layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:245 admin/js/builder/builder-shortcuts.js:58
+msgid "Hold the key, then drag a layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:246
+msgid "Horizontal"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:247
+msgid "Horizontal Divider Line"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:248
+msgid "Horizontal Inline"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:249
+msgid "Hover"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:250
+msgid "Hover Background"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:251 templates/builder/elements/tab-style-full.php:265 templates/builder/elements/tab-style-media.php:17
+msgid "Hover Bg"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:252 templates/builder/elements/tab-style-full.php:273 templates/builder/elements/tab-style-media.php:25
+msgid "Hover Border"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:253
+msgid "Hover Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:254 templates/builder/elements/tab-style-full.php:269 templates/builder/elements/tab-style-media.php:21
+msgid "Hover Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:255
+msgid "Hover Text Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:256
+msgid "Html"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:257
+msgid "ICON COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:258
+msgid "ICON GLYPH"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:259
+msgid "IMAGE SOURCE URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:260 includes/admin/class-zappoppop-list-table.php:299
+msgid "INACTIVE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:261
+msgid "INLINE CSS RULES"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:262
+msgid "INPUT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:263
+msgid "INPUT MASK"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:264
+msgid "INPUT STYLING"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:265 templates/builder/ribbon.php:13
+msgid "Icon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:266 includes/class-zappoppop-builder-theme.php:872 templates/builder/elements/tab-style-full.php:40 templates/builder/elements/tab-style-full.php:55
+msgid "Icon Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:267 templates/builder/elements/elem-06-close.php:9
+msgid "Icon Glyph"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:268
+msgid "Icon Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:269 templates/builder/elements/tab-logic-conditional.php:23
+msgid "If ALL rules match"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:270 templates/builder/elements/tab-logic-conditional.php:24
+msgid "If ANY rule matches"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:271 includes/class-zappoppop-layer-settings.php:30 templates/builder/ribbon.php:8
+msgid "Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:272
+msgid "Image Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:273 templates/builder/elements/elem-02-image.php:7
+msgid "Image Source URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:274
+msgid "Imageselect"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:275 includes/admin/class-admin-assets.php:407
+msgid "Import"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:276
+msgid "Import failed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:277 includes/admin/class-admin-assets.php:424
+msgid "Imported"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:278
+msgid "Imported!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:279
+msgid "Importing popups and A/B tests..."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:280 admin/js/widget/widget-block.js:22 admin/js/widget/widget-block.js:70 templates/settings/tab-performance.php:22
+msgid "Inline Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:281 includes/class-zappoppop-layer-settings.php:211 templates/builder/elements/tab-advanced-form.php:13
+msgid "Input Mask"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:282
+msgid "Insert merge tag"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:283
+msgid "Inset Shadow"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:284 admin/js/builder/builder-shortcuts.js:18
+msgid "Inside a text field you get the browser’s own text undo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:285
+msgid "Inside field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:286 includes/admin/class-admin-assets.php:518
+msgid "Installing…"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:287
+msgid "Invalidating cookie epoch cache..."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:288
+msgid "Is Empty"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:289
+msgid "Is Filled"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:290
+msgid "Is Not Empty"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:291
+msgid "Justify"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:292 admin/js/builder/builder-shortcuts.js:150 templates/builder/header.php:65
+msgid "Keyboard Shortcut"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:293
+msgid "LABEL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:294
+msgid "LAYER SETTINGS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:295
+msgid "LAYOUT ORIENTATION"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:296
+msgid "LEFT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:297
+msgid "LEFT ICON"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:298
+msgid "LEFT ICON CLASS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:299
+msgid "LINE HEIGHT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:300
+msgid "LOADING TEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:301 templates/builder/elements/elem-16b-checkboxgroup.php:12 templates/builder/elements/elem-17-radio.php:12
+msgid "Label"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:302
+msgid "Label Position"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:303
+msgid "Label Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:304
+msgid "Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:305
+msgid "Layer Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:306
+msgid "Layer color presets"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:307 includes/ajax/class-ajax-templates.php:361
+msgid "Lead Generation"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:308 admin/js/builder/builder-shortcuts.js:29
+msgid "Leaves the original, drops a copy where you release"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:309 templates/builder/canvas.php:44 templates/builder/drawer-inspector.php:308 templates/builder/elements/tab-style-form.php:20 templates/builder/elements/tab-style-full.php:23 templates/builder/elements/tab-style-full.php:192 templates/settings/tab-libraries.php:70
+msgid "Left"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:310
+msgid "Less (<)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:311
+msgid "Lightspeed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:312 templates/builder/drawer-inspector.php:294
+msgid "Line Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:313 templates/builder/elements/tab-style-full.php:114
+msgid "Line Height"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:314
+msgid "Line Style"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:315 includes/admin/class-admin-theme.php:116
+msgid "Link"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:316
+msgid "Link Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:317
+msgid "Link Button Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:318 templates/builder/top-bar.php:39 templates/theme/preview.php:10
+msgid "Live Preview"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:319
+msgid "Lock Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:320 includes/class-zappoppop-builder-theme.php:1394 includes/class-zappoppop-layer-settings.php:21 templates/builder/drawer-inspector.php:18 templates/builder/panel-properties.php:14
+msgid "Logic"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:321
+msgid "Loop"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:322
+msgid "Loop Playback"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:323 templates/builder/elements/tab-advanced-form.php:25
+msgid "Lowercase"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:324
+msgid "Media"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:325
+msgid "Message"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:326 templates/builder/top-bar.php:12 templates/library/modal-preview.php:14
+msgid "Mobile"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:327 admin/js/builder/builder-shortcuts.js:26
+msgid "Moving layers"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:328 includes/class-zappoppop-layer-settings.php:46
+msgid "Multiselect"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:329 templates/builder/elements/elem-03-video.php:52
+msgid "Muted"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:330 includes/ajax/class-ajax-templates.php:366 includes/ajax/class-ajax-templates.php:384 includes/ajax/class-ajax-templates.php:418 templates/library-view.php:19
+msgid "My Templates"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:331 includes/admin/class-zappoppop-list-table.php:28 templates/builder/panel-properties.php:21 templates/theme/preview.php:27
+msgid "Name"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:332
+msgid "Network error while loading columns."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:333
+msgid "New Icon Preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:334 includes/class-zappoppop-promo.php:445 includes/admin/class-admin-guide.php:447
+msgid "Next"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:335
+msgid "Next Step Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:336 includes/front/elements/class-front-element-actions.php:36
+msgid "Next Step →"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:337 includes/admin/class-admin-assets.php:388 templates/extend-view.php:38
+msgid "Next page"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:338 includes/class-zappoppop-builder-theme.php:180 templates/builder/header.php:19
+msgid "Night Mode"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:339
+msgid "No Image Selected"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:340
+msgid "No Shadow"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:341
+msgid "No elements"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:342
+msgid "No form fields found"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:343
+msgid "No matches"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:344
+msgid "No notifications yet. Click \"Add notification\"."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:345
+msgid "No popup starter templates found matching your criteria."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:346
+msgid "No rules yet. Click \"+ Add rule\" to add a condition."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:347
+msgid "No video URL set"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:348 includes/class-zappoppop-builder-theme.php:1417 includes/admin/class-admin-theme.php:68 templates/builder/drawer-inspector.php:40 templates/builder/panel-properties.php:42 templates/builder/panel-properties.php:71 templates/builder/elements/tab-basic-footer.php:14 templates/builder/elements/tab-style-full.php:131 templates/builder/elements/tab-style-full.php:213
+msgid "None"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:349
+msgid "Normal"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:350
+msgid "Not Equal"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:351
+msgid "Not Equal (!=)"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:352
+msgid "Nothing To Save"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:353
+msgid "Notification"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:354
+msgid "Nudge"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:355 templates/builder/ribbon.php:19
+msgid "Number"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:356
+msgid "OBJECT FIT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:357
+msgid "OPACITY"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:358
+msgid "OPERATOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:359 templates/builder/elements/elem-02-image.php:14
+msgid "Object Fit"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:360
+msgid "Octagon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:361 admin/js/builder/builder-shortcuts.js:178
+msgid "On Windows / Linux: ⌘ is Ctrl, ⌥ is Alt, ⇧ is Shift, ⌫ is Backspace."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:362 admin/js/builder/builder-shortcuts.js:179
+msgid "On a Mac: Ctrl is ⌘ (Command), Alt is ⌥ (Option)."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:363 admin/js/widget/widget-block.js:23 admin/js/widget/widget-block.js:70 templates/settings/tab-performance.php:23
+msgid "Onload Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:364 includes/class-zappoppop-builder-theme.php:1027 includes/class-zappoppop-builder-theme.php:1193 includes/admin/class-admin-assets.php:128 includes/admin/class-admin-theme.php:473
+msgid "Opacity"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:365 includes/front/class-front-shortcode.php:73 includes/widget/class-widget-form.php:11 includes/widget/class-widget-form.php:102 includes/widget/class-widget-render.php:10
+msgid "Open Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:366
+msgid "Orientation"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:367
+msgid "PATH"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:368
+msgid "PLACEHOLDER TEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:369
+msgid "POLYLINE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:370
+msgid "PROVIDER"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:371 admin/js/builder/builder-shortcuts.js:37
+msgid "Pan the stage"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:372
+msgid "Paragraph"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:373
+msgid "Paragraph Body Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:374
+msgid "Paragraph Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:375
+msgid "Paragraph Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:376 templates/builder/elements/setting-form-data-adv.php:24
+msgid "Parameter Name"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:377 includes/class-zappoppop-layer-settings.php:50 templates/builder/ribbon.php:29
+msgid "Password"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:378 admin/js/builder/builder-shortcuts.js:22
+msgid "Paste"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:379
+msgid "Pay"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:380
+msgid "Payment Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:381
+msgid "Payment Button Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:382 templates/builder/drawer-inspector.php:263
+msgid "Payment Gateway"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:383 templates/builder/ribbon.php:20
+msgid "Phone"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:384
+msgid "Phone number"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:385
+msgid "Pick a color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:386 includes/admin/class-admin-assets.php:124 includes/admin/class-admin-theme.php:469
+msgid "Pick colour"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:387 includes/admin/class-admin-assets.php:131
+msgid "Pick colour from screen"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:388 templates/builder/elements/elem-12-number.php:9 templates/builder/elements/elem-21-date.php:9 templates/builder/elements/elem-24-password.php:9
+msgid "Placeholder"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:389
+msgid "Plain text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:390 includes/front/elements/class-front-element-media.php:102
+msgid "Play video"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:391 includes/ajax/class-ajax-templates.php:86 includes/ajax/class-ajax-templates.php:471
+msgid "Please enter a popup name."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:392 admin/js/widget/widget-block.js:47
+msgid "Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:393 templates/builder/modals.php:138 templates/library/modal-template-edit.php:15
+msgid "Popup Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:394 includes/class-zappoppop-builder-theme.php:1271 templates/builder/drawer-settings.php:12 templates/builder/top-bar.php:8
+msgid "Popup Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:395
+msgid "Popup name"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:396
+msgid "Preset colors"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:397
+msgid "Preset removed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:398 includes/admin/class-admin-guide.php:140 templates/builder/header.php:66 templates/builder/top-bar.php:39 templates/library/grid.php:54
+msgid "Preview"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:399 templates/builder/header.php:67
+msgid "Preview on Homepage"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:400 includes/admin/class-admin-assets.php:399
+msgid "Preview template"
+msgstr ""
+
+#. translators: 1: first item number, 2: last item number, 3: total number of items.
+#: admin/js/zappoppop-i18n-catalog.js:401 includes/admin/class-admin-assets.php:387 templates/extend-view.php:37
+msgid "Previous page"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:402
+msgid "Product Order"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:403
+msgid "Progress"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:404 includes/admin/class-zappoppop-list-table.php:167 includes/admin/class-zappoppop-list-table.php:316 templates/dashboard/table.php:145
+msgid "Published"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:405
+msgid "RIGHT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:406
+msgid "RIGHT ICON"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:407
+msgid "RIGHT ICON CLASS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:408 templates/builder/ribbon.php:24
+msgid "Radio"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:409
+msgid "Rating"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:410 includes/class-zappoppop-layer-settings.php:203 templates/builder/elements/tab-data-form.php:20
+msgid "Read Only Field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:411
+msgid "Recipient"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:412 templates/submissions/modal-editor.php:20
+msgid "Record ID"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:413 templates/builder/elements/tab-logic-actions.php:35
+msgid "Redirect to External URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:414 templates/builder/elements/elem-26-submit.php:23
+msgid "Redirect to URL"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:415 admin/js/builder/builder-shortcuts.js:19 templates/builder/top-bar.php:33
+msgid "Redo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:416 includes/class-zappoppop-builder-theme.php:1024 includes/admin/class-admin-assets.php:405 templates/builder/modals.php:144 templates/library/modal-template-edit.php:21 templates/theme/sections.php:42
+msgid "Remove"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:417
+msgid "Remove preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:418
+msgid "Remove the saved defaults (all tabs) for this layer type"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:419
+msgid "Remove this choice"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:420 templates/theme/sections.php:41
+msgid "Replace logo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:421 includes/front/class-front-preview.php:172 templates/library/modal-preview.php:16
+msgid "Replay"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:422 templates/builder/canvas.php:14
+msgid "Replay Animation"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:423
+msgid "Reply-To"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:424
+msgid "Report Copied!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:425
+msgid "Reset Advanced Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:426
+msgid "Reset Builder Theme settings to default values?"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:427 admin/js/builder/builder-content-tab.js:71 admin/js/builder/builder-content-tab.js:117 includes/class-zappoppop-builder-theme.php:1427
+msgid "Reset Content Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:428
+msgid "Reset Data Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:429
+msgid "Reset Logic Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:430
+msgid "Reset Shape"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:431
+msgid "Reset Style Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:432 admin/js/builder/builder-shortcuts.js:39
+msgid "Reset zoom to 100%"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:433
+msgid "Restoration complete!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:434
+msgid "Restored!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:435 includes/admin/class-admin-assets.php:130 templates/theme/bar-actions.php:7
+msgid "Revert"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:436 templates/builder/canvas.php:47 templates/builder/drawer-inspector.php:309 templates/builder/elements/tab-style-form.php:22 templates/builder/elements/tab-style-full.php:25 templates/builder/elements/tab-style-full.php:184 templates/settings/tab-libraries.php:72
+msgid "Right"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:437
+msgid "Rotating"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:438
+msgid "Rounded Pill"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:439
+msgid "Rounded Rectangle"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:440
+msgid "SANITIZATION FILTERS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:441
+msgid "SELECT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:442
+msgid "SEMANTIC HTML TAG"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:443
+msgid "SHADOW COLOR"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:444
+msgid "SHADOW PRESET"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:445
+msgid "SPAN"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:446
+msgid "SPREAD"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:447
+msgid "STATIC DEFAULT VALUE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:448
+msgid "STEP"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:449
+msgid "STYLE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:450
+msgid "SUBTEXT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:451 admin/js/builder/builder-shortcuts.js:20
+msgid "Same as the Save button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:452 includes/admin/class-admin-assets.php:126 includes/admin/class-admin-theme.php:471
+msgid "Saturation and brightness"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:453 admin/js/builder/builder-shortcuts.js:20 includes/class-zappoppop-builder-theme.php:1248 includes/class-zappoppop-modules-installer.php:416 templates/builder/header.php:70 templates/submissions/modal-table-options.php:55
+msgid "Save"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:454
+msgid "Save Layer Settings as Default"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:455
+msgid "Save Submission Value to Database"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:456 templates/settings-view.php:89 templates/theme/tools.php:15
+msgid "Save as Default"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:457 templates/builder/header.php:75
+msgid "Save as Template"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:458
+msgid "Save failed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:459
+msgid "Save the picked color as a preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:460 includes/class-zappoppop-layer-settings.php:204 templates/builder/elements/setting-form-data-adv.php:39 templates/builder/elements/tab-data-form.php:24
+msgid "Save to Database"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:461
+msgid "Saved As Default ✓"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:462
+msgid "Saved to Popups Library."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:463 includes/class-zappoppop-saved-defaults.php:656
+msgid "Saved!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:464
+msgid "Saves the Content, Style, Logic, Data and Advanced settings of this layer type as the default for new layers"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:465 admin/js/builder/builder-shortcuts.js:63
+msgid "Scroll the mouse wheel"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:466 templates/builder/ribbon.php:22 templates/library/grid.php:60 templates/theme/preview.php:25
+msgid "Select"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:467
+msgid "Select Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:468
+msgid "Select Layer Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:469
+msgid "Select Video Thumbnail"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:470
+msgid "Select attachment"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:471
+msgid "Select field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:472
+msgid "Select or Upload Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:473
+msgid "Select top bar logo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:474 admin/js/builder/builder-shortcuts.js:31
+msgid "Selecting"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:475 admin/js/builder/builder-shortcuts.js:32
+msgid "Selects every layer the box touches"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:476
+msgid "Send"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:477
+msgid "Send if"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:478
+msgid "Server error while loading preview."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:479
+msgid "Server error while saving template."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:480
+msgid "Server error while saving."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:481
+msgid "Server error while updating."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:482 includes/ajax/class-ajax-settings.php:71 templates/settings-view.php:17
+msgid "Settings saved successfully!"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:483
+msgid "Shape"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:484
+msgid "Shape Fill Transparency"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:485
+msgid "Shape Preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:486
+msgid "Shape Stroke Transparency"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:487
+msgid "Shield"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:488
+msgid "Show Elements Ribbon"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:489 templates/builder/elements/tab-logic-conditional.php:16
+msgid "Show Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:490
+msgid "Show Success & Close Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:491 includes/front/elements/class-front-decomposed-26.php:623 public/js/front/front-form.js:273 public/js/front/front-form.js:742
+msgid "Show password"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:492
+msgid "Show this layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:493
+msgid "Site name"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:494
+msgid "Sliding"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:495 templates/builder/elements/tab-style-full.php:209
+msgid "Solid"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:496 includes/class-zappoppop-modules-installer.php:358 includes/admin/class-admin-assets.php:525
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:497 admin/js/builder/builder-shortcuts.js:55
+msgid "Space bar"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:498
+msgid "Specials"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:499 includes/class-zappoppop-builder-theme.php:1403 templates/builder/elements/elem-01-shape.php:12
+msgid "Square"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:500
+msgid "Standard"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:501 templates/builder/elements/elem-07-icon.php:18
+msgid "Star"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:502 templates/builder/drawer-inspector.php:180 templates/builder/elements/elem-12-number.php:27
+msgid "Step"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:503
+msgid "Step Navigation Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:504 templates/builder/elements/elem-02-image.php:18
+msgid "Stretch Fill"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:505 templates/builder/elements/elem-01-shape.php:49
+msgid "Stroke Color"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:506 includes/class-zappoppop-builder-theme.php:1393 includes/class-zappoppop-layer-settings.php:20 templates/builder/drawer-inspector.php:17 templates/builder/panel-properties.php:13 templates/builder/elements/tab-style-full.php:207 templates/settings/tab-libraries.php:81
+msgid "Style"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:507
+msgid "Subject"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:508
+msgid "Submission Behavior"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:509
+msgid "Submission ID"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:510 public/js/front/front-submit.js:240 public/js/front/front-submit.js:246 public/js/front/front-submit.js:251 public/js/front/front-submit.js:252 templates/builder/ribbon.php:33
+msgid "Submit"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:511 includes/class-zappoppop-layer-settings.php:51
+msgid "Submit Button"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:512
+msgid "Submit Button Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:513 includes/front/class-front-renderer.php:1066 templates/builder/panel-properties.php:44
+msgid "Submit Form"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:514 includes/front/elements/class-front-element-actions.php:23
+msgid "Submit Now"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:515
+msgid "Success Message"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:516 includes/ajax/class-ajax-templates.php:364
+msgid "Surveys & Feedback"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:517
+msgid "TEXT ALIGNMENT"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:518
+msgid "TEXT TRANSFORM"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:519
+msgid "TOOLTIP TITLE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:520
+msgid "Tablet"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:521 templates/library/modal-preview.php:9
+msgid "Template Preview"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:522 templates/builder/ribbon.php:17
+msgid "Text"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:523
+msgid "Text Field"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:524
+msgid "Text Field Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:525
+msgid "Text Label"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:526 templates/builder/elements/elem-04-label.php:36 templates/builder/elements/tab-style-full.php:129
+msgid "Text Transform"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:527
+msgid "Text to copy"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:528 includes/class-zappoppop-layer-settings.php:41 templates/builder/ribbon.php:21
+msgid "Textarea"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:529 admin/js/builder/builder-shortcuts.js:21
+msgid "The selected layer, or every layer in a box selection"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:530
+msgid "The slug \"all\" is reserved."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:531 includes/admin/class-admin-assets.php:402
+msgid "This file could not be read."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:532
+msgid "This slug is fixed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:533
+msgid "Tile"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:534 templates/builder/ribbon.php:27
+msgid "Time"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:535 templates/dashboard/table.php:125
+msgid "Title"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:536 includes/ajax/class-ajax-dashboard.php:73
+msgid "Title cannot be empty."
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:537 includes/admin/class-admin-assets.php:129 includes/admin/class-admin-theme.php:474 templates/builder/elements/elem-01-shape.php:43 templates/builder/elements/tab-style-full.php:80
+msgid "Transparent"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:538 templates/builder/elements/elem-01-shape.php:17
+msgid "Triangle"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:539 includes/admin/class-admin-theme.php:68 templates/builder/elements/tab-style-full.php:132
+msgid "UPPERCASE"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:540
+msgid "URL QUERY PARAMETER KEY"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:541 admin/js/builder/builder-shortcuts.js:18 templates/builder/top-bar.php:32 templates/dashboard/table.php:35
+msgid "Undo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:542
+msgid "Unlock Layer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:543 includes/ajax/class-ajax-builder.php:71 templates/dashboard-overview.php:82 templates/builder/header.php:24 templates/payments/table.php:40 templates/submissions/table.php:72
+msgid "Untitled Popup"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:544 includes/class-zappoppop-builder-theme.php:1249 templates/dashboard/table.php:154 templates/library/modal-template-edit.php:48
+msgid "Update"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:545 templates/builder/ribbon.php:28
+msgid "Upload"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:546 templates/theme/sections.php:41
+msgid "Upload logo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:547 templates/builder/elements/elem-04-label.php:39 templates/builder/elements/tab-advanced-form.php:26
+msgid "Uppercase"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:548
+msgid "Url"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:549
+msgid "Use Image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:550
+msgid "Use as Thumbnail"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:551
+msgid "Use as logo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:552
+msgid "Use image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:553 includes/admin/class-admin-assets.php:526
+msgid "Use the WordPress Plugins screen"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:554
+msgid "Use this image"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:555
+msgid "User Agent"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:556
+msgid "VALIDATION RULES"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:557
+msgid "VECTOR SHAPE PRESET"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:558
+msgid "VIDEO URL OR EMBED ID"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:559
+msgid "VISIBLE ROWS"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:560 templates/builder/elements/elem-16b-checkboxgroup.php:13 templates/builder/elements/elem-17-radio.php:13 templates/builder/elements/tab-logic-conditional.php:57
+msgid "Value"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:561
+msgid "Vector Shape"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:562
+msgid "Vector Shape Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:563
+msgid "Vertical"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:564
+msgid "Vertical Stacked"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:565 templates/builder/ribbon.php:9
+msgid "Video"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:566 includes/class-zappoppop-layer-settings.php:31
+msgid "Video Embed"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:567
+msgid "Video Settings"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:568
+msgid "Video Size Preset"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:569 templates/builder/elements/elem-03-video.php:38
+msgid "Video Thumbnail"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:570 admin/js/builder/builder-shortcuts.js:36 templates/library/pager.php:11 templates/submissions/table.php:159
+msgid "View"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:571 templates/builder/elements/elem-03-video.php:22
+msgid "Vimeo"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:572
+msgid "Visitor country"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:573
+msgid "WP User Email"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:574
+msgid "WP User Login"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:576 templates/builder/elements/elem-05-html.php:11
+msgid "Wrapper Tag"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:577 admin/js/builder/builder-shortcuts.js:38
+msgid "Zoom around the pointer"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:578
+msgid "Zooming"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:579
+msgid "all"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:580
+msgid "any"
+msgstr ""
+
+#: admin/js/zappoppop-i18n-catalog.js:581
+msgid "of the rules match:"
+msgstr ""
+
+#. translators: 1: canvas number, 2: canvas name
+#: admin/js/builder/builder-button-canvas-select.js:44 admin/js/builder/builder-click-routing.js:63 admin/js/builder/registry/registry-form.js:871
+msgid "Canvas %1$d – %2$s"
+msgstr ""
+
+#. translators: 1: canvas number, 2: canvas name
+#: admin/js/builder/builder-button-canvas-select.js:44 admin/js/builder/builder-click-routing.js:63 admin/js/builder/registry/registry-form.js:871
+msgid "Canvas %d"
+msgstr ""
+
+#: admin/js/builder/builder-button-canvas-select.js:70 admin/js/builder/builder-click-routing.js:64 admin/js/builder/registry/registry-form.js:885
+msgid "(this canvas)"
+msgstr ""
+
+#: admin/js/builder/builder-button-canvas-select.js:70 admin/js/builder/registry/registry-form.js:885
+msgid "(missing)"
+msgstr ""
+
 #: admin/js/builder/builder-core.js:561
 msgid "Your popup must have at least one canvas."
 msgstr ""
@@ -84,8 +2391,17 @@ msgstr ""
 msgid "Are you sure you want to delete \"%s\"? All elements on this canvas will be permanently removed."
 msgstr ""
 
+#. translators: %s: field identifier token
+#: admin/js/builder/builder-field-id.js:38
+msgid "Field ID: %s"
+msgstr ""
+
 #: admin/js/builder/builder-io.js:196
 msgid "Server error while saving popup."
+msgstr ""
+
+#: admin/js/builder/builder-layers.js:208
+msgid "No layers on this canvas. Click an element in the Ribbon Bar to add one."
 msgstr ""
 
 #: admin/js/builder/builder-modals.js:91 admin/js/dashboard/dashboard-embed.js:84
@@ -100,6 +2416,109 @@ msgstr ""
 msgid "Server error while preparing preview."
 msgstr ""
 
+#. translators: %s: number of elements on the canvas
+#: admin/js/builder/builder-settings.js:222
+msgid "%s Element"
+msgid_plural "%s Elements"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/js/builder/builder-shortcuts.js:21
+msgid "Copy layer(s)"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:22
+msgid "Each paste is offset 15px; one Undo removes it"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:23
+msgid "A box selection is deleted in one step; locked layers stay"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:24
+msgid "Deselect / close"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:27
+msgid "Nudge 1px"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:28
+msgid "Nudge 10px"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:33
+msgid "Add / remove one layer"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:45
+msgid "Control key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:46
+msgid "Command key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:47
+msgid "Alt key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:48
+msgid "Option key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:49 admin/js/builder/builder-shortcuts.js:50
+msgid "Shift key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:51
+msgid "Escape key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:52
+msgid "Delete key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:53 admin/js/builder/builder-shortcuts.js:54
+msgid "Backspace key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:56
+msgid "Arrow keys"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:57
+msgid "Zero key"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:67
+msgid "drag a layer"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:68
+msgid "drag on empty canvas"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:69
+msgid "click a layer"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:70
+msgid "drag a box"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:71
+msgid "drag"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:72
+msgid "mouse wheel"
+msgstr ""
+
+#: admin/js/builder/builder-shortcuts.js:167
+msgid "or"
+msgstr ""
+
 #: admin/js/builder/builder-template.js:110 admin/js/library/library-actions.js:41 includes/class-zappoppop-modules-installer.php:414
 msgid "Image URL"
 msgstr ""
@@ -110,6 +2529,10 @@ msgstr ""
 
 #: admin/js/builder/elements/video-inspector.js:91
 msgid "Thumbnail image URL:"
+msgstr ""
+
+#: admin/js/builder/registry/registry-label.js:10 includes/admin/class-admin-export.php:174 includes/ajax/class-ajax-frontend.php:197
+msgid "IP Address"
 msgstr ""
 
 #: admin/js/builder/registry/registry-media.js:297
@@ -172,7 +2595,7 @@ msgstr ""
 msgid "Invalid popup definition. Expected a JSON object."
 msgstr ""
 
-#: admin/js/dashboard/dashboard-import.js:123 includes/admin/class-admin-assets.php:406
+#: admin/js/dashboard/dashboard-import.js:123 includes/admin/class-admin-assets.php:425
 msgid "Import failed."
 msgstr ""
 
@@ -199,6 +2622,10 @@ msgid_plural "Delete %d selected popup campaigns?"
 msgstr[0] ""
 msgstr[1] ""
 
+#: admin/js/library/library-actions.js:14 admin/js/library/library-actions.js:17
+msgid "Import & Edit"
+msgstr ""
+
 #: admin/js/library/library-actions.js:68
 msgid "Could not load template."
 msgstr ""
@@ -211,7 +2638,7 @@ msgstr ""
 msgid "Reset categories to the defaults? Your changes in this dialog will be replaced."
 msgstr ""
 
-#: admin/js/library/library-download.js:47 includes/admin/class-admin-assets.php:401
+#: admin/js/library/library-download.js:47 includes/admin/class-admin-assets.php:420
 msgid "Download failed."
 msgstr ""
 
@@ -300,7 +2727,12 @@ msgstr ""
 msgid "Network error while deleting submission."
 msgstr ""
 
-#: admin/js/submissions/submissions-actions.js:183
+#. translators: %s: popup name and uid
+#: admin/js/submissions/submissions-actions.js:168
+msgid "Popup: %s"
+msgstr ""
+
+#: admin/js/submissions/submissions-actions.js:184
 msgid "Select at least one column."
 msgstr ""
 
@@ -311,6 +2743,12 @@ msgstr ""
 #: admin/js/submissions/submissions-labels.js:98
 msgid "Network error while updating label."
 msgstr ""
+
+#: admin/js/submissions/submissions-list.js:47
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/js/submissions/submissions-list.js:84
 msgid "Label update failed."
@@ -334,12 +2772,25 @@ msgid_plural "Anonymize PII for %d submissions?"
 msgstr[0] ""
 msgstr[1] ""
 
+#: admin/js/submissions/submissions-table-options.js:68
+msgid "Done"
+msgstr ""
+
 #: admin/js/submissions/submissions-table-options.js:72
 msgid "This popup has no saved form fields yet."
 msgstr ""
 
+#. translators: %s: error message
+#: admin/js/submissions/submissions-table-options.js:306
+msgid "Save failed: %s"
+msgstr ""
+
 #: admin/js/tools/tools-database.js:51
 msgid "Database schema tables verified successfully!"
+msgstr ""
+
+#: admin/js/tools/tools-database.js:52
+msgid "Schema Optimal!"
 msgstr ""
 
 #: admin/js/tools/tools-database.js:61
@@ -365,6 +2816,10 @@ msgstr ""
 #. translators: %s: number of days.
 #: admin/js/tools/tools-maintenance.js:30
 msgid "Delete all log entries older than %s days? This cannot be undone."
+msgstr ""
+
+#: admin/js/tools/tools-maintenance.js:36
+msgid "Done."
 msgstr ""
 
 #: admin/js/tools/tools-portability.js:61
@@ -415,32 +2870,12 @@ msgstr ""
 msgid "— Choose a popup —"
 msgstr ""
 
-#: admin/js/widget/widget-block.js:22 admin/js/widget/widget-block.js:70 templates/settings/tab-performance.php:22
-msgid "Inline Popup"
-msgstr ""
-
-#: admin/js/widget/widget-block.js:23 admin/js/widget/widget-block.js:70 templates/settings/tab-performance.php:23
-msgid "Onload Popup"
-msgstr ""
-
 #: admin/js/widget/widget-block.js:27 admin/js/widget/widget-block.js:80 admin/js/widget/widget-block.js:82
 msgid "ZapPopPop Popup"
 msgstr ""
 
-#: admin/js/widget/widget-block.js:28
-msgid "Embed a popup inline or open it on page load."
-msgstr ""
-
-#: admin/js/widget/widget-block.js:47
-msgid "Popup"
-msgstr ""
-
 #: admin/js/widget/widget-block.js:52
 msgid "Popup UID (no published popups found)"
-msgstr ""
-
-#: admin/js/widget/widget-block.js:57
-msgid "Embed Type"
 msgstr ""
 
 #: admin/js/widget/widget-block.js:62
@@ -510,14 +2945,6 @@ msgstr ""
 
 #: includes/class-zappoppop-backup.php:181
 msgid "Restore from JSON"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:180 templates/builder/header.php:19
-msgid "Night Mode"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:226 templates/builder/header.php:19
-msgid "Day Mode"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:272
@@ -606,10 +3033,6 @@ msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:866
 msgid "Helper captions (Appearance, Duration ms, px, %, 350 x 400 readout)."
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:872 templates/builder/elements/tab-style-full.php:40 templates/builder/elements/tab-style-full.php:55
-msgid "Icon Color"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:873
@@ -748,16 +3171,8 @@ msgstr ""
 msgid "Space Starfield"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1024 includes/admin/class-admin-assets.php:386 templates/builder/modals.php:144 templates/library/modal-template-edit.php:21 templates/theme/sections.php:42
-msgid "Remove"
-msgstr ""
-
 #: includes/class-zappoppop-builder-theme.php:1026
 msgid "Image visibility (0–100%)"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1027 includes/class-zappoppop-builder-theme.php:1193 includes/admin/class-admin-assets.php:109 includes/admin/class-admin-theme.php:473
-msgid "Opacity"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:1052
@@ -846,27 +3261,15 @@ msgstr ""
 msgid "Save As Template"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1248 includes/class-zappoppop-modules-installer.php:416 templates/builder/header.php:70 templates/submissions/modal-table-options.php:55
-msgid "Save"
-msgstr ""
-
 #: includes/class-zappoppop-builder-theme.php:1249
 msgid "Update (unsaved changes)"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1249 templates/dashboard/table.php:154 templates/library/modal-template-edit.php:48
-msgid "Update"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:1262
 msgid "Snap Object"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1271 templates/builder/drawer-settings.php:12 templates/builder/top-bar.php:8
-msgid "Popup Settings"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1278 templates/builder/settings/acc-01-canvas-styling.php:9
+#: includes/class-zappoppop-builder-theme.php:1278 includes/class-zappoppop-module-strings.php:17 templates/builder/settings/acc-01-canvas-styling.php:9
 msgid "Canvas Settings"
 msgstr ""
 
@@ -890,11 +3293,11 @@ msgstr ""
 msgid "Solid Background Color"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1313
+#: includes/class-zappoppop-builder-theme.php:1313 includes/class-zappoppop-module-strings.php:21
 msgid "Display Triggers"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1318
+#: includes/class-zappoppop-builder-theme.php:1318 includes/class-zappoppop-module-html-strings.php:23
 msgid "On Page Load"
 msgstr ""
 
@@ -918,18 +3321,6 @@ msgstr ""
 msgid "Layer Settings"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1392 includes/class-zappoppop-layer-settings.php:19 templates/builder/drawer-inspector.php:16
-msgid "Content"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1393 includes/class-zappoppop-layer-settings.php:20 templates/builder/drawer-inspector.php:17 templates/builder/panel-properties.php:13 templates/builder/elements/tab-style-full.php:207 templates/settings/tab-libraries.php:81
-msgid "Style"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1394 includes/class-zappoppop-layer-settings.php:21 templates/builder/drawer-inspector.php:18 templates/builder/panel-properties.php:14
-msgid "Logic"
-msgstr ""
-
 #: includes/class-zappoppop-builder-theme.php:1397 includes/class-zappoppop-layer-settings.php:163 templates/builder/drawer-inspector.php:28
 msgid "Layer Name"
 msgstr ""
@@ -942,28 +3333,12 @@ msgstr ""
 msgid "SVG Shape Preset"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1403 templates/builder/elements/elem-01-shape.php:12
-msgid "Square"
-msgstr ""
-
 #: includes/class-zappoppop-builder-theme.php:1404 templates/builder/drawer-inspector.php:415 templates/builder/panel-properties.php:30 templates/builder/elements/elem-01-shape.php:28 templates/builder/elements/elem-03-video.php:9 templates/builder/elements/tab-style-full.php:203 templates/builder/settings/acc-01-canvas-styling.php:38
 msgid "Width (px)"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:1404 templates/builder/drawer-inspector.php:419 templates/builder/panel-properties.php:31 templates/builder/elements/elem-01-shape.php:32 templates/builder/elements/elem-03-video.php:13 templates/builder/settings/acc-01-canvas-styling.php:42
 msgid "Height (px)"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1405 templates/builder/elements/elem-01-shape.php:37
-msgid "Fill Color"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1414 includes/class-zappoppop-builder-theme.php:1416 templates/builder/drawer-inspector.php:36 templates/builder/elements/tab-basic-footer.php:8
-msgid "Animation"
-msgstr ""
-
-#: includes/class-zappoppop-builder-theme.php:1417 includes/admin/class-admin-theme.php:68 templates/builder/drawer-inspector.php:40 templates/builder/panel-properties.php:42 templates/builder/panel-properties.php:71 templates/builder/elements/tab-basic-footer.php:14 templates/builder/elements/tab-style-full.php:131 templates/builder/elements/tab-style-full.php:213
-msgid "None"
 msgstr ""
 
 #: includes/class-zappoppop-builder-theme.php:1418 templates/builder/drawer-inspector.php:121 templates/builder/elements/tab-basic-footer.php:29
@@ -978,32 +3353,8 @@ msgstr ""
 msgid "Coordinates & Bounds"
 msgstr ""
 
-#: includes/class-zappoppop-builder-theme.php:1427
-msgid "Reset Content Settings"
-msgstr ""
-
 #: includes/class-zappoppop-element-opacity.php:421
 msgid "Color & Opacity (All Elements)"
-msgstr ""
-
-#: includes/class-zappoppop-element-opacity.php:422
-msgid "Element Opacity"
-msgstr ""
-
-#: includes/class-zappoppop-element-opacity.php:423
-msgid "Element Color"
-msgstr ""
-
-#: includes/class-zappoppop-element-opacity.php:424
-msgid "Color Opacity"
-msgstr ""
-
-#: includes/class-zappoppop-element-opacity.php:425 includes/class-zappoppop-layer-settings.php:174 templates/builder/elements/tab-style-full.php:76
-msgid "Background Color"
-msgstr ""
-
-#: includes/class-zappoppop-element-opacity.php:426
-msgid "Background Opacity"
 msgstr ""
 
 #: includes/class-zappoppop-font-catalog.php:65
@@ -1026,24 +3377,8 @@ msgstr ""
 msgid "Custom fonts"
 msgstr ""
 
-#: includes/class-zappoppop-layer-settings.php:22 templates/builder/drawer-inspector.php:19
-msgid "Data"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:23 templates/builder/drawer-inspector.php:20
-msgid "Advanced"
-msgstr ""
-
 #: includes/class-zappoppop-layer-settings.php:29
 msgid "Rectangle / Shape"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:30 templates/builder/ribbon.php:8
-msgid "Image"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:31
-msgid "Video Embed"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:32
@@ -1052,10 +3387,6 @@ msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:33
 msgid "HTML Content"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:34
-msgid "Close Icon"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:35
@@ -1082,28 +3413,12 @@ msgstr ""
 msgid "Phone / Tel"
 msgstr ""
 
-#: includes/class-zappoppop-layer-settings.php:41 templates/builder/ribbon.php:21
-msgid "Textarea"
-msgstr ""
-
 #: includes/class-zappoppop-layer-settings.php:42
 msgid "Select Dropdown"
 msgstr ""
 
-#: includes/class-zappoppop-layer-settings.php:43
-msgid "Agreement Checkbox"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:44 templates/builder/ribbon.php:23
-msgid "Checkbox"
-msgstr ""
-
 #: includes/class-zappoppop-layer-settings.php:45
 msgid "Radio Button"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:46
-msgid "Multiselect"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:47
@@ -1116,14 +3431,6 @@ msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:49
 msgid "File Upload"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:50 templates/builder/ribbon.php:29
-msgid "Password"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:51
-msgid "Submit Button"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:165
@@ -1202,20 +3509,12 @@ msgstr ""
 msgid "Click Action"
 msgstr ""
 
-#: includes/class-zappoppop-layer-settings.php:193 templates/builder/elements/elem-09-button.php:27 templates/builder/elements/tab-logic-conditional.php:53
-msgid "Destination URL"
-msgstr ""
-
 #: includes/class-zappoppop-layer-settings.php:194
 msgid "Target Canvas #"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:199 templates/builder/elements/tab-data-form.php:6
 msgid "Data & Value Binding"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:200 templates/builder/elements/setting-form-data-adv.php:10 templates/builder/elements/tab-data-form.php:8
-msgid "Default Value"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:201 templates/builder/elements/tab-data-form.php:12
@@ -1226,24 +3525,12 @@ msgstr ""
 msgid "URL Parameter / Cookie Name"
 msgstr ""
 
-#: includes/class-zappoppop-layer-settings.php:203 templates/builder/elements/tab-data-form.php:20
-msgid "Read Only Field"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:204 templates/builder/elements/setting-form-data-adv.php:39 templates/builder/elements/tab-data-form.php:24
-msgid "Save to Database"
-msgstr ""
-
 #: includes/class-zappoppop-layer-settings.php:209 templates/builder/elements/tab-advanced-form.php:6
 msgid "Field Identifier"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:210 templates/builder/elements/tab-advanced-form.php:8
 msgid "ID / Merge Token Name"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:211 templates/builder/elements/tab-advanced-form.php:13
-msgid "Input Mask"
 msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:213 templates/builder/elements/tab-advanced-form.php:19
@@ -1264,10 +3551,6 @@ msgstr ""
 
 #: includes/class-zappoppop-layer-settings.php:217
 msgid "In Array Allowed Values"
-msgstr ""
-
-#: includes/class-zappoppop-layer-settings.php:218 templates/builder/elements/tab-advanced-form.php:48
-msgid "Custom Validation Error Message"
 msgstr ""
 
 #. translators: %s: element name, e.g. Text Input
@@ -1291,12 +3574,80 @@ msgstr ""
 msgid "Enter a valid image URL or path (up to 500 characters)."
 msgstr ""
 
-#: includes/class-zappoppop-modules-engine.php:66 templates/settings/tab-module.php:69
-msgid "PRO"
+#: includes/class-zappoppop-module-html-strings.php:16
+msgid "(All Pages)"
 msgstr ""
 
-#: includes/class-zappoppop-modules-installer.php:351 includes/admin/class-admin-assets.php:387 templates/builder/modals.php:174 templates/dashboard/modal-import.php:20 templates/dashboard/table.php:153 templates/library/modal-categories.php:24 templates/library/modal-template-edit.php:47 templates/settings/modal-module-categories.php:25 templates/submissions/modal-export.php:18
-msgid "Cancel"
+#: includes/class-zappoppop-module-html-strings.php:17
+msgid "(Embed Code Only)"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:18
+msgid "Add notification"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:19
+msgid "After a successful form submission the notification, welcome, thank-you or any other email can be sent. You can customize these emails and use conditional logic."
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:20
+msgid "Appear Continuously Every X Hours"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:21
+msgid "Delay (seconds)"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:22
+msgid "On Exit Intent"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:24
+msgid "On Scroll Depth (%)"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:25
+msgid "Opens on every page load, even after the visitor closed it. Shows on every page of the site (subject to targeting rules)."
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:26
+msgid "Opens on every page load, only on pages that contain this popup's shortcode or widget code. Not shown anywhere else."
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:27
+msgid "Popup All the Time on Page Load"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:28
+msgid "Repeat every (hours)"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:29
+msgid "Scroll Depth Trigger (%)"
+msgstr ""
+
+#: includes/class-zappoppop-module-html-strings.php:30
+msgid "Sensitivity Threshold (px top)"
+msgstr ""
+
+#: includes/class-zappoppop-module-strings.php:18
+msgid "Canvas size, colours, close behaviour and auto-close."
+msgstr ""
+
+#: includes/class-zappoppop-module-strings.php:22
+msgid "Page load, always-on, repeat, exit intent and scroll depth triggers."
+msgstr ""
+
+#: includes/class-zappoppop-module-strings.php:25
+msgid "Notifications"
+msgstr ""
+
+#: includes/class-zappoppop-module-strings.php:26
+msgid "Notification messages for popup events."
+msgstr ""
+
+#: includes/class-zappoppop-modules-engine.php:66 templates/settings/tab-module.php:69
+msgid "PRO"
 msgstr ""
 
 #: includes/class-zappoppop-modules-installer.php:352 includes/addons/class-addon-catalog.php:139
@@ -1311,20 +3662,12 @@ msgstr ""
 msgid "Uninstall"
 msgstr ""
 
-#: includes/class-zappoppop-modules-installer.php:355 templates/settings/tab-module.php:81 templates/submissions/table.php:17 templates/submissions/table.php:163
-msgid "Delete"
-msgstr ""
-
 #: includes/class-zappoppop-modules-installer.php:356
 msgid "Manage"
 msgstr ""
 
 #: includes/class-zappoppop-modules-installer.php:357
 msgid "Working…"
-msgstr ""
-
-#: includes/class-zappoppop-modules-installer.php:358 includes/admin/class-admin-assets.php:506
-msgid "Something went wrong. Please try again."
 msgstr ""
 
 #: includes/class-zappoppop-modules-installer.php:359
@@ -1378,7 +3721,7 @@ msgid "No modules match."
 msgstr ""
 
 #. translators: %s: module author.
-#: includes/class-zappoppop-modules-installer.php:373 includes/admin/class-admin-assets.php:309 templates/settings/guide-editor.php:43 templates/settings/tab-module.php:77
+#: includes/class-zappoppop-modules-installer.php:373 includes/admin/class-admin-assets.php:328 templates/settings/guide-editor.php:43 templates/settings/tab-module.php:77
 msgid "Built-in"
 msgstr ""
 
@@ -1504,10 +3847,6 @@ msgstr ""
 msgid "Categories saved."
 msgstr ""
 
-#: includes/class-zappoppop-modules-installer.php:410 includes/admin/class-zappoppop-list-table.php:267 templates/dashboard-overview.php:38
-msgid "Edit"
-msgstr ""
-
 #. translators: %s: module name
 #: includes/class-zappoppop-modules-installer.php:412
 msgid "Edit %s"
@@ -1600,10 +3939,6 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: includes/class-zappoppop-promo.php:445 includes/admin/class-admin-guide.php:447
-msgid "Next"
-msgstr ""
-
 #: includes/class-zappoppop-saved-defaults.php:177 includes/class-zappoppop-saved-defaults.php:261
 msgid "These defaults are too large to save."
 msgstr ""
@@ -1618,10 +3953,6 @@ msgstr ""
 
 #: includes/class-zappoppop-saved-defaults.php:609 includes/ajax/class-ajax-saved-defaults.php:55 includes/ajax/class-ajax-saved-defaults.php:83
 msgid "Nothing to save."
-msgstr ""
-
-#: includes/class-zappoppop-saved-defaults.php:656
-msgid "Saved!"
 msgstr ""
 
 #: includes/class-zappoppop-saved-defaults.php:657
@@ -1768,10 +4099,6 @@ msgstr ""
 msgid "Display an embedded popup campaign or click trigger button in any sidebar or widget area."
 msgstr ""
 
-#: includes/addons/class-addon-catalog.php:127 includes/admin/class-admin-assets.php:501
-msgid "Activate"
-msgstr ""
-
 #: includes/addons/class-addon-catalog.php:134
 msgid "Get add-on"
 msgstr ""
@@ -1816,147 +4143,78 @@ msgstr ""
 msgid "Return to Site"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:105 includes/admin/class-admin-theme.php:469
-msgid "Pick colour"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:106 includes/admin/class-admin-theme.php:470
-msgid "Colour value"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:107 includes/admin/class-admin-theme.php:471
-msgid "Saturation and brightness"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:108 includes/admin/class-admin-theme.php:472
+#: includes/admin/class-admin-assets.php:127 includes/admin/class-admin-theme.php:472
 msgid "Hue"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:110 includes/admin/class-admin-theme.php:474 templates/builder/elements/elem-01-shape.php:43 templates/builder/elements/tab-style-full.php:80
-msgid "Transparent"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:111 templates/theme/bar-actions.php:7
-msgid "Revert"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:112
-msgid "Pick colour from screen"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:300
+#: includes/admin/class-admin-assets.php:319
 msgid "Tour reset. It will start the next time you open the builder."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:301
+#: includes/admin/class-admin-assets.php:320
 msgid "Could not reset the tour. Please reload the page and try again."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:308
+#: includes/admin/class-admin-assets.php:327
 msgid "{n} of {max} steps"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:310
+#: includes/admin/class-admin-assets.php:329
 msgid "Delete this step?"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:311
+#: includes/admin/class-admin-assets.php:330
 msgid "Reset all guide steps to the built-in defaults? Save settings to apply."
 msgstr ""
 
 #. translators: 1: first item number, 2: last item number, 3: total number of items.
-#: includes/admin/class-admin-assets.php:367
+#: includes/admin/class-admin-assets.php:386
 msgid "Showing %1$s-%2$s of %3$s"
 msgstr ""
 
-#. translators: 1: first item number, 2: last item number, 3: total number of items.
-#: includes/admin/class-admin-assets.php:368 templates/extend-view.php:37
-msgid "Previous page"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:369 templates/extend-view.php:38
-msgid "Next page"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:380
-msgid "Preview template"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:381
-msgid "Check the template below, then click Import to add it to My Templates."
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:382
+#: includes/admin/class-admin-assets.php:401
 msgid "Reading template..."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:383
-msgid "This file could not be read."
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:384
+#: includes/admin/class-admin-assets.php:403
 msgid "elements"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:385
+#: includes/admin/class-admin-assets.php:404
 msgid "images"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:388
-msgid "Import"
-msgstr ""
-
 #. translators: %d: number of templates
-#: includes/admin/class-admin-assets.php:390
+#: includes/admin/class-admin-assets.php:409
 msgid "Import %d templates"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:400
+#: includes/admin/class-admin-assets.php:419
 msgid "Some images could not be found and were left as links."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:402
+#: includes/admin/class-admin-assets.php:421
 msgid "Only .zip or .json files can be imported."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:403
+#: includes/admin/class-admin-assets.php:422
 msgid "File is too large."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:404
+#: includes/admin/class-admin-assets.php:423
 msgid "Importing..."
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:405
-msgid "Imported"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:499
-msgid "Installing…"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:500
-msgid "Activating…"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:502 includes/admin/class-zappoppop-list-table.php:31 includes/admin/class-zappoppop-list-table.php:113 includes/admin/class-zappoppop-list-table.php:396 templates/extend/addons.php:31 templates/settings/tab-module.php:46 templates/theme/preview.php:23 templates/theme/preview.php:28
+#: includes/admin/class-admin-assets.php:521 includes/admin/class-zappoppop-list-table.php:31 includes/admin/class-zappoppop-list-table.php:113 includes/admin/class-zappoppop-list-table.php:396 templates/extend/addons.php:31 templates/settings/tab-module.php:46 templates/theme/preview.php:23 templates/theme/preview.php:28
 msgid "Active"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:503 includes/admin/class-zappoppop-list-table.php:114 includes/admin/class-zappoppop-list-table.php:396 templates/extend/addons.php:33 templates/settings/tab-module.php:47
+#: includes/admin/class-admin-assets.php:522 includes/admin/class-zappoppop-list-table.php:114 includes/admin/class-zappoppop-list-table.php:396 templates/extend/addons.php:33 templates/settings/tab-module.php:47
 msgid "Inactive"
 msgstr ""
 
-#: includes/admin/class-admin-assets.php:504
-msgid "Add-on installed. Click Activate to turn it on."
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:505
+#: includes/admin/class-admin-assets.php:524
 msgid "Add-on activated. Reloading to load its modules…"
-msgstr ""
-
-#: includes/admin/class-admin-assets.php:507
-msgid "Use the WordPress Plugins screen"
 msgstr ""
 
 #: includes/admin/class-admin-export.php:152 includes/ajax/class-ajax-submissions.php:38 includes/ajax/class-ajax-submissions.php:108 includes/ajax/class-ajax-submissions.php:215
@@ -2047,10 +4305,6 @@ msgstr ""
 msgid "**Popup Settings** (the gear in the toolbar) is where you choose when the popup appears: page load, delay, exit intent, scroll depth and more."
 msgstr ""
 
-#: includes/admin/class-admin-guide.php:140 templates/builder/header.php:66 templates/builder/top-bar.php:39 templates/library/grid.php:54
-msgid "Preview"
-msgstr ""
-
 #: includes/admin/class-admin-guide.php:141
 msgid "Check how the popup looks and behaves before it goes live."
 msgstr ""
@@ -2102,10 +4356,6 @@ msgstr ""
 #. translators: 1: current step number, 2: total steps
 #: includes/admin/class-admin-guide.php:446
 msgid "Step {n} of {total}"
-msgstr ""
-
-#: includes/admin/class-admin-guide.php:448
-msgid "Back"
 msgstr ""
 
 #: includes/admin/class-admin-guide.php:449
@@ -2328,20 +4578,8 @@ msgstr ""
 msgid "Black"
 msgstr ""
 
-#: includes/admin/class-admin-theme.php:68 templates/builder/elements/tab-style-full.php:132
-msgid "UPPERCASE"
-msgstr ""
-
 #: includes/admin/class-admin-theme.php:68 templates/builder/elements/elem-04-label.php:40 templates/builder/elements/tab-style-full.php:133
 msgid "lowercase"
-msgstr ""
-
-#: includes/admin/class-admin-theme.php:68 templates/builder/elements/tab-style-full.php:134
-msgid "Capitalize"
-msgstr ""
-
-#: includes/admin/class-admin-theme.php:75
-msgid "General"
 msgstr ""
 
 #: includes/admin/class-admin-theme.php:76
@@ -2494,10 +4732,6 @@ msgstr ""
 
 #: includes/admin/class-admin-theme.php:115
 msgid "Muted / description text"
-msgstr ""
-
-#: includes/admin/class-admin-theme.php:116
-msgid "Link"
 msgstr ""
 
 #: includes/admin/class-admin-theme.php:117
@@ -2852,10 +5086,6 @@ msgstr ""
 msgid "Campaigns"
 msgstr ""
 
-#: includes/admin/class-zappoppop-list-table.php:28 templates/builder/panel-properties.php:21 templates/theme/preview.php:27
-msgid "Name"
-msgstr ""
-
 #: includes/admin/class-zappoppop-list-table.php:30 templates/dashboard-overview.php:39
 msgid "Entries"
 msgstr ""
@@ -2892,10 +5122,6 @@ msgstr ""
 msgid "Trash"
 msgstr ""
 
-#: includes/admin/class-zappoppop-list-table.php:167 includes/admin/class-zappoppop-list-table.php:316 templates/dashboard/table.php:145
-msgid "Published"
-msgstr ""
-
 #: includes/admin/class-zappoppop-list-table.php:174
 msgid "Drafts"
 msgstr ""
@@ -2927,18 +5153,6 @@ msgstr ""
 
 #: includes/admin/class-zappoppop-list-table.php:286 templates/builder/header.php:68 templates/builder/top-bar.php:38
 msgid "Embed"
-msgstr ""
-
-#: includes/admin/class-zappoppop-list-table.php:298
-msgid "ACTIVE"
-msgstr ""
-
-#: includes/admin/class-zappoppop-list-table.php:299
-msgid "INACTIVE"
-msgstr ""
-
-#: includes/admin/class-zappoppop-list-table.php:316 templates/dashboard/table.php:146 templates/theme/preview.php:16 templates/theme/preview.php:28
-msgid "Draft"
 msgstr ""
 
 #: includes/admin/class-zappoppop-list-table.php:369
@@ -3014,10 +5228,6 @@ msgstr ""
 msgid "Add-on activated."
 msgstr ""
 
-#: includes/ajax/class-ajax-builder.php:71 templates/dashboard-overview.php:82 templates/builder/header.php:24 templates/payments/table.php:40 templates/submissions/table.php:72
-msgid "Untitled Popup"
-msgstr ""
-
 #: includes/ajax/class-ajax-builder.php:84
 msgid "Malformed JSON definition."
 msgstr ""
@@ -3077,10 +5287,6 @@ msgstr ""
 msgid "You do not have permission to edit this campaign."
 msgstr ""
 
-#: includes/ajax/class-ajax-dashboard.php:73
-msgid "Title cannot be empty."
-msgstr ""
-
 #: includes/ajax/class-ajax-dashboard.php:76
 msgid "Invalid status."
 msgstr ""
@@ -3124,10 +5330,6 @@ msgstr ""
 #. translators: 1: site name or date, 2: campaign UID
 #: includes/ajax/class-ajax-frontend.php:186
 msgid "A new submission was received on %1$s for Campaign UID: %2$s."
-msgstr ""
-
-#: includes/ajax/class-ajax-frontend.php:197
-msgid "IP Address"
 msgstr ""
 
 #: includes/ajax/class-ajax-frontend.php:210 includes/rest/class-rest-submissions.php:155
@@ -3188,10 +5390,6 @@ msgstr ""
 
 #: includes/ajax/class-ajax-saved-defaults.php:89
 msgid "Layer defaults removed."
-msgstr ""
-
-#: includes/ajax/class-ajax-settings.php:71 templates/settings-view.php:17
-msgid "Settings saved successfully!"
 msgstr ""
 
 #: includes/ajax/class-ajax-settings.php:106
@@ -3285,10 +5483,6 @@ msgstr[1] ""
 msgid "Save As Template is turned off in Settings > Builder."
 msgstr ""
 
-#: includes/ajax/class-ajax-templates.php:86 includes/ajax/class-ajax-templates.php:471
-msgid "Please enter a popup name."
-msgstr ""
-
 #: includes/ajax/class-ajax-templates.php:94
 msgid "Malformed popup definition."
 msgstr ""
@@ -3309,28 +5503,8 @@ msgstr ""
 msgid "Template deleted."
 msgstr ""
 
-#: includes/ajax/class-ajax-templates.php:361
-msgid "Lead Generation"
-msgstr ""
-
 #: includes/ajax/class-ajax-templates.php:362
 msgid "E-Commerce & Coupons"
-msgstr ""
-
-#: includes/ajax/class-ajax-templates.php:363
-msgid "Gamified & Interactive"
-msgstr ""
-
-#: includes/ajax/class-ajax-templates.php:364
-msgid "Surveys & Feedback"
-msgstr ""
-
-#: includes/ajax/class-ajax-templates.php:365
-msgid "Announcements"
-msgstr ""
-
-#: includes/ajax/class-ajax-templates.php:366 includes/ajax/class-ajax-templates.php:384 includes/ajax/class-ajax-templates.php:418 templates/library-view.php:19
-msgid "My Templates"
 msgstr ""
 
 #: includes/ajax/class-ajax-templates.php:482
@@ -3351,6 +5525,14 @@ msgstr ""
 
 #: includes/ajax/class-ajax-tools.php:46
 msgid "Payment Records"
+msgstr ""
+
+#: includes/ajax/class-ajax-tools.php:79 templates/tools/system-info.php:78 templates/tools/system-info.php:79
+msgid "Optimal"
+msgstr ""
+
+#: includes/ajax/class-ajax-tools.php:79
+msgid "Missing"
 msgstr ""
 
 #: includes/ajax/class-ajax-tools.php:132
@@ -3452,14 +5634,6 @@ msgstr ""
 msgid "Back to Builder"
 msgstr ""
 
-#: includes/front/class-front-preview.php:172 templates/library/modal-preview.php:16
-msgid "Replay"
-msgstr ""
-
-#: includes/front/class-front-renderer.php:274 templates/builder/modals.php:23 templates/builder/modals.php:133 templates/builder/ribbon.php:12 templates/dashboard/modal-embed.php:10 templates/library/modal-categories.php:10 templates/library/modal-preview.php:10 templates/library/modal-preview.php:22 templates/library/modal-template-edit.php:10 templates/log/modal-payload.php:24 templates/payments/modal-receipt.php:63 templates/settings/modal-module-categories.php:11 templates/submissions/modal-editor.php:58 templates/submissions/modal-table-options.php:13
-msgid "Close"
-msgstr ""
-
 #: includes/front/class-front-renderer.php:300 includes/front/class-front-renderer.php:304
 msgid "Powered by"
 msgstr ""
@@ -3488,16 +5662,8 @@ msgstr ""
 msgid "Click Here"
 msgstr ""
 
-#: includes/front/class-front-renderer.php:1066 templates/builder/panel-properties.php:44
-msgid "Submit Form"
-msgstr ""
-
 #: includes/front/class-front-renderer.php:1143 includes/front/elements/class-front-element-actions.php:62
 msgid "Pay Now"
-msgstr ""
-
-#: includes/front/class-front-shortcode.php:73 includes/widget/class-widget-form.php:11 includes/widget/class-widget-form.php:102 includes/widget/class-widget-render.php:10
-msgid "Open Popup"
 msgstr ""
 
 #: includes/front/elements/class-front-decomposed-26.php:191
@@ -3512,28 +5678,12 @@ msgstr ""
 msgid "Write your message..."
 msgstr ""
 
-#: includes/front/elements/class-front-decomposed-26.php:545 templates/builder/elements/elem-23-upload.php:31
+#: includes/front/elements/class-front-decomposed-26.php:545 public/js/front/front-form.js:695 templates/builder/elements/elem-23-upload.php:31
 msgid "File too large. Maximum size is {max}MB."
-msgstr ""
-
-#: includes/front/elements/class-front-decomposed-26.php:576 templates/builder/elements/elem-23-upload.php:8
-msgid "Choose file or drag here..."
-msgstr ""
-
-#: includes/front/elements/class-front-decomposed-26.php:623
-msgid "Show password"
 msgstr ""
 
 #: includes/front/elements/class-front-decomposed-26.php:626 templates/builder/elements/elem-24-password.php:10
 msgid "Enter password..."
-msgstr ""
-
-#: includes/front/elements/class-front-element-actions.php:23
-msgid "Submit Now"
-msgstr ""
-
-#: includes/front/elements/class-front-element-actions.php:36
-msgid "Next Step →"
 msgstr ""
 
 #: includes/front/elements/class-front-element-actions.php:47
@@ -3554,10 +5704,6 @@ msgstr ""
 
 #: includes/front/elements/class-front-element-inputs.php:171
 msgid "Choose File"
-msgstr ""
-
-#: includes/front/elements/class-front-element-media.php:102
-msgid "Play video"
 msgstr ""
 
 #: includes/rest/class-rest-delivery.php:24
@@ -3605,7 +5751,7 @@ msgstr ""
 msgid "Spam detected by security shield."
 msgstr ""
 
-#: includes/rest/class-rest-submissions.php:74
+#: includes/rest/class-rest-submissions.php:74 public/js/front/front-form.js:65 public/js/front/front-form.js:534 public/js/front/front-submit.js:131
 msgid "Please enter a valid email address."
 msgstr ""
 
@@ -3653,24 +5799,100 @@ msgstr ""
 msgid "Tip: You can also embed any popup directly in content using the [zappoppop uid=\"...\"] shortcode."
 msgstr ""
 
-#: public/js/front/front-submit.js:238 public/js/front/front-submit.js:244 public/js/front/front-submit.js:249 public/js/front/front-submit.js:250 templates/builder/ribbon.php:33
-msgid "Submit"
+#: public/js/front/front-display.js:336
+msgid "Today"
 msgstr ""
 
-#: public/js/front/front-submit.js:239
+#: public/js/front/front-form.js:71 public/js/front/front-submit.js:150
+msgid "Submitting..."
+msgstr ""
+
+#: public/js/front/front-form.js:132 templates/builder/elements/elem-26-submit.php:38
+msgid "Thank you for your submission!"
+msgstr ""
+
+#: public/js/front/front-form.js:141 public/js/front/front-submit.js:241
 msgid "Submission failed. Please try again."
 msgstr ""
 
-#: public/js/front/front-submit.js:245 public/js/front/front-submit.js:250
+#: public/js/front/front-form.js:147
+msgid "Network error. Please try again."
+msgstr ""
+
+#: public/js/front/front-form.js:530 public/js/front/front-submit.js:117 templates/builder/drawer-inspector.php:146
+msgid "This field is required."
+msgstr ""
+
+#: public/js/front/front-form.js:538
+msgid "Please enter a valid number."
+msgstr ""
+
+#: public/js/front/front-form.js:539
+msgid "Value must be at least %s."
+msgstr ""
+
+#: public/js/front/front-form.js:540
+msgid "Value must be at most %s."
+msgstr ""
+
+#: public/js/front/front-form.js:544
+msgid "Value does not match."
+msgstr ""
+
+#: public/js/front/front-form.js:548
+msgid "Value is not in the allowed list."
+msgstr ""
+
+#: public/js/front/front-form.js:557
+msgid "This value is already used in another field."
+msgstr ""
+
+#: public/js/front/front-form.js:680
+msgid "Remove file"
+msgstr ""
+
+#: public/js/front/front-form.js:813 templates/builder/elements/elem-26-submit.php:50
+msgid "Please fill in all fields before submitting."
+msgstr ""
+
+#: public/js/front/front-pickers.js:121
+msgid "Previous month"
+msgstr ""
+
+#: public/js/front/front-pickers.js:123
+msgid "Next month"
+msgstr ""
+
+#: public/js/front/front-submit.js:105
+msgid "This field is required"
+msgstr ""
+
+#: public/js/front/front-submit.js:175
+msgid "Submitted"
+msgstr ""
+
+#: public/js/front/front-submit.js:197
+msgid "Thank you! Submitted successfully."
+msgstr ""
+
+#: public/js/front/front-submit.js:247 public/js/front/front-submit.js:252
 msgid "Submission error. Please check your connection."
 msgstr ""
 
-#: public/js/front/front-submit.js:249
+#: public/js/front/front-submit.js:251
 msgid "Submission failed."
 msgstr ""
 
-#: public/js/front/front-submit.js:272
+#: public/js/front/front-submit.js:263
+msgid "Processing Payment..."
+msgstr ""
+
+#: public/js/front/front-submit.js:274
 msgid "Payment completed!"
+msgstr ""
+
+#: public/js/front/front-submit.js:278
+msgid "Pay %1$s %2$s"
 msgstr ""
 
 #: templates/builder-view.php:9
@@ -3817,11 +6039,11 @@ msgstr ""
 msgid "Remove data on delete"
 msgstr ""
 
-#: templates/network-view.php:70
+#: templates/network-view.php:70 templates/tools/system-info.php:32
 msgid "Yes"
 msgstr ""
 
-#: templates/network-view.php:72
+#: templates/network-view.php:72 templates/tools/system-info.php:32
 msgid "No"
 msgstr ""
 
@@ -3899,10 +6121,6 @@ msgstr ""
 msgid "Use the last saved settings as the defaults"
 msgstr ""
 
-#: templates/settings-view.php:89 templates/theme/tools.php:15
-msgid "Save as Default"
-msgstr ""
-
 #: templates/settings-view.php:91
 msgid "Reset Defaults"
 msgstr ""
@@ -3927,16 +6145,8 @@ msgstr ""
 msgid "Replay Canvas Entrance Animation"
 msgstr ""
 
-#: templates/builder/canvas.php:14
-msgid "Replay Animation"
-msgstr ""
-
 #: templates/builder/canvas.php:15
 msgid "Exit Preview and Return to Editor"
-msgstr ""
-
-#: templates/builder/canvas.php:15
-msgid "Exit Preview"
 msgstr ""
 
 #: templates/builder/canvas.php:24 templates/builder/top-bar.php:23
@@ -3961,14 +6171,6 @@ msgstr ""
 
 #: templates/builder/canvas.php:40 templates/builder/top-bar.php:29
 msgid "Align Bottom"
-msgstr ""
-
-#: templates/builder/canvas.php:44 templates/builder/drawer-inspector.php:308 templates/builder/elements/tab-style-form.php:20 templates/builder/elements/tab-style-full.php:23 templates/builder/elements/tab-style-full.php:192 templates/settings/tab-libraries.php:70
-msgid "Left"
-msgstr ""
-
-#: templates/builder/canvas.php:47 templates/builder/drawer-inspector.php:309 templates/builder/elements/tab-style-form.php:22 templates/builder/elements/tab-style-full.php:25 templates/builder/elements/tab-style-full.php:184 templates/settings/tab-libraries.php:72
-msgid "Right"
 msgstr ""
 
 #: templates/builder/canvas.php:50 templates/builder/elements/tab-style-full.php:180
@@ -4071,10 +6273,6 @@ msgstr ""
 msgid "Error Message"
 msgstr ""
 
-#: templates/builder/drawer-inspector.php:146
-msgid "This field is required."
-msgstr ""
-
 #: templates/builder/drawer-inspector.php:147
 msgid "Default message: This field is required."
 msgstr ""
@@ -4089,10 +6287,6 @@ msgstr ""
 
 #: templates/builder/drawer-inspector.php:176 templates/builder/drawer-inspector.php:365
 msgid "Max"
-msgstr ""
-
-#: templates/builder/drawer-inspector.php:180 templates/builder/elements/elem-12-number.php:27
-msgid "Step"
 msgstr ""
 
 #: templates/builder/drawer-inspector.php:184 templates/builder/drawer-inspector.php:203 templates/builder/drawer-inspector.php:227 templates/builder/drawer-inspector.php:373
@@ -4135,10 +6329,6 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: templates/builder/drawer-inspector.php:255
-msgid "Currency"
-msgstr ""
-
 #: templates/builder/drawer-inspector.php:257
 msgid "USD ($)"
 msgstr ""
@@ -4149,14 +6339,6 @@ msgstr ""
 
 #: templates/builder/drawer-inspector.php:259
 msgid "GBP (£)"
-msgstr ""
-
-#: templates/builder/drawer-inspector.php:263
-msgid "Payment Gateway"
-msgstr ""
-
-#: templates/builder/drawer-inspector.php:274
-msgid "Divider Settings"
 msgstr ""
 
 #: templates/builder/drawer-inspector.php:277
@@ -4191,20 +6373,12 @@ msgstr ""
 msgid "Thickness (px)"
 msgstr ""
 
-#: templates/builder/drawer-inspector.php:294
-msgid "Line Color"
-msgstr ""
-
 #: templates/builder/drawer-inspector.php:301
 msgid "Width (%)"
 msgstr ""
 
 #: templates/builder/drawer-inspector.php:305 templates/settings/tab-libraries.php:68 templates/settings/tab-libraries.php:74
 msgid "Alignment"
-msgstr ""
-
-#: templates/builder/drawer-inspector.php:307 templates/builder/elements/tab-style-form.php:21 templates/builder/elements/tab-style-full.php:24 templates/settings/tab-libraries.php:71
-msgid "Center"
 msgstr ""
 
 #: templates/builder/drawer-inspector.php:321
@@ -4249,10 +6423,6 @@ msgstr ""
 
 #: templates/builder/drawer-inspector.php:343
 msgid "Stay at 00:00"
-msgstr ""
-
-#: templates/builder/drawer-inspector.php:344 templates/builder/panel-properties.php:43 templates/builder/elements/elem-09-button.php:16 templates/builder/elements/tab-logic-conditional.php:47
-msgid "Close Popup"
 msgstr ""
 
 #: templates/builder/drawer-inspector.php:345
@@ -4307,14 +6477,6 @@ msgstr ""
 msgid "Duplicate Active Canvas"
 msgstr ""
 
-#: templates/builder/header.php:34
-msgid "Delete Canvas"
-msgstr ""
-
-#: templates/builder/header.php:36
-msgid "Add Canvas"
-msgstr ""
-
 #: templates/builder/header.php:44
 msgid "Desktop Viewport (640px)"
 msgstr ""
@@ -4335,24 +6497,12 @@ msgstr ""
 msgid "Builder guide"
 msgstr ""
 
-#: templates/builder/header.php:65
-msgid "Keyboard Shortcut"
-msgstr ""
-
-#: templates/builder/header.php:67
-msgid "Preview on Homepage"
-msgstr ""
-
 #: templates/builder/header.php:71
 msgid "More save options"
 msgstr ""
 
 #: templates/builder/header.php:73
 msgid "Save Draft"
-msgstr ""
-
-#: templates/builder/header.php:75
-msgid "Save as Template"
 msgstr ""
 
 #: templates/builder/layers-panel.php:15
@@ -4500,10 +6650,6 @@ msgstr ""
 msgid "Example, open after 5 seconds:"
 msgstr ""
 
-#: templates/builder/modals.php:138 templates/library/modal-template-edit.php:15
-msgid "Popup Image"
-msgstr ""
-
 #: templates/builder/modals.php:139
 msgid "Click to upload"
 msgstr ""
@@ -4588,10 +6734,6 @@ msgstr ""
 msgid "Text Color"
 msgstr ""
 
-#: templates/builder/panel-properties.php:65
-msgid "Background"
-msgstr ""
-
 #: templates/builder/panel-properties.php:66
 msgid "Border Radius"
 msgstr ""
@@ -4656,16 +6798,8 @@ msgstr ""
 msgid "3. Video (video)"
 msgstr ""
 
-#: templates/builder/ribbon.php:9
-msgid "Video"
-msgstr ""
-
 #: templates/builder/ribbon.php:10
 msgid "4. Header (header)"
-msgstr ""
-
-#: templates/builder/ribbon.php:10
-msgid "Header"
 msgstr ""
 
 #: templates/builder/ribbon.php:11
@@ -4680,48 +6814,24 @@ msgstr ""
 msgid "7. Font Awesome (icon)"
 msgstr ""
 
-#: templates/builder/ribbon.php:13
-msgid "Icon"
-msgstr ""
-
 #: templates/builder/ribbon.php:14
 msgid "9. Button / Link (button)"
-msgstr ""
-
-#: templates/builder/ribbon.php:14
-msgid "Button"
 msgstr ""
 
 #: templates/builder/ribbon.php:17
 msgid "10. Text (text)"
 msgstr ""
 
-#: templates/builder/ribbon.php:17
-msgid "Text"
-msgstr ""
-
 #: templates/builder/ribbon.php:18
 msgid "11. Email Address (email)"
-msgstr ""
-
-#: templates/builder/ribbon.php:18
-msgid "Email"
 msgstr ""
 
 #: templates/builder/ribbon.php:19
 msgid "12. Number (number)"
 msgstr ""
 
-#: templates/builder/ribbon.php:19
-msgid "Number"
-msgstr ""
-
 #: templates/builder/ribbon.php:20
 msgid "13. Phone / Tel (phone)"
-msgstr ""
-
-#: templates/builder/ribbon.php:20
-msgid "Phone"
 msgstr ""
 
 #: templates/builder/ribbon.php:21
@@ -4732,20 +6842,12 @@ msgstr ""
 msgid "15. Select (select)"
 msgstr ""
 
-#: templates/builder/ribbon.php:22 templates/library/grid.php:60 templates/theme/preview.php:25
-msgid "Select"
-msgstr ""
-
 #: templates/builder/ribbon.php:23
 msgid "16. Checkbox (checkboxgroup)"
 msgstr ""
 
 #: templates/builder/ribbon.php:24
 msgid "17. Radio Button (radio)"
-msgstr ""
-
-#: templates/builder/ribbon.php:24
-msgid "Radio"
 msgstr ""
 
 #: templates/builder/ribbon.php:25
@@ -4760,24 +6862,12 @@ msgstr ""
 msgid "21. Date (date)"
 msgstr ""
 
-#: templates/builder/ribbon.php:26 templates/payments/table.php:26
-msgid "Date"
-msgstr ""
-
 #: templates/builder/ribbon.php:27
 msgid "22. Time (time)"
 msgstr ""
 
-#: templates/builder/ribbon.php:27
-msgid "Time"
-msgstr ""
-
 #: templates/builder/ribbon.php:28
 msgid "23. Upload / File (upload)"
-msgstr ""
-
-#: templates/builder/ribbon.php:28
-msgid "Upload"
 msgstr ""
 
 #: templates/builder/ribbon.php:29
@@ -4828,10 +6918,6 @@ msgstr ""
 msgid "Hide / Unhide Layer Panel"
 msgstr ""
 
-#: templates/builder/ribbon.php:55
-msgid "Hide Elements Ribbon"
-msgstr ""
-
 #: templates/builder/top-bar.php:9
 msgid "ZapPopPop Builder"
 msgstr ""
@@ -4840,16 +6926,8 @@ msgstr ""
 msgid "Desktop View (640px)"
 msgstr ""
 
-#: templates/builder/top-bar.php:11 templates/library/modal-preview.php:13
-msgid "Desktop"
-msgstr ""
-
 #: templates/builder/top-bar.php:12
 msgid "Mobile View (360px)"
-msgstr ""
-
-#: templates/builder/top-bar.php:12 templates/library/modal-preview.php:14
-msgid "Mobile"
 msgstr ""
 
 #: templates/builder/top-bar.php:15
@@ -4876,24 +6954,12 @@ msgstr ""
 msgid "Undo (Cmd+Z)"
 msgstr ""
 
-#: templates/builder/top-bar.php:32 templates/dashboard/table.php:35
-msgid "Undo"
-msgstr ""
-
 #: templates/builder/top-bar.php:33
 msgid "Redo (Cmd+Y)"
 msgstr ""
 
-#: templates/builder/top-bar.php:33
-msgid "Redo"
-msgstr ""
-
 #: templates/builder/top-bar.php:38
 msgid "Embed & Shortcode"
-msgstr ""
-
-#: templates/builder/top-bar.php:39 templates/theme/preview.php:10
-msgid "Live Preview"
 msgstr ""
 
 #: templates/builder/top-bar.php:40
@@ -4916,10 +6982,6 @@ msgstr ""
 msgid "Pill / Stadium"
 msgstr ""
 
-#: templates/builder/elements/elem-01-shape.php:17
-msgid "Triangle"
-msgstr ""
-
 #: templates/builder/elements/elem-01-shape.php:18
 msgid "Diamond / Rhombus"
 msgstr ""
@@ -4928,16 +6990,8 @@ msgstr ""
 msgid "Pentagon"
 msgstr ""
 
-#: templates/builder/elements/elem-01-shape.php:20
-msgid "Hexagon"
-msgstr ""
-
 #: templates/builder/elements/elem-01-shape.php:21
 msgid "5-Point Star"
-msgstr ""
-
-#: templates/builder/elements/elem-01-shape.php:22 templates/builder/elements/elem-07-icon.php:20
-msgid "Heart"
 msgstr ""
 
 #: templates/builder/elements/elem-01-shape.php:23
@@ -4950,10 +7004,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-01-shape.php:41
 msgid "Transparent fill"
-msgstr ""
-
-#: templates/builder/elements/elem-01-shape.php:49
-msgid "Stroke Color"
 msgstr ""
 
 #: templates/builder/elements/elem-01-shape.php:52 templates/builder/elements/elem-01-shape.php:53
@@ -4972,16 +7022,8 @@ msgstr ""
 msgid "Image Source & Fitting"
 msgstr ""
 
-#: templates/builder/elements/elem-02-image.php:7
-msgid "Image Source URL"
-msgstr ""
-
 #: templates/builder/elements/elem-02-image.php:10 templates/builder/elements/elem-03-video.php:41
 msgid "WP Media"
-msgstr ""
-
-#: templates/builder/elements/elem-02-image.php:14
-msgid "Object Fit"
 msgstr ""
 
 #: templates/builder/elements/elem-02-image.php:16
@@ -4992,16 +7034,8 @@ msgstr ""
 msgid "Cover (Crop)"
 msgstr ""
 
-#: templates/builder/elements/elem-02-image.php:18
-msgid "Stretch Fill"
-msgstr ""
-
 #: templates/builder/elements/elem-02-image.php:19
 msgid "Scale Down"
-msgstr ""
-
-#: templates/builder/elements/elem-02-image.php:23
-msgid "Alt Text"
 msgstr ""
 
 #: templates/builder/elements/elem-02-image.php:24
@@ -5036,16 +7070,8 @@ msgstr ""
 msgid "YouTube"
 msgstr ""
 
-#: templates/builder/elements/elem-03-video.php:22
-msgid "Vimeo"
-msgstr ""
-
 #: templates/builder/elements/elem-03-video.php:23
 msgid "Direct MP4 URL"
-msgstr ""
-
-#: templates/builder/elements/elem-03-video.php:27
-msgid "Aspect Ratio"
 msgstr ""
 
 #: templates/builder/elements/elem-03-video.php:29
@@ -5068,10 +7094,6 @@ msgstr ""
 msgid "Video URL or Embed ID"
 msgstr ""
 
-#: templates/builder/elements/elem-03-video.php:38
-msgid "Video Thumbnail"
-msgstr ""
-
 #: templates/builder/elements/elem-03-video.php:43
 msgid "Click to choose a thumbnail from the Media Library"
 msgstr ""
@@ -5082,14 +7104,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-03-video.php:45
 msgid "Remove thumbnail"
-msgstr ""
-
-#: templates/builder/elements/elem-03-video.php:49
-msgid "Autoplay"
-msgstr ""
-
-#: templates/builder/elements/elem-03-video.php:52
-msgid "Muted"
 msgstr ""
 
 #: templates/builder/elements/elem-03-video.php:55
@@ -5156,16 +7170,8 @@ msgstr ""
 msgid "Heading H6"
 msgstr ""
 
-#: templates/builder/elements/elem-04-label.php:36 templates/builder/elements/tab-style-full.php:129
-msgid "Text Transform"
-msgstr ""
-
 #: templates/builder/elements/elem-04-label.php:38
 msgid "None (As Typed)"
-msgstr ""
-
-#: templates/builder/elements/elem-04-label.php:39 templates/builder/elements/tab-advanced-form.php:26
-msgid "Uppercase"
 msgstr ""
 
 #: templates/builder/elements/elem-04-label.php:41
@@ -5178,10 +7184,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-05-html.php:7
 msgid "Raw HTML / SVG / Embed Markup"
-msgstr ""
-
-#: templates/builder/elements/elem-05-html.php:11
-msgid "Wrapper Tag"
 msgstr ""
 
 #: templates/builder/elements/elem-05-html.php:18
@@ -5202,10 +7204,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-06-close.php:6
 msgid "Close Icon & Dismissal"
-msgstr ""
-
-#: templates/builder/elements/elem-06-close.php:9
-msgid "Icon Glyph"
 msgstr ""
 
 #: templates/builder/elements/elem-06-close.php:11
@@ -5298,10 +7296,6 @@ msgstr ""
 msgid "📣 Promo"
 msgstr ""
 
-#: templates/builder/elements/elem-07-icon.php:18
-msgid "Star"
-msgstr ""
-
 #: templates/builder/elements/elem-07-icon.php:19
 msgid "Check"
 msgstr ""
@@ -5348,10 +7342,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-09-button.php:6
 msgid "Button Label & Click Action"
-msgstr ""
-
-#: templates/builder/elements/elem-09-button.php:7
-msgid "Button Label Text"
 msgstr ""
 
 #: templates/builder/elements/elem-09-button.php:14 templates/builder/elements/tab-logic-conditional.php:43
@@ -5510,10 +7500,6 @@ msgstr ""
 msgid "Number & Stepper Bounds"
 msgstr ""
 
-#: templates/builder/elements/elem-12-number.php:9 templates/builder/elements/elem-21-date.php:9 templates/builder/elements/elem-24-password.php:9
-msgid "Placeholder"
-msgstr ""
-
 #: templates/builder/elements/elem-12-number.php:13
 msgid "Unit Suffix"
 msgstr ""
@@ -5608,14 +7594,6 @@ msgstr ""
 
 #: templates/builder/elements/elem-16b-checkboxgroup.php:6 templates/builder/elements/elem-16b-checkboxgroup.php:7
 msgid "Checkbox Choices (Label + Value)"
-msgstr ""
-
-#: templates/builder/elements/elem-16b-checkboxgroup.php:12 templates/builder/elements/elem-17-radio.php:12
-msgid "Label"
-msgstr ""
-
-#: templates/builder/elements/elem-16b-checkboxgroup.php:13 templates/builder/elements/elem-17-radio.php:13 templates/builder/elements/tab-logic-conditional.php:57
-msgid "Value"
 msgstr ""
 
 #: templates/builder/elements/elem-16b-checkboxgroup.php:13 templates/builder/elements/elem-17-radio.php:13
@@ -5814,10 +7792,6 @@ msgstr ""
 msgid "Show Confirmation & Close"
 msgstr ""
 
-#: templates/builder/elements/elem-26-submit.php:23
-msgid "Redirect to URL"
-msgstr ""
-
 #: templates/builder/elements/elem-26-submit.php:27
 msgid "Next Canvas #"
 msgstr ""
@@ -5838,20 +7812,12 @@ msgstr ""
 msgid "Confirmation Message"
 msgstr ""
 
-#: templates/builder/elements/elem-26-submit.php:38
-msgid "Thank you for your submission!"
-msgstr ""
-
 #: templates/builder/elements/elem-26-submit.php:42
 msgid "Do Not Allow Submit on Empty Field"
 msgstr ""
 
 #: templates/builder/elements/elem-26-submit.php:49
 msgid "Custom Error Message"
-msgstr ""
-
-#: templates/builder/elements/elem-26-submit.php:50
-msgid "Please fill in all fields before submitting."
 msgstr ""
 
 #: templates/builder/elements/setting-form-data-adv.php:7
@@ -5866,16 +7832,8 @@ msgstr ""
 msgid "Enter default value of the field."
 msgstr ""
 
-#: templates/builder/elements/setting-form-data-adv.php:17
-msgid "Dynamic Default Value"
-msgstr ""
-
 #: templates/builder/elements/setting-form-data-adv.php:20
 msgid "Set default value dynamically from URL query parameters."
-msgstr ""
-
-#: templates/builder/elements/setting-form-data-adv.php:24
-msgid "Parameter Name"
 msgstr ""
 
 #: templates/builder/elements/setting-form-data-adv.php:25
@@ -5994,10 +7952,6 @@ msgstr ""
 msgid "Digits Only"
 msgstr ""
 
-#: templates/builder/elements/tab-advanced-form.php:25
-msgid "Lowercase"
-msgstr ""
-
 #: templates/builder/elements/tab-advanced-form.php:33
 msgid "Required *"
 msgstr ""
@@ -6082,10 +8036,6 @@ msgstr ""
 msgid "Jump to Specific Canvas Step"
 msgstr ""
 
-#: templates/builder/elements/tab-logic-actions.php:35
-msgid "Redirect to External URL"
-msgstr ""
-
 #: templates/builder/elements/tab-logic-actions.php:38
 msgid "Step #"
 msgstr ""
@@ -6118,24 +8068,8 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: templates/builder/elements/tab-logic-conditional.php:16
-msgid "Show Layer"
-msgstr ""
-
-#: templates/builder/elements/tab-logic-conditional.php:17
-msgid "Hide Layer"
-msgstr ""
-
 #: templates/builder/elements/tab-logic-conditional.php:21
 msgid "Match Mode"
-msgstr ""
-
-#: templates/builder/elements/tab-logic-conditional.php:23
-msgid "If ALL rules match"
-msgstr ""
-
-#: templates/builder/elements/tab-logic-conditional.php:24
-msgid "If ANY rule matches"
 msgstr ""
 
 #: templates/builder/elements/tab-logic-conditional.php:30
@@ -6314,10 +8248,6 @@ msgstr ""
 msgid "Black (900)"
 msgstr ""
 
-#: templates/builder/elements/tab-style-full.php:114
-msgid "Line Height"
-msgstr ""
-
 #: templates/builder/elements/tab-style-full.php:118
 msgid "Letter Spacing (px)"
 msgstr ""
@@ -6362,22 +8292,6 @@ msgstr ""
 msgid "Padding (Top / Right / Bottom / Left px)"
 msgstr ""
 
-#: templates/builder/elements/tab-style-full.php:209
-msgid "Solid"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:210
-msgid "Dashed"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:211
-msgid "Dotted"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:212
-msgid "Double"
-msgstr ""
-
 #: templates/builder/elements/tab-style-full.php:219
 msgid "Border Color"
 msgstr ""
@@ -6408,18 +8322,6 @@ msgstr ""
 
 #: templates/builder/elements/tab-style-full.php:262 templates/builder/elements/tab-style-media.php:13
 msgid "Button Hover State"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:265 templates/builder/elements/tab-style-media.php:17
-msgid "Hover Bg"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:269 templates/builder/elements/tab-style-media.php:21
-msgid "Hover Text"
-msgstr ""
-
-#: templates/builder/elements/tab-style-full.php:273 templates/builder/elements/tab-style-media.php:25
-msgid "Hover Border"
 msgstr ""
 
 #: templates/builder/elements/tab-style-full.php:281
@@ -6721,10 +8623,6 @@ msgstr[1] ""
 msgid "Search Popups"
 msgstr ""
 
-#: templates/dashboard/table.php:125
-msgid "Title"
-msgstr ""
-
 #: templates/dashboard/table.php:131
 msgid "UID"
 msgstr ""
@@ -6907,10 +8805,6 @@ msgstr ""
 msgid "Reset to defaults"
 msgstr ""
 
-#: templates/library/modal-preview.php:9
-msgid "Template Preview"
-msgstr ""
-
 #: templates/library/modal-preview.php:23
 msgid "Use Template"
 msgstr ""
@@ -6921,10 +8815,6 @@ msgstr ""
 
 #: templates/library/pager.php:10
 msgid "Cards per page"
-msgstr ""
-
-#: templates/library/pager.php:11 templates/submissions/table.php:159
-msgid "View"
 msgstr ""
 
 #: templates/library/pager.php:17
@@ -7226,10 +9116,6 @@ msgstr ""
 
 #: templates/settings/builder-layer-settings.php:67
 msgid "Drag to reorder (or use the Up / Down arrow keys)"
-msgstr ""
-
-#: templates/settings/builder-layer-settings.php:67 templates/settings/tab-module.php:65 templates/settings/tab-pages.php:25
-msgid "Drag to reorder"
 msgstr ""
 
 #: templates/settings/builder-layer-settings.php:69
@@ -7946,10 +9832,6 @@ msgstr ""
 msgid "All popups"
 msgstr ""
 
-#: templates/submissions/context.php:51
-msgid "Email address"
-msgstr ""
-
 #: templates/submissions/header.php:44
 msgid "Select popup"
 msgstr ""
@@ -7968,10 +9850,6 @@ msgstr ""
 
 #: templates/submissions/modal-editor.php:9
 msgid "Lead Submission Details & Receipt"
-msgstr ""
-
-#: templates/submissions/modal-editor.php:20
-msgid "Record ID"
 msgstr ""
 
 #: templates/submissions/modal-editor.php:27
@@ -8165,14 +10043,6 @@ msgstr ""
 
 #: templates/theme/sections.php:9
 msgid "Theme sections"
-msgstr ""
-
-#: templates/theme/sections.php:41
-msgid "Replace logo"
-msgstr ""
-
-#: templates/theme/sections.php:41
-msgid "Upload logo"
 msgstr ""
 
 #: templates/theme/sections.php:44
@@ -8435,86 +10305,95 @@ msgstr ""
 msgid "Save current as default"
 msgstr ""
 
-#: templates/tools/saved-defaults.php:80
-msgid "Clear"
+#. translators: %s: cURL version number.
+#: templates/tools/system-info.php:29
+msgid "Enabled (%s)"
 msgstr ""
 
-#: templates/tools/system-info.php:63
-msgid "WordPress Core"
-msgstr ""
-
-#: templates/tools/system-info.php:64
-msgid "WordPress Version"
-msgstr ""
-
-#: templates/tools/system-info.php:65
-msgid "ZapPopPop Version"
-msgstr ""
-
-#: templates/tools/system-info.php:66
-msgid "Multisite Network"
-msgstr ""
-
-#: templates/tools/system-info.php:67
-msgid "WP Debug Mode"
-msgstr ""
-
-#: templates/tools/system-info.php:69
-msgid "PHP & Web Server"
-msgstr ""
-
-#: templates/tools/system-info.php:70
-msgid "PHP Version"
+#: templates/tools/system-info.php:30 templates/tools/system-info.php:31 templates/tools/system-info.php:33
+msgid "Disabled"
 msgstr ""
 
 #: templates/tools/system-info.php:71
-msgid "PHP Memory Limit"
+msgid "WordPress Core"
 msgstr ""
 
 #: templates/tools/system-info.php:72
-msgid "WP Memory Limit"
+msgid "WordPress Version"
 msgstr ""
 
 #: templates/tools/system-info.php:73
-msgid "Max Execution Time"
+msgid "ZapPopPop Version"
+msgstr ""
+
+#: templates/tools/system-info.php:74
+msgid "Multisite Network"
 msgstr ""
 
 #: templates/tools/system-info.php:75
-msgid "Uploads & Extensions"
-msgstr ""
-
-#: templates/tools/system-info.php:76
-msgid "Upload Max Filesize"
+msgid "WP Debug Mode"
 msgstr ""
 
 #: templates/tools/system-info.php:77
-msgid "Post Max Size"
+msgid "PHP & Web Server"
 msgstr ""
 
 #: templates/tools/system-info.php:78
-msgid "MySQL Version"
+msgid "PHP Version"
 msgstr ""
 
 #: templates/tools/system-info.php:79
-msgid "cURL Extension"
+msgid "PHP Memory Limit"
+msgstr ""
+
+#: templates/tools/system-info.php:79
+msgid "Low"
 msgstr ""
 
 #: templates/tools/system-info.php:80
-msgid "GD Library"
+msgid "WP Memory Limit"
+msgstr ""
+
+#: templates/tools/system-info.php:81
+msgid "Max Execution Time"
+msgstr ""
+
+#: templates/tools/system-info.php:83
+msgid "Uploads & Extensions"
+msgstr ""
+
+#: templates/tools/system-info.php:84
+msgid "Upload Max Filesize"
+msgstr ""
+
+#: templates/tools/system-info.php:85
+msgid "Post Max Size"
+msgstr ""
+
+#: templates/tools/system-info.php:86
+msgid "MySQL Version"
 msgstr ""
 
 #: templates/tools/system-info.php:87
+msgid "cURL Extension"
+msgstr ""
+
+#: templates/tools/system-info.php:88
+msgid "GD Library"
+msgstr ""
+
+#: templates/tools/system-info.php:95
 msgid "System Environment & Health Diagnostics"
 msgstr ""
 
-#: templates/tools/system-info.php:89
+#: templates/tools/system-info.php:97
 msgid "Copy Diagnostic Report"
 msgstr ""
 
-#: templates/tools/system-info.php:90
+#: templates/tools/system-info.php:98
 msgid "Download diagnostic report as a .txt file"
 msgstr ""
 
-#: templates/tools/system-info.php:90
+#: templates/tools/system-info.php:98
 msgid "Download .txt"
 msgstr ""

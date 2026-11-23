@@ -7,11 +7,23 @@
  */
 (function () {
     'use strict';
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
+    /* zppNames(options, count, firstDate): localized names from the browser (html lang); null when unsupported */
+    function zppNames(opt, n, mk) {
+        try {
+            var f = new Intl.DateTimeFormat(document.documentElement.lang || undefined, opt), out = [], i;
+            for (i = 0; i < n; i++) { out.push(f.format(mk(i))); }
+            return out;
+        } catch (e) { return null; }
+    }
+    function zppMonths(style, fb) { return zppNames({ month: style }, 12, function (i) { return new Date(2021, i, 15); }) || fb; }
+    function zppDays(style, fb) { return zppNames({ weekday: style }, 7, function (i) { return new Date(2021, 7, 1 + i); }) || fb; }
+    function zppMin(a) { return a.map(function (s) { return Array.from ? Array.from(s).slice(0, 2).join('') : String(s).slice(0, 2); }); }
 
     var pop = null;
     var owner = null;
-    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DOW = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    var MONTHS = zppMonths('long', ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
+    var DOW = zppMin(zppDays('short', ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']));
 
     function pad(n) { return (n < 10 ? '0' : '') + n; }
 
@@ -106,9 +118,9 @@
             box.className = 'zappoppop-pk zappoppop-pk-cal';
             box.setAttribute('role', 'dialog');
             var html = '<div class="zappoppop-pk-head">' +
-                '<button type="button" class="zappoppop-pk-nav" data-nav="-1" aria-label="Previous month">&#8249;</button>' +
+                '<button type="button" class="zappoppop-pk-nav" data-nav="-1" aria-label="' + __('Previous month', 'zappoppop') + '">&#8249;</button>' +
                 '<span class="zappoppop-pk-title">' + MONTHS[view.getMonth()] + ' ' + view.getFullYear() + '</span>' +
-                '<button type="button" class="zappoppop-pk-nav" data-nav="1" aria-label="Next month">&#8250;</button></div>' +
+                '<button type="button" class="zappoppop-pk-nav" data-nav="1" aria-label="' + __('Next month', 'zappoppop') + '">&#8250;</button></div>' +
                 '<div class="zappoppop-pk-grid">';
             DOW.forEach(function (d) { html += '<span class="zappoppop-pk-dow">' + d + '</span>'; });
             var first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();

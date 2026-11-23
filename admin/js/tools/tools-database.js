@@ -49,7 +49,7 @@
                             }
 
                             self.showNotice('success', data.message || wp.i18n.__('Database schema tables verified successfully!', 'zappoppop'));
-                            $btn.prop('disabled', false).html('Schema Optimal!');
+                            $btn.prop('disabled', false).text(wp.i18n.__('Schema Optimal!', 'zappoppop'));
                             setTimeout(function() {
                                 $btn.html(origHtml);
                             }, 2500);

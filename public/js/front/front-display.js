@@ -4,6 +4,18 @@
  */
 (function(window, $) {
     'use strict';
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
+    /* zppNames(options, count, firstDate): localized names from the browser (html lang); null when unsupported */
+    function zppNames(opt, n, mk) {
+        try {
+            var f = new Intl.DateTimeFormat(document.documentElement.lang || undefined, opt), out = [], i;
+            for (i = 0; i < n; i++) { out.push(f.format(mk(i))); }
+            return out;
+        } catch (e) { return null; }
+    }
+    function zppMonths(style, fb) { return zppNames({ month: style }, 12, function (i) { return new Date(2021, i, 15); }) || fb; }
+    function zppDays(style, fb) { return zppNames({ weekday: style }, 7, function (i) { return new Date(2021, 7, 1 + i); }) || fb; }
+    function zppMin(a) { return a.map(function (s) { return Array.from ? Array.from(s).slice(0, 2).join('') : String(s).slice(0, 2); }); }
 
     var vars = window.zappoppop_front_vars || {
         ajax_url: '',
@@ -316,13 +328,13 @@
                     var opts = { autoClose: true };
                     /* ZAPPOPPOP_DATE_LOCALE_INLINE: built-in English locale (library default is not English) */
                     opts.locale = {
-                        days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-                        daysShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-                        daysMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-                        months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-                        monthsShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                        today: 'Today',
-                        clear: 'Clear',
+                        days: zppDays('long', ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']),
+                        daysShort: zppDays('short', ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']),
+                        daysMin: zppMin(zppDays('short', ['Su','Mo','Tu','We','Th','Fr','Sa'])),
+                        months: zppMonths('long', ['January','February','March','April','May','June','July','August','September','October','November','December']),
+                        monthsShort: zppMonths('short', ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']),
+                        today: __('Today', 'zappoppop'),
+                        clear: __('Clear', 'zappoppop'),
                         dateFormat: 'MM/dd/yyyy',
                         timeFormat: 'hh:mm aa',
                         firstDay: 0

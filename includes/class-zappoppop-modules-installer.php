@@ -38,10 +38,10 @@ class ZapPopPop_Modules_Installer {
         $by   = array_keys(ZapPopPop_Modules::required_by($slug));
         return [
             'slug'        => $slug,
-            'name'        => ($m['source'] === 'core') ? /* phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction, WordPress.WP.I18n.NonSingularStringLiteralText -- module manifest strings are translated by the module text domain */ translate($m['name'], 'zappoppop') : $m['name'],
+            'name'        => ZapPopPop_Modules::display($m, 'name'),
             'version'     => $m['version'],
             'author'      => $m['author'],
-            'description' => ($m['source'] === 'core') ? /* phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction, WordPress.WP.I18n.NonSingularStringLiteralText -- module manifest strings are translated by the module text domain */ translate($m['description'], 'zappoppop') : $m['description'],
+            'description' => ZapPopPop_Modules::display($m, 'description'),
             'source'      => $m['source'],
             'state'       => ZapPopPop_Modules::state($slug),
             'locked'      => (bool) $m['locked'],
@@ -188,7 +188,7 @@ class ZapPopPop_Modules_Installer {
         $out = [];
         foreach ($slugs as $s) {
             $m     = ZapPopPop_Modules::get($s);
-            $out[] = $m ? $m['name'] : $s;
+            $out[] = $m ? ZapPopPop_Modules::display($m, 'name') : $s;
         }
         return implode(', ', $out);
     }
@@ -610,7 +610,7 @@ class ZapPopPop_Modules_Installer {
                 if (!$m) {
                     continue;
                 }
-                $names[] = $m['name'];
+                $names[] = ZapPopPop_Modules::display($m, 'name');
                 if (!ZapPopPop_Modules::get($m['slug'])) {
                     if (!empty($m['data_keys'])) {
                         ZapPopPop_Modules::set_orphan($m['slug'], $m['data_keys']);

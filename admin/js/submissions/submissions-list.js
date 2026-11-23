@@ -44,7 +44,7 @@
 
             $('.zappoppop-pg-cur').text(this.page);
             $('.zappoppop-pg-total').text(pages);
-            $('.zappoppop-pager .displaying-num').text(total + (total === 1 ? ' item' : ' items'));
+            $('.zappoppop-pager .displaying-num').text(wp.i18n.sprintf(wp.i18n._n('%s item', '%s items', total, 'zappoppop'), total));
             $('.zappoppop-pg-first, .zappoppop-pg-prev').prop('disabled', this.page <= 1);
             $('.zappoppop-pg-next, .zappoppop-pg-last').prop('disabled', this.page >= pages);
 

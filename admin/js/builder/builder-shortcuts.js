@@ -5,6 +5,7 @@
     if (window.__zppShortcuts) { return; }
     window.__zppShortcuts = true;
 
+    var __ = (window.wp && wp.i18n && wp.i18n.__) ? wp.i18n.__ : function (t) { return t; };
     var MAC = /Mac|iPhone|iPad|iPod/i.test(String(navigator.platform || navigator.userAgent || ''));
     var K = {
         mod: MAC ? '⌘' : 'Ctrl', alt: MAC ? '⌥' : 'Alt', shift: MAC ? '⇧' : 'Shift',
@@ -13,41 +14,62 @@
 
     /* [action, [alternative key combos], note] */
     var DATA = [
-        { t: 'Editing', rows: [
-            ['Undo', [[K.mod, 'Z']], 'Inside a text field you get the browser’s own text undo'],
-            ['Redo', [[K.mod, K.shift, 'Z'], [K.mod, 'Y']]],
-            ['Save', [[K.mod, 'S']], 'Same as the Save button'],
-            ['Copy layer(s)', [[K.mod, 'C']], 'The selected layer, or every layer in a box selection'],
-            ['Paste', [[K.mod, 'V']], 'Each paste is offset 15px; one Undo removes it'],
-            ['Delete layer', [[K.del], [K.bksp]], 'A box selection is deleted in one step; locked layers stay'],
-            ['Deselect / close', [[K.esc]], 'Closes Layer Settings, clears a box selection, exits Preview']
+        { t: __('Editing', 'zappoppop'), rows: [
+            [__('Undo', 'zappoppop'), [[K.mod, 'Z']], __('Inside a text field you get the browser’s own text undo', 'zappoppop')],
+            [__('Redo', 'zappoppop'), [[K.mod, K.shift, 'Z'], [K.mod, 'Y']]],
+            [__('Save', 'zappoppop'), [[K.mod, 'S']], __('Same as the Save button', 'zappoppop')],
+            [__('Copy layer(s)', 'zappoppop'), [[K.mod, 'C']], __('The selected layer, or every layer in a box selection', 'zappoppop')],
+            [__('Paste', 'zappoppop'), [[K.mod, 'V']], __('Each paste is offset 15px; one Undo removes it', 'zappoppop')],
+            [__('Delete layer', 'zappoppop'), [[K.del], [K.bksp]], __('A box selection is deleted in one step; locked layers stay', 'zappoppop')],
+            [__('Deselect / close', 'zappoppop'), [[K.esc]], __('Closes Layer Settings, clears a box selection, exits Preview', 'zappoppop')]
         ] },
-        { t: 'Moving layers', rows: [
-            ['Nudge 1px', [['← → ↑ ↓']], 'Also moves a whole box selection'],
-            ['Nudge 10px', [[K.shift, '← → ↑ ↓']]],
-            ['Drop a copy', [[K.alt, 'drag a layer']], 'Leaves the original, drops a copy where you release']
+        { t: __('Moving layers', 'zappoppop'), rows: [
+            [__('Nudge 1px', 'zappoppop'), [['← → ↑ ↓']], __('Also moves a whole box selection', 'zappoppop')],
+            [__('Nudge 10px', 'zappoppop'), [[K.shift, '← → ↑ ↓']]],
+            [__('Drop a copy', 'zappoppop'), [[K.alt, 'drag a layer']], __('Leaves the original, drops a copy where you release', 'zappoppop')]
         ] },
-        { t: 'Selecting', rows: [
-            ['Box select', [['drag on empty canvas']], 'Selects every layer the box touches'],
-            ['Add / remove one layer', [[K.shift, 'click a layer']]],
-            ['Add a box to the selection', [[K.shift, 'drag a box']]]
+        { t: __('Selecting', 'zappoppop'), rows: [
+            [__('Box select', 'zappoppop'), [['drag on empty canvas']], __('Selects every layer the box touches', 'zappoppop')],
+            [__('Add / remove one layer', 'zappoppop'), [[K.shift, 'click a layer']]],
+            [__('Add a box to the selection', 'zappoppop'), [[K.shift, 'drag a box']]]
         ] },
-        { t: 'View', rows: [
-            ['Pan the stage', [[K.space, 'drag']]],
-            ['Zoom around the pointer', [[K.alt, 'mouse wheel']]],
-            ['Reset zoom to 100%', [[K.mod, '0']]]
+        { t: __('View', 'zappoppop'), rows: [
+            [__('Pan the stage', 'zappoppop'), [[K.space, 'drag']]],
+            [__('Zoom around the pointer', 'zappoppop'), [[K.alt, 'mouse wheel']]],
+            [__('Reset zoom to 100%', 'zappoppop'), [[K.mod, '0']]]
         ] }
     ];
 
     /* Hover bubble text per key label (falls back to the label itself, e.g. "drag a layer"). */
     var TIPS = {
-        'Ctrl': 'Control key', '\u2318': 'Command key', 'Alt': 'Alt key', '\u2325': 'Option key',
-        'Shift': 'Shift key', '\u21E7': 'Shift key', 'Esc': 'Escape key', 'Delete': 'Delete key',
-        'Backspace': 'Backspace key', '\u232B': 'Backspace key', 'Space': 'Space bar',
-        '\u2190 \u2192 \u2191 \u2193': 'Arrow keys', '0': 'Zero key',
-        'drag a layer': 'Hold the key, then drag a layer', 'drag on empty canvas': 'Click and drag on empty canvas',
-        'click a layer': 'Click a layer', 'drag a box': 'Drag a selection box', 'drag': 'Click and drag',
-        'mouse wheel': 'Scroll the mouse wheel'
+        'Ctrl': __('Control key', 'zappoppop'),
+        '\u2318': __('Command key', 'zappoppop'),
+        'Alt': __('Alt key', 'zappoppop'),
+        '\u2325': __('Option key', 'zappoppop'),
+        'Shift': __('Shift key', 'zappoppop'),
+        '\u21E7': __('Shift key', 'zappoppop'),
+        'Esc': __('Escape key', 'zappoppop'),
+        'Delete': __('Delete key', 'zappoppop'),
+        'Backspace': __('Backspace key', 'zappoppop'),
+        '\u232B': __('Backspace key', 'zappoppop'),
+        'Space': __('Space bar', 'zappoppop'),
+        '\u2190 \u2192 \u2191 \u2193': __('Arrow keys', 'zappoppop'),
+        '0': __('Zero key', 'zappoppop'),
+        'drag a layer': __('Hold the key, then drag a layer', 'zappoppop'),
+        'drag on empty canvas': __('Click and drag on empty canvas', 'zappoppop'),
+        'click a layer': __('Click a layer', 'zappoppop'),
+        'drag a box': __('Drag a selection box', 'zappoppop'),
+        'drag': __('Click and drag', 'zappoppop'),
+        'mouse wheel': __('Scroll the mouse wheel', 'zappoppop')
+    };
+    /* On-screen text of the descriptive key labels (the English text stays the lookup key). */
+    var LBL = {
+        'drag a layer': __('drag a layer', 'zappoppop'),
+        'drag on empty canvas': __('drag on empty canvas', 'zappoppop'),
+        'click a layer': __('click a layer', 'zappoppop'),
+        'drag a box': __('drag a box', 'zappoppop'),
+        'drag': __('drag', 'zappoppop'),
+        'mouse wheel': __('mouse wheel', 'zappoppop')
     };
 
     var CSS = [
@@ -125,11 +147,11 @@
         modal.setAttribute('aria-labelledby', 'zpp-sc-title');
         var card = el('div', 'zpp-sc-card');
         var head = el('div', 'zpp-sc-head');
-        var title = el('h2', 'zpp-sc-title', 'Keyboard Shortcut');
+        var title = el('h2', 'zpp-sc-title', __('Keyboard Shortcut', 'zappoppop'));
         title.id = 'zpp-sc-title';
         var x = el('button', 'zpp-sc-x', '×');
         x.type = 'button';
-        x.setAttribute('aria-label', 'Close');
+        x.setAttribute('aria-label', __('Close', 'zappoppop'));
         x.setAttribute('data-zpp-sc-close', '1');
         head.appendChild(title); head.appendChild(x);
         var body = el('div', 'zpp-sc-body');
@@ -142,9 +164,9 @@
                 if (r[2]) { what.appendChild(el('span', 'zpp-sc-note', r[2])); }
                 var keys = el('div', 'zpp-sc-keys');
                 r[1].forEach(function (combo, i) {
-                    if (i) { keys.appendChild(el('span', 'zpp-sc-or', 'or')); }
+                    if (i) { keys.appendChild(el('span', 'zpp-sc-or', __('or', 'zappoppop'))); }
                     var c = el('span', 'zpp-sc-combo');
-                    combo.forEach(function (k) { var kb = el('kbd', '', k); kb.setAttribute('data-zpp-tip', TIPS[k] || k); c.appendChild(kb); });
+                    combo.forEach(function (k) { var kb = el('kbd', '', LBL[k] || k); kb.setAttribute('data-zpp-tip', TIPS[k] || k); c.appendChild(kb); });
                     keys.appendChild(c);
                 });
                 row.appendChild(what); row.appendChild(keys);
@@ -153,8 +175,8 @@
             body.appendChild(s);
         });
         body.appendChild(el('p', 'zpp-sc-foot', MAC
-            ? 'On Windows / Linux: ⌘ is Ctrl, ⌥ is Alt, ⇧ is Shift, ⌫ is Backspace.'
-            : 'On a Mac: Ctrl is ⌘ (Command), Alt is ⌥ (Option).') );
+            ? __('On Windows / Linux: ⌘ is Ctrl, ⌥ is Alt, ⇧ is Shift, ⌫ is Backspace.', 'zappoppop')
+            : __('On a Mac: Ctrl is ⌘ (Command), Alt is ⌥ (Option).', 'zappoppop')) );
         card.appendChild(head); card.appendChild(body);
         modal.appendChild(card);
         tip = el('div', 'zpp-sc-tip');

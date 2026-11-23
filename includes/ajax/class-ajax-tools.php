@@ -76,7 +76,7 @@ class ZapPopPop_Ajax_Tools {
                 'exists' => $exists,
                 'rows'   => number_format_i18n($rows),
                 'size'   => $size,
-                'status' => $exists ? 'Optimal' : 'Missing',
+                'status' => $exists ? __('Optimal', 'zappoppop') : __('Missing', 'zappoppop'),
             ];
         }
         return $out;

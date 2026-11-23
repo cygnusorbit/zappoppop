@@ -143,9 +143,12 @@
             var f = document.createElement('div');
             f.id = 'zpp-ld-footer';
             f.className = 'zpp-ld-row zpp-ld-footer';
+            var zppT = function (s) {
+                return String(wp.i18n.__(s, 'zappoppop')).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            };
             f.innerHTML =
-                '<button type="button" class="zpp-ld-save" data-zpp-ld="save" title="Saves the Content, Style, Logic, Data and Advanced settings of this layer type as the default for new layers"><span>Save Layer Settings as Default</span></button>' +
-                '<button type="button" class="zpp-ld-clear" data-zpp-ld="clear" hidden title="Remove the saved defaults (all tabs) for this layer type"><span>Clear</span></button>';
+                '<button type="button" class="zpp-ld-save" data-zpp-ld="save" title="' + zppT('Saves the Content, Style, Logic, Data and Advanced settings of this layer type as the default for new layers') + '"><span>' + zppT('Save Layer Settings as Default') + '</span></button>' +
+                '<button type="button" class="zpp-ld-clear" data-zpp-ld="clear" hidden title="' + zppT('Remove the saved defaults (all tabs) for this layer type') + '"><span>' + zppT('Clear') + '</span></button>';
             d.appendChild(f);
         }
         refresh();

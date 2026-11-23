@@ -34,7 +34,8 @@
             if (!tok && typeof R.ensureElementToken === 'function') { R.ensureElementToken(el); tok = String(el.fieldName || el.fieldId || el.token || ''); }
         }
         if (!tok) { n.style.display = 'none'; n.textContent = ''; return; }
-        var txt = 'Field ID: ' + tok;
+        /* translators: %s: field identifier token */
+        var txt = wp.i18n.sprintf(wp.i18n.__('Field ID: %s', 'zappoppop'), tok);
         if (n.textContent !== txt) { n.textContent = txt; }
         n.title = 'Field identifier used in submissions and merge tokens';
         n.style.display = 'block';

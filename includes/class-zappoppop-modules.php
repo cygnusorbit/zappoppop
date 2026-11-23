@@ -544,11 +544,32 @@ class ZapPopPop_Modules {
         return $out;
     }
 
+    /**
+     * Translated display text of a module manifest field ('name' or 'description').
+     * Built-in modules use literal strings (ZapPopPop_Module_Strings, so they reach the POT file);
+     * add-on modules are translated through the 'zappoppop_module_text' filter by whoever ships them.
+     */
+    public static function display($m, $field) {
+        $value = (is_array($m) && isset($m[$field])) ? (string) $m[$field] : '';
+        if ($value === '' || empty($m['slug'])) {
+            return $value;
+        }
+        if (isset($m['source']) && $m['source'] === 'core') {
+            if (!class_exists('ZapPopPop_Module_Strings')) {
+                require_once __DIR__ . '/class-zappoppop-module-strings.php';
+            }
+            $map = ZapPopPop_Module_Strings::map();
+            return isset($map[$m['slug']][$field]) ? $map[$m['slug']][$field] : $value;
+        }
+        $out = apply_filters('zappoppop_module_text', $value, $field, $m['slug'], isset($m['source']) ? $m['source'] : '');
+        return is_string($out) ? $out : $value;
+    }
+
     /** slug => display name for installed modules (built-in names are translatable). */
     public static function labels() {
         $out = [];
         foreach (self::installed() as $slug => $m) {
-            $out[$slug] = ($m['source'] === 'core') ? /* phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction, WordPress.WP.I18n.NonSingularStringLiteralText -- module manifest strings are translated by the module text domain */ translate($m['name'], 'zappoppop') : $m['name'];
+            $out[$slug] = ZapPopPop_Modules::display($m, 'name');
         }
         return $out;
     }

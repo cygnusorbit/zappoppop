@@ -50,7 +50,7 @@
             var g = document.createElement('button');
             g.type = 'button';
             g.className = 'zappoppop-box-grip';
-            g.title = 'Drag to rearrange (or use the arrow keys)';
+            g.title = wp.i18n.__('Drag to rearrange (or use the arrow keys)', 'zappoppop');
             g.setAttribute('aria-label', 'Rearrange box: ' + title(b));
             g.innerHTML = '<span class="dashicons dashicons-move" aria-hidden="true"></span>';
             b.appendChild(g);

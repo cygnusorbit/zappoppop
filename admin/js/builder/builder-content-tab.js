@@ -68,7 +68,7 @@
         if (!document.getElementById('zpp-ct-reset')) {
             var wrap = document.createElement('div');
             wrap.id = 'zpp-ct-reset-wrap';
-            wrap.innerHTML = '<button type="button" id="zpp-ct-reset" class="zpp-ct-reset">↺ <span>Reset Content Settings</span></button>';
+            wrap.innerHTML = '<button type="button" id="zpp-ct-reset" class="zpp-ct-reset">↺ <span></span></button>'; wrap.querySelector('span').textContent = wp.i18n.__('Reset Content Settings', 'zappoppop');
             pane.appendChild(wrap);
         }
         return true;
@@ -114,7 +114,7 @@
     function disarm(btn) {
         window.clearTimeout(armTimer);
         btn.classList.remove('is-armed');
-        btn.querySelector('span').textContent = 'Reset Content Settings';
+        btn.querySelector('span').textContent = wp.i18n.__('Reset Content Settings', 'zappoppop');
     }
     /* ZPP_LK_OWN_BLOCK: the link group (no data-prop) belongs to the layer types that carry it; Reset clears it, Save as Default keeps only the two switches */
     var LINK_TYPES = ['shape', 'label', 'icon', 'html'], LINK_KEYS = ['linkUrl', 'url', 'linkBlank', 'targetBlank', 'nofollow'];

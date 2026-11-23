@@ -180,3 +180,19 @@
 /* ZAPPOPPOP_PROTECT_NOSCROLL: Security & Protections > Disable page scrollbar */
 html.zappoppop-no-scroll,
 html.zappoppop-no-scroll body { overflow: hidden !important; }
+
+/* ZPP_FRONT_RTL */
+/* Popup geometry always matches the builder canvas (LTR); text direction is decided per text, from its content. */
+.zappoppop-popup-wrap,
+.zappoppop-canvas-container {
+    direction: ltr;
+}
+.zappoppop-canvas-container .zappoppop-front-label,
+.zappoppop-canvas-container .zappoppop-front-label *,
+.zappoppop-canvas-container .zappoppop-el-text,
+.zappoppop-canvas-container button,
+.zappoppop-canvas-container input,
+.zappoppop-canvas-container textarea,
+.zappoppop-canvas-container select {
+    unicode-bidi: plaintext;
+}

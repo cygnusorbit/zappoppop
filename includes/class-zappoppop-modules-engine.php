@@ -66,12 +66,47 @@ class ZapPopPop_Modules_Engine {
         return '<span class="zpp-pro-bullet">' . esc_html__('PRO', 'zappoppop') . '</span>';
     }
 
+    /**
+     * Swap translated text into an accordion.html (data, English) before it is sanitised and printed.
+     * Only text nodes and placeholder/title/label attributes found in the generated catalog are replaced;
+     * markup, ids, values and {{merge tags}} are never touched. Catalog: ZapPopPop_Module_Html_Strings
+     * (core) and ZapPopPop_Pro_Module_Html_Strings (Pro, via the zappoppop_module_html_strings filter).
+     */
+    public static function translate_html($raw, $m) {
+        if ('' === $raw || 0 === strpos(determine_locale(), 'en_')) {
+            return $raw;
+        }
+        $map = (empty($m['source']) || 'pro' !== $m['source']) ? ZapPopPop_Module_Html_Strings::map() : array();
+        $map = apply_filters('zappoppop_module_html_strings', $map, $m);
+        if (!is_array($map) || !$map) {
+            return $raw;
+        }
+        $find = static function ($s) use ($map) {
+            $k = trim(preg_replace('/\s+/', ' ', html_entity_decode($s, ENT_QUOTES, 'UTF-8')));
+            return ('' !== $k && isset($map[$k]) && is_string($map[$k]) && $map[$k] !== $k) ? $map[$k] : null;
+        };
+        $raw = preg_replace_callback('/>([^<>]+)</', static function ($x) use ($find) {
+            $t = $find($x[1]);
+            if (null === $t) {
+                return $x[0];
+            }
+            preg_match('/^\s*/', $x[1], $a);
+            preg_match('/\s*$/', $x[1], $b);
+            return '>' . $a[0] . esc_html($t) . $b[0] . '<';
+        }, $raw);
+        return preg_replace_callback('/(\s(?:placeholder|title|label)=)"([^"]*)"/', static function ($x) use ($find) {
+            $t = $find($x[2]);
+            return (null === $t) ? $x[0] : $x[1] . '"' . esc_attr($t) . '"';
+        }, $raw);
+    }
+
     /** Accordion shell (header + body) around a module's accordion.html. */
     public static function render_html($m) {
         $file = $m['dir'] . '/accordion.html';
         /* phpcs:ignore WordPress.WP.AlternativeFunctions -- reads a local plugin or upload temp file, not a remote URL */ $raw  = (is_file($file) && !is_link($file) && is_readable($file) && filesize($file) <= ZapPopPop_Modules::MAX_HTML) ? (string) file_get_contents($file) : '';
+        $raw  = self::translate_html($raw, $m);
         $h    = '<div class="zappoppop-acc-item" data-html-module="' . esc_attr($m['slug']) . '">';
-        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($m['name']) . self::pro_bullet($m) . '</button>';
+        $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html(ZapPopPop_Modules::display($m, 'name')) . self::pro_bullet($m) . '</button>';
         $h   .= '<div class="zappoppop-acc-body" style="display:none;">' . wp_kses($raw, self::html_allowed()) . '</div>';
         return $h . '</div>';
     }
@@ -181,7 +216,7 @@ class ZapPopPop_Modules_Engine {
         if (!empty($m['html'])) {
             return self::render_html($m);
         }
-        $name = ($m['source'] === 'core') ? /* phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction, WordPress.WP.I18n.NonSingularStringLiteralText -- module manifest strings are translated by the module text domain */ translate($m['name'], 'zappoppop') : $m['name'];
+        $name = ZapPopPop_Modules::display($m, 'name');
         $id   = $m['ext_key'];
         $h    = '<div class="zappoppop-acc-item" data-ext-module="' . esc_attr($id) . '">';
         $h   .= '<button type="button" class="zappoppop-acc-header">' . esc_html($name) . self::pro_bullet($m) . '</button>';

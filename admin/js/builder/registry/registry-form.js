@@ -867,7 +867,8 @@
     }
     function label(n, meta) {
         var m = meta && meta[n], nm = m && (m.name || m.title || m.label);
-        return 'Canvas ' + n + (nm ? ' \u2013 ' + nm : '');
+        /* translators: 1: canvas number, 2: canvas name */
+        return nm ? wp.i18n.sprintf(wp.i18n.__('Canvas %1$d – %2$s', 'zappoppop'), n, nm) : wp.i18n.sprintf(wp.i18n.__('Canvas %d', 'zappoppop'), n);
     }
     function build(sel) {
         var $s = $('#prop-submit-canvas');
@@ -881,7 +882,7 @@
             var h = '<option value="">Select a canvas...</option>';
             list.forEach(function(n) {
                 var isCur = (n === i.current);
-                var txt = label(n, i.meta) + (isCur ? ' (this canvas)' : '') + ((missing && n === want) ? ' (missing)' : '');
+                var txt = label(n, i.meta) + (isCur ? ' ' + wp.i18n.__('(this canvas)', 'zappoppop') : '') + ((missing && n === want) ? ' ' + wp.i18n.__('(missing)', 'zappoppop') : '');
                 h += '<option value="' + n + '"' + (isCur && n !== want ? ' disabled' : '') + '>' + $('<div>').text(txt).html() + '</option>';
             });
             $s.html(h).data('sig', sig);

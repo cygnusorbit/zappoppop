@@ -23,6 +23,14 @@ $json_status        = extension_loaded('json') ? 'Enabled' : 'Disabled';
 $multisite_status   = is_multisite() ? 'Yes' : 'No';
 $wp_debug_status    = defined('WP_DEBUG') && WP_DEBUG ? 'Enabled' : 'Disabled';
 $plugin_version     = defined('ZAPPOPPOP_VERSION') ? ZAPPOPPOP_VERSION : '1.0.0';
+/* Display-only labels. The $..._status values above stay English because they feed the copyable support report. */
+$curl_label         = function_exists('curl_version')
+    /* translators: %s: cURL version number. */
+    ? sprintf(__('Enabled (%s)', 'zappoppop'), curl_version()['version'])
+    : __('Disabled', 'zappoppop');
+$gd_label           = extension_loaded('gd') ? __('Enabled', 'zappoppop') : __('Disabled', 'zappoppop');
+$multisite_label    = is_multisite() ? __('Yes', 'zappoppop') : __('No', 'zappoppop');
+$wp_debug_label     = (defined('WP_DEBUG') && WP_DEBUG) ? __('Enabled', 'zappoppop') : __('Disabled', 'zappoppop');
 
 // Database Entity Counts
 $popups_count       = (int)$wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}zappoppop_items");
@@ -63,12 +71,12 @@ $sys_groups = [
     __('WordPress Core', 'zappoppop') => [
         [__('WordPress Version', 'zappoppop'), $wp_version, null],
         [__('ZapPopPop Version', 'zappoppop'), $plugin_version, null],
-        [__('Multisite Network', 'zappoppop'), $multisite_status, null],
-        [__('WP Debug Mode', 'zappoppop'), $wp_debug_status, null],
+        [__('Multisite Network', 'zappoppop'), $multisite_label, null],
+        [__('WP Debug Mode', 'zappoppop'), $wp_debug_label, null],
     ],
     __('PHP & Web Server', 'zappoppop') => [
-        [__('PHP Version', 'zappoppop'), $php_version, $php_is_optimal ? ['ok', 'Optimal'] : ['warn', 'Attention']],
-        [__('PHP Memory Limit', 'zappoppop'), $php_memory_limit, $memory_is_optimal ? ['ok', 'Optimal'] : ['warn', 'Low']],
+        [__('PHP Version', 'zappoppop'), $php_version, $php_is_optimal ? ['ok', __('Optimal', 'zappoppop')] : ['warn', __('Attention', 'zappoppop')]],
+        [__('PHP Memory Limit', 'zappoppop'), $php_memory_limit, $memory_is_optimal ? ['ok', __('Optimal', 'zappoppop')] : ['warn', __('Low', 'zappoppop')]],
         [__('WP Memory Limit', 'zappoppop'), $wp_memory_limit, null],
         [__('Max Execution Time', 'zappoppop'), $max_exec_time, null],
     ],
@@ -76,8 +84,8 @@ $sys_groups = [
         [__('Upload Max Filesize', 'zappoppop'), $upload_max_filesize, null],
         [__('Post Max Size', 'zappoppop'), $post_max_size, null],
         [__('MySQL Version', 'zappoppop'), $mysql_version, null],
-        [__('cURL Extension', 'zappoppop'), $curl_status, null],
-        [__('GD Library', 'zappoppop'), $gd_status, null],
+        [__('cURL Extension', 'zappoppop'), $curl_label, null],
+        [__('GD Library', 'zappoppop'), $gd_label, null],
     ],
 ];
 ?>

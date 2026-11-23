@@ -65,7 +65,7 @@
                 if (e.which === 13) { e.preventDefault(); self.addCustom(); }
             });
 
-            $('#wto-save').attr('title', 'Done').on('click', function() { self.close(); });
+            $('#wto-save').attr('title', wp.i18n.__('Done', 'zappoppop')).on('click', function() { self.close(); });
 
             $('#wto-reset-cols').on('click', function() {
                 var pf = $.isArray(self.cfg.popup_fields) ? self.cfg.popup_fields : [];
@@ -302,7 +302,8 @@
                     ok = true;
                     self.status('\u2713 Saved', true);
                 } else {
-                    self.status('Save failed: ' + ((res && res.data && res.data.message) ? res.data.message : 'unknown error'), false);
+                    /* translators: %s: error message */
+                    self.status(wp.i18n.sprintf(wp.i18n.__('Save failed: %s', 'zappoppop'), ((res && res.data && res.data.message) ? res.data.message : 'unknown error')), false);
                 }
             }).fail(function(xhr) {
                 var hint = (xhr && xhr.status) ? ' (HTTP ' + xhr.status + ')' : '';

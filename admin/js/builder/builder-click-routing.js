@@ -60,7 +60,8 @@
         var html = '';
         list.forEach(function (n) {
             var m = i.meta[n], nm = m && (m.name || m.title || m.label);
-            html += '<option value="' + n + '">Canvas ' + n + (nm ? ' – ' + $('<i>').text(nm).html() : '') + (n === i.current ? ' (this canvas)' : '') + '</option>';
+            var cl = nm ? wp.i18n.sprintf(wp.i18n.__('Canvas %1$d – %2$s', 'zappoppop'), n, nm) : wp.i18n.sprintf(wp.i18n.__('Canvas %d', 'zappoppop'), n);
+            html += '<option value="' + n + '">' + $('<i>').text(cl + (n === i.current ? ' ' + wp.i18n.__('(this canvas)', 'zappoppop') : '')).html() + '</option>';
         });
         $s.html(html);
         if (!(want > 0)) {

@@ -171,7 +171,7 @@ class ZapPopPop_Admin_Export {
             ['id' => 'date',      'label' => 'Date',       'group' => 'core'],
             ['id' => 'name',      'label' => 'Name',       'group' => 'core'],
             ['id' => 'phone',     'label' => 'Phone',      'group' => 'core'],
-            ['id' => 'ip',        'label' => 'IP Address', 'group' => 'core'],
+            ['id' => 'ip',        'label' => __('IP Address', 'zappoppop'), 'group' => 'core'],
         ];
 
         list($defined, $canon) = $this->build_field_index($uid);
