@@ -494,7 +494,7 @@ class ZapPopPop_Saved_Defaults {
 
     /** Model keys that are never part of a layer default: identity, position, state and unique field ids. */
     protected static function layer_skip() {
-        return ['id', 'type', 'name', 'right', 'bottom', 'zIndex', 'locked', 'hidden', 'custom_settings', 'fieldId', 'fieldName', 'field_id', 'field_name']; /* ZPP_LD_COORDS: X / Y / Width / Height are allowed */
+        return ['id', 'type', 'name', 'right', 'bottom', 'zIndex', 'locked', 'hidden', 'custom_settings', 'htmlAttrs', 'custom_css_id', 'fieldId', 'fieldName', 'field_id', 'field_name']; /* ZPP_LD_COORDS: X / Y / Width / Height are allowed */
     }
 
     public static function layer_type($type) {

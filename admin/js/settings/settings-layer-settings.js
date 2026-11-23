@@ -23,9 +23,31 @@
         var $field = $('#zappoppop-ls-json');
 
         /* Builder sub-tabs: Builder Tools | Element / Layer Settings */
+        /* ZPP_BUILDER_ANCHORS: sub-tab <-> URL hash (#builder = Builder Tools, #builder-element = Element / Layer Settings, #builder-guide = Guide Steps) */
+        var BLD_HASH = { tools: 'builder', layers: 'builder-element', guide: 'builder-guide' };
+        var BLD_PANE = { 'builder': 'tools', 'builder-tools': 'tools', 'builder-element': 'layers', 'builder-guide': 'guide' };
+        function showBldPane(pane, writeHash) {
+            var $b = $('.zappoppop-bld-subtab[data-bld-pane="' + pane + '"]');
+            if (!$b.length) { return; }
+            $('.zappoppop-bld-subtab').removeClass('is-active').attr('aria-selected', 'false');
+            $b.addClass('is-active').attr('aria-selected', 'true');
+            $('.zappoppop-bld-pane').each(function () {
+                if ($(this).attr('data-bld-pane') === pane) { this.removeAttribute('hidden'); }
+                else { this.setAttribute('hidden', 'hidden'); }
+            });
+            if (writeHash && window.history && window.history.replaceState) { window.history.replaceState(null, '', '#' + (BLD_HASH[pane] || 'builder')); }
+        }
+        $(window).on('hashchange', function () {
+            var h = String(window.location.hash || '').replace(/^#/, '');
+            if (BLD_PANE[h] && $('#tab-builder.active, #zappoppop-tab-builder.active').length) { showBldPane(BLD_PANE[h], false); }
+        });
+        var initH = String((window.ZapPopPopSettings && window.ZapPopPopSettings.initialHash) || window.location.hash || '').replace(/^#/, '');
+        if (BLD_PANE[initH] && initH !== 'builder') { showBldPane(BLD_PANE[initH], true); }
+
         $('.zappoppop-bld-subtabs').on('click', '.zappoppop-bld-subtab', function (e) {
             e.preventDefault();
             var target = $(this).attr('data-bld-pane');
+            if (window.history && window.history.replaceState) { window.history.replaceState(null, '', '#' + (BLD_HASH[target] || 'builder')); }
             $('.zappoppop-bld-subtab').removeClass('is-active').attr('aria-selected', 'false');
             $(this).addClass('is-active').attr('aria-selected', 'true');
             $('.zappoppop-bld-pane').each(function () {
@@ -265,6 +287,80 @@
         });
 
         /* Reset one element to its defaults */
+        /* ZPP_ELEMENT_ORDER: drag & drop (Pointer Events) + Up / Down keys on the element list; the order feeds the builder ribbon. Submit stays last. */
+        var $eo = $('#zappoppop-eo-json');
+        var $eoList = $root.find('.zappoppop-ls-elements');
+        function eoItems() { return $eoList.children('li.zappoppop-ls-eo-item').get(); }
+        function eoMovable() { return eoItems().filter(function (li) { return !li.classList.contains('is-pinned'); }); }
+        function eoDefaultSorted() {
+            return eoItems().slice().sort(function (a, b) { return parseInt(a.getAttribute('data-ls-defpos'), 10) - parseInt(b.getAttribute('data-ls-defpos'), 10); });
+        }
+        function eoSave() {
+            var items = eoItems(), def = eoDefaultSorted(), same = true;
+            items.forEach(function (li, i) {
+                $(li).find('.zappoppop-ls-num').first().text(i + 1);
+                if (def[i] !== li) { same = false; }
+            });
+            if ($eo.length) { $eo.val(same ? '[]' : JSON.stringify(items.map(function (li) { return li.getAttribute('data-ls-type'); }))); }
+        }
+        function eoKeepPinnedLast() {
+            var pinned = $eoList.children('li.zappoppop-ls-eo-item.is-pinned').get();
+            pinned.forEach(function (li) { $eoList[0].appendChild(li); });
+        }
+        if ($eoList.length) {
+            $eoList[0].addEventListener('pointerdown', function (e) {
+                var grip = e.target.closest ? e.target.closest('.zappoppop-ls-eo-grip') : null;
+                if (!grip || (e.pointerType === 'mouse' && e.button !== 0)) { return; }
+                var li = grip.closest('li.zappoppop-ls-eo-item');
+                if (!li) { return; }
+                e.preventDefault();
+                li.classList.add('is-dragging');
+                $root.addClass('is-sorting');
+                function move(ev) {
+                    var others = eoMovable().filter(function (o) { return o !== li; });
+                    var i, r, target = null;
+                    for (i = 0; i < others.length; i++) {
+                        r = others[i].getBoundingClientRect();
+                        if (ev.clientY < r.top + r.height / 2) { target = others[i]; break; }
+                    }
+                    if (target) {
+                        if (li.nextElementSibling !== target) { $eoList[0].insertBefore(li, target); }
+                    } else if (others.length) {
+                        var last = others[others.length - 1];
+                        if (li.previousElementSibling !== last) { $eoList[0].insertBefore(li, last.nextSibling); }
+                    }
+                    eoKeepPinnedLast();
+                }
+                function end() {
+                    document.removeEventListener('pointermove', move);
+                    document.removeEventListener('pointerup', end);
+                    document.removeEventListener('pointercancel', end);
+                    li.classList.remove('is-dragging');
+                    $root.removeClass('is-sorting');
+                    eoSave();
+                }
+                document.addEventListener('pointermove', move);
+                document.addEventListener('pointerup', end);
+                document.addEventListener('pointercancel', end);
+            });
+            $eoList.on('keydown', '.zappoppop-ls-eo-grip', function (e) {
+                if (e.which !== 38 && e.which !== 40) { return; }
+                e.preventDefault();
+                var li = $(this).closest('li.zappoppop-ls-eo-item')[0], mov = eoMovable(), i = mov.indexOf(li);
+                if (e.which === 38 && i > 0) { $eoList[0].insertBefore(li, mov[i - 1]); }
+                else if (e.which === 40 && i > -1 && i < mov.length - 1) { $eoList[0].insertBefore(li, mov[i + 1].nextSibling); }
+                else { return; }
+                eoKeepPinnedLast();
+                eoSave();
+                $(li).find('.zappoppop-ls-eo-grip').trigger('focus');
+            });
+            $root.on('click', '.zappoppop-ls-eo-reset', function (e) {
+                e.preventDefault();
+                eoDefaultSorted().forEach(function (li) { $eoList[0].appendChild(li); });
+                eoSave();
+            });
+        }
+
         $root.on('click', '.zappoppop-ls-reset', function (e) {
             e.preventDefault();
             var type = $(this).attr('data-ls-el');

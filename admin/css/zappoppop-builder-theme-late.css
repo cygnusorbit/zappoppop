@@ -1095,3 +1095,290 @@ html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="lowercase"
 html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="lowercase"] *:not(input):not(textarea):not(select):not(label) { text-transform: lowercase !important; }
 html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="capitalize"],
 html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-tt="capitalize"] *:not(input):not(textarea):not(select):not(label) { text-transform: capitalize !important; }
+
+/* ZPP_HEADER_CONTENT: Header / Headline content mini editor + Settings rows (Tag, Link, ID, Attributes). Theme colours only, matches the other inspector panels. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-title { font-size: 10px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-tok { position: relative; display: inline-block; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-box { position: relative; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 10px; background: var(--zpp-builder-content-bg); overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-box:focus-within { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-bar { display: flex; align-items: center; justify-content: space-between; gap: 2px; padding: 4px 6px; background: var(--zpp-builder-accordion-bg); border-bottom: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn { min-width: 28px; height: 28px; padding: 0 4px; margin: 0; border: 0 !important; border-radius: 6px; background: transparent !important; box-shadow: none; cursor: pointer; font-size: 13px; line-height: 28px; text-align: center; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn:focus-visible { background: rgba(127, 127, 127, .18) !important; color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn.is-active { background: rgba(127, 127, 127, .26) !important; color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn:disabled { opacity: .4; cursor: default; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn .dashicons { width: 16px; height: 16px; font-size: 16px; line-height: 28px; vertical-align: top; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn sup, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn sub { font-size: 9px; line-height: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-btn-html { font-size: 10px; font-weight: 700; letter-spacing: .3px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-u { text-decoration: underline; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-s { text-decoration: line-through; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-linkbar { display: flex; align-items: center; gap: 6px; padding: 6px; border-bottom: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-linkbar[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-linkbar input { flex: 1 1 auto; min-width: 0; font-size: 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-linkbar input[aria-invalid="true"] { border-color: #dc2626; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-area { min-height: 64px; max-height: 220px; overflow-y: auto; padding: 10px 12px; font-size: 13px; line-height: 1.5; color: var(--zpp-builder-text-color); outline: 0; word-break: break-word; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-area:empty:before { content: attr(data-placeholder); opacity: .5; pointer-events: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-area a { color: var(--zpp-builder-accent-color); text-decoration: underline; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-src { position: absolute; left: 0; top: 0; width: 1px; height: 1px; padding: 0; margin: 0; border: 0; opacity: 0; overflow: hidden; pointer-events: none; resize: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-box.is-html .zpp-hc-area { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-box.is-html .zpp-hc-src { position: static; display: block; width: 100%; height: auto; min-height: 96px; padding: 10px 12px; opacity: 1; pointer-events: auto; border: 0; border-radius: 0; box-shadow: none; background: transparent; font-family: Menlo, Consolas, monospace; font-size: 12px; resize: vertical; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-note { padding: 6px 12px; font-size: 11px; border-top: 1px solid var(--zpp-builder-border-color); color: var(--zpp-builder-muted-text); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-note[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-set { margin-top: 14px; border-top: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-sethead { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 0; margin: 0; border: 0 !important; background: transparent !important; box-shadow: none; cursor: pointer; font-size: 12px; font-weight: 800; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-sethead:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-sethead:focus-visible { color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-setbody[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row > label, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row > span { font-size: 12px; color: var(--zpp-builder-text-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row > select, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row > input[type="text"] { width: 55%; max-width: 55%; font-size: 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-row-block { display: block; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-plus { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; padding: 0; margin: 0; border: 0 !important; border-radius: 6px; background: transparent !important; box-shadow: none; cursor: pointer; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-plus:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-plus:focus-visible { color: var(--zpp-builder-accent-color) !important; background: rgba(127, 127, 127, .18) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-plus .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attrs { padding: 0 0 4px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 6px; align-items: center; margin: 0 0 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr input { width: 100%; min-width: 0; font-size: 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr input[aria-invalid="true"] { border-color: #dc2626; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr-del { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; margin: 0; border: 0 !important; border-radius: 6px; background: transparent !important; box-shadow: none; cursor: pointer; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr-del:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-hc-attr-del:focus-visible { color: #dc2626 !important; outline: 0; }
+
+/* ZPP_SPACING: Margin + Padding block (4 sides each, icon + value + PX, Link button). Theme colours only. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-body[hidden], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-group[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-group { padding: 4px 0 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-group[data-zpp-sp="margin"]:not([hidden]) { margin-bottom: 12px; border-bottom: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-group[data-zpp-sp="padding"] { padding-bottom: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-ghead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 12px; color: var(--zpp-builder-text-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; margin: 0; cursor: pointer; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; border-radius: 6px; background: var(--zpp-builder-accordion-bg) !important; box-shadow: none; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link:focus-visible { color: var(--zpp-builder-accent-color) !important; border-color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link.is-linked { background: var(--zpp-builder-accent-color) !important; border-color: var(--zpp-builder-accent-color) !important; color: #fff !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-cell > label { display: block; margin: 0 0 4px; font-size: 11px; color: var(--zpp-builder-text-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 8px; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; background: var(--zpp-builder-content-bg); box-sizing: border-box; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box:focus-within { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-ico { flex: 0 0 14px; color: var(--zpp-builder-muted-text); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box input.zpp-sp-in { flex: 1 1 auto; min-width: 0; width: 100%; height: 100%; padding: 0; margin: 0; border: 0 !important; background: transparent !important; box-shadow: none !important; font-size: 12px; text-align: left; -moz-appearance: textfield; appearance: textfield; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box input.zpp-sp-in::-webkit-outer-spin-button, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box input.zpp-sp-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-unit { flex: 0 0 auto; font-size: 10px; font-weight: 700; letter-spacing: .3px; color: var(--zpp-builder-muted-text); }
+
+/* ZPP_SP_RESET */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-tools { display: inline-flex; align-items: center; gap: 6px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; margin: 0; cursor: pointer; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; border-radius: 6px; background: var(--zpp-builder-accordion-bg) !important; box-shadow: none; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:focus-visible { color: var(--zpp-builder-accent-color) !important; border-color: var(--zpp-builder-accent-color) !important; outline: 0; }
+
+/* ZPP_SP_STEP */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-step { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; margin-left: 2px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-up, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-down { display: block; width: 14px; height: 10px; padding: 0; margin: 0; border: 0 !important; background: transparent !important; box-shadow: none; cursor: pointer; position: relative; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-up::after, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-down::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-up::after { -webkit-transform: translate(-50%, -25%) rotate(-135deg); transform: translate(-50%, -25%) rotate(-135deg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-down::after { -webkit-transform: translate(-50%, -75%) rotate(45deg); transform: translate(-50%, -75%) rotate(45deg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-up:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-down:hover { color: var(--zpp-builder-accent-color) !important; }
+
+/* ZPP_TYPOGRAPHY */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer[data-zpp-ls-type="label"] #insp-section-text-align { display: none !important; } /* Header layers: replaced by the Text align row in Typography */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-row { position: relative; display: grid; grid-template-columns: 38% minmax(0, 1fr); align-items: center; gap: 8px; margin: 0 0 10px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-row[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-lab { margin: 0; font-size: 11px; font-weight: 600; color: var(--zpp-builder-text-color); line-height: 1.3; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-row > select.widefat, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-row > input[type="color"] { width: 100%; min-width: 0; margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 8px; box-sizing: border-box; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl:focus-within { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl input { flex: 1 1 auto; min-width: 0; width: 100%; height: 100%; padding: 0; margin: 0; border: 0 !important; background: transparent !important; box-shadow: none !important; outline: 0; font-size: 12px; color: var(--zpp-builder-text-color); -moz-appearance: textfield; appearance: textfield; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl input::-webkit-outer-spin-button, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-unit { flex: 0 0 auto; font-size: 10px; font-weight: 700; letter-spacing: .3px; color: var(--zpp-builder-muted-text); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-divider { height: 0; margin: 12px 0; border: 0; border-top: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-seg { display: flex; min-width: 0; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b { flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center; min-width: 0; height: 30px; padding: 0; margin: 0; border: 0 !important; border-left: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; border-radius: 0 !important; background: transparent !important; box-shadow: none; cursor: pointer; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b:first-child { border-left: 0 !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b:focus-visible { color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b.is-on { background: var(--zpp-builder-accent-color) !important; color: #fff !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-b .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-glyph { font-size: 12px; font-weight: 700; line-height: 1; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-g-under { text-decoration: underline; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-g-strike { text-decoration: line-through; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-g-over { text-decoration: overline; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-g-ital { font-style: italic; font-family: Georgia, "Times New Roman", serif; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-proxy { position: absolute; right: 0; top: 0; width: 1px; height: 1px; margin: 0; padding: 0; border: 0; opacity: 0; overflow: hidden; pointer-events: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 32px; margin: 4px 0 12px; padding: 0; cursor: pointer; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; border-radius: 8px; background: transparent !important; box-shadow: none; font-size: 11px; font-weight: 700; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more-btn:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more-btn:focus-visible { color: var(--zpp-builder-accent-color) !important; border-color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-chev { width: 6px; height: 6px; margin-top: 2px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; -webkit-transform: rotate(-135deg); transform: rotate(-135deg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more-btn[aria-expanded="false"] .zpp-ty-chev { margin-top: -2px; -webkit-transform: rotate(45deg); transform: rotate(45deg); }
+/* collapsed with visibility (not display) so the controls stay populated and flushed by the Inspector */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more.is-collapsed { height: 0; overflow: hidden; visibility: hidden; margin: 0; padding: 0; }
+/* stage: the builder wrapper forces text rules off, so the layer node carries data attributes (set by ZapPopPopTextStyle.apply) */
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-fs="italic"],
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-fs="italic"] *:not(input):not(textarea):not(select):not(label) { font-style: italic !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="underline"], html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="underline"] *:not(input):not(textarea):not(select):not(label) { text-decoration: underline !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="overline"], html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="overline"] *:not(input):not(textarea):not(select):not(label) { text-decoration: overline !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="line-through"], html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-ld="line-through"] *:not(input):not(textarea):not(select):not(label) { text-decoration: line-through !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-dir="rtl"], html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-dir="rtl"] *:not(input):not(textarea):not(select):not(label) { direction: rtl !important; }
+html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-sw="1"], html body .zappoppop-builder-wrap .zappoppop-canvas-item[data-zpp-sw="1"] *:not(input):not(textarea):not(select):not(label) { -webkit-text-stroke: var(--zpp-sw) var(--zpp-sc) !important; }
+
+/* ZPP_TY_SEG_BORDER: the frame is an overlay on top of the buttons, so the active button can never cover any side of it */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-seg { position: relative; border: 0 !important; overflow: hidden; border-radius: 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-seg::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; pointer-events: none; z-index: 2; box-sizing: border-box; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-seg:focus-within::after { border-color: var(--zpp-builder-accent-color); }
+
+/* ZPP_BACKGROUND */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; margin: 0; cursor: pointer; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; border-radius: 6px; background: transparent !important; box-shadow: none; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add:focus-visible { color: var(--zpp-builder-accent-color) !important; border-color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add[disabled] { opacity: .4; cursor: not-allowed; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-list { margin: 0 0 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item { margin: 0 0 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-row { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 6px 0 8px; box-sizing: border-box; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; cursor: pointer; color: var(--zpp-builder-text-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item.is-open > .zpp-bgo-row { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-row:focus-visible { outline: 0; border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-chip { flex: 0 0 18px; width: 18px; height: 18px; border-radius: 4px; background-color: #e5e7eb; background-repeat: no-repeat; box-sizing: border-box; border: 1px solid rgba(128,128,128,.6); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-lab { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-x { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; margin: 0; cursor: pointer; border: 0 !important; background: transparent !important; box-shadow: none; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-x:hover { color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-x .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-panel { margin-top: 6px; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; overflow: hidden; background: var(--zpp-builder-accordion-bg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-tabs { display: flex; border-bottom: 1px solid var(--zpp-builder-border-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-tab { flex: 1 1 0; height: 34px; padding: 0; margin: 0; cursor: pointer; border: 0 !important; border-bottom: 2px solid transparent !important; border-radius: 0 !important; background: transparent !important; box-shadow: none; font-size: 11px; font-weight: 700; color: var(--zpp-builder-muted-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-tab:hover { color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-tab.is-on { color: var(--zpp-builder-text-color) !important; border-bottom-color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-pane { padding: 10px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-pane[hidden] { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-panel .zpp-ty-row > select { width: 100%; min-width: 0; margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-imgwrap { position: relative; margin: 0 0 10px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-img { display: flex; align-items: center; justify-content: center; height: 110px; border-radius: 8px; cursor: pointer; background-color: rgba(128,128,128,.18); background-size: cover; background-position: center; background-repeat: no-repeat; border: 1px dashed var(--zpp-builder-field-border, var(--zpp-builder-border-color)); box-sizing: border-box; color: var(--zpp-builder-muted-text); font-size: 11px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-img.has-img { border-style: solid; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-img.has-img .zpp-bgo-ph { display: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-imgx { position: absolute; top: 6px; right: 6px; display: none; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; margin: 0; cursor: pointer; border: 0 !important; border-radius: 50% !important; background: rgba(0,0,0,.55) !important; color: #fff !important; box-shadow: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-imgwrap:hover .zpp-bgo-imgx { display: inline-flex; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-imgx .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-bar { position: relative; height: 12px; margin: 14px 8px 18px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-barfill { position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: 6px; box-sizing: border-box; border: 1px solid rgba(128,128,128,.6); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-handle { position: absolute; top: -4px; width: 20px; height: 20px; margin: 0 0 0 -10px; padding: 0; cursor: grab; touch-action: none; border: 2px solid #fff !important; border-radius: 50% !important; box-shadow: none !important; box-sizing: border-box; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-handle::after { content: ""; position: absolute; top: -4px; right: -4px; bottom: -4px; left: -4px; border: 1px solid rgba(128,128,128,.85); border-radius: 50%; pointer-events: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-handle:active { cursor: grabbing; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-bar { touch-action: none; cursor: pointer; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-handle.is-on { box-shadow: none !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-handle.is-on::after { border: 2px solid var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-top: 6px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-two .zpp-ty-lab { display: block; margin: 0 0 4px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-two select { width: 100%; margin: 0; }
+
+/* ZPP_LABEL_UNIFY: row labels in Typography and Background look the same whether they are a <span> or a <label> (the theme upper-cases every <label>) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-lab, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-ty-lab { display: block; margin: 0; font-size: 11px !important; font-weight: 600 !important; letter-spacing: normal !important; text-transform: none !important; line-height: 1.3 !important; color: var(--zpp-builder-text-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-two .zpp-ty-lab { margin: 0 0 4px; }
+
+/* ZPP_TY_NUMWRAP */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-numwrap { display: flex; align-items: center; gap: 6px; min-width: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-numwrap .zpp-ty-ctl { flex: 1 1 auto; min-width: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-numwrap .zpp-ty-reset { flex: 0 0 auto; }
+
+/* ZPP_FIELD_BG_THEME: the new fields use Theme > Fields background and text, like every other Inspector field */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-seg,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-row,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-more-btn,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-link,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-add { background: var(--zpp-builder-field-bg) !important; background-color: var(--zpp-builder-field-bg) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-ty-ctl input,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-box input.zpp-sp-in,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-row { color: var(--zpp-builder-field-text) !important; }
+
+/* ZPP_RESET_UNIFORM */
+/* every reset / revert button in the Inspector shares the colour-picker revert look: 30x30, theme border + radius, field colours, same arc icon */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px; width: 30px; height: 30px; min-height: 30px; margin: 0; padding: 0; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-builder-field-border) !important; border-radius: var(--zpp-r-button, 4px) !important; background: var(--zpp-builder-field-bg) !important; box-shadow: none; color: var(--zpp-builder-field-text) !important; line-height: 0; cursor: pointer; -webkit-appearance: none; appearance: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:hover:not(:disabled),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:focus-visible,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert:hover:not(:disabled) { border-color: var(--zpp-builder-accent-color) !important; color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset .dashicons { width: 16px; height: 16px; font-size: 16px; line-height: 16px; }
+/* swap the dashicon rotate glyph for the same arc as the colour-picker revert (mask keeps currentColor, works in Chrome/Safari/Firefox/Edge) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset .dashicons-image-rotate:before { content: ""; display: block; width: 16px; height: 16px; background-color: currentColor; -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 3-6.7M3 4v5h5'/></svg>") center / 16px 16px no-repeat; mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 3-6.7M3 4v5h5'/></svg>") center / 16px 16px no-repeat; }
+
+/* ZPP_BORDER_SIDES */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-row { display: flex; align-items: center; gap: 6px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-row > input { flex: 1 1 auto; min-width: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px; width: 30px; height: 30px; margin: 0; padding: 0; box-sizing: border-box; border: var(--zpp-bw, 1px) solid var(--zpp-builder-field-border) !important; border-radius: var(--zpp-r-button, 4px) !important; background: var(--zpp-builder-field-bg) !important; color: var(--zpp-builder-field-text) !important; line-height: 0; cursor: pointer; box-shadow: none; -webkit-appearance: none; appearance: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-toggle:hover, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-toggle:focus-visible, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-toggle.is-open, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-toggle.is-mixed { border-color: var(--zpp-builder-accent-color) !important; color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-panel { margin: 0 0 10px; padding: 10px; box-sizing: border-box; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; background: var(--zpp-builder-accordion-bg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-panel.is-collapsed { visibility: hidden; height: 0; margin: 0; padding: 0; border-width: 0; overflow: hidden; }
+
+/* ZPP_BORDER_MASTER_STEPPER */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bx-row > .zpp-ty-ctl { flex: 1 1 auto; min-width: 0; }
+
+/* ZPP_BORDER_TWO_COL */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > div[style*="grid-template-columns"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > div[style*="grid-template-columns"] > div { min-width: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > div[style*="grid-template-columns"] .zpp-cp { min-width: 0; max-width: 100%; }
+
+/* ZPP_BORDER_ONE_GRID */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > .zpp-bx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > .zpp-bx-grid > div { min-width: 0; margin-bottom: 8px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > .zpp-bx-grid > .zpp-bx-panel { grid-column: 1 / -1; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > .zpp-bx-grid > .zpp-bx-panel.is-collapsed { margin-bottom: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer #insp-section-border .zappoppop-sec-body > .zpp-bx-grid .zpp-cp { min-width: 0; max-width: 100%; }
+
+/* ZPP_RESET_STATE */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:disabled { opacity: .4; cursor: default; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-sp-reset:disabled:hover { color: var(--zpp-builder-field-text) !important; border-color: var(--zpp-builder-field-border) !important; }
+
+/* ZPP_EFFECTS */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-f { display: grid; grid-template-columns: 38% minmax(0, 1fr); align-items: center; gap: 8px; margin: 0 0 10px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-f > label { margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-f > select, .zpp-fx-f > input[type="color"], .zpp-fx-f .zpp-cp { min-width: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 14px 0 8px; padding-top: 10px; border-top: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-title { margin: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tools { display: inline-flex; gap: 6px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tb { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin: 0; padding: 0; box-sizing: border-box; border: 0 !important; border-radius: var(--zpp-r-button, 4px) !important; background: transparent !important; color: var(--zpp-builder-muted-text) !important; cursor: pointer; box-shadow: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tb:hover:not(:disabled), .zpp-fx-tb:focus-visible, .zpp-fx-tb.is-open { color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tb:disabled { opacity: .4; cursor: default; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tb .dashicons { width: 18px; height: 18px; font-size: 18px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-origin { margin: 0 0 10px; padding: 10px 10px 0; box-sizing: border-box; border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; background: var(--zpp-builder-accordion-bg); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-origin.is-collapsed { visibility: hidden; height: 0; margin: 0; padding: 0; border-width: 0; overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-list { display: flex; flex-direction: column; gap: 6px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-item { border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; background: var(--zpp-builder-field-bg); color: var(--zpp-builder-field-text); overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-item.is-open { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-item.is-off .zpp-fx-lab { opacity: .5; text-decoration: line-through; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-irow { display: flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 6px 0 10px; cursor: pointer; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-lab { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 600; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-ib { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 24px; margin: 0; padding: 0; border: 0 !important; background: transparent !important; color: inherit !important; cursor: pointer; box-shadow: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-ib:hover, .zpp-fx-ib:focus-visible { color: var(--zpp-builder-accent-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-ib .dashicons { width: 16px; height: 16px; font-size: 16px; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-panel { padding: 10px 10px 0; border-top: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); background: var(--zpp-builder-accordion-bg); }
+
+/* ZPP_FX_TABS */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tabs { display: flex; margin: 0 -10px 12px; border-bottom: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tab { flex: 1 1 0; min-width: 0; margin: 0 0 -1px; padding: 8px 4px; border: 0 !important; border-bottom: 2px solid transparent !important; border-radius: 0 !important; background: transparent !important; color: var(--zpp-builder-muted-text) !important; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: none; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tab:hover, .zpp-fx-tab:focus-visible { color: var(--zpp-builder-text-color) !important; outline: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-tab.is-on { color: var(--zpp-builder-text-color) !important; border-bottom-color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-ico { flex: 0 0 auto; font-size: 13px; line-height: 1; color: var(--zpp-builder-muted-text); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-ti { flex: 0 0 auto; width: 16px; height: 16px; font-size: 16px; margin-right: 6px; }
+
+/* ZPP_BG_DIVIDER: line under the Overlay stack, same line as the Effect section dividers */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bg-divider { height: 0; margin: 2px 0 12px; border-top: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); }
+
+/* ZPP_BGO_CARD: an overlay item is one card with one complete border (same as the Effect transform / filter items); open = accent border all round */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item { border: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 8px; background: var(--zpp-builder-field-bg); overflow: hidden; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item.is-open { border-color: var(--zpp-builder-accent-color); }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item > .zpp-bgo-row, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item.is-open > .zpp-bgo-row, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item > .zpp-bgo-row:focus-visible { border: 0; border-radius: 0; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item > .zpp-bgo-panel { margin-top: 0; border: 0; border-top: 1px solid var(--zpp-builder-field-border, var(--zpp-builder-border-color)); border-radius: 0; }
+
+/* ZPP_CP_PREINIT: the native colour input (orange field border) flashed on load until the alpha picker replaced it with its own field; hide it until then (the picker turns it into a hidden input) */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer input[type="color"]:not([data-zpp-fl]) { display: none !important; }
+
+/* ZPP_BGO_NO_BLINK: the overlay list is rebuilt on every add/remove; the drawer-wide "transition: all" made each rebuilt row and picker fade in from its default (orange) border/colour = visible blinking */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-list, html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-list * { transition: none !important; animation: none !important; }
+
+/* ZPP_CARD_ALL_SIDES: the theme paints [data-zpp-role="divider-row"] top/bottom borders in the divider colour (!important); on an overlay / effect card that left only the side borders in the field colour = an incomplete border. Force all four sides to the card colour. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item[data-zpp-role], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-item[data-zpp-role] { border-color: var(--zpp-builder-field-border, var(--zpp-builder-border-color)) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item.is-open[data-zpp-role], html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-fx-item.is-open[data-zpp-role] { border-color: var(--zpp-builder-accent-color) !important; }
+
+/* ZPP_BGO_STATIC_ROLE_COLOURS: the theme script tags rebuilt overlay panels with data-zpp-role a moment after every click, and the role rules then recoloured the divider lines (flash). Give the panel and tab bar the final colours directly so nothing changes when the tags arrive. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item > .zpp-bgo-panel { border-color: var(--zpp-builder-content-border) !important; background: transparent !important; background-color: transparent !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-bgo-item > .zpp-bgo-panel .zpp-bgo-tabs { border-top-color: var(--zpp-builder-border-color) !important; border-bottom-color: var(--zpp-builder-border-color) !important; }
+
+/* ZPP_ZOOM_SELECT_BG: the ribbon zoom dropdown (100% v) uses the same background as every builder field (--zpp-builder-field-bg); the chevron image is kept */
+html body #zappoppop-ribbon .zppz-select,
+html body #zappoppop-ribbon .zppz-select:focus { background-color: var(--zpp-builder-field-bg) !important; color: var(--zpp-builder-text-color, #e2e8f0) !important; }
+html body #zappoppop-ribbon .zppz-select:hover { background-color: var(--zpp-builder-field-bg) !important; filter: brightness(1.25); }
+html body #zappoppop-ribbon .zppz-select option { background-color: #0f172a; color: #e2e8f0; }

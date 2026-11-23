@@ -38,14 +38,17 @@
             }
 
             // Sync with URL Hash for direct linking
-            if (window.history && window.history.replaceState) {
+            /* ZPP_BUILDER_ANCHORS: keep #builder-element / #builder-guide while the Builder tab stays open */
+            if (window.history && window.history.replaceState && !(tabKey === 'builder' && /^#builder-(tools|element|guide)$/.test(window.location.hash))) {
                 window.history.replaceState(null, '', '#' + tabKey);
             }
         },
 
         restoreActiveTab: function() {
+            window.ZapPopPopSettings.initialHash = window.location.hash || ''; /* ZPP_BUILDER_ANCHORS */
             if (window.location.hash) {
                 var hashTab = window.location.hash.replace('#', '').replace(/^tab-/, '');
+                if (/^builder-(tools|element|guide)$/.test(hashTab)) { hashTab = 'builder'; }
                 if ($('.zappoppop-tab-btn[data-tab="' + hashTab + '"]').length) {
                     this.switchTab(hashTab);
                     return;

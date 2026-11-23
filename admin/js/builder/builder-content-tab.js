@@ -122,6 +122,7 @@
         var keys = {};
         if (el && LINK_TYPES.indexOf(String(el.type || '').toLowerCase()) !== -1) { LINK_KEYS.forEach(function (k) { keys[k] = 1; }); }
         SHAPE_KEYS.forEach(function (k) { if (el && el.type === 'shape') { keys[k] = 1; } });
+        if (el && /^(label|title|paragraph)$/i.test(String(el.type || ''))) { keys.htmlAttrs = 1; keys.custom_css_id = 1; } /* ZPP_HEADER_CONTENT: Reset clears the ID + Attributes */
         Array.prototype.forEach.call(document.querySelectorAll('#insp-tab-basic [data-prop]'), function (n) {
             if (n.closest('#insp-section-layer-name')) { return; }
             var k = n.getAttribute('data-prop');
@@ -134,6 +135,7 @@
     window.ZapPopTabKeys.basic = function (el) {
         var keys = contentKeys(el);
         delete keys.linkUrl; delete keys.url; /* a URL is per layer, never a default */
+        delete keys.htmlAttrs; delete keys.custom_css_id; /* ZPP_HEADER_CONTENT_DEF: HTML ID + Attributes are per layer, never a default */
         Object.keys(ALWAYS).forEach(function (k) { keys[k] = 1; });
         Object.keys(IF_SET).forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } });
         LABEL_KEYS.forEach(function (k) { if (el && Object.prototype.hasOwnProperty.call(el, k)) { keys[k] = 1; } }); /* ZPP_LD_LABEL */
@@ -160,6 +162,7 @@
         $('#prop-gp-autocomplete').val('off');
         if (window.ZapPopPopLayerDefaults) { window.ZapPopPopLayerDefaults.applyTo(el, 'basic'); window.ZapPopPopLayerDefaults.syncDom(el); } /* ZPP_LAYER_DEFAULTS */
         if (window.ZapPopPopLinkGroup) { window.ZapPopPopLinkGroup.hydrate(); } /* ZPP_LK_OWN_BLOCK */
+        if (window.ZapPopPopHeaderContent) { window.ZapPopPopHeaderContent.hydrate(); } /* ZPP_HEADER_CONTENT_RESET */
         var c = core();
         if (c && typeof c.pushHistory === 'function') { c.pushHistory('Reset Content Settings'); }
         var cv = window.ZapPopPopBuilderCanvas;

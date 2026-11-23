@@ -28,6 +28,7 @@
     }
 
     function insertAtCursor(token) {
+        if (window.ZapPopPopHeaderContent && window.ZapPopPopHeaderContent.insertText(token)) return; /* ZPP_HEADER_CONTENT: visual editor inserts at the caret */
         var ta = document.getElementById("prop-label-content");
         if (!ta) return;
         var v = ta.value || "";

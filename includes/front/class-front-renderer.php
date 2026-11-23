@@ -390,7 +390,7 @@ class ZapPopPop_Front_Renderer {
         }, $html, 1);
     }
 
-    private function render_shape_svg($preset, $fill, $stroke, $stroke_width, $rotate) {
+    private function render_shape_svg($preset, $fill, $stroke, $stroke_width, $rotate, $radius = 0, $box_w = 0, $box_h = 0) {
         $preset = !empty($preset) ? sanitize_key($preset) : 'circle';
         $fill = !empty($fill) ? esc_attr($fill) : '#3b82f6'; // 'none' allowed for transparent fill
         $stroke = !empty($stroke) ? esc_attr($stroke) : 'transparent';
@@ -427,6 +427,13 @@ class ZapPopPop_Front_Renderer {
             'heart'  => 'M50,88 C50,88 10,60 10,32 C10,16 23,6 37,6 C45,6 50,12 50,18 C50,12 55,6 63,6 C77,6 90,16 90,32 C90,60 50,88 50,88 Z',
             'shield' => 'M50 4 L92 18 L92 54 C92 76 50 96 50 96 C50 96 8 76 8 54 L8 18 Z',
         );
+        /* ZPP_SHAPE_RADIUS: px radius on rectangle presets, converted to viewBox units so corners stay circular */
+        $radius = max(0, intval($radius));
+        if ($radius > 0 && in_array($preset, array('square', 'rectangle', 'rect', 'rounded', 'rounded_square'), true)) {
+            $rx = min(50, $radius * 100 / max(1, (float) $box_w));
+            $ry = min(50, $radius * 100 / max(1, (float) $box_h));
+            $geom_open[$preset] = sprintf('<rect x="0" y="0" width="100" height="100" rx="%.3F" ry="%.3F"', $rx, $ry);
+        }
         if (isset($geom_open[$preset])) {
             $path = sprintf('%s fill="%s" %s />', $geom_open[$preset], $fill, $s_attr);
         } elseif (isset($geom_poly[$preset])) {
@@ -438,7 +445,7 @@ class ZapPopPop_Front_Renderer {
         }
 
         /* ZPP_SHAPE_CRISP_EDGES: un-rotated, stroke-less rectangles snap to whole pixels, so touching boxes never show an anti-aliased seam (during the appear animation or at rest) */
-        $crisp = (in_array($preset, array('square', 'rectangle', 'rect'), true) && $stroke_width <= 0 && $rotate === 0) ? ' shape-rendering="crispEdges"' : '';
+        $crisp = (in_array($preset, array('square', 'rectangle', 'rect'), true) && $stroke_width <= 0 && $rotate === 0 && $radius <= 0) ? ' shape-rendering="crispEdges"' : '';
         return sprintf('<svg viewBox="0 0 100 100" preserveAspectRatio="none"%s style="%s">%s</svg>', $crisp, esc_attr($svg_style), $path);
     }
 
@@ -592,13 +599,14 @@ class ZapPopPop_Front_Renderer {
         /* ZAPPOPPOP_STYLE_TOGGLES */
         if (isset($el['borderEnabled']) && (empty($el['borderEnabled']) || $el['borderEnabled'] === 'false')) {
             $el['borderWidth'] = 0; $el['borderRadius'] = 0; $el['borderStyle'] = 'none';
+            foreach ( ZapPopPop_Box_Style::keys() as $zappoppop_bk ) { unset( $el[ $zappoppop_bk ] ); } /* ZPP_BORDER_SIDES */
         }
         if (isset($el['shadowEnabled']) && (empty($el['shadowEnabled']) || $el['shadowEnabled'] === 'false')) {
             unset($el['boxShadow'], $el['shadowX'], $el['shadowY'], $el['shadowBlur'], $el['shadowSpread']);
         }
         $el_id = !empty($el['id']) ? sanitize_html_class($el['id']) : uniqid('el_');
         $custom_class = !empty($el['custom_css_class']) ? esc_attr($el['custom_css_class']) : '';
-        $custom_id = !empty($el['custom_css_id']) ? (' id="' . esc_attr($el['custom_css_id']) . '"') : '';
+        $custom_id = (!empty($el['custom_css_id']) && ZapPopPop_Html_Attrs::clean_id($el['custom_css_id']) !== '') ? (' id="' . esc_attr(ZapPopPop_Html_Attrs::clean_id($el['custom_css_id'])) . '"') : ''; /* ZPP_HTML_ATTRS: valid id characters only */
         
         // Build Box Shadow style
         $box_shadow_val = !empty($el['boxShadow']) ? $el['boxShadow'] : '';
@@ -680,7 +688,7 @@ class ZapPopPop_Front_Renderer {
             "width:{$width}px",
             "height:{$height}px",
             "z-index:{$zIndex}",
-            "border-radius:{$bRad}px",
+            'border-radius:' . ZapPopPop_Box_Style::radius_css($el), /* ZPP_BORDER_SIDES */
             "opacity:{$opac}",
             'box-sizing:border-box'
         ];
@@ -698,10 +706,12 @@ class ZapPopPop_Front_Renderer {
         if (isset($el['textTransform']) && in_array($el['textTransform'], array('uppercase', 'lowercase', 'capitalize'), true)) $style[] = 'text-transform:' . $el['textTransform']; /* ZPP_TEXT_TRANSFORM: enum, inherited by the text inside the layer */
         /* ZPP_WORD_SPACING: clamped number, inherited by the text inside the layer */
         if (isset($el['wordSpacing']) && is_numeric($el['wordSpacing']) && (float) $el['wordSpacing'] != 0) $style[] = 'word-spacing:' . max(-10, min(50, (float) $el['wordSpacing'])) . 'px';
+        foreach (ZapPopPop_Text_Style::declarations($el) as $zpp_ty_decl) { $style[] = $zpp_ty_decl; } /* ZPP_TYPOGRAPHY: structured, validated */
         if (!empty($el['fontSize'])) $style[] = 'font-size:' . intval($el['fontSize']) . 'px';
         if (!empty($el['fontWeight']) && preg_match('/^[0-9a-z]{3,10}$/i', (string) $el['fontWeight'])) $style[] = 'font-weight:' . $el['fontWeight']; /* ZAPPOPPOP_FRONT_FONT_WEIGHT: form inputs inherit this */
         if (!empty($el['color'])) $style[] = 'color:' . esc_attr($el['color']);
         if (!empty($el['bgColor']) && $type !== 'shape' && (empty($el['transparentFill']) || $el['transparentFill'] === 'false')) $style[] = 'background-color:' . esc_attr($el['bgColor']);
+        if ($type !== 'shape') { foreach (ZapPopPop_Bg_Style::declarations($el) as $zpp_bg_decl) { $style[] = $zpp_bg_decl; } } /* ZPP_BACKGROUND: overlays + clipping, structured and validated */
 
                 $pad_top    = intval($el['paddingTop'] ?? ($el['padding_top'] ?? ($el['padding'] ?? 0)));
         $pad_right  = intval($el['paddingRight'] ?? ($el['padding_right'] ?? ($el['padding'] ?? 0)));
@@ -713,11 +723,12 @@ class ZapPopPop_Front_Renderer {
 
         /* ZAPPOPPOP_LABEL_STYLE_FRONT: border + shadow for text-like layers */
         if (in_array($type, array('label', 'text', 'title', 'paragraph', 'html'), true)) {
-            $lb_bw = isset($el['borderWidth']) ? intval($el['borderWidth']) : 0;
+            $lb_bw = ZapPopPop_Box_Style::max_width($el); /* ZPP_BORDER_SIDES */
             if ($lb_bw > 0) {
                 $lb_bs = (!empty($el['borderStyle']) && in_array($el['borderStyle'], array('solid', 'dashed', 'dotted', 'double'), true)) ? $el['borderStyle'] : 'solid';
                 $lb_bc = (!empty($el['borderColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', (string) $el['borderColor'])) ? $el['borderColor'] : '#334155';
                 $style[] = 'border:' . $lb_bw . 'px ' . $lb_bs . ' ' . $lb_bc;
+                if (ZapPopPop_Box_Style::width_css($el) !== '') { $style[] = ZapPopPop_Box_Style::width_css($el); }
             }
             if (!empty($box_shadow_val)) { $style[] = 'box-shadow:' . $box_shadow_val; }
         }
@@ -729,15 +740,17 @@ class ZapPopPop_Front_Renderer {
         if ($shape_rot !== 0) {
             $style[] = "transform:rotate({$shape_rot}deg)";
         }
+        if ($type !== 'shape') { foreach (ZapPopPop_Effects_Style::declarations($el, $shape_rot) as $zpp_fx_decl) { $style[] = $zpp_fx_decl; } } /* ZPP_EFFECTS: blend mode, transform list, filter list */
 
         /* ZAPPOPPOP_FORM_BORDER_FIX: wrapper owns border + radius; inner box radius = outer radius - border width */
         if (in_array($type, array('text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password', 'upload', 'file', 'multiselect'), true)) {
-            $fb_bw = isset($el['borderWidth']) ? max(0, intval($el['borderWidth'])) : 0;
+            $fb_bw = ZapPopPop_Box_Style::max_width($el); /* ZPP_BORDER_SIDES */
             if ($fb_bw > 0) {
                 if ($type !== 'text') {
                     $fb_bs = (!empty($el['borderStyle']) && in_array($el['borderStyle'], array('solid', 'dashed', 'dotted', 'double'), true)) ? $el['borderStyle'] : 'solid';
                     $fb_bc = (!empty($el['borderColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', (string) $el['borderColor'])) ? $el['borderColor'] : '#334155';
                     $style[] = 'border:' . $fb_bw . 'px ' . $fb_bs . ' ' . $fb_bc;
+                    if (ZapPopPop_Box_Style::width_css($el) !== '') { $style[] = ZapPopPop_Box_Style::width_css($el); }
                 }
                 $style[] = '--zappoppop-wb:' . $fb_bw . 'px';
             }
@@ -863,7 +876,7 @@ class ZapPopPop_Front_Renderer {
                 $stroke = esc_attr(!empty($el['strokeColor']) ? $el['strokeColor'] : (!empty($el['shapeStroke']) ? $el['shapeStroke'] : 'transparent'));
                 $stroke_width = intval($el['strokeWidth'] ?? ($el['shapeStrokeWidth'] ?? 0));
                 $rotate = !empty($el['rotate']) ? intval($el['rotate']) : (!empty($el['shapeRotate']) ? intval($el['shapeRotate']) : intval($el['rotation'] ?? 0));
-                $svg = $this->render_shape_svg($preset, $fill, $stroke, $stroke_width, $rotate);
+                $svg = $this->render_shape_svg($preset, $fill, $stroke, $stroke_width, $rotate, intval($el['shapeRadius'] ?? 0), $width, $height);
                 $shape_style = [
                     'position:absolute',
                     "top:{$top}px",
@@ -875,7 +888,7 @@ class ZapPopPop_Front_Renderer {
                     'box-sizing:border-box'
                 ];
                 if (!empty($el['bgColor']) && empty($el['transparentFill'])) { $shape_style[] = 'background-color:' . sanitize_text_field($el['bgColor']); }
-                $shape_style[] = 'border-radius:' . $bRad . 'px';
+                $shape_style[] = 'border-radius:' . ZapPopPop_Box_Style::radius_css($el); /* ZPP_BORDER_SIDES */
                 $shape_style_attr = esc_attr(implode(';', $shape_style) . $anim_style);
                 return '<div class="zappoppop-layer-item zappoppop-element zappoppop-el-shape ' . $anim_class . '" style="' . $shape_style_attr . '">' . $svg . '</div>';
 
@@ -1035,10 +1048,11 @@ class ZapPopPop_Front_Renderer {
                 if (!empty($el['fontWeight']) && preg_match('/^[0-9a-z]{3,10}$/i', (string) $el['fontWeight'])) { $bt_x[] = 'font-weight:' . $el['fontWeight']; }
                 if (isset($el['letterSpacing']) && is_numeric($el['letterSpacing']) && floatval($el['letterSpacing']) != 0) { $bt_x[] = 'letter-spacing:' . floatval($el['letterSpacing']) . 'px'; }
                 if (!empty($el['lineHeight']) && is_numeric($el['lineHeight'])) { $bt_x[] = 'line-height:' . floatval($el['lineHeight']); }
-                if (!empty($el['borderWidth']) && intval($el['borderWidth']) > 0) {
+                if (ZapPopPop_Box_Style::max_width($el) > 0) { /* ZPP_BORDER_SIDES */
                     $bt_bs = (!empty($el['borderStyle']) && in_array($el['borderStyle'], array('solid', 'dashed', 'dotted', 'double'), true)) ? $el['borderStyle'] : 'solid';
                     $bt_bc = (!empty($el['borderColor']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $el['borderColor'])) ? $el['borderColor'] : '#334155';
-                    $bt_x[] = 'border:' . intval($el['borderWidth']) . 'px ' . $bt_bs . ' ' . $bt_bc;
+                    $bt_x[] = 'border:' . ZapPopPop_Box_Style::max_width($el) . 'px ' . $bt_bs . ' ' . $bt_bc;
+                    if (ZapPopPop_Box_Style::width_css($el) !== '') { $bt_x[] = ZapPopPop_Box_Style::width_css($el); }
                 }
                 if (!empty($box_shadow_val)) { $bt_x[] = 'box-shadow:' . $box_shadow_val; }
                 $bt_just = 'center';

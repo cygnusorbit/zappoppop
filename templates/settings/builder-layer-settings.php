@@ -12,16 +12,26 @@ $__ls_first     = key($__ls_elements);
 $__ls_json      = empty($__ls_overrides) ? '{}' : wp_json_encode($__ls_overrides);
 $__ls_order     = ZapPopPop_Layer_Settings::get_order();
 $__lo_json      = empty($__ls_order) ? '{}' : wp_json_encode($__ls_order);
+$__eo_saved     = ZapPopPop_Layer_Settings::get_element_order(); /* ZPP_ELEMENT_ORDER_UI */
+$__eo_json      = empty($__eo_saved) ? '[]' : wp_json_encode($__eo_saved);
+$__eo_defpos    = array_flip(ZapPopPop_Layer_Settings::default_element_order());
 ?>
 <div class="zappoppop-ls" id="zappoppop-ls-root">
     <p class="description"><?php esc_html_e('Choose which Layer Settings each element shows in the builder. Use the slide button to enable or disable a setting. Save settings, then reload the builder.', 'zappoppop'); ?></p>
     <input type="hidden" id="zappoppop-ls-json" name="settings[builder_layer_settings]" value="<?php echo esc_attr($__ls_json); ?>">
     <input type="hidden" id="zappoppop-lo-json" name="settings[builder_layer_order]" value="<?php echo esc_attr($__lo_json); ?>">
+    <input type="hidden" id="zappoppop-eo-json" name="settings[builder_element_order]" value="<?php echo esc_attr($__eo_json); ?>">
+    <p class="zappoppop-ls-eo-bar"><span><?php esc_html_e('Drag the grip (or use the Up / Down arrow keys) to reorder the elements. The builder ribbon follows this order. Save settings, then reload the builder.', 'zappoppop'); ?></span> <button type="button" class="button-link zappoppop-ls-eo-reset"><?php esc_html_e('Reset element order', 'zappoppop'); ?></button></p>
 
     <div class="zappoppop-ls-layout">
         <ul class="zappoppop-ls-elements" role="tablist" aria-label="<?php esc_attr_e('Elements', 'zappoppop'); ?>">
             <?php $__ls_n = 0; foreach ($__ls_elements as $__t => $__tl) : $__ls_n++; ?>
-                <li>
+                <li class="zappoppop-ls-eo-item<?php echo $__t === 'submit' ? ' is-pinned' : ''; ?>" data-ls-type="<?php echo esc_attr($__t); ?>" data-ls-defpos="<?php echo (int) (isset($__eo_defpos[$__t]) ? $__eo_defpos[$__t] : 999); ?>">
+                    <?php if ($__t === 'submit') : ?>
+                        <span class="zappoppop-ls-eo-pin" title="<?php esc_attr_e('Submit always stays last', 'zappoppop'); ?>"><span class="dashicons dashicons-lock" aria-hidden="true"></span></span>
+                    <?php else : ?>
+                        <button type="button" class="zappoppop-ls-eo-grip" aria-label="<?php esc_attr_e('Drag to reorder (or use the Up / Down arrow keys)', 'zappoppop'); ?>" title="<?php esc_attr_e('Drag to reorder', 'zappoppop'); ?>"><span class="dashicons dashicons-menu" aria-hidden="true"></span></button>
+                    <?php endif; ?>
                     <button type="button" class="zappoppop-ls-el-btn<?php echo $__t === $__ls_first ? ' is-active' : ''; ?><?php echo !empty($__ls_overrides[$__t]) ? ' has-override' : ''; ?>" data-ls-el="<?php echo esc_attr($__t); ?>" role="tab">
                         <span class="zappoppop-ls-num"><?php echo (int) $__ls_n; ?></span>
                         <span class="zappoppop-ls-name"><?php echo esc_html($__tl); ?></span>

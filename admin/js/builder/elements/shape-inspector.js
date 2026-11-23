@@ -12,6 +12,18 @@
     var DEF_FILL = '#3b82f6';
     var DEF_STROKE = '#0284c7';
 
+    /* ZPP_SHAPE_RADIUS: corner radius only applies to rectangle-based presets */
+    var RADIUS_PRESETS = { square: 1, rectangle: 1, rect: 1, rounded: 1, rounded_square: 1 };
+    function paintRadius(preset) {
+        var ok = !!RADIUS_PRESETS[String(preset || 'square')];
+        $('#zpp-shape-radius-wrap').css('opacity', ok ? '' : '.45');
+        $('#prop-shape-radius').prop('disabled', !ok);
+        $('#zpp-shape-radius-wrap .zpp-ty-reset').prop('disabled', !ok || !(parseInt($('#prop-shape-radius').val(), 10) > 0));
+    }
+    $(document).on('change.zppShapeInsp input.zppShapeInsp', '#prop-shape-type, #prop-shape-radius', function () {
+        paintRadius($('#prop-shape-type').val());
+    });
+
     function cid(r) { return String(r || '').replace(/^zappoppop-el-/, '').replace(/^el-/, '').trim(); }
 
     function activeEl() {
@@ -66,6 +78,9 @@
         $('#prop-shape-stroke-transparent').prop('checked', strokeClear);
 
         $('#prop-shape-stroke-width').val(Math.max(0, intOr(el.strokeWidth !== undefined ? el.strokeWidth : el.shapeStrokeWidth, 0)));
+
+        $('#prop-shape-radius').val(Math.max(0, intOr(el.shapeRadius, 0))); /* ZPP_SHAPE_RADIUS */
+        paintRadius(el.shapePreset);
 
         var rot = intOr(el.rotate !== undefined && el.rotate !== '' ? el.rotate : el.shapeRotate, 0);
         $('#prop-shape-rotate').val(rot);
@@ -141,7 +156,8 @@
     $(document).on('click.zppShapeInsp', '#prop-shape-reset', function (e) {
         e.preventDefault();
         var el = activeEl(); if (!isShape(el)) { return; }
-        el.strokeWidth = 0; el.shapeStrokeWidth = 0; el.strokeNone = false;
+        el.strokeWidth = 0; el.shapeStrokeWidth = 0; el.strokeNone = false; el.shapeRadius = 0;
+        $('#prop-shape-radius').val(0);
         el.rotate = 0; el.shapeRotate = 0;
         $('#prop-shape-stroke-width').val(0);
         $('#prop-shape-rotate').val(0);

@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) exit;
 ?>
 <!-- ADVANCED FIELD IDENTIFIER, FILTERS & VALIDATORS SUITE -->
+<?php /* ZPP_ADV_TOGGLES */ ZapPopPop_Inline_Assets::style('builder-elements-tab-advanced-form'); ?>
 <div class="zappoppop-insp-section" id="insp-section-form-advanced" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">
     <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:10px;"><?php esc_html_e('Field Identifier', 'zappoppop'); ?></div>
     <div id="insp-row-adv-field-name" style="margin-bottom:10px;">
@@ -17,24 +18,24 @@ if (!defined('ABSPATH')) exit;
 
 <div class="zappoppop-insp-section" id="insp-section-form-filters" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">
     <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;"><?php esc_html_e('Sanitization Filters', 'zappoppop'); ?></div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="trim" /> <?php esc_html_e('Trim Whitespace', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="striptags" /> <?php esc_html_e('Strip Tags', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="alpha" /> <?php esc_html_e('Alpha Only', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="digits" /> <?php esc_html_e('Digits Only', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="lowercase" /> <?php esc_html_e('Lowercase', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-filter-chk" value="uppercase" /> <?php esc_html_e('Uppercase', 'zappoppop'); ?></label>
+    <div class="zpp-adv-switches" style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px 8px;">
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="trim" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Trim Whitespace', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="striptags" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Strip Tags', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="alpha" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Alpha Only', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="digits" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Digits Only', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="lowercase" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Lowercase', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-filter-chk" value="uppercase" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Uppercase', 'zappoppop'); ?></span></label>
     </div>
 </div>
 
 <div class="zappoppop-insp-section" id="insp-section-form-validators" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px;">
     <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;"><?php esc_html_e('Validation Rules', 'zappoppop'); ?></div>
-    <div id="insp-row-val-rules" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-validator-chk" value="required" /> <?php esc_html_e('Required *', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-validator-chk" value="email" /> <?php esc_html_e('RFC Email', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-validator-chk" value="equal" /> <?php esc_html_e('Equal Match', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-validator-chk" value="inarray" /> <?php esc_html_e('In Array', 'zappoppop'); ?></label>
-        <label style="font-size:11px; color:#cbd5e1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="checkbox" class="prop-validator-chk" value="noduplicates" /> <?php esc_html_e('No Duplicates', 'zappoppop'); ?></label>
+    <div id="insp-row-val-rules" class="zpp-adv-switches" style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px 8px; margin-bottom:10px;">
+        <label class="zpp-sw"><input type="checkbox" class="prop-validator-chk" value="required" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Required *', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-validator-chk" value="email" /><span class="zpp-sw-track"></span><span><?php esc_html_e('RFC Email', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-validator-chk" value="equal" /><span class="zpp-sw-track"></span><span><?php esc_html_e('Equal Match', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-validator-chk" value="inarray" /><span class="zpp-sw-track"></span><span><?php esc_html_e('In Array', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" class="prop-validator-chk" value="noduplicates" /><span class="zpp-sw-track"></span><span><?php esc_html_e('No Duplicates', 'zappoppop'); ?></span></label>
     </div>
     <div id="zappoppop-val-extra-equal" class="zappoppop-val-extra" style="display:none; margin-bottom:10px;">
         <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px; text-transform:uppercase;"><?php esc_html_e('Equal Match — Value Must Equal', 'zappoppop'); ?></label>

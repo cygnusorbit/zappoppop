@@ -45,7 +45,7 @@
         if (el.color) $node.css('color', el.color);
         $node.css('text-shadow', Reg.textShadowCss ? Reg.textShadowCss(el) : ''); /* ZPP_TEXT_SHADOW */
         $node.attr('data-zpp-tt', (el.textTransform && el.textTransform !== 'none') ? el.textTransform : null); /* ZPP_TEXT_TRANSFORM */
-        $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
+        $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */ if (window.ZapPopPopTextStyle) { window.ZapPopPopTextStyle.apply($node, el); } /* ZPP_TYPOGRAPHY */ if (window.ZapPopPopBgStyle) { window.ZapPopPopBgStyle.apply($node, el); } /* ZPP_BACKGROUND */
         /* ZAPPOPPOP_FG_COLOR: foreground colour for icons & accents */
         if (/^#[0-9a-fA-F]{3,8}$/.test(el.fgColor || '')) { $node[0].style.setProperty('--zappoppop-fg', el.fgColor); $node.attr('data-zpp-fg', '1'); }
         else { $node[0].style.removeProperty('--zappoppop-fg'); $node.removeAttr('data-zpp-fg'); }
@@ -68,13 +68,14 @@
         var bOff = (el.borderEnabled === false || el.borderEnabled === 'false' || el.borderEnabled === 0);
         var bw = bOff ? 0 : (parseInt(el.borderWidth, 10) || 0);
         var bs = bOff ? 'none' : (el.borderStyle || (bw > 0 ? 'solid' : 'none'));
-        var bc = el.borderColor || '#cbd5e1';
+        var bc = el.borderColor || '#334155'; /* ZPP_BORDER_COLOR_DEFAULT: same default as the inspector, live update and front renderer */
         $node.css({
             'border-width': bw + 'px',
             'border-style': bs,
             'border-color': bc,
             'border-radius': (bOff ? 0 : (parseInt(el.borderRadius, 10) || 0)) + 'px'
         });
+        if (window.ZapPopPopBoxStyle) { window.ZapPopPopBoxStyle.apply($node, el); } /* ZPP_BORDER_SIDES */ if (window.ZapPopPopFxStyle) { window.ZapPopPopFxStyle.apply($node, el); } /* ZPP_EFFECTS */
         /* ZAPPOPPOP_FORM_BORDER_FIX: inner box follows wrapper radius; drop its own border when wrapper has one */
         var fbTypes = ['text', 'textfield', 'email', 'number', 'phone', 'tel', 'textarea', 'select', 'dropdown', 'date', 'time', 'password', 'upload', 'file', 'multiselect'];
         if (fbTypes.indexOf(String(el.type || '').toLowerCase()) !== -1 && $node[0]) {
@@ -174,7 +175,7 @@
         $('#prop-border-width').val(parseInt(el.borderWidth, 10) || 0);
         $('#prop-border-style').val(el.borderStyle || 'none');
         $('#prop-border-radius').val(parseInt(el.borderRadius, 10) || 0);
-        $('#prop-border-color').val(el.borderColor || '#cbd5e1');
+        $('#prop-border-color').val(el.borderColor || '#334155');
         $('#prop-shadow-x').val(parseInt(el.shadowX, 10) || 0);
         $('#prop-shadow-y').val(parseInt(el.shadowY, 10) || 0);
         $('#prop-shadow-blur').val(parseInt(el.shadowBlur, 10) || 0);

@@ -55,9 +55,16 @@ if (!defined('ABSPATH')) exit;
                 </label>
             </div>
         </div>
+    </div>
+    <!-- ZPP_SHAPE_RADIUS -->
+    <div class="zappoppop-shape-row">
         <div>
             <label class="zappoppop-shape-label" for="prop-shape-stroke-width"><?php esc_html_e('Stroke Width (px)', 'zappoppop'); ?></label>
-            <input type="number" id="prop-shape-stroke-width" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="strokeWidth" min="0" max="40" value="0" style="font-size:12px;" placeholder="0">
+            <span class="zpp-ty-numwrap"><span class="zpp-ty-ctl"><input type="number" id="prop-shape-stroke-width" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="strokeWidth" min="0" max="40" value="0" placeholder="0" /><span class="zpp-ty-unit">PX</span><span class="zpp-sp-step"><button type="button" class="zpp-sp-up" tabindex="-1" title="<?php esc_attr_e('Increase', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Increase', 'zappoppop'); ?>"></button><button type="button" class="zpp-sp-down" tabindex="-1" title="<?php esc_attr_e('Decrease', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Decrease', 'zappoppop'); ?>"></button></span></span><button type="button" class="zpp-sp-reset zpp-ty-reset" data-default="0" title="<?php esc_attr_e('Reset', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Reset', 'zappoppop'); ?>"><span class="dashicons dashicons-image-rotate" aria-hidden="true"></span></button></span>
+        </div>
+        <div id="zpp-shape-radius-wrap">
+            <label class="zappoppop-shape-label" for="prop-shape-radius"><?php esc_html_e('Radius (px)', 'zappoppop'); ?></label>
+            <span class="zpp-ty-numwrap"><span class="zpp-ty-ctl"><input type="number" id="prop-shape-radius" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="shapeRadius" min="0" max="500" value="0" placeholder="0" /><span class="zpp-ty-unit">PX</span><span class="zpp-sp-step"><button type="button" class="zpp-sp-up" tabindex="-1" title="<?php esc_attr_e('Increase', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Increase', 'zappoppop'); ?>"></button><button type="button" class="zpp-sp-down" tabindex="-1" title="<?php esc_attr_e('Decrease', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Decrease', 'zappoppop'); ?>"></button></span></span><button type="button" class="zpp-sp-reset zpp-ty-reset" data-default="0" title="<?php esc_attr_e('Reset', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Reset', 'zappoppop'); ?>"><span class="dashicons dashicons-image-rotate" aria-hidden="true"></span></button></span>
         </div>
     </div>
     <div class="zappoppop-shape-field" style="margin-bottom:0;">
@@ -67,5 +74,5 @@ if (!defined('ABSPATH')) exit;
         </div>
         <input type="range" id="prop-shape-rotate" class="zappoppop-gp-bind zappoppop-shape-range" data-prop="rotate" min="0" max="360" step="1" value="0">
     </div>
-    <?php $zappoppop_lk_id = 'shape'; include ZAPPOPPOP_PATH . 'templates/builder/elements/partial-link-group.php'; ?>
+    <?php /* ZPP_SHAPE_NO_LINK_URL: Shape no longer carries its own Link URL block; the link is set in Logic > Action & Click Routing (same model keys). */ ?>
 </div>

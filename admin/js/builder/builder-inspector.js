@@ -4297,7 +4297,7 @@
                     $(pane).addClass('active');
                     if (pane.style.getPropertyValue('display') !== 'block' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'block', 'important'); } /* ZPP_FLICKER_FIX */
                     // Ensure direct section cards inside active tab are visible unless explicitly scoped off
-                    $(pane).children('.zappoppop-insp-section').not('#zappoppop-form-style-module, #prop-btn-hover-section').show();
+                    $(pane).children('.zappoppop-insp-section').not('#zappoppop-form-style-module, #prop-btn-hover-section, #insp-section-text-align, #insp-section-submit-text-align').show(); /* ZPP_TYPE_SECTIONS: layer-type sections decide their own visibility */
                 } else {
                     $(pane).removeClass('active');
                     if (pane.style.getPropertyValue('display') !== 'none' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'none', 'important'); } /* ZPP_FLICKER_FIX */
@@ -4748,6 +4748,7 @@
                     if (el.letterSpacing !== undefined) $node.css('letter-spacing', el.letterSpacing + 'px');
                     if (el.borderRadius !== undefined) $node.css('border-radius', el.borderRadius + 'px');
                     if (el.borderWidth !== undefined) $node.css('border', el.borderWidth + 'px ' + (el.borderStyle || 'solid') + ' ' + (el.borderColor || '#334155'));
+                    if (window.ZapPopPopBoxStyle) { window.ZapPopPopBoxStyle.apply($node, el); } /* ZPP_BORDER_SIDES */ if (window.ZapPopPopFxStyle) { window.ZapPopPopFxStyle.apply($node, el); } /* ZPP_EFFECTS */
                 }
             });
 
@@ -4995,6 +4996,7 @@
 
     // Content tab button inside COORDINATES & BOUNDS
     function ensurePresetButton() {
+        $('#zappoppop-video-preset-wrap').remove(); return; /* ZPP_NO_VIDEO_PRESET_BTN */
         var $coords = $('#insp-section-coords');
         if (!$coords.length || $('#zappoppop-video-preset-btn').length) return;
         $coords.append(
@@ -5137,6 +5139,7 @@
     }
 
     function ensureSizeButton() {
+        $('#zappoppop-fa-size-wrap').remove(); return; /* ZPP_NO_ICON_PRESET_BTN */
         var $coords = $('#insp-section-coords');
         if (!$coords.length || $('#zappoppop-fa-size-wrap').length) return;
         $coords.append(
@@ -5469,6 +5472,7 @@
    Writes to the element model (el.textAlign) and the stage node. */
 (function(window, $) {
     'use strict';
+    return; /* ZPP_NO_TEXT_ALIGN: section removed */
 
     var SECTION_ID = 'insp-section-text-align';
     var ALIGNS = ['left', 'center', 'right', 'justify']; /* ZPP_ALIGN_JUSTIFY */
@@ -6124,6 +6128,7 @@
 /* === ZAPPOPPOP_SUBMIT_TEXT_ALIGN_START === */
 (function(window, $) {
     'use strict';
+    return; /* ZPP_NO_TEXT_ALIGN: section removed */
     var SECTION_ID = 'insp-section-submit-text-align';
     var ALIGNS = ['left', 'center', 'right'];
 

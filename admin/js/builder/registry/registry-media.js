@@ -59,6 +59,13 @@
         if (canonical === 'shape') {
             var preset = el.shapePreset || 'square';
             var svgInner = SVG_SHAPE_PATHS[preset] || SVG_SHAPE_PATHS['square'];
+            /* ZPP_SHAPE_RADIUS: px radius for rectangle presets (viewBox units keep corners circular) */
+            var shRad = Math.max(0, parseInt(el.shapeRadius, 10) || 0);
+            if (shRad > 0 && { square: 1, rectangle: 1, rect: 1, rounded: 1, rounded_square: 1 }[preset]) {
+                var shW = Math.max(1, parseInt(el.width !== undefined ? el.width : el.w, 10) || 120);
+                var shH = Math.max(1, parseInt(el.height !== undefined ? el.height : el.h, 10) || 120);
+                svgInner = '<rect x="0" y="0" width="100" height="100" rx="' + Math.min(50, shRad * 100 / shW).toFixed(3) + '" ry="' + Math.min(50, shRad * 100 / shH).toFixed(3) + '" />';
+            }
             var fillCol = el.shapeNoFill ? 'none' : (el.shapeFill || '#3b82f6');
             var stWidth = parseInt(el.strokeWidth !== undefined ? el.strokeWidth : el.shapeStrokeWidth, 10) || 0;
             var stCol   = el.strokeColor || el.shapeStroke || '#0284c7';
@@ -135,9 +142,15 @@
             var tf  = el.textTransform || 'none';
             var jcMap = { center: 'center', right: 'flex-end' };
             var jc = jcMap[el.textAlign] || 'flex-start';
+            /* ZPP_SPACING: Header margin = space around the text block inside the layer box */
+            var lmN = function(k) { var n = parseInt(el[k], 10); return isNaN(n) ? 0 : Math.max(0, Math.min(200, n)); };
+            var lmT = lmN('marginTop'), lmR = lmN('marginRight'), lmB = lmN('marginBottom'), lmL = lmN('marginLeft');
+            var lmM = lmT + 'px ' + lmR + 'px ' + lmB + 'px ' + lmL + 'px';
+            var lmW = (lmL + lmR) ? ('calc(100% - ' + (lmL + lmR) + 'px)') : '100%';
+            var lmH = (lmT + lmB) ? ('calc(100% - ' + (lmT + lmB) + 'px)') : '100%';
             var hScale = { h1: 2, h2: 1.5, h3: 1.17, h4: 1, h5: 0.83, h6: 0.67 };
             var tagFont = hScale[tag] ? ('font-family:inherit;font-style:inherit;font-size:' + hScale[tag] + 'em;font-weight:' + (el.fontWeight || 700) + ';') : 'font:inherit;';
-            innerHtml = '<' + tag + ' class="zappoppop-stage-label-inner" style="margin:0!important;padding:0!important;box-sizing:border-box;display:flex;align-items:center;justify-content:' + jc + ';width:100%;height:100%;text-transform:' + tf + ';' + tagFont + 'color:inherit;line-height:inherit;letter-spacing:inherit;text-align:inherit;pointer-events:none;">' + txt + '</' + tag + '>';
+            innerHtml = '<' + tag + ' class="zappoppop-stage-label-inner" style="margin:' + lmM + '!important;padding:0!important;box-sizing:border-box;display:flex;align-items:center;justify-content:' + jc + ';width:' + lmW + ';height:' + lmH + ';text-transform:' + tf + ';' + tagFont + 'color:inherit;line-height:inherit;letter-spacing:inherit;text-align:inherit;pointer-events:none;">' + txt + '</' + tag + '>';
         } else if (canonical === 'html') {
             var hTag = (el.tag === 'span') ? 'span' : 'div';
             var ovf  = el.overflow || 'hidden';

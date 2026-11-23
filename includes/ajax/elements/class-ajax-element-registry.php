@@ -104,6 +104,10 @@ class ZapPopPop_Ajax_Element_Registry {
         if ( isset( $clean['textTransform'] ) && ! in_array( $clean['textTransform'], array( 'none', 'uppercase', 'lowercase', 'capitalize' ), true ) ) { unset( $clean['textTransform'] ); } /* ZPP_TEXT_TRANSFORM */
         if ( isset( $el['textShadowPos'] ) && ! is_array( $el['textShadowPos'] ) ) { $clean['textShadowPos'] = ( 'inset' === (string) $el['textShadowPos'] ) ? 'inset' : 'outset'; } /* ZPP_TEXT_SHADOW */
 
+        $clean = ZapPopPop_Text_Style::clean( $el, $clean ); /* ZPP_TYPOGRAPHY */
+        $clean = ZapPopPop_Bg_Style::clean( $el, $clean ); /* ZPP_BACKGROUND */
+        $clean = ZapPopPop_Effects_Style::clean( $el, $clean ); /* ZPP_EFFECTS */
+
         $html_keys = array( 'content', 'options', 'titleText', 'paragraphText', 'text', 'label' );
         foreach ( $html_keys as$hk ) {
             if ( isset( $el[$hk ] ) && ! is_array( $el[$hk ] ) ) {
@@ -114,10 +118,10 @@ class ZapPopPop_Ajax_Element_Registry {
         $num_keys = array(
             'x', 'y', 'left', 'top', 'width', 'height', 'w', 'h', 'opacity',
             'fontSize', 'lineHeight', 'letterSpacing', 'wordSpacing',
-            'padTop', 'padRight', 'padBottom', 'padLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'padding',
-            'borderWidth', 'borderRadius', 'shadowX', 'shadowY', 'shadowBlur', 'shadowSpread', 'textShadowX', 'textShadowY', 'textShadowBlur',
+            'padTop', 'padRight', 'padBottom', 'padLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'padding', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+            'borderWidth', 'borderRadius', 'borderWidthTop', 'borderWidthRight', 'borderWidthBottom', 'borderWidthLeft', 'borderRadiusTl', 'borderRadiusTr', 'borderRadiusBr', 'borderRadiusBl', 'shadowX', 'shadowY', 'shadowBlur', 'shadowSpread', 'textShadowX', 'textShadowY', 'textShadowBlur',
             'animDuration', 'animDelay', 'iconLeftOffset', 'iconRightOffset',
-            'strokeWidth', 'strokeWidthPrev', 'rotate', 'iconSize', 'cookieDays', 'progressValue', 'progressPercent', 'progressVal', 'gotoCanvas', 'goto_canvas', 'goto_screen',
+            'strokeWidth', 'strokeWidthPrev', 'shapeRadius', 'rotate', 'iconSize', 'cookieDays', 'progressValue', 'progressPercent', 'progressVal', 'gotoCanvas', 'goto_canvas', 'goto_screen',
             'maxLength', 'minLength', 'min', 'max', 'step', 'rows',
             'maxSelect', 'maxSelections', 'columns', 'gridCols', 'timeStep', 'maxFileSize', 'ratingMax'
         );
@@ -139,6 +143,9 @@ class ZapPopPop_Ajax_Element_Registry {
             }
         }
 
+        /* ZPP_HTML_ATTRS: layer HTML ID + Attributes rows */
+        if ( isset( $el['custom_css_id'] ) && is_scalar( $el['custom_css_id'] ) ) { $clean['custom_css_id'] = ZapPopPop_Html_Attrs::clean_id( $el['custom_css_id'] ); }
+        if ( isset( $el['htmlAttrs'] ) && is_array( $el['htmlAttrs'] ) ) { $clean['htmlAttrs'] = ZapPopPop_Html_Attrs::clean_list( $el['htmlAttrs'] ); }
         if ( isset( $el['inlineStyles'] ) && is_array( $el['inlineStyles'] ) ) {$clean['inlineStyles'] = array();
             foreach ( $el['inlineStyles'] as$st ) {
                 if ( is_array( $st ) ) {$pair = ZapPopPop_Style_Pairs::clean( isset( $st['prop'] ) ? $st['prop'] : '', isset( $st['value'] ) ? $st['value'] : ( isset( $st['val'] ) ? $st['val'] : '' ) );

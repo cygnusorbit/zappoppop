@@ -84,6 +84,7 @@ class ZapPopPop_Ajax_Element_Media {
         if (isset($el['shapeStroke']))        $clean['shapeStroke']        = ZapPopPop_Color::sanitize($el['shapeStroke'], sanitize_text_field($el['shapeStroke']));
         if (isset($el['shapeStrokeWidth']))   $clean['shapeStrokeWidth']   = intval($el['shapeStrokeWidth']);
         if (isset($el['shapeRotate']))        $clean['shapeRotate']        = intval($el['shapeRotate']);
+        if (isset($el['shapeRadius']))        $clean['shapeRadius']        = min(500, max(0, intval($el['shapeRadius']))); /* ZPP_SHAPE_RADIUS */
         if (isset($el['shapeNoFill']))        $clean['shapeNoFill']        = !empty($el['shapeNoFill']) && $el['shapeNoFill'] !== 'false';
         if (isset($el['strokeWidth']))        $clean['strokeWidth']        = max(0, intval($el['strokeWidth']));
         if (isset($el['strokeNone']))         $clean['strokeNone']         = !empty($el['strokeNone']) && $el['strokeNone'] !== 'false';

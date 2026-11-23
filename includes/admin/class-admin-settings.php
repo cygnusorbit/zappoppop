@@ -338,6 +338,12 @@ class ZapPopPop_Admin_Settings {
             : ((is_array($__ls_prev) && isset($__ls_prev['builder_layer_order'])) ? $__ls_prev['builder_layer_order'] : []);
         $o['builder_layer_order'] = ZapPopPop_Layer_Settings::sanitize_order($__lo_src);
 
+        // 5c4. Element list order = builder ribbon order (drag & drop). Missing key = keep what is stored; [] = default.
+        $__eo_src = array_key_exists('builder_element_order', $in)
+            ? $in['builder_element_order']
+            : ((is_array($__ls_prev) && isset($__ls_prev['builder_element_order'])) ? $__ls_prev['builder_element_order'] : []); /* ZPP_ELEMENT_ORDER_SAVE */
+        $o['builder_element_order'] = ZapPopPop_Layer_Settings::sanitize_element_order($__eo_src);
+
         // 5d. Admin menu pages (rename / reorder / hide). Whitelist: zappoppop* slugs only.
         // Missing key = keep what is stored, so unrelated saves never reset it.
         $__mp_prev = get_option('zappoppop_settings', []);

@@ -7,7 +7,7 @@
     var TAB_LABEL = { style: 'Style', logic: 'Logic', data: 'Data', advanced: 'Advanced' };
     var ROUTING = ['buttonAction', 'linkUrl', 'url', 'linkBlank', 'targetBlank', 'nofollow', 'routeValue', 'routeLabel', 'goto_canvas', 'goto_screen', 'target_canvas', 'linkTarget'];
     var FIXED = {
-        style: ['borderEnabled', 'shadowEnabled', 'textAlign'], /* ZPP_STYLE_TEXTALIGN: the Left/Center/Right buttons have no data-prop, so list the key here for Save-as-Default and Reset */
+        style: ['borderEnabled', 'shadowEnabled', 'textAlign', 'bgOverlays', 'fxTransforms', 'fxFilters'], /* ZPP_STYLE_TEXTALIGN: the Left/Center/Right buttons have no data-prop, so list the key here for Save-as-Default and Reset */
         logic: ['logicEnabled', 'logicAction', 'logicMatch', 'logicRules'].concat(ROUTING),
         data: ['defaultValue', 'dynamicDefault', 'paramName', 'dynamicParam', 'readOnly', 'saveToDb'],
         advanced: ['fieldName', 'fieldId', 'inputMask', 'errorMessage', 'validatorEqual', 'validatorList', 'filters', 'validators']

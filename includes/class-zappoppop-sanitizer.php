@@ -255,7 +255,7 @@ class ZapPopPop_Sanitizer {
         if (preg_match('/expression|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:|@import|[\\\\&}=]|\/\*/i', $t)) {
             return false;
         }
-        $fn = 'rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|cubic-bezier|steps|blur|brightness|contrast|drop-shadow|grayscale|hue-rotate|invert|opacity|saturate|sepia|attr|env|linear-gradient|radial-gradient|conic-gradient|repeating-linear-gradient|repeating-radial-gradient';
+        $fn = 'translate3d|scale3d|rotateX|rotateY|rotateZ|skew|perspective|rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|cubic-bezier|steps|blur|brightness|contrast|drop-shadow|grayscale|hue-rotate|invert|opacity|saturate|sepia|attr|env|linear-gradient|radial-gradient|conic-gradient|repeating-linear-gradient|repeating-radial-gradient';
         for ($i = 0; $i < 5; $i++) {
             $n = preg_replace('/\b(?:' . $fn . ')\((?:[^()]|\([^()]*\))*\)/i', '', $t);
             if ($n === null || $n === $t) {
@@ -324,6 +324,21 @@ class ZapPopPop_Sanitizer {
         }
         if (!$raw && $key !== '' && $depth > 0 && (is_array($node) || is_object($node)) && in_array($key, self::module_keys(), true)) {
             $raw = true; // keep markup intact; keys are still cleaned below
+        }
+        if ($depth > 0 && $key === 'htmlAttrs' && (is_array($node) || is_object($node))) { /* ZPP_HTML_ATTRS: Attributes rows are structured data, only allow-listed name / value pairs survive */
+            return ZapPopPop_Html_Attrs::clean_list(is_object($node) ? array_values(get_object_vars($node)) : $node);
+        }
+        if ($depth > 0 && $key === 'custom_css_id' && is_string($node)) { /* ZPP_HTML_ATTRS */
+            return ZapPopPop_Html_Attrs::clean_id($node);
+        }
+        if ($depth > 0 && $key === 'bgOverlays' && (is_array($node) || is_object($node))) { /* ZPP_BACKGROUND: overlays are structured data, rebuilt from validated pieces */
+            return ZapPopPop_Bg_Style::clean_list($node);
+        }
+        if ($depth > 0 && $key === 'fxTransforms' && (is_array($node) || is_object($node))) { /* ZPP_EFFECTS: structured data, rebuilt from validated pieces */
+            return ZapPopPop_Effects_Style::clean_transforms($node);
+        }
+        if ($depth > 0 && $key === 'fxFilters' && (is_array($node) || is_object($node))) { /* ZPP_EFFECTS */
+            return ZapPopPop_Effects_Style::clean_filters($node);
         }
         if (is_object($node)) {
             $out = new stdClass();

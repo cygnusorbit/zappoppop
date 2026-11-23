@@ -108,14 +108,16 @@
     }
 
     function applyOrder(type) {
-        var o = (hasOrder && type) ? order[type] : null;
-        if (!o) { return; }
+        /* ZPP_CONTENT_DEFAULT_ORDER: a type with no saved order still gets the Settings list's default order on the Content tab
+           (Layer Name, Element Settings, Animation, Required, Coordinates), so the Inspector matches what Settings > Builder > Element / Layer Settings shows. */
+        var o = (hasOrder && type && order[type]) ? order[type] : {};
+        if (!type) { return; }
         TABS.forEach(function (tab) {
             var pane = document.getElementById('insp-tab-' + tab);
             var tree = cfg.tree[tab] || [];
             if (!pane) { return; }
-            if (o[tab]) {
-                orderWithin(pane, tab, type, sequence(tree.map(function (e) { return e.k; }), o[tab]));
+            if (o[tab] || tab === 'basic') {
+                orderWithin(pane, tab, type, sequence(tree.map(function (e) { return e.k; }), o[tab] || []));
             }
             tree.forEach(function (e) {
                 var slot = o[tab + '|' + e.k], m = meta(tab, e.k);

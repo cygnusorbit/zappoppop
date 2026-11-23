@@ -103,6 +103,17 @@ class ZapPopPop_Front_Decomposed_26 {
     }
 
     /* ZAPPOPPOP_LABEL_TYPO_FRONT */
+    /* ZPP_SPACING: Header margin = space around the text block inside the layer box (drag / push / X Y W H are untouched) */
+    private static function label_margin(array $el): string {
+        $m = array();
+        foreach (array('marginTop', 'marginRight', 'marginBottom', 'marginLeft') as $k) {
+            $m[] = (isset($el[$k]) && is_numeric($el[$k])) ? max(0, min(200, (int) $el[$k])) : 0;
+        }
+        $w = $m[1] + $m[3];
+        $h = $m[0] + $m[2];
+        return 'margin:' . $m[0] . 'px ' . $m[1] . 'px ' . $m[2] . 'px ' . $m[3] . 'px;width:' . ($w ? 'calc(100% - ' . $w . 'px)' : '100%') . ';height:' . ($h ? 'calc(100% - ' . $h . 'px)' : '100%') . ';';
+    }
+
     private static function label_typo(array $el): string {
         $al = isset($el['textAlign']) ? strtolower((string) $el['textAlign']) : 'left';
         if (!in_array($al, array('left', 'center', 'right', 'justify'), true)) { $al = 'left'; }
@@ -139,7 +150,7 @@ class ZapPopPop_Front_Decomposed_26 {
                     if (!empty($el['nofollow']) && $el['nofollow'] !== 'false') { $label_rel[] = 'nofollow'; }
                     $content = '<a class="zappoppop-label-link" href="' . $label_url . '"' . ($blank_on ? ' target="_blank"' : '') . (!empty($label_rel) ? ' rel="' . esc_attr(implode(' ', $label_rel)) . '"' : '') . ' style="color:inherit;text-decoration:inherit;display:block;width:100%;">' . $content . '</a>';
                 }
-                return '<' . $tag . ' class="zappoppop-front-label" style="margin:0;padding:0;box-sizing:border-box;width:100%;height:100%;display:flex;align-items:center;' . self::label_typo($el) . $tf . '">' . $content . '</' . $tag . '>';
+                return '<' . $tag . ' class="zappoppop-front-label"' . ZapPopPop_Html_Attrs::render(isset($el['htmlAttrs']) ? $el['htmlAttrs'] : array()) . ' style="padding:0;box-sizing:border-box;' . self::label_margin($el) . 'display:flex;align-items:center;' . self::label_typo($el) . $tf . '">' . $content . '</' . $tag . '>';
 
             case 'button':
                 $btn_label = isset($el['content']) && $el['content'] !== '' ? esc_html($el['content']) : esc_html__('Click Here', 'zappoppop');

@@ -750,7 +750,7 @@
             if (el.lineHeight) $div.css('lineHeight', el.lineHeight);
             if (el.letterSpacing) $div.css('letterSpacing', el.letterSpacing + 'px');
             $div.attr('data-zpp-tt', (el.textTransform && el.textTransform !== 'none') ? el.textTransform : null); /* ZPP_TEXT_TRANSFORM */
-            $div.css('wordSpacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
+            $div.css('wordSpacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */ if (window.ZapPopPopTextStyle) { window.ZapPopPopTextStyle.apply($div, el); } /* ZPP_TYPOGRAPHY */ if (window.ZapPopPopBgStyle) { window.ZapPopPopBgStyle.apply($div, el); } /* ZPP_BACKGROUND */ if (window.ZapPopPopBoxStyle) { window.ZapPopPopBoxStyle.apply($div, el); } /* ZPP_BORDER_SIDES */ if (window.ZapPopPopFxStyle) { window.ZapPopPopFxStyle.apply($div, el); } /* ZPP_EFFECTS */
             { var zppTsReg = window.ZapPopPopElementsRegistry; $div.css('text-shadow', zppTsReg && zppTsReg.textShadowCss ? zppTsReg.textShadowCss(el) : ''); } /* ZPP_TEXT_SHADOW */
             if (el.textAlign) $div.css('textAlign', el.textAlign);
             if (el.color) $div.css('color', el.color);
@@ -765,7 +765,7 @@
             return $div;
         },
 
-        renderShapeSvg: function(preset, fill, stroke, strokeWidth, rotate) {
+        renderShapeSvg: function(preset, fill, stroke, strokeWidth, rotate, el) {
             preset = preset || 'square';
             fill = fill || '#3b82f6';
             stroke = stroke || '#1d4ed8';
@@ -779,7 +779,9 @@
             var geom = '';
             switch(preset) {
                 case 'square':
-                    geom = '<rect x="0" y="0" width="100" height="100" ' + fAttr + ' ' + sAttr + transformAttr + ' />';
+                    var zppRad = el ? Math.max(0, parseInt(el.shapeRadius, 10) || 0) : 0; /* ZPP_SHAPE_RADIUS */
+                    var zppRx = zppRad > 0 ? ' rx="' + Math.min(50, zppRad * 100 / Math.max(1, parseInt(el.width, 10) || 120)).toFixed(3) + '" ry="' + Math.min(50, zppRad * 100 / Math.max(1, parseInt(el.height, 10) || 120)).toFixed(3) + '"' : '';
+                    geom = '<rect x="0" y="0" width="100" height="100"' + zppRx + ' ' + fAttr + ' ' + sAttr + transformAttr + ' />';
                     break;
                 case 'rounded_rect':
                 case 'rounded_rectangle':
@@ -826,7 +828,7 @@
 
             switch (el.type) {
                 case 'shape':
-                    return this.renderShapeSvg(el.shapePreset, el.shapeNoFill ? 'none' : el.shapeFill, el.strokeColor || el.shapeStroke, (el.strokeWidth !== undefined ? el.strokeWidth : el.shapeStrokeWidth), el.shapeRotate);
+                    return this.renderShapeSvg(el.shapePreset, el.shapeNoFill ? 'none' : el.shapeFill, el.strokeColor || el.shapeStroke, (el.strokeWidth !== undefined ? el.strokeWidth : el.shapeStrokeWidth), el.shapeRotate, el);
                 case 'title':
             case 'heading':
                 var tTag = el.titleTag || el.htmlTag || 'h2';
@@ -1054,9 +1056,21 @@
                 return;
             }
 
+            /* ZPP_FX_DRAG: offset between the visual (transformed) box jQuery UI sees and the real left/top */
+            var zppFxFix = function(ui) {
+                var d = $node.data('zppFxDelta');
+                if (d && ui && ui.position) { ui.position.left -= d.x; ui.position.top -= d.y; }
+            };
             $node.draggable({
                 containment: self.getContainment(),
+                start: function(event, ui) {
+                    var tf = $node[0] ? ($node[0].style.transform || '') : '';
+                    if (tf && tf !== 'none' && ui && ui.originalPosition) {
+                        $node.data('zppFxDelta', { x: ui.originalPosition.left - (parseFloat(el.left) || 0), y: ui.originalPosition.top - (parseFloat(el.top) || 0) });
+                    } else { $node.removeData('zppFxDelta'); }
+                },
                 drag: function(event, ui) {
+                    zppFxFix(ui);
                     self.snapToCanvasEdges(event, ui, $node);
                     self.snapToObjects(event, ui, $node, el);
                     el.top = ui.position.top;
@@ -1066,8 +1080,11 @@
                     }
                 },
                 stop: function(event, ui) {
+                    /* ZPP_FX_DRAG: ui.position already carries the correction from the last drag callback */
                     el.top = ui.position.top;
                     el.left = ui.position.left;
+                    $node.css({ top: el.top + 'px', left: el.left + 'px' });
+                    $node.removeData('zppFxDelta');
                     if (window.ZapPopPopBuilderInspector) {
                         window.ZapPopPopBuilderInspector.syncCoordinates(el);
                     }

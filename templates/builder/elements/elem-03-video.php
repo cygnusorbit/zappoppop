@@ -2,16 +2,18 @@
 if (!defined('ABSPATH')) exit;
 ?>
 <!-- DECOMPOSED MODULE 03: VIDEO EMBED (video) -->
+<?php ZapPopPop_Inline_Assets::style('builder-elements-elem-03-video'); ?>
 <div class="element-panel zappoppop-panel-specific" id="panel-elem-video" data-elem-family="media" style="display:none;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;">
     <div style="font-size:10px;font-weight:800;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;letter-spacing:0.5px;"><?php esc_html_e('Video Embed & Playback', 'zappoppop'); ?></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <!-- ZPP_VIDEO_TOGGLES: number fields carry stepper + Reset (default 200 x 150) -->
         <div>
             <label for="prop-video-width" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Width (px)', 'zappoppop'); ?></label>
-            <input type="number" id="prop-video-width" class="widefat zappoppop-input" min="16" step="1" value="200" style="font-size:12px;">
+            <span class="zpp-ty-numwrap"><span class="zpp-ty-ctl"><input type="number" id="prop-video-width" class="widefat zappoppop-input" min="16" step="1" value="200" /><span class="zpp-ty-unit">PX</span><span class="zpp-sp-step"><button type="button" class="zpp-sp-up" tabindex="-1" title="<?php esc_attr_e('Increase', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Increase', 'zappoppop'); ?>"></button><button type="button" class="zpp-sp-down" tabindex="-1" title="<?php esc_attr_e('Decrease', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Decrease', 'zappoppop'); ?>"></button></span></span><button type="button" class="zpp-sp-reset zpp-ty-reset" data-default="200" title="<?php esc_attr_e('Reset', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Reset', 'zappoppop'); ?>"><span class="dashicons dashicons-image-rotate" aria-hidden="true"></span></button></span>
         </div>
         <div>
             <label for="prop-video-height" style="display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;"><?php esc_html_e('Height (px)', 'zappoppop'); ?></label>
-            <input type="number" id="prop-video-height" class="widefat zappoppop-input" min="16" step="1" value="150" style="font-size:12px;">
+            <span class="zpp-ty-numwrap"><span class="zpp-ty-ctl"><input type="number" id="prop-video-height" class="widefat zappoppop-input" min="16" step="1" value="150" /><span class="zpp-ty-unit">PX</span><span class="zpp-sp-step"><button type="button" class="zpp-sp-up" tabindex="-1" title="<?php esc_attr_e('Increase', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Increase', 'zappoppop'); ?>"></button><button type="button" class="zpp-sp-down" tabindex="-1" title="<?php esc_attr_e('Decrease', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Decrease', 'zappoppop'); ?>"></button></span></span><button type="button" class="zpp-sp-reset zpp-ty-reset" data-default="150" title="<?php esc_attr_e('Reset', 'zappoppop'); ?>" aria-label="<?php esc_attr_e('Reset', 'zappoppop'); ?>"><span class="dashicons dashicons-image-rotate" aria-hidden="true"></span></button></span>
         </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
@@ -44,18 +46,10 @@ if (!defined('ABSPATH')) exit;
         <span class="zappoppop-video-thumb-hint" style="font-size:11px;color:#64748b;pointer-events:none;"><?php esc_html_e('Click to add thumbnail', 'zappoppop'); ?></span>
         <button type="button" id="prop-video-thumb-clear" title="<?php esc_attr_e('Remove thumbnail', 'zappoppop'); ?>" style="display:none;position:absolute;top:4px;right:4px;width:22px;height:22px;line-height:20px;padding:0;border:0;border-radius:50%;background:rgba(15,23,42,.85);color:#fff;font-size:14px;cursor:pointer;">&times;</button>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#cbd5e1;cursor:pointer;">
-            <input type="checkbox" id="prop-video-autoplay" class="zappoppop-gp-bind" data-prop="videoAutoplay" value="1"> <?php esc_html_e('Autoplay', 'zappoppop'); ?>
-        </label>
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#cbd5e1;cursor:pointer;">
-            <input type="checkbox" id="prop-video-mute" class="zappoppop-gp-bind" data-prop="videoMute" value="1"> <?php esc_html_e('Muted', 'zappoppop'); ?>
-        </label>
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#cbd5e1;cursor:pointer;">
-            <input type="checkbox" id="prop-video-loop" class="zappoppop-gp-bind" data-prop="videoLoop" value="1"> <?php esc_html_e('Loop Video', 'zappoppop'); ?>
-        </label>
-        <label style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#cbd5e1;cursor:pointer;">
-            <input type="checkbox" id="prop-video-controls" class="zappoppop-gp-bind" data-prop="videoControls" value="1" checked> <?php esc_html_e('Player Controls', 'zappoppop'); ?>
-        </label>
+    <div class="zpp-video-switches" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 8px;"><!-- ZPP_VIDEO_2COL -->
+        <label class="zpp-sw"><input type="checkbox" id="prop-video-autoplay" class="zappoppop-gp-bind" data-prop="videoAutoplay" value="1"><span class="zpp-sw-track"></span><span><?php esc_html_e('Autoplay', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" id="prop-video-mute" class="zappoppop-gp-bind" data-prop="videoMute" value="1"><span class="zpp-sw-track"></span><span><?php esc_html_e('Muted', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" id="prop-video-loop" class="zappoppop-gp-bind" data-prop="videoLoop" value="1"><span class="zpp-sw-track"></span><span><?php esc_html_e('Loop Video', 'zappoppop'); ?></span></label>
+        <label class="zpp-sw"><input type="checkbox" id="prop-video-controls" class="zappoppop-gp-bind" data-prop="videoControls" value="1" checked><span class="zpp-sw-track"></span><span><?php esc_html_e('Player Controls', 'zappoppop'); ?></span></label>
     </div>
 </div>

@@ -253,7 +253,7 @@
                     $(pane).addClass('active');
                     if (pane.style.getPropertyValue('display') !== 'block' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'block', 'important'); } /* ZPP_FLICKER_FIX */
                     // Ensure direct section cards inside active tab are visible unless explicitly scoped off
-                    $(pane).children('.zappoppop-insp-section').not('#zappoppop-form-style-module, #prop-btn-hover-section').show();
+                    $(pane).children('.zappoppop-insp-section').not('#zappoppop-form-style-module, #prop-btn-hover-section, #insp-section-text-align, #insp-section-submit-text-align').show(); /* ZPP_TYPE_SECTIONS: layer-type sections decide their own visibility */
                 } else {
                     $(pane).removeClass('active');
                     if (pane.style.getPropertyValue('display') !== 'none' || pane.style.getPropertyPriority('display') !== 'important') { pane.style.setProperty('display', 'none', 'important'); } /* ZPP_FLICKER_FIX */
@@ -694,10 +694,11 @@
                     if (el.fontSize) $node.css('font-size', el.fontSize + 'px');
                     if (el.fontWeight) $node.css('font-weight', el.fontWeight);
                     if (el.lineHeight) $node.css('line-height', el.lineHeight);
-                    if (el.letterSpacing !== undefined) $node.css('letter-spacing', el.letterSpacing + 'px'); $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */
+                    if (el.letterSpacing !== undefined) $node.css('letter-spacing', el.letterSpacing + 'px'); $node.css('word-spacing', (parseFloat(el.wordSpacing) || 0) ? (parseFloat(el.wordSpacing) + 'px') : ''); /* ZPP_WORD_SPACING */ if (window.ZapPopPopTextStyle) { window.ZapPopPopTextStyle.apply($node, el); } /* ZPP_TYPOGRAPHY */ if (window.ZapPopPopBgStyle) { window.ZapPopPopBgStyle.apply($node, el); } /* ZPP_BACKGROUND */
                     if (window.ZapPopPopElementsRegistry && window.ZapPopPopElementsRegistry.textShadowCss) $node.css('text-shadow', window.ZapPopPopElementsRegistry.textShadowCss(el)); /* ZPP_TEXT_SHADOW */
                     if (el.borderRadius !== undefined) $node.css('border-radius', el.borderRadius + 'px');
                     if (el.borderWidth !== undefined) $node.css('border', el.borderWidth + 'px ' + (el.borderStyle || 'solid') + ' ' + (el.borderColor || '#334155'));
+                    if (window.ZapPopPopBoxStyle) { window.ZapPopPopBoxStyle.apply($node, el); } /* ZPP_BORDER_SIDES */ if (window.ZapPopPopFxStyle) { window.ZapPopPopFxStyle.apply($node, el); } /* ZPP_EFFECTS */
                 }
             });
 

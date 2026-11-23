@@ -14,14 +14,7 @@ if (!defined('ABSPATH')) exit;
     </div>
 
     <!-- 2. Input Text Alignment (Left | Center | Right) -->
-    <div class="zappoppop-insp-card" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">
-        <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:6px; text-transform:uppercase;"><?php esc_html_e('Input Text Alignment', 'zappoppop'); ?></label>
-        <div id="zappoppop-form-align-group" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
-            <button type="button" class="button zappoppop-form-align-btn" data-align="left" style="font-size:11px; font-weight:700;"><?php esc_html_e('Left', 'zappoppop'); ?></button>
-            <button type="button" class="button zappoppop-form-align-btn" data-align="center" style="font-size:11px; font-weight:700;"><?php esc_html_e('Center', 'zappoppop'); ?></button>
-            <button type="button" class="button zappoppop-form-align-btn" data-align="right" style="font-size:11px; font-weight:700;"><?php esc_html_e('Right', 'zappoppop'); ?></button>
-        </div>
-    </div>
+    <!-- ZPP_NO_TEXT_ALIGN: Input Text Alignment card removed -->
 
     <!-- 3. Input Icons (Left / Right + Pixel Offsets) -->
     <div id="zappoppop-form-icons-card" class="zappoppop-insp-card" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:12px;">

@@ -40,7 +40,7 @@
         shape: '1. Rectangle / Shape',
         image: '2. Image',
         video: '3. Video Embed',
-        label: '4. Label / Text',
+        label: '4. Header',
         html: '5. HTML Content',
         close: '6. Close Icon',
         icon: '7. Font Awesome Icon',

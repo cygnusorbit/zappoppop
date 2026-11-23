@@ -52,3 +52,62 @@ html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw in
 html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw,
 html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw > span { color: var(--zpp-builder-text-color) !important; }
 html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer label.zpp-sw code { color: var(--zpp-builder-accent-color) !important; }
+
+/* ZPP_CP_THEME_BRIDGE: colour pickers follow Theme > Builder > Form Field & Button (bg / text / border + opacity) and the accent colour.
+   The picker stylesheet only knows the Theme-page tokens (--zpp-c-*), which do not exist in the Builder, so it fell back to white. */
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-box,
+html body .zpp-cp .zpp-cp-box {
+    background: var(--zpp-builder-field-bg) !important;
+    background-color: var(--zpp-builder-field-bg) !important;
+    border-color: var(--zpp-builder-field-border) !important;
+    color: var(--zpp-builder-field-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-box:hover,
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-box:focus-within,
+html body .zpp-cp .zpp-cp-box:hover,
+html body .zpp-cp .zpp-cp-box:focus-within { border-color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-box .zpp-cp-btn,
+html body .zpp-cp .zpp-cp-box .zpp-cp-btn { border-color: var(--zpp-builder-field-border) !important; background: transparent !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp > .zpp-cp-btn,
+html body .zpp-cp > .zpp-cp-btn { background: var(--zpp-builder-field-bg) !important; border-color: var(--zpp-builder-field-border) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-btn:hover:not(:disabled),
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-btn[aria-expanded="true"],
+html body .zpp-cp .zpp-cp-btn:hover:not(:disabled),
+html body .zpp-cp .zpp-cp-btn[aria-expanded="true"] { border-color: var(--zpp-builder-accent-color) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-hex,
+html body .zpp-cp .zpp-cp-hex { color: var(--zpp-builder-field-text) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp > .zpp-cp-hex,
+html body .zpp-cp > .zpp-cp-hex { background: var(--zpp-builder-field-bg) !important; border-color: var(--zpp-builder-field-border) !important; }
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert,
+html body .zpp-cp .zpp-cp-revert {
+    background: var(--zpp-builder-field-bg) !important;
+    border-color: var(--zpp-builder-field-border) !important;
+    color: var(--zpp-builder-field-text) !important;
+}
+html body #zappoppop-inspector-drawer.zappoppop-inspector-drawer .zpp-cp .zpp-cp-revert:hover:not(:disabled),
+html body .zpp-cp .zpp-cp-revert:hover:not(:disabled) { border-color: var(--zpp-builder-accent-color) !important; color: var(--zpp-builder-accent-color) !important; }
+/* popover (mounted on <body>, outside the drawer) */
+html body .zpp-cp-pop.zpp-cp-pop {
+    background: var(--zpp-builder-content-bg) !important;
+    border-color: var(--zpp-builder-content-border) !important;
+    color: var(--zpp-builder-content-text) !important;
+}
+html body .zpp-cp-pop .zpp-cp-pop-hex,
+html body .zpp-cp-pop .zpp-cp-pct,
+html body .zpp-cp-pop .zpp-cp-eye {
+    background: var(--zpp-builder-field-bg) !important;
+    background-color: var(--zpp-builder-field-bg) !important;
+    border-color: var(--zpp-builder-field-border) !important;
+    color: var(--zpp-builder-field-text) !important;
+}
+html body .zpp-cp-pop .zpp-cp-pct .zpp-cp-pct-in { color: var(--zpp-builder-field-text) !important; background: transparent !important; }
+html body .zpp-cp-pop .zpp-cp-pct > span { color: var(--zpp-builder-muted-text) !important; }
+html body .zpp-cp-pop .zpp-cp-clear { border-color: var(--zpp-builder-field-border) !important; }
+html body .zpp-cp-pop .zpp-cp-pop-hex:focus,
+html body .zpp-cp-pop .zpp-cp-pct:focus-within,
+html body .zpp-cp-pop .zpp-cp-eye:hover,
+html body .zpp-cp-pop .zpp-cp-eye:focus-visible,
+html body .zpp-cp-pop .zpp-cp-clear:hover,
+html body .zpp-cp-pop .zpp-cp-clear:focus-visible { border-color: var(--zpp-builder-accent-color) !important; }
+html body .zpp-cp-pop .zpp-cp-eye:hover,
+html body .zpp-cp-pop .zpp-cp-eye:focus-visible { color: var(--zpp-builder-accent-color) !important; }

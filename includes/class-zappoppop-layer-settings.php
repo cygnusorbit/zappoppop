@@ -29,7 +29,7 @@ class ZapPopPop_Layer_Settings {
             'shape'       => __('Rectangle / Shape', 'zappoppop'),
             'image'       => __('Image', 'zappoppop'),
             'video'       => __('Video Embed', 'zappoppop'),
-            'label'       => __('Label / Text', 'zappoppop'),
+            'label'       => __('Header', 'zappoppop'),
             'html'        => __('HTML Content', 'zappoppop'),
             'close'       => __('Close Icon', 'zappoppop'),
             'icon'        => __('Font Awesome Icon', 'zappoppop'),
@@ -73,11 +73,70 @@ class ZapPopPop_Layer_Settings {
         return self::$ribbon_types;
     }
 
-    /** elements() arranged like the ribbon; types the ribbon does not show keep their relative order at the end. */
-    public static function ordered_elements() {
+    /* ZPP_ELEMENT_ORDER: the order of the element list (Settings > Builder > Element / Layer Settings) IS the order of the builder ribbon.
+       Stored as zappoppop_settings['builder_element_order'] = [type, ...]; empty = default (the ribbon as shipped). Submit stays last. */
+    private static function pin_submit($list) {
+        $list = array_values(array_diff($list, array('submit')));
+        if (isset(self::elements()['submit'])) {
+            $list[] = 'submit';
+        }
+        return $list;
+    }
+
+    /** Default order: the ribbon as shipped (core buttons + add-on tools), then any remaining types, Submit last. */
+    public static function default_element_order() {
         $els = self::elements();
         $out = array();
         foreach (self::ribbon_types() as $type) {
+            if (isset($els[$type]) && !in_array($type, $out, true)) {
+                $out[] = $type;
+            }
+        }
+        foreach (array_keys($els) as $type) {
+            if (!in_array($type, $out, true)) {
+                $out[] = $type;
+            }
+        }
+        return self::pin_submit($out);
+    }
+
+    /** Accepts an array or a JSON string; keeps only known element types; returns array() when it equals the default order. */
+    public static function sanitize_element_order($raw) {
+        if (is_string($raw)) {
+            $decoded = json_decode($raw, true);
+            $raw     = is_array($decoded) ? $decoded : array();
+        }
+        if (!is_array($raw)) {
+            return array();
+        }
+        $known = array_keys(self::elements());
+        $want  = array();
+        foreach ($raw as $t) {
+            if (is_string($t) && in_array($t, $known, true) && !in_array($t, $want, true)) {
+                $want[] = $t;
+            }
+        }
+        if (!$want) {
+            return array();
+        }
+        $def  = self::default_element_order();
+        $full = self::pin_submit(array_merge($want, array_values(array_diff($def, $want))));
+        return $full === $def ? array() : $full;
+    }
+
+    public static function get_element_order() {
+        $s   = get_option('zappoppop_settings', array());
+        $raw = (is_array($s) && isset($s['builder_element_order'])) ? $s['builder_element_order'] : array();
+        return self::sanitize_element_order($raw);
+    }
+
+    /** elements() arranged by the saved order (default: like the ribbon); types missing from it keep their default place after the listed ones. */
+    public static function ordered_elements() {
+        $els   = self::elements();
+        $order = self::get_element_order();
+        $order = $order ? $order : self::default_element_order();
+        $out   = array();
+        foreach ($order as $type) {
             if (isset($els[$type])) {
                 $out[$type] = $els[$type];
             }
@@ -96,18 +155,18 @@ class ZapPopPop_Layer_Settings {
 
     /** Element types that keep the stock Style layout of the Inspector (mirrors the builder's settled layout). */
     private static function style_layout() {
-        $form_base   = 'formModule alignCard iconsCard';
-        $form_choice = 'formModule alignCard';
+        $form_base   = 'formModule iconsCard';
+        $form_choice = 'formModule';
         return (array) apply_filters('zappoppop_layer_style_layout', array(
             'shape'         => 'padding shadow',
             'image'         => 'opacity padding border shadow',
             'video'         => 'padding border shadow',
-            'label'         => 'textAlign bg typo padding border shadow',
-            'html'          => 'textAlign bg padding border shadow',
+            'label'         => 'bg typo padding border shadow',
+            'html'          => 'bg padding border shadow',
             'close'         => 'bg border hover',
             'icon'          => 'opacity bg border',
             'button'        => 'bg typo padding border shadow hover',
-            'submit'        => 'formModule iconsCard submitAlign bg typo shadow hover css',
+            'submit'        => 'formModule iconsCard bg typo shadow hover css',
             'text'          => $form_base,
             'email'         => $form_base,
             'number'        => $form_base,
@@ -162,7 +221,7 @@ class ZapPopPop_Layer_Settings {
         $cat['basic'] = array(
             self::entry('layer_name', __('Layer Name', 'zappoppop'), '#insp-section-layer-name', $all),
             self::entry('element_settings', '', '#panel-elem-{type}', $all, 'block', array(), true),
-            self::entry('animation', __('Animation (Appearance / Duration / Start Delay / Start Animation)', 'zappoppop'), '#insp-row-gp-animation', $all),
+            self::entry('animation', __('Animation (Appearance / Duration / Start Delay / Start Animation)', 'zappoppop'), '#insp-section-gp-basic-Shared, #insp-section-gp-basic-shared, #insp-row-gp-animation', $all), /* ZPP_ANIM_CARD */
             self::entry('required', __('Required Switch', 'zappoppop'), '#insp-row-gp-required', $form, 'flex', array(
                 self::entry('required_msg', __('Required Error Message', 'zappoppop'), '#insp-row-gp-required-msg', $form),
             )),
@@ -170,18 +229,15 @@ class ZapPopPop_Layer_Settings {
         );
 
         $cat['style'] = array(
-            self::entry('opacity', __('Opacity & Visibility', 'zappoppop'), '#insp-section-opacity', self::style_native('opacity')),
-            self::entry('bg', __('Background Color', 'zappoppop'), '#insp-section-bg-color', self::style_native('bg')),
-            self::entry('typo', __('Typography & Spacing', 'zappoppop'), '#insp-section-typography', self::style_native('typo')),
-            self::entry('padding', __('Padding (Top / Right / Bottom / Left PX)', 'zappoppop'), '#insp-section-padding', self::style_native('padding')),
-            self::entry('border', __('Border & Corner Radius', 'zappoppop'), '#insp-section-border', self::style_native('border')),
+            self::entry('opacity', __('Effect', 'zappoppop'), '#insp-section-opacity', self::style_native('opacity')),
+            self::entry('bg', __('Background', 'zappoppop'), '#insp-section-bg-color', self::style_native('bg')),
+            self::entry('typo', __('Typography', 'zappoppop'), '#insp-section-typography', self::style_native('typo')),
+            self::entry('padding', __('Spacing (Margin / Padding PX)', 'zappoppop'), '#insp-section-padding', self::style_native('padding')),
+            self::entry('border', __('Border & Radius', 'zappoppop'), '#insp-section-border', self::style_native('border')),
             self::entry('shadow', __('Box Shadow', 'zappoppop'), '#insp-section-shadow', self::style_native('shadow')),
             self::entry('hover', __('Hover State', 'zappoppop'), '#prop-btn-hover-section', self::style_native('hover')),
             self::entry('css', __('Custom CSS Class & Inline Styles', 'zappoppop'), '#insp-section-custom-css', self::style_native('css')),
-            self::entry('textAlign', __('Text Alignment', 'zappoppop'), '#insp-section-text-align', self::style_native('textAlign')),
-            self::entry('submitAlign', __('Submit Text Alignment', 'zappoppop'), '#insp-section-submit-text-align', self::style_native('submitAlign')),
             self::entry('formModule', __('Input Styling Module', 'zappoppop'), '#zappoppop-form-style-module', self::style_native('formModule'), 'block', array(
-                self::entry('alignCard', __('Input Text Alignment', 'zappoppop'), '#zappoppop-form-style-module > .zappoppop-insp-card:not(#zappoppop-form-icons-card)', self::style_native('alignCard')),
                 self::entry('iconsCard', __('Input Icons & Offsets', 'zappoppop'), '#zappoppop-form-icons-card', self::style_native('iconsCard')),
             )),
         );
@@ -442,6 +498,7 @@ class ZapPopPop_Layer_Settings {
             'selectors' => $sel,
             'tabs'      => $tabs,
             'order'     => ($ord = self::get_order()) ? $ord : new stdClass(),
+            'element_order' => self::get_element_order(), /* ZPP_ELEMENT_ORDER_PAYLOAD: builder ribbon follows this */
             'tree'      => self::tree(),
         );
     }
