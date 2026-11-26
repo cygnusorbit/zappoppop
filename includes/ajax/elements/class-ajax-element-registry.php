@@ -146,16 +146,6 @@ class ZapPopPop_Ajax_Element_Registry {
         /* ZPP_HTML_ATTRS: layer HTML ID + Attributes rows */
         if ( isset( $el['custom_css_id'] ) && is_scalar( $el['custom_css_id'] ) ) { $clean['custom_css_id'] = ZapPopPop_Html_Attrs::clean_id( $el['custom_css_id'] ); }
         if ( isset( $el['htmlAttrs'] ) && is_array( $el['htmlAttrs'] ) ) { $clean['htmlAttrs'] = ZapPopPop_Html_Attrs::clean_list( $el['htmlAttrs'] ); }
-        if ( isset( $el['inlineStyles'] ) && is_array( $el['inlineStyles'] ) ) {$clean['inlineStyles'] = array();
-            foreach ( $el['inlineStyles'] as$st ) {
-                if ( is_array( $st ) ) {$pair = ZapPopPop_Style_Pairs::clean( isset( $st['prop'] ) ? $st['prop'] : '', isset( $st['value'] ) ? $st['value'] : ( isset( $st['val'] ) ? $st['val'] : '' ) );
-                    if ( $pair ) {
-                        $clean['inlineStyles'][] = $pair;
-                    }
-                }
-            }
-        }
-
         if ( isset( $el['logicRules'] ) && is_array( $el['logicRules'] ) ) {$clean['logicRules'] = array();
             foreach ( $el['logicRules'] as$rl ) {
                 if ( is_array( $rl ) ) {$clean['logicRules'][] = array(

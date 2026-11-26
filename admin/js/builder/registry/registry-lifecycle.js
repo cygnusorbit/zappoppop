@@ -105,14 +105,6 @@
             el.cssClass    = el.customClass;
         }
 
-        var stylesArr = [];
-        $('#zappoppop-gp-inline-styles-list .zappoppop-gp-repeater-item').each(function() {
-            var p = $.trim($(this).find('.gp-css-prop').val() || '');
-            var v = $.trim($(this).find('.gp-css-val').val() || '');
-            if (p || v) stylesArr.push({ prop: p, value: v });
-        });
-        el.inlineStyles = stylesArr;
-
         // 5. Flush Conditional Logic Repeater
         if ($('#prop-logic-enabled').length) {
             el.logicEnabled = $('#prop-logic-enabled').is(':checked');

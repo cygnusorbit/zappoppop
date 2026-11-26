@@ -137,7 +137,7 @@ class ZapPopPop_Ajax_Tools {
         $decoded = json_decode($raw, true);
         if (is_array($decoded)) { foreach (array('settings', 'theme') as $zappoppop_k) { if (isset($decoded[$zappoppop_k]) && is_array($decoded[$zappoppop_k])) { $decoded[$zappoppop_k] = ZapPopPop_Legacy_Import::convert($decoded[$zappoppop_k]); } } } /* accept exports from the previous generation */
         $has_data = is_array($decoded) && !empty($decoded['items']);
-        $has_data = (bool) apply_filters('zappoppop_import_has_data', $has_data, $decoded);
+        $has_data = (bool) apply_filters('zappoppop_import_has_data', $has_data, is_array($decoded) ? ZapPopPop_Sanitizer::deep($decoded) : array()); /* ZAPPOPPOP_P27_IMPORT_FILTER */
         if (!is_array($decoded) || !$has_data) {
             return new WP_Error('format', __('Invalid or unrecognized backup format.', 'zappoppop'));
         }

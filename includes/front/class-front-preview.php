@@ -104,6 +104,10 @@ class ZapPopPop_Front_Preview {
         if (!empty($_GET['zappoppop_frame'])) {
             show_admin_bar(false);
             add_filter('show_admin_bar', '__return_false');
+            /* ZPP_PREVIEW_NO_NOTICES: the preview frame is a bare document; other plugins' WordPress notices (_doing_it_wrong / deprecated) must not print behind the popup */
+            foreach (array('doing_it_wrong_trigger_error', 'deprecated_function_trigger_error', 'deprecated_argument_trigger_error', 'deprecated_file_trigger_error', 'deprecated_hook_trigger_error') as $zappoppop_notice_filter) {
+                add_filter($zappoppop_notice_filter, '__return_false');
+            }
         }
 
         // Preview shows ONLY the previewed popup.

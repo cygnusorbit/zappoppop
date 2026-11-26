@@ -5,7 +5,7 @@ Tags: popup, modal, popup builder, optin, lead generation
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,7 +62,10 @@ A separate, optional paid plugin, ZapPopPop Pro, is sold and distributed from za
 The plugin shows a few small links to the Pro version. The banners can be closed, and a dismissed notice stays hidden for 14 days. They never block any feature.
 
 == External services ==
-ZapPopPop does not send visitor data to any third-party service and makes no outgoing request on its own. The one exception is the optional "Test webhook" button in the admin: when an administrator clicks it, the plugin sends one small JSON ping (an event name, the time and a test message, signed with the secret the administrator typed) to the webhook URL that administrator entered, so the owner of that URL receives that request. Nothing else is sent and nothing is sent automatically. Nothing is loaded from a CDN: the fonts (Inter, Roboto, Montserrat, Poppins, Open Sans, Lato, Nunito, Raleway, DM Sans, Work Sans, Source Sans 3, Oswald, Playfair Display, Merriweather) and the Font Awesome icons are bundled with the plugin, and no visitor data leaves your site.
+ZapPopPop makes no outgoing request on its own and loads no scripts from a CDN. Two optional features contact an outside service, and only when you use them. The first is the "Test webhook" button in the admin: when an administrator clicks it, the plugin sends one small JSON ping (an event name, the time and a test message, signed with the secret the administrator typed) to the webhook URL that administrator entered, so the owner of that URL receives that request. Nothing is sent automatically. The second is the YouTube and Vimeo video layer, described below. The fonts (Inter, Roboto, Montserrat, Poppins, Open Sans, Lato, Nunito, Raleway, DM Sans, Work Sans, Source Sans 3, Oswald, Playfair Display, Merriweather) and the Font Awesome icons are bundled with the plugin and are not loaded from a CDN.
+
+**YouTube and Vimeo video layers (optional).** Only when you add a Video layer that uses a YouTube or Vimeo link, the popup shows that provider's player in an iframe. The visitor's browser then contacts the provider (youtube.com or player.vimeo.com), which receives the visitor's IP address and browser details and may set cookies. While you edit such a layer in the builder, the admin screen also requests the video's preview image (img.youtube.com for YouTube). Nothing is sent to these services when no video layer is used, and the plugin sends no other data to them. YouTube: Terms https://www.youtube.com/t/terms - Privacy https://policies.google.com/privacy. Vimeo: Terms https://vimeo.com/terms - Privacy https://vimeo.com/privacy.
+
 
 == Third-party libraries ==
 * Font Awesome Free 6.5.1 - icons CC BY 4.0, fonts SIL OFL 1.1, code MIT - https://fontawesome.com/license/free (bundled in `assets/vendor/fontawesome/`).
@@ -73,5 +76,5 @@ ZapPopPop does not send visitor data to any third-party service and makes no out
 
 == Changelog ==
 
-= 1.0.12 =
+= 1.0.13 =
 * Initial release of ZapPopPop.

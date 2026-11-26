@@ -53,7 +53,9 @@
         return origShow.apply(this, arguments);
     };
 
-    if (t.debug && t.is_admin) {
+    // ZPP_PREVIEW_NO_BADGE: never draw the admin debug badge inside the preview frame.
+    var zppInFrame = /[?&]zappoppop_frame=1(&|$)/.test(window.location.search || '');
+    if (t.debug && t.is_admin && !zppInFrame) {
         $(function () {
             var ab = [];
             document.cookie.split('; ').forEach(function (c) {

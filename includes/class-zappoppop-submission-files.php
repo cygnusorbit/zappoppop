@@ -26,6 +26,16 @@ class ZapPopPop_Submission_Files {
         if (!function_exists('wp_handle_upload')) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
         }
+        $file = array( /* ZAPPOPPOP_P27_STORE_CLEAN */
+            'name'     => isset($file['name']) && is_string($file['name']) ? sanitize_file_name($file['name']) : '',
+            'tmp_name' => isset($file['tmp_name']) && is_string($file['tmp_name']) ? $file['tmp_name'] : '',
+            'error'    => isset($file['error']) ? (int) $file['error'] : UPLOAD_ERR_NO_FILE,
+            'size'     => isset($file['size']) ? absint($file['size']) : 0,
+            'type'     => isset($file['type']) && is_string($file['type']) ? sanitize_mime_type($file['type']) : '',
+        );
+        if ($file['name'] === '' || $file['tmp_name'] === '' || !is_uploaded_file($file['tmp_name'])) {
+            return null;
+        }
         $sub = '/' . self::SUBDIR . '/' . gmdate('Y/m');
         $cb  = function ($d) use ($sub) {
             $d['subdir'] = $sub;

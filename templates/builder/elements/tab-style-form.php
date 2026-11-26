@@ -48,15 +48,10 @@ if (!defined('ABSPATH')) exit;
         </div>
     </div>
 
-    <!-- 4. Custom CSS Class & Inline CSS Styles Repeater (+ Add a style) -->
+    <!-- 4. Custom CSS Class -->
     <div class="zappoppop-insp-card" style="background:#0f172a; border:1px solid #1e293b; border-radius:8px; padding:12px;">
         <label style="display:block; font-size:10px; font-weight:700; color:#94a3b8; margin-bottom:4px; text-transform:uppercase;"><?php esc_html_e('Custom CSS Class', 'zappoppop'); ?></label>
         <input type="text" id="prop-form-custom-class" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="customClass" placeholder="<?php esc_attr_e('e.g. my-custom-input', 'zappoppop'); ?>" style="margin-bottom:10px; font-size:12px;">
 
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase;"><?php esc_html_e('Inline CSS Styles', 'zappoppop'); ?></span>
-            <button type="button" id="zappoppop-btn-add-inline-style" class="button button-small" style="font-size:11px; font-weight:700;"><?php esc_html_e('+ Add a style', 'zappoppop'); ?></button>
-        </div>
-        <div id="zappoppop-gp-inline-styles-list" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
 </div>

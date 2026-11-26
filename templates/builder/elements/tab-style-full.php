@@ -581,11 +581,6 @@ $zappoppop_bx_panel = function ($zappoppop_bx_key) use ($zappoppop_bx_groups) {
             <input type="text" id="prop-custom-id" class="widefat zappoppop-input zappoppop-gp-bind" data-prop="customId" placeholder="<?php esc_attr_e('e.g. custom-layer-id', 'zappoppop'); ?>" style="font-size:12px;" />
         </div>
     </div>
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-        <span style="font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase;"><?php esc_html_e('CSS Styles Repeater', 'zappoppop'); ?></span>
-        <button type="button" id="zappoppop-btn-add-inline-style" class="button button-small" style="font-size:11px; font-weight:700;"><?php esc_html_e('+ Add a style', 'zappoppop'); ?></button>
-    </div>
-    <div id="zappoppop-gp-inline-styles-list" style="display:flex; flex-direction:column; gap:6px;"></div>
 </div>
 
 <?php

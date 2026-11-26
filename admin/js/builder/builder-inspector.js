@@ -260,15 +260,6 @@
             el.customClass     = jQuery('#prop-gp-style-css-class').val() || '';
             el.cssClass        = el.customClass;
 
-            var stylesArr = [];
-            jQuery('#zappoppop-gp-inline-styles-list .zappoppop-gp-repeater-item').each(function() {
-                var p = jQuery.trim(jQuery(this).find('.gp-css-prop').val() || '');
-                var v = jQuery.trim(jQuery(this).find('.gp-css-val').val() || '');
-                if (p !== '' || v !== '') {
-                    stylesArr.push({ prop: p, value: v });
-                }
-            });
-            el.inlineStyles = stylesArr;
         }
 
         // 4. Flush Conditional Logic Repeater
@@ -426,23 +417,6 @@
         jQuery('#prop-logic-action').val(el.logicAction || 'show');
         jQuery('#prop-logic-match').val(el.logicMatch || 'all');
 
-        // Hydrate Inline CSS Styles Repeater
-        var $stylesList = jQuery('#zappoppop-gp-inline-styles-list').empty();
-        if (Array.isArray(el.inlineStyles)) {
-            el.inlineStyles.forEach(function(item) {
-                if (!item) return;
-                var pVal = jQuery('<div>').text(item.prop || '').html();
-                var vVal = jQuery('<div>').text(item.value || '').html();
-                $stylesList.append(
-                    '<div class="zappoppop-gp-repeater-item">' +
-                    '<input type="text" class="zappoppop-input gp-css-prop" placeholder="property" value="' + pVal + '">' +
-                    '<input type="text" class="zappoppop-input gp-css-val" placeholder="value" value="' + vVal + '">' +
-                    '<button type="button" class="zappoppop-gp-btn-remove" title="Remove">&times;</button>' +
-                    '</div>'
-                );
-            });
-        }
-
         // Hydrate Conditional Logic Rules Repeater
         var $rulesList = jQuery('#zappoppop-gp-logic-rules-list').empty();
         if (Array.isArray(el.logicRules)) {
@@ -529,21 +503,6 @@
             el.cssClass        = el.customClass;
             jQuery('#prop-custom-class').val(el.customClass);
             syncStage();
-        });
-
-        // Add Inline CSS Style Repeater Row
-        jQuery(document).on('click', '#zappoppop-btn-add-css-style', function(e) {
-            e.preventDefault();
-            var el = getEl();
-            if (!el) return;
-            el.inlineStyles = Array.isArray(el.inlineStyles) ? el.inlineStyles : [];
-            el.inlineStyles.push({ prop: '', value: '' });
-            var rowHtml = '<div class="zappoppop-gp-repeater-item">' +
-                '<input type="text" class="zappoppop-input gp-css-prop" placeholder="property (e.g. border-bottom)">' +
-                '<input type="text" class="zappoppop-input gp-css-val" placeholder="value (e.g. 2px solid #c2185b)">' +
-                '<button type="button" class="zappoppop-gp-btn-remove" title="Remove">&times;</button>' +
-                '</div>';
-            jQuery('#zappoppop-gp-inline-styles-list').append(rowHtml);
         });
 
         // Conditional Logic Toggle & Add Rule Repeater
@@ -4306,26 +4265,6 @@
         }
     }
 
-    function renderInlineStylesRepeater(el) {
-        var $list = $('#zappoppop-gp-inline-styles-list');
-        if (!$list.length) return;
-        $list.empty();
-        var styles = Array.isArray(el.inlineStyles) ? el.inlineStyles : [];
-        for (var i = 0; i < styles.length; i++) {
-            var r = styles[i] || {};
-            var $row = $(
-                '<div class="zappoppop-inline-style-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:center;">' +
-                    '<input type="text" class="zappoppop-input zappoppop-style-prop" placeholder="property (e.g. border-color)" style="font-size:11px;" />' +
-                    '<input type="text" class="zappoppop-input zappoppop-style-val" placeholder="value (e.g. #38bdf8)" style="font-size:11px;" />' +
-                    '<button type="button" class="button button-small zappoppop-remove-inline-style" style="color:#f87171;">&times;</button>' +
-                '</div>'
-            );
-            $row.find('.zappoppop-style-prop').val(r.prop || '');
-            $row.find('.zappoppop-style-val').val(r.val || '');
-            $list.append($row);
-        }
-    }
-
     /* ZAPPOPPOP_LOGIC_SCOPE: current-stage, form-field-only, de-duplicated candidates */
     function getLogicFieldCandidates(selfEl) {
         var LOGIC_TYPES = ['text','textfield','email','number','spinner','phone','tel','textarea','select','dropdown','checkbox','checkboxes','radio','radios','multiselect','imageselect','tile','date','time','upload','file','password','rating'];
@@ -4548,7 +4487,6 @@
         $('#prop-form-icon-right').val(el.iconRight || '');
         $('#prop-form-icon-right-offset').val(el.iconRightOffset !== undefined ? el.iconRightOffset : 10);
         $('#prop-form-custom-class').val(el.customClass || '');
-        renderInlineStylesRepeater(el);
 
         // 4. LOGIC TAB (#insp-tab-logic)
         $('#prop-logic-enabled').prop('checked', !!el.logicEnabled);
@@ -4752,18 +4690,14 @@
                 }
             });
 
-        // 3. Repeater buttons (+ Add a style, + Add rule, Form Align)
+        // 3. Repeater buttons (+ Add rule, Form Align)
         $(document)
             .off('click.zappoppopMasterRepeaters')
-            .on('click.zappoppopMasterRepeaters', '#zappoppop-btn-add-inline-style, #btn-add-logic-rule, #zappoppop-form-align-group .zappoppop-form-align-btn', function(e) {
+            .on('click.zappoppopMasterRepeaters', '#btn-add-logic-rule, #zappoppop-form-align-group .zappoppop-form-align-btn', function(e) {
                 e.preventDefault();
                 var el = resolveElement();
                 if (!el) return;
-                if (this.id === 'zappoppop-btn-add-inline-style') {
-                    if (!Array.isArray(el.inlineStyles)) el.inlineStyles = [];
-                    el.inlineStyles.push({ prop: '', val: '' });
-                    renderInlineStylesRepeater(el);
-                } else if (this.id === 'btn-add-logic-rule') {
+                if (this.id === 'btn-add-logic-rule') {
                     if (!Array.isArray(el.logicRules)) el.logicRules = [];
                     el.logicRules.push({ field: '', operator: 'equal', value: '' });
                     renderLogicRulesList(el);

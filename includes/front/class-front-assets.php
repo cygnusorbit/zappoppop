@@ -13,8 +13,8 @@ class ZapPopPop_Front_Assets {
         $zappoppop_root = trailingslashit(dirname(__DIR__, 2));
         $zappoppop_css_deps = [];
         if (file_exists($zappoppop_root . 'public/css/vendor/animate.min.css')) {
-            wp_enqueue_style('animate-css', ZAPPOPPOP_URL . 'public/css/vendor/animate.min.css', [], '4.1.1');
-            $zappoppop_css_deps[] = 'animate-css';
+            wp_enqueue_style('zappoppop-animate-css', ZAPPOPPOP_URL . 'public/css/vendor/animate.min.css', [], '4.1.1');
+            $zappoppop_css_deps[] = 'zappoppop-animate-css';
         }
         wp_enqueue_style('zappoppop-animations-core-css', ZAPPOPPOP_URL . 'public/css/animations-core.css', [], ZAPPOPPOP_VERSION);
         wp_enqueue_style('zappoppop-front-css', ZAPPOPPOP_URL . 'public/css/zappoppop-front.css', $zappoppop_css_deps, ZAPPOPPOP_VERSION);

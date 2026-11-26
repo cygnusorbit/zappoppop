@@ -99,14 +99,6 @@
             $node.css('box-shadow', 'none');
         }
 
-        // 6. Inline CSS Styles Repeater
-        if (Array.isArray(el.inlineStyles)) {
-            el.inlineStyles.forEach(function(pair) {
-                if (pair && pair.prop && pair.value) {
-                    $node.css(pair.prop, pair.value);
-                }
-            });
-        }
     };
 
     Reg.hydrateCoreAndStyleFields = function(el) {
@@ -124,14 +116,14 @@
 
         // Toggle Media Style Suite vs Form Style Suite
         $('#insp-section-media-style-suite').toggle(!isForm);
-        $('#insp-section-form-input-style').show(); // Custom CSS Class & CSS Styles repeater available for all elements
+        $('#insp-section-form-input-style').show(); // Custom CSS Class available for all elements
         $('#gp-form-global-style-notice, #gp-form-text-align-row').toggle(isForm);
         var hasSideIcons = isForm && ['text', 'email', 'number', 'tel', 'date', 'time', 'password', 'upload', 'file'].indexOf(canonical) !== -1;
         $('#gp-form-input-icons-row').toggle(hasSideIcons);
         $('#zappoppop-form-icons-card').toggle(canonical !== 'textarea' && canonical !== 'select'); /* ZAPPOPPOP_TEXTAREA_STYLE */
         /* ZAPPOPPOP_TF_STYLE: Text Field hides Opacity, Background, Typography, Custom CSS */
         var tfHide = '#insp-section-opacity, #insp-section-bg-color, #insp-section-typography, #insp-section-padding, #insp-section-border, #insp-section-shadow, #insp-section-custom-css, ' +
-            '#prop-form-custom-class, #prop-gp-style-css-class, #zappoppop-btn-add-inline-style, #zappoppop-gp-inline-styles-list';
+            '#prop-form-custom-class, #prop-gp-style-css-class';
         var $tfNodes = $(tfHide).map(function() {
             var $c = $(this).closest('.zappoppop-insp-card, .zappoppop-insp-section');
             return ($c.length && !$c.is('#zappoppop-form-icons-card')) ? $c[0] : this;
@@ -305,19 +297,11 @@
             $('#insp-row-data-param').toggle(isDyn);
         });
 
-        // 6. Inline CSS Styles & Logic Rule Repeater live input sync
-        $(document).off('input.p1Repeaters change.p1Repeaters', '#zappoppop-gp-inline-styles-list input, #zappoppop-gp-logic-rules-list input, #zappoppop-gp-logic-rules-list select')
-                   .on('input.p1Repeaters change.p1Repeaters', '#zappoppop-gp-inline-styles-list input, #zappoppop-gp-logic-rules-list input, #zappoppop-gp-logic-rules-list select', function() {
+        // 6. Logic Rule Repeater live input sync
+        $(document).off('input.p1Repeaters change.p1Repeaters', '#zappoppop-gp-logic-rules-list input, #zappoppop-gp-logic-rules-list select')
+                   .on('input.p1Repeaters change.p1Repeaters', '#zappoppop-gp-logic-rules-list input, #zappoppop-gp-logic-rules-list select', function() {
             var el = Reg.resolveElement();
             if (!el) return;
-            var stylesArr = [];
-            $('#zappoppop-gp-inline-styles-list .zappoppop-gp-repeater-item').each(function() {
-                var p = $.trim($(this).find('.gp-css-prop').val() || '');
-                var v = $.trim($(this).find('.gp-css-val').val() || '');
-                if (p || v) stylesArr.push({ prop: p, value: v });
-            });
-            el.inlineStyles = stylesArr;
-
             var rulesArr = [];
             $('#zappoppop-gp-logic-rules-list .zappoppop-gp-repeater-item').each(function() {
                 var f  = $.trim($(this).find('.gp-rule-field').val() || '');

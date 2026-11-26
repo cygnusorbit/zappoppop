@@ -233,13 +233,16 @@ class ZapPopPop_Module_Bridge {
     public static function redact($config) {
         if (has_filter('zappoppop_redact_config')) {
             $res = apply_filters('zappoppop_redact_config', $config);
-            return is_array($res) ? $res : $config;
-        }
-        /* No extension is active: the keys of the extension integrations are never exposed. */
-        if (is_array($config) && isset($config['settings']) && is_array($config['settings'])) {
+            $config = is_array($res) ? $res : $config;
+        } elseif (is_array($config) && isset($config['settings']) && is_array($config['settings'])) {
+            /* No extension is active: the keys of the extension integrations are never exposed. */
             foreach (array('webhooks', 'mailchimp', 'getresponse', 'sms', 'downloads') as $key) {
                 unset($config['settings'][$key]);
             }
+        }
+        /* ZAPPOPPOP_P27_REDACT_NOTIFY: notification rules hold recipient addresses; they are read from the database on submit, never from the public config. */
+        if (is_array($config) && isset($config['settings']) && is_array($config['settings'])) {
+            unset($config['settings']['notifications']);
         }
         return $config;
     }

@@ -44,6 +44,7 @@ class ZapPopPop_Rest_Delivery {
             }
             $config = $zappoppop_mg['config'];
         }
+        if (class_exists('ZapPopPop_Module_Bridge')) { $config = ZapPopPop_Module_Bridge::redact($config); } /* ZAPPOPPOP_P27_REST_REDACT */
 
         ob_start();
         if (class_exists('ZapPopPop_Front_Renderer')) {

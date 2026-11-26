@@ -62,11 +62,11 @@ class ZapPopPop_Ajax_Frontend {
 
         // 4. Handle Multipart File Uploads
         if (!empty($_FILES)) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
-            foreach ($_FILES as $file_key =>$file_data) {
-                $file_key = sanitize_key($file_key);
-                if ($file_key === '' || !is_array($file_data)) { continue; }
-                if (!empty($file_data['name']) &&$file_data['error'] === UPLOAD_ERR_OK) {
+            foreach (array_keys($_FILES) as $zappoppop_raw_key) { /* ZAPPOPPOP_P27_UPLOAD */
+                $file_key  = sanitize_key($zappoppop_raw_key);
+                $file_data = ZapPopPop_Sanitizer::uploaded_file($zappoppop_raw_key);
+                if ($file_key === '' || !is_array($file_data) || !is_uploaded_file($file_data['tmp_name'])) { continue; }
+                if (!empty($file_data['name']) && $file_data['error'] === UPLOAD_ERR_OK) {
                     $movefile = ZapPopPop_Submission_Files::store($file_data);
                     if ($movefile && !isset($movefile['error'])) {
                         $clean_fields[$file_key] = esc_url_raw($movefile['url']);$clean_fields[$file_key . '_path'] = sanitize_text_field($movefile['file']);

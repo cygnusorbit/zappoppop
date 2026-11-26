@@ -35,7 +35,7 @@ class ZapPopPop_Ajax_Builder {
     /* ZPP_LAYER_COLOR_PRESETS: per-site list of preset Layer Colors (#rrggbb, max 24) */
     public function save_layer_color_presets() {
         $this->verify_security();
-        $raw = isset($_POST['presets']) && is_array($_POST['presets']) ? wp_unslash($_POST['presets']) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in verify_security()
+        $raw = ZapPopPop_Sanitizer::post_array('presets'); /* ZAPPOPPOP_P29_PRESETS: unslashed and reduced to plain text at the point of read; each value is then matched against #rrggbb */
         $out = array();
         foreach ($raw as $c) {
             $c = is_string($c) ? strtolower(trim($c)) : '';
@@ -782,16 +782,6 @@ class ZapPopPop_Ajax_Builder {
         /* ZPP_HTML_ATTRS: layer HTML ID + Attributes rows */
         if ( isset( $el['custom_css_id'] ) && is_scalar( $el['custom_css_id'] ) ) { $clean['custom_css_id'] = ZapPopPop_Html_Attrs::clean_id( $el['custom_css_id'] ); }
         if ( isset( $el['htmlAttrs'] ) && is_array( $el['htmlAttrs'] ) ) { $clean['htmlAttrs'] = ZapPopPop_Html_Attrs::clean_list( $el['htmlAttrs'] ); }
-        if ( isset( $el['inlineStyles'] ) && is_array( $el['inlineStyles'] ) ) {$clean['inlineStyles'] = array();
-            foreach ( $el['inlineStyles'] as$st ) {
-                if ( is_array( $st ) ) {$pair = ZapPopPop_Style_Pairs::clean( isset( $st['prop'] ) ? $st['prop'] : '', isset( $st['value'] ) ? $st['value'] : ( isset( $st['val'] ) ? $st['val'] : '' ) );
-                    if ( $pair ) {
-                        $clean['inlineStyles'][] = $pair;
-                    }
-                }
-            }
-        }
-
         if ( isset( $el['logicRules'] ) && is_array( $el['logicRules'] ) ) {$clean['logicRules'] = array();
             foreach ( $el['logicRules'] as$rl ) {
                 if ( is_array( $rl ) ) {$clean['logicRules'][] = array(
