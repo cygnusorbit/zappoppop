@@ -49,12 +49,10 @@
             busy($b, true, t('installing', 'Installing…'));
             window.wp.updates.installPlugin({
                 slug: String($c.data('addon')),
-                success: function (r) {
-                    busy($b, false);
+                success: function () {
                     pill($c, t('inactive', 'Inactive'), 'is-warn');
-                    $b.attr('data-zpp-act', 'activate').text(t('activate', 'Activate'));
-                    if (r && r.activateUrl) { $b.attr('href', r.activateUrl); }
-                    M.notice($notice, 'success', t('installed', 'Add-on installed. Click Activate to turn it on.'));
+                    M.notice($notice, 'success', t('installed', 'Add-on installed. Reloading…'));
+                    window.setTimeout(function () { window.location.reload(); }, 700);
                 },
                 error: function (r) { fail($b, r && r.errorMessage ? r.errorMessage : ''); }
             });
@@ -78,6 +76,34 @@
                 M.notice($notice, 'success', t('activated', 'Add-on activated. Reloading to load its modules…'));
                 window.setTimeout(function () { window.location.reload(); }, 900);
             }).fail(function () { fail($b, ''); });
+        });
+
+        $wrap.on('click', 'a.zpp-ext-switch', function (e) {
+            var $s = $(this);
+            var $c = card(this);
+            var on = $s.hasClass('is-on');
+            e.preventDefault();
+            if ($s.data('zppBusy')) { return; }
+            $s.data('zppBusy', true);
+            $c.addClass('is-busy');
+            function stop(message) {
+                $s.data('zppBusy', false);
+                $c.removeClass('is-busy');
+                M.notice($notice, 'error', message || t('failed', 'Something went wrong. Please try again.'), { href: $s.attr('href'), text: t('native', 'Use the WordPress Plugins screen') });
+            }
+            $.ajax({
+                url: M.vars.ajax_url,
+                type: 'POST',
+                dataType: 'json',
+                data: { action: on ? 'zappoppop_addon_deactivate' : 'zappoppop_addon_activate', nonce: M.vars.nonce, slug: String($c.data('addon')) }
+            }).done(function (res) {
+                if (!res || !res.success) { stop(res && res.data && res.data.message ? res.data.message : ''); return; }
+                $s.toggleClass('is-on', !on).attr('aria-checked', on ? 'false' : 'true');
+                $c.find('.zpp-ext-switch-label').text(on ? t('deactivatedLabel', 'Deactivated') : t('activatedLabel', 'Activated'));
+                pill($c, on ? t('inactive', 'Inactive') : t('active', 'Active'), on ? 'is-warn' : 'is-ok');
+                M.notice($notice, 'success', on ? t('deactivated', 'Add-on deactivated. Reloading…') : t('activated', 'Add-on activated. Reloading to load its modules…'));
+                window.setTimeout(function () { window.location.reload(); }, 900);
+            }).fail(function () { stop(''); });
         });
     });
 })(jQuery);

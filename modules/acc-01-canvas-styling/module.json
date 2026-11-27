@@ -1,5 +1,6 @@
 {
     "schema": 1,
+    "allow_edit": false,
     "slug": "acc-01-canvas-styling",
     "name": "Canvas Settings",
     "version": "1.0.0",

@@ -7,7 +7,11 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 .zpp-ext-card { background: var(--zpp-c-bg-card, #fff); border: var(--zpp-bw, 1px) solid var(--zpp-c-border, #dcdcde); border-radius: var(--zpp-r-card, 3px); box-shadow: var(--zpp-shadow-card, 0 1px 1px rgba(0,0,0,.04)); padding: var(--zpp-p-card, 20px); margin: 16px 0; box-sizing: border-box; }
 .zpp-ext-card-head { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 8px; margin: 0 0 12px; padding: 0 0 12px; border-bottom: var(--zpp-bw, 1px) solid var(--zpp-c-row-border, #eee); }
 .zpp-ext-card-head h3 { margin: 0; font-family: var(--zpp-font-heading, inherit); font-size: var(--zpp-fs-h2, 15px); font-weight: var(--zpp-fw-heading, 600); color: var(--zpp-c-heading, #1d2327); }
-.zpp-ext-card-head .dashicons { color: var(--zpp-c-primary, #c1272d); }
+/* Icons follow the text they sit next to: card icon = card heading colour, button icon = button text colour. */
+#wpbody-content .zappoppop-extend-wrap .zpp-ext-card-head .dashicons { color: var(--zpp-c-heading, #1d2327); }
+#wpbody-content .zappoppop-extend-wrap .button .dashicons,
+#wpbody-content .zappoppop-extend-wrap .button:hover .dashicons,
+#wpbody-content .zappoppop-extend-wrap .button:focus .dashicons { color: inherit; }
 .zpp-ext-help { margin: 0 0 12px; font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #787c82); line-height: 1.5; }
 
 .zpp-ext-upload-row { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; -webkit-box-align: stretch; -ms-flex-align: stretch; align-items: stretch; }
@@ -140,3 +144,15 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 .zpp-ext-addons .zpp-ext-grid { margin-top: 4px; }
 .zpp-ext-addons .zpp-ext-item-actions { margin-top: auto; }
 #wpbody-content .zappoppop-extend-wrap .zpp-ext-addons .zpp-ext-item-actions a.button { text-decoration: none; }
+
+/* ZAPPOPPOP_ADDON_SWITCH: version + slide-toggle row of an installed add-on (a link, so it works without JavaScript). */
+.zpp-ext-item-installed { -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; }
+.zpp-ext-item-ver { font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #646970); }
+.zpp-ext-switch-wrap { display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 8px; }
+.zpp-ext-switch-label { font-size: var(--zpp-fs-small, 12px); color: var(--zpp-c-muted, #646970); }
+#wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch { position: relative; display: inline-block; width: 36px; height: 20px; border-radius: 20px; background: var(--zpp-c-border, #c3c4c7); text-decoration: none; -webkit-transition: background-color .15s ease; transition: background-color .15s ease; cursor: pointer; -webkit-box-shadow: none; box-shadow: none; }
+#wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch:before { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; -webkit-transition: -webkit-transform .15s ease; transition: transform .15s ease; }
+#wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch.is-on { background: var(--zpp-c-primary, #c1272d); }
+#wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch.is-on:before { -webkit-transform: translateX(16px); transform: translateX(16px); }
+#wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch:focus { outline: 2px solid var(--zpp-c-link, #2271b1); outline-offset: 2px; -webkit-box-shadow: none; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch, #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch:before { -webkit-transition: none; transition: none; } }

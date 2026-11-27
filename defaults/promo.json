@@ -12,13 +12,18 @@
     "menu_item": "text = menu label (default Go PRO), url = where it links, text_color and bg_color = menu item colours.",
     "note": "JSON does not allow comments or trailing commas. Keys starting with an underscore are ignored. Put images (png, jpg, gif, webp, svg, avif) in this defaults/ folder.",
     "plugin_link": "Link on the Plugins screen, right after 'Deactivate'. text = label (default Go PRO), url = where it links, new_tab (true/false), text_color = hex colour of the text (empty = Theme primary colour). enabled=false removes it.",
-    "image_fit": "Dashboard slider images: auto (default) = the image fills the full width and its height follows the image size, so the box grows or shrinks to fit; text and button are drawn on top of the image. cover = fixed box height, the image is cropped to fill it. Set image_fit on the slot or on a single slide."
+    "image_fit": "Dashboard slider images: auto (default) = the image fills the full width and its height follows the image size, so the box grows or shrinks to fit; text and button are drawn on top of the image. cover = fixed box height, the image is cropped to fill it. Set image_fit on the slot or on a single slide.",
+    "pro_extensions": "Static Pro cards at the bottom of ZapPopPop > Extend. title and text = heading and intro, cta = text of the orange button on every card, url = where the button goes (new_tab honoured; empty url = the button only opens the upgrade dialog). cta_bg_color / cta_text_color change the button colours (default orange / white). items = list of {slug, name, description, icon (a dashicons class), badge (max 12)}, up to 24. An item whose slug is already a real module on the site is skipped. Closable like the other slots (show_close, reshow_days).",
+    "builder_pro_settings": "Static locked rows after the accordions in the builder Popup Settings drawer. Same fields as pro_extensions (title, text, items). Nothing in them is saved. Each item may carry \"controls\": [{type: toggle|select|number|text|textarea|color|range, label, value, options, on}], up to 8, drawn greyed-out inside the accordion. Nothing is saved. Hover button: overlay_text (default \"Upgrade to PRO\"), overlay_url (default = url), overlay_new_tab, overlay_action = \"link\" (default, goes straight to overlay_url) or \"popup\" (opens the upgrade dialog). Empty overlay_url and url = no button. (default)",
+    "upgrade_popup": "The dialog that opens when a locked card or row is clicked. title (use {name} for the clicked item name), text (links <a>, <strong>, <em>, <br> allowed), features = list of short lines (max 8), cta + url + new_tab = the upgrade button, close_text = label of the second button (default Not now), image, and the colours text_color / bg_color / cta_text_color / cta_bg_color. enabled=false turns the dialog off: the teasers then show the cta as a plain link. show_close / remember_dismiss / reshow_days work as on the other slots: X and \"Not now\" snooze the dialog in this browser for reshow_days (0 = until site data is cleared; remember_dismiss=false = until the next page refresh; show_close=false = no X and nothing is remembered). after_close = what a click on a locked item does while snoozed: \"none\" or \"link\" (goes to url).",
+    "_label": "Every slot has a \"_label\" naming the area it controls. It is for you only; the plugin ignores it."
   },
   "enabled": true,
-  "remember_dismiss": true,
+  "remember_dismiss": false,
   "show_close": true,
   "slots": {
     "header_text": {
+      "_label": "Top bar of the ZapPopPop admin pages (short promo text)",
       "enabled": true,
       "text": "Unlock advanced popup features with Pro.",
       "cta": "Go Pro",
@@ -33,6 +38,7 @@
       "cta_bg_color": ""
     },
     "builder_box": {
+      "_label": "Builder > Popup Settings drawer > promo box at the bottom",
       "enabled": true,
       "show_close": true,
       "title": "Need more power?",
@@ -51,6 +57,7 @@
       "image_url": ""
     },
     "dashboard_slider": {
+      "_label": "ZapPopPop dashboard > promotions slider",
       "enabled": true,
       "show_close": true,
       "interval": 5000,
@@ -67,7 +74,7 @@
           "image_url": "https://zappoppop.com"
         },
         {
-    	  "title": "",
+          "title": "",
           "text": "",
           "cta": "",
           "url": "",
@@ -75,8 +82,8 @@
           "image": "images/promo2.jpeg",
           "image_url": "https://zappoppop.com"
         },
-         {
-    	  "title": "",
+        {
+          "title": "",
           "text": "",
           "cta": "",
           "url": "",
@@ -84,8 +91,8 @@
           "image": "images/promo3.jpeg",
           "image_url": "https://zappoppop.com"
         },
-          {
-    	  "title": "",
+        {
+          "title": "",
           "text": "",
           "cta": "",
           "url": "",
@@ -101,6 +108,7 @@
       "cta_bg_color": ""
     },
     "menu_item": {
+      "_label": "WordPress admin menu > ZapPopPop > upgrade link",
       "enabled": true,
       "text": "Upgrade to PRO",
       "url": "https://zappoppop.com/",
@@ -111,6 +119,7 @@
       "end": ""
     },
     "plugin_link": {
+      "_label": "Plugins page > ZapPopPop row > upgrade link",
       "enabled": true,
       "text": "Go PRO",
       "url": "https://zappoppop.com",
@@ -118,6 +127,524 @@
       "text_color": "",
       "start": "",
       "end": ""
+    },
+    "pro_extensions": {
+      "_label": "ZapPopPop > Extend page > \"Pro extensions\" cards",
+      "enabled": true,
+      "show_close": true,
+      "reshow_days": 14,
+      "title": "Pro extensions",
+      "text": "These extensions come with ZapPopPop Pro. They are shown here for reference and are not part of the free version.",
+      "cta": "Upgrade to Pro",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "start": "",
+      "end": "",
+      "items": [
+        {
+          "slug": "acc-targeting-triggers",
+          "name": "Targeting Triggers",
+          "description": "Show rules by event, schedule, role, area and URL.",
+          "icon": "dashicons-controls-repeat",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-targeting",
+          "name": "Targeting",
+          "description": "Visitor authentication, targeting and attribution rules.",
+          "icon": "dashicons-visibility",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-popup-positions",
+          "name": "Popup Positions",
+          "description": "Popup position on screen: top, bottom, left or right.",
+          "icon": "dashicons-move",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-popup-overlay",
+          "name": "Popup Overlay",
+          "description": "Page overlay behind the popup: colour, opacity, image or animation.",
+          "icon": "dashicons-admin-appearance",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-animation",
+          "name": "Animation",
+          "description": "Open and close animations for the popup.",
+          "icon": "dashicons-controls-play",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-side-tabs",
+          "name": "Side Tabs",
+          "description": "Sticky side tabs attached to the screen edge.",
+          "icon": "dashicons-align-pull-right",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-success-celebration",
+          "name": "Success Celebration",
+          "description": "Celebration animation after a successful submit.",
+          "icon": "dashicons-awards",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-security",
+          "name": "Security & Protections",
+          "description": "Antibot protection, scrollbar lock and personal data keys.",
+          "icon": "dashicons-shield",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-autoresponder",
+          "name": "Autoresponder",
+          "description": "Automatic reply sent to subscribers after they submit.",
+          "icon": "dashicons-email",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-double-optin",
+          "name": "Double Opt-In",
+          "description": "Double opt-in confirmation for subscribers.",
+          "icon": "dashicons-yes-alt",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-mailchimp",
+          "name": "Mailchimp",
+          "description": "Send submissions to Mailchimp audiences.",
+          "icon": "dashicons-email-alt",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-getresponse",
+          "name": "GetResponse",
+          "description": "Add submissions to GetResponse campaigns.",
+          "icon": "dashicons-email-alt2",
+          "badge": "Pro"
+        },
+        {
+          "slug": "acc-woo-cart",
+          "name": "WooCommerce Cart",
+          "description": "Show popups by cart contents, with coupons and upsells.",
+          "icon": "dashicons-cart",
+          "badge": "Pro"
+        }
+      ]
+    },
+    "builder_pro_settings": {
+      "_label": "Builder > Popup Settings drawer > \"Available in ZapPopPop Pro\" greyed-out accordions",
+      "enabled": true,
+      "show_close": true,
+      "reshow_days": 14,
+      "title": "Available in ZapPopPop Pro",
+      "text": "",
+      "cta": "Upgrade to Pro",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "start": "",
+      "end": "",
+      "items": [
+        {
+          "slug": "acc-targeting-triggers",
+          "name": "Targeting Triggers",
+          "description": "Show rules by event, schedule, role, area and URL.",
+          "icon": "dashicons-controls-repeat",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "select",
+              "label": "Show popup when",
+              "options": [
+                "Page load",
+                "Exit intent",
+                "Scroll depth",
+                "Inactivity"
+              ],
+              "value": "Page load"
+            },
+            {
+              "type": "number",
+              "label": "Delay (seconds)",
+              "value": "5"
+            },
+            {
+              "type": "toggle",
+              "label": "Limit to a schedule",
+              "on": false
+            },
+            {
+              "type": "select",
+              "label": "User role",
+              "options": [
+                "Everyone",
+                "Logged in",
+                "Guests"
+              ],
+              "value": "Everyone"
+            }
+          ]
+        },
+        {
+          "slug": "acc-targeting",
+          "name": "Targeting",
+          "description": "Visitor authentication, targeting and attribution rules.",
+          "icon": "dashicons-visibility",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "toggle",
+              "label": "Logged-in visitors only",
+              "on": false
+            },
+            {
+              "type": "select",
+              "label": "Device",
+              "options": [
+                "All devices",
+                "Desktop",
+                "Mobile"
+              ],
+              "value": "All devices"
+            },
+            {
+              "type": "text",
+              "label": "Referrer contains",
+              "value": "google.com"
+            },
+            {
+              "type": "select",
+              "label": "Country",
+              "options": [
+                "Any country"
+              ],
+              "value": "Any country"
+            }
+          ]
+        },
+        {
+          "slug": "acc-popup-positions",
+          "name": "Popup Positions",
+          "description": "Popup position on screen: top, bottom, left or right.",
+          "icon": "dashicons-move",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "select",
+              "label": "Position",
+              "options": [
+                "Center",
+                "Top",
+                "Bottom",
+                "Left",
+                "Right"
+              ],
+              "value": "Center"
+            },
+            {
+              "type": "number",
+              "label": "Offset (px)",
+              "value": "20"
+            }
+          ]
+        },
+        {
+          "slug": "acc-popup-overlay",
+          "name": "Popup Overlay",
+          "description": "Page overlay behind the popup: colour, opacity, image or animation.",
+          "icon": "dashicons-admin-appearance",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "color",
+              "label": "Overlay colour",
+              "value": "#000000"
+            },
+            {
+              "type": "range",
+              "label": "Opacity",
+              "value": "60"
+            },
+            {
+              "type": "toggle",
+              "label": "Use an overlay image",
+              "on": false
+            }
+          ]
+        },
+        {
+          "slug": "acc-animation",
+          "name": "Animation",
+          "description": "Open and close animations for the popup.",
+          "icon": "dashicons-controls-play",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "select",
+              "label": "Open animation",
+              "options": [
+                "Fade in",
+                "Slide up",
+                "Zoom in"
+              ],
+              "value": "Fade in"
+            },
+            {
+              "type": "select",
+              "label": "Close animation",
+              "options": [
+                "Fade out",
+                "Slide down",
+                "Zoom out"
+              ],
+              "value": "Fade out"
+            },
+            {
+              "type": "number",
+              "label": "Duration (ms)",
+              "value": "400"
+            }
+          ]
+        },
+        {
+          "slug": "acc-side-tabs",
+          "name": "Side Tabs",
+          "description": "Sticky side tabs attached to the screen edge.",
+          "icon": "dashicons-align-pull-right",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "toggle",
+              "label": "Show a side tab",
+              "on": true
+            },
+            {
+              "type": "select",
+              "label": "Screen edge",
+              "options": [
+                "Right",
+                "Left"
+              ],
+              "value": "Right"
+            },
+            {
+              "type": "text",
+              "label": "Tab label",
+              "value": "Get 10% off"
+            },
+            {
+              "type": "color",
+              "label": "Tab colour",
+              "value": "#c1272d"
+            }
+          ]
+        },
+        {
+          "slug": "acc-success-celebration",
+          "name": "Success Celebration",
+          "description": "Celebration animation after a successful submit.",
+          "icon": "dashicons-awards",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "select",
+              "label": "Effect",
+              "options": [
+                "Confetti",
+                "Fireworks",
+                "Balloons"
+              ],
+              "value": "Confetti"
+            },
+            {
+              "type": "number",
+              "label": "Duration (seconds)",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "slug": "acc-security",
+          "name": "Security & Protections",
+          "description": "Antibot protection, scrollbar lock and personal data keys.",
+          "icon": "dashicons-shield",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "toggle",
+              "label": "Antibot protection",
+              "on": true
+            },
+            {
+              "type": "toggle",
+              "label": "Lock page scrollbar",
+              "on": false
+            },
+            {
+              "type": "text",
+              "label": "Personal data keys",
+              "value": "email, name"
+            }
+          ]
+        },
+        {
+          "slug": "acc-autoresponder",
+          "name": "Autoresponder",
+          "description": "Automatic reply sent to subscribers after they submit.",
+          "icon": "dashicons-email",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "toggle",
+              "label": "Send an automatic reply",
+              "on": true
+            },
+            {
+              "type": "text",
+              "label": "Subject",
+              "value": "Thanks for subscribing"
+            },
+            {
+              "type": "textarea",
+              "label": "Message",
+              "value": "Hi, thanks for joining us."
+            }
+          ]
+        },
+        {
+          "slug": "acc-double-optin",
+          "name": "Double Opt-In",
+          "description": "Double opt-in confirmation for subscribers.",
+          "icon": "dashicons-yes-alt",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "toggle",
+              "label": "Require email confirmation",
+              "on": true
+            },
+            {
+              "type": "text",
+              "label": "Confirmation subject",
+              "value": "Please confirm your email"
+            }
+          ]
+        },
+        {
+          "slug": "acc-mailchimp",
+          "name": "Mailchimp",
+          "description": "Send submissions to Mailchimp audiences.",
+          "icon": "dashicons-email-alt",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "text",
+              "label": "API key",
+              "value": "xxxxxxxx-us1"
+            },
+            {
+              "type": "select",
+              "label": "Audience",
+              "options": [
+                "Newsletter"
+              ],
+              "value": "Newsletter"
+            },
+            {
+              "type": "toggle",
+              "label": "Tag new subscribers",
+              "on": false
+            }
+          ]
+        },
+        {
+          "slug": "acc-getresponse",
+          "name": "GetResponse",
+          "description": "Add submissions to GetResponse campaigns.",
+          "icon": "dashicons-email-alt2",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "text",
+              "label": "API key",
+              "value": "xxxxxxxxxxxx"
+            },
+            {
+              "type": "select",
+              "label": "Campaign",
+              "options": [
+                "Newsletter"
+              ],
+              "value": "Newsletter"
+            },
+            {
+              "type": "toggle",
+              "label": "Add to autoresponder cycle",
+              "on": false
+            }
+          ]
+        },
+        {
+          "slug": "acc-woo-cart",
+          "name": "WooCommerce Cart",
+          "description": "Show popups by cart contents, with coupons and upsells.",
+          "icon": "dashicons-cart",
+          "badge": "Pro",
+          "controls": [
+            {
+              "type": "select",
+              "label": "Cart condition",
+              "options": [
+                "Cart has items",
+                "Cart total over",
+                "Cart has product"
+              ],
+              "value": "Cart has items"
+            },
+            {
+              "type": "number",
+              "label": "Minimum total",
+              "value": "50"
+            },
+            {
+              "type": "toggle",
+              "label": "Fill live cart values into text",
+              "on": false
+            }
+          ]
+        }
+      ],
+      "overlay_text": "Upgrade to PRO",
+      "overlay_url": "https://zappoppop.com/",
+      "overlay_new_tab": true,
+      "overlay_action": "link"
+    },
+    "upgrade_popup": {
+      "_label": "Upgrade dialog opened from the Pro cards (Extend page) and the Pro accordions (builder)",
+      "enabled": true,
+      "show_close": true,
+      "remember_dismiss": true,
+      "reshow_days": 14,
+      "after_close": "none",
+      "title": "Unlock {name} with ZapPopPop Pro",
+      "text": "This feature is part of ZapPopPop Pro. The free version keeps working exactly as it does today.",
+      "features": [
+        "Advanced targeting and triggers",
+        "Email marketing integrations",
+        "WooCommerce cart and recovery tools",
+        "Priority updates and support"
+      ],
+      "cta": "Upgrade to Pro",
+      "url": "https://zappoppop.com/",
+      "new_tab": true,
+      "close_text": "Not now",
+      "image": "",
+      "text_color": "",
+      "bg_color": "",
+      "cta_text_color": "",
+      "cta_bg_color": ""
     }
   }
 }

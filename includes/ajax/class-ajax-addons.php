@@ -12,6 +12,7 @@ class ZapPopPop_Ajax_Addons {
 
     public function __construct() {
         add_action('wp_ajax_zappoppop_addon_activate', [$this, 'activate']);
+        add_action('wp_ajax_zappoppop_addon_deactivate', [$this, 'deactivate']);
     }
 
     protected function verify() {
@@ -54,5 +55,34 @@ class ZapPopPop_Ajax_Addons {
             ZapPopPop_Modules::flush();
         }
         wp_send_json_success(['slug' => $slug, 'status' => 'active', 'message' => __('Add-on activated.', 'zappoppop')]);
+    }
+
+    /* ZAPPOPPOP_ADDON_SWITCH: turns an installed add-on off. Same rules as activate(): catalog entries only. */
+    public function deactivate() {
+        $this->verify();
+        $slug = isset($_POST['slug']) ? sanitize_key(wp_unslash($_POST['slug'])) : '';
+        $item = null;
+        foreach (ZapPopPop_Addon_Catalog::items() as $it) {
+            if ($it['slug'] === $slug) {
+                $item = $it;
+                break;
+            }
+        }
+        if (!$item) {
+            wp_send_json_error(['message' => __('Add-on not found.', 'zappoppop')]);
+        }
+        if (!function_exists('deactivate_plugins')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        if (is_multisite() && is_plugin_active_for_network($item['file'])) {
+            wp_send_json_error(['message' => __('This add-on is network-activated. Use the Network Plugins screen.', 'zappoppop')]);
+        }
+        if (ZapPopPop_Addon_Catalog::status($item) === 'active') {
+            deactivate_plugins($item['file']);
+        }
+        if (class_exists('ZapPopPop_Modules')) {
+            ZapPopPop_Modules::flush();
+        }
+        wp_send_json_success(['slug' => $slug, 'status' => 'inactive', 'message' => __('Add-on deactivated.', 'zappoppop')]);
     }
 }

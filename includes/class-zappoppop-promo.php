@@ -12,6 +12,7 @@ if (!defined('ABSPATH')) {
 class ZapPopPop_Promo {
 
     const MAX_SLIDES = 8;
+    const MAX_LOCKED = 24; /* ZAPPOPPOP_PRO_LOCK */
     const PARENT     = 'zappoppop-dashboard';
 
     private static $config = null;
@@ -57,7 +58,13 @@ class ZapPopPop_Promo {
     }
 
     private static function ver() {
-        return defined('ZAPPOPPOP_VERSION') ? ZAPPOPPOP_VERSION : '1.0';
+        $v = defined('ZAPPOPPOP_VERSION') ? ZAPPOPPOP_VERSION : '1.0';
+        $t = 0;
+        foreach (array('admin/css/promo.css', 'admin/css/pro-preview.css', 'admin/js/promo.js', 'admin/js/promo-lock.js') as $f) {
+            $m = is_readable(ZAPPOPPOP_PATH . $f) ? (int) filemtime(ZAPPOPPOP_PATH . $f) : 0;
+            $t = max($t, $m);
+        }
+        return $t ? $v . '.' . $t : $v;
     }
 
     /** Plugin pages only. The script loads in <head> so closed items are hidden before first paint (no flash). */
@@ -68,10 +75,16 @@ class ZapPopPop_Promo {
         wp_enqueue_style('dashicons');
         wp_enqueue_style('zappoppop-promo-css', ZAPPOPPOP_URL . 'admin/css/promo.css', array('zappoppop-theme-global-css'), self::ver());
         wp_enqueue_script('zappoppop-promo-js', ZAPPOPPOP_URL . 'admin/js/promo.js', array(), self::ver(), false);
+        wp_enqueue_script('zappoppop-promo-lock-js', ZAPPOPPOP_URL . 'admin/js/promo-lock.js', array(), self::ver(), true); /* ZAPPOPPOP_PRO_LOCK */
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- page slug only, nothing is saved
+        $zpp_page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+        if ($zpp_page === 'zappoppop-builder' && self::item('builder_pro_settings')) { /* ZAPPOPPOP_PRO_PREVIEW */
+            wp_enqueue_style('zappoppop-pro-preview-css', ZAPPOPPOP_URL . 'admin/css/pro-preview.css', array('zappoppop-promo-css'), self::ver());
+        }
 
         // Items that must come back after every refresh: any stored "closed" record for them is ignored and purged.
         $volatile = array();
-        foreach (array('header_text', 'builder_box', 'dashboard_slider') as $slot) {
+        foreach (array('header_text', 'builder_box', 'dashboard_slider', 'pro_extensions', 'builder_pro_settings', 'upgrade_popup') as $slot) {
             $it = self::item($slot);
             if ($it && (empty($it['remember']) || empty($it['dismissible']))) { // no close button: ignore any old "closed" record
                 $volatile[] = $it['id'];
@@ -301,6 +314,26 @@ class ZapPopPop_Promo {
             if ($item['text'] === '') {
                 return null;
             }
+        } elseif ($slot === 'pro_extensions' || $slot === 'builder_pro_settings') {
+            $item['entries'] = self::lock_entries($raw); /* ZAPPOPPOP_PRO_LOCK */
+            if ($slot === 'builder_pro_settings') { /* ZAPPOPPOP_PRO_OVERLAY */
+                $oa = strtolower(self::str($raw, 'overlay_action'));
+                $item['overlay_text']    = mb_substr(wp_strip_all_tags(self::str($raw, 'overlay_text')), 0, 40);
+                $item['overlay_url']     = esc_url_raw(self::str($raw, 'overlay_url'), array('http', 'https'));
+                $item['overlay_new_tab'] = self::flag($raw, 'overlay_new_tab', $item['new_tab']);
+                $item['overlay_action']  = ($oa === 'popup') ? 'popup' : 'link';
+            }
+            if (!$item['entries']) {
+                return null;
+            }
+        } elseif ($slot === 'upgrade_popup') {
+            $item['features']    = self::features($raw);
+            $item['close_text']  = mb_substr(wp_strip_all_tags(self::str($raw, 'close_text')), 0, 40);
+            $ac = strtolower(self::str($raw, 'after_close')); /* ZAPPOPPOP_PRO_DISMISS */
+            $item['after_close'] = ($ac === 'link') ? 'link' : 'none';
+            if ($item['title'] === '' && $item['text'] === '') {
+                return null;
+            }
         } elseif ($item['title'] === '' && $item['text'] === '') {
             return null;
         }
@@ -311,6 +344,320 @@ class ZapPopPop_Promo {
         }
         $item['id'] = $slot . '-' . $id;
         return $item;
+    }
+
+    /* ------------------------------------------------------------ ZAPPOPPOP_PRO_LOCK: static Pro teasers (no stored data) */
+
+    private static $modal_done = false;
+    private static $installed  = null;
+
+    /** Slugs of modules this site already has, so a teaser never sits next to the real module. */
+    private static function installed_slugs() {
+        if (self::$installed !== null) {
+            return self::$installed;
+        }
+        self::$installed = array();
+        if (class_exists('ZapPopPop_Modules_Installer')) {
+            foreach ((array) ZapPopPop_Modules_Installer::extend_items() as $m) {
+                if (is_array($m) && !empty($m['slug']) && is_string($m['slug'])) {
+                    self::$installed[sanitize_key($m['slug'])] = true;
+                }
+            }
+        }
+        return self::$installed;
+    }
+
+    /** Entries of a list slot: name, description, icon (dashicons), badge, slug (optional). */
+    private static function lock_entries($raw) {
+        $out = array();
+        if (!isset($raw['items']) || !is_array($raw['items'])) {
+            return $out;
+        }
+        $have = self::installed_slugs();
+        foreach ($raw['items'] as $r) {
+            if (!is_array($r) || count($out) >= self::MAX_LOCKED) {
+                continue;
+            }
+            $name = mb_substr(wp_strip_all_tags(self::str($r, 'name')), 0, 60);
+            if ($name === '') {
+                continue;
+            }
+            $slug = sanitize_key(self::str($r, 'slug'));
+            if ($slug !== '' && isset($have[$slug])) {
+                continue;
+            }
+            $icon = self::str($r, 'icon');
+            if (!preg_match('/^dashicons-[a-z0-9-]+$/', $icon)) {
+                $icon = 'dashicons-lock';
+            }
+            $out[] = array(
+                'slug'        => $slug,
+                'name'        => $name,
+                'description' => mb_substr(wp_strip_all_tags(self::str($r, 'description')), 0, 200),
+                'icon'        => $icon,
+                'badge'       => mb_substr(wp_strip_all_tags(self::str($r, 'badge')), 0, 12),
+                'controls'    => self::lock_controls($r),
+                'preview'     => sanitize_key(self::str($r, 'preview')),
+            );
+        }
+        return $out;
+    }
+
+    private static function features($raw) {
+        $out = array();
+        if (isset($raw['features']) && is_array($raw['features'])) {
+            foreach ($raw['features'] as $f) {
+                if (is_scalar($f) && count($out) < 8) {
+                    $t = mb_substr(trim(wp_strip_all_tags((string) $f)), 0, 120);
+                    if ($t !== '') {
+                        $out[] = $t;
+                    }
+                }
+            }
+        }
+        return $out;
+    }
+
+    /** The upgrade dialog, printed once per page. JS moves it to <body> when it opens (the builder drawer is transformed). */
+    private static function render_modal() {
+        if (self::$modal_done) {
+            return;
+        }
+        $p = self::item('upgrade_popup');
+        if (!$p) {
+            return;
+        }
+        self::$modal_done = true;
+        $allowed = self::allowed_html();
+        echo '<div class="zpp-pro-modal" id="zpp-pro-modal" hidden data-zpp-pro-id="' . esc_attr($p['id']) . '" data-zpp-pro-days="' . (int) $p['reshow_days'] . '" data-zpp-pro-after="' . esc_attr($p['after_close']) . '"'
+            . ((!empty($p['dismissible']) && !empty($p['remember'])) ? '' : ' data-zpp-pro-remember="0"')
+            . ($p['url'] !== '' ? ' data-zpp-pro-url="' . esc_url($p['url']) . '"' : '')
+            . ($p['new_tab'] ? ' data-zpp-pro-newtab="1"' : '') . '>'; /* ZAPPOPPOP_PRO_DISMISS */
+        echo '<div class="zpp-pro-modal-backdrop" data-zpp-pro-close="1"></div>';
+        echo '<div class="zpp-pro-modal-box" role="dialog" aria-modal="true" aria-labelledby="zpp-pro-modal-title" tabindex="-1"';
+        self::print_vars($p);
+        echo '>';
+        if (!empty($p['dismissible'])) {
+            echo '<button type="button" class="zpp-promo-x zpp-pro-modal-x" data-zpp-pro-close="1" data-zpp-pro-dismiss="1" aria-label="' . esc_attr__('Close', 'zappoppop') . '"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>';
+        }
+        if ($p['image'] !== '') {
+            echo '<img class="zpp-pro-modal-img" src="' . esc_url($p['image']) . '" alt="" loading="lazy">';
+        }
+        if ($p['title'] !== '') {
+            echo '<h2 class="zpp-pro-modal-title" id="zpp-pro-modal-title" data-zpp-pro-title="' . esc_attr($p['title']) . '">' . esc_html(str_replace('{name}', '', $p['title'])) . '</h2>';
+        }
+        if ($p['text'] !== '') {
+            echo '<p class="zpp-pro-modal-text">' . wp_kses($p['text'], $allowed) . '</p>';
+        }
+        if (!empty($p['features'])) {
+            echo '<ul class="zpp-pro-modal-list">';
+            foreach ($p['features'] as $f) {
+                echo '<li><span class="dashicons dashicons-yes" aria-hidden="true"></span>' . esc_html($f) . '</li>';
+            }
+            echo '</ul>';
+        }
+        echo '<div class="zpp-pro-modal-actions">';
+        echo wp_kses(self::link($p, 'button button-primary zpp-promo-btn'), $allowed);
+        echo '<button type="button" class="button zpp-pro-modal-close" data-zpp-pro-close="1" data-zpp-pro-dismiss="1">' . esc_html($p['close_text'] !== '' ? $p['close_text'] : __('Not now', 'zappoppop')) . '</button>';
+        echo '</div></div></div>';
+    }
+
+    /** Opening attributes for a locked card or row: opens the dialog when it exists. */
+    private static function lock_attrs($entry, $popup_ok) {
+        $a = ' data-zpp-pro-name="' . esc_attr($entry['name']) . '"';
+        if ($popup_ok) {
+            $a .= ' data-zpp-pro-lock="1" role="button" tabindex="0" aria-haspopup="dialog"';
+        }
+        return $a;
+    }
+
+    private static function render_extensions($item) {
+        $popup_ok = (bool) self::item('upgrade_popup');
+        $badge    = __('Pro', 'zappoppop');
+        $title    = $item['title'] !== '' ? $item['title'] : __('Pro extensions', 'zappoppop');
+        echo '<section class="zpp-ext-card zpp-pro-lock-section" aria-labelledby="zpp-pro-lock-title"';
+        self::print_root_attrs($item);
+        echo '>';
+        self::dismiss_button($item);
+        echo '<div class="zpp-ext-card-head"><span class="dashicons dashicons-lock" aria-hidden="true"></span><h3 id="zpp-pro-lock-title">' . esc_html($title) . '</h3></div>';
+        if ($item['text'] !== '') {
+            echo '<p class="zpp-ext-help">' . wp_kses($item['text'], self::allowed_html()) . '</p>';
+        }
+        echo '<div class="zpp-ext-grid zpp-pro-lock-grid">';
+        foreach ($item['entries'] as $e) {
+            echo '<div class="zpp-ext-item zpp-pro-lock-item"' . self::lock_attrs($e, $popup_ok) . '>';
+            echo '<div class="zpp-ext-item-top"><span class="zpp-ext-item-img is-empty"><span class="dashicons ' . esc_attr($e['icon']) . '" aria-hidden="true"></span></span>';
+            echo '<div class="zpp-ext-item-head"><h3 class="zpp-ext-item-name">' . esc_html($e['name']) . '</h3>';
+            echo '<span class="zpp-mod-pill is-lock">' . esc_html($e['badge'] !== '' ? $e['badge'] : $badge) . '</span></div></div>';
+            if ($e['description'] !== '') {
+                echo '<p class="zpp-ext-item-desc">' . esc_html($e['description']) . '</p>';
+            }
+            echo '<div class="zpp-pro-lock-cta">';
+            $zpp_cta_label = $item['cta'] !== '' ? $item['cta'] : __('Available in Pro', 'zappoppop');
+            if ($item['url'] !== '') {
+                $zpp_cta_attr = !empty($item['new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : '';
+                echo '<a class="zpp-pro-lock-btn" href="' . esc_url($item['url']) . '"' . $zpp_cta_attr . '><span class="dashicons dashicons-lock" aria-hidden="true"></span>' . esc_html($zpp_cta_label) . '</a>';
+            } else {
+                echo '<span class="zpp-pro-lock-btn"><span class="dashicons dashicons-lock" aria-hidden="true"></span>' . esc_html($zpp_cta_label) . '</span>';
+            }
+            echo '</div></div>';
+        }
+        echo '</div>';
+        echo '</section>';
+        self::render_modal();
+    }
+
+    /* ZAPPOPPOP_PRO_ACC: sample controls of a Pro feature (display only, nothing is saved) */
+    private static function lock_controls($r) {
+        $out = array();
+        if (!isset($r['controls']) || !is_array($r['controls'])) {
+            return $out;
+        }
+        foreach ($r['controls'] as $c) {
+            if (!is_array($c) || count($out) >= 8) {
+                continue;
+            }
+            $type = strtolower(self::str($c, 'type'));
+            if (!in_array($type, array('toggle', 'select', 'number', 'text', 'textarea', 'color', 'range'), true)) {
+                continue;
+            }
+            $label = mb_substr(wp_strip_all_tags(self::str($c, 'label')), 0, 60);
+            if ($label === '') {
+                continue;
+            }
+            $opts = array();
+            if (isset($c['options']) && is_array($c['options'])) {
+                foreach ($c['options'] as $o) {
+                    if (is_scalar($o) && count($opts) < 8) {
+                        $t = mb_substr(wp_strip_all_tags((string) $o), 0, 40);
+                        if ($t !== '') {
+                            $opts[] = $t;
+                        }
+                    }
+                }
+            }
+            $val = mb_substr(wp_strip_all_tags(self::str($c, 'value')), 0, 80);
+            if ($type === 'color') {
+                $hex = sanitize_hex_color($val);
+                $val = ($hex && strlen($hex) === 7) ? $hex : '#000000';
+            }
+            $out[] = array('type' => $type, 'label' => $label, 'value' => $val, 'options' => $opts, 'on' => self::flag($c, 'on', false));
+        }
+        return $out;
+    }
+
+    private static function render_lock_control($c) {
+        $lab = esc_attr($c['label']);
+        echo '<div class="zpp-pro-ctl zpp-pro-ctl--' . esc_attr($c['type']) . '">';
+        echo '<span class="zpp-pro-ctl-label">' . esc_html($c['label']) . '</span>';
+        $common = ' disabled tabindex="-1" aria-disabled="true" data-zpp-static="1" aria-label="' . $lab . '"';
+        switch ($c['type']) {
+            case 'toggle':
+                echo '<span class="zappoppop-ovf-switch"><input type="checkbox" role="switch"' . $common . ($c['on'] ? ' checked' : '') . '><span class="zappoppop-ovf-track"></span></span>';
+                break;
+            case 'select':
+                echo '<select class="widefat"' . $common . '>';
+                foreach ($c['options'] as $o) {
+                    echo '<option' . ($o === $c['value'] ? ' selected' : '') . '>' . esc_html($o) . '</option>';
+                }
+                echo '</select>';
+                break;
+            case 'textarea':
+                echo '<textarea class="widefat" rows="3"' . $common . '>' . esc_textarea($c['value']) . '</textarea>';
+                break;
+            case 'color':
+                echo '<input type="color" value="' . esc_attr($c['value']) . '"' . $common . '>';
+                break;
+            case 'range':
+                echo '<input type="range" min="0" max="100" value="' . (int) $c['value'] . '"' . $common . '>';
+                break;
+            case 'number':
+                echo '<input type="number" class="widefat" value="' . esc_attr($c['value']) . '"' . $common . '>';
+                break;
+            default:
+                echo '<input type="text" class="widefat" value="' . esc_attr($c['value']) . '"' . $common . '>';
+        }
+        echo '</div>';
+    }
+
+    /* ZAPPOPPOP_PRO_PREVIEW: static copy of a Pro accordion (defaults/pro-preview/<slug>.html), shown greyed out */
+    private static function preview_html($e) {
+        $key = sanitize_key($e['preview'] !== '' ? $e['preview'] : $e['slug']);
+        if ($key === '') {
+            return '';
+        }
+        $file = ZAPPOPPOP_PATH . 'defaults/pro-preview/' . $key . '.html';
+        if (!is_readable($file)) {
+            return '';
+        }
+        $html = file_get_contents($file); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin file
+        return is_string($html) ? $html : '';
+    }
+
+    private static function preview_allowed_html() {
+        $common = array('class' => true, 'id' => true, 'title' => true, 'role' => true, 'tabindex' => true, 'aria-hidden' => true);
+        $form   = array('type' => true, 'value' => true, 'placeholder' => true, 'rows' => true, 'min' => true, 'max' => true, 'step' => true,
+                        'maxlength' => true, 'disabled' => true, 'checked' => true, 'selected' => true);
+        $out = array();
+        foreach (array('div', 'span', 'p', 'label', 'strong', 'em', 'code', 'ul', 'li', 'i', 'small', 'fieldset', 'h4') as $t) {
+            $out[$t] = $common;
+        }
+        foreach (array('input', 'select', 'option', 'optgroup', 'textarea', 'button') as $t) {
+            $out[$t] = array_merge($common, $form);
+        }
+        $out['svg']  = array('class' => true, 'viewbox' => true, 'aria-hidden' => true, 'focusable' => true);
+        $out['rect'] = array('class' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true);
+        return $out;
+    }
+
+    private static function render_builder_rows($item) {
+        $popup_ok = (bool) self::item('upgrade_popup');
+        $badge    = __('Pro', 'zappoppop');
+        $title    = $item['title'] !== '' ? $item['title'] : __('Available in ZapPopPop Pro', 'zappoppop');
+        $allowed  = self::allowed_html();
+        /* ZAPPOPPOP_PRO_OVERLAY: one button over the greyed controls; text and link come from promo.json */
+        $o_text   = $item['overlay_text'] !== '' ? $item['overlay_text'] : __('Upgrade to PRO', 'zappoppop');
+        $o_url    = $item['overlay_url'] !== '' ? $item['overlay_url'] : $item['url'];
+        $as_popup = $popup_ok && $item['overlay_action'] !== 'link';
+        $as_link  = !$as_popup && $o_url !== '';
+        echo '<div class="zappoppop-accordion-group zappoppop-pro-lock-group"';
+        self::print_root_attrs($item);
+        echo '>';
+        self::dismiss_button($item);
+        echo '<div class="zappoppop-pro-lock-head">' . esc_html($title) . '</div>';
+        if ($item['text'] !== '') {
+            echo '<p class="zappoppop-pro-lock-note">' . wp_kses($item['text'], $allowed) . '</p>';
+        }
+        foreach ($item['entries'] as $e) {
+            $pill = $e['badge'] !== '' ? $e['badge'] : $badge;
+            // Same classes as the real accordions: the builder's own handler and theme open, close and style it.
+            echo '<div class="zappoppop-acc-item zpp-pro-acc">';
+            echo '<button type="button" class="zappoppop-acc-header"><span>' . esc_html($e['name']) . '</span><span class="zpp-pro-badge">' . esc_html($pill) . '</span></button>';
+            echo '<div class="zappoppop-acc-body zpp-pro-acc-body" style="display:none;"><div class="zpp-pro-acc-wrap">';
+            $pv = self::preview_html($e);
+            if ($pv !== '') {
+                // exact copy of the real settings, every control disabled; escaped late with a fixed tag list
+                echo '<div class="zpp-pro-acc-ctls zpp-pro-acc-real" aria-hidden="true">' . wp_kses($pv, self::preview_allowed_html()) . '</div>';
+            } else {
+                if ($e['description'] !== '') {
+                    echo '<p class="zpp-pro-acc-desc">' . esc_html($e['description']) . '</p>';
+                }
+                echo '<div class="zpp-pro-acc-ctls" aria-hidden="true">';
+                foreach ($e['controls'] as $c) {
+                    self::render_lock_control($c);
+                }
+                echo '</div>';
+            }
+            if ($as_popup) {
+                echo '<div class="zpp-pro-acc-overlay"><button type="button" class="button zpp-pro-acc-cta" data-zpp-pro-lock="1" data-zpp-pro-name="' . esc_attr($e['name']) . '">' . esc_html($o_text) . '</button></div>';
+            } elseif ($as_link) {
+                $attr = $item['overlay_new_tab'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+                echo '<div class="zpp-pro-acc-overlay"><a class="button zpp-pro-acc-cta" href="' . esc_url($o_url) . '"' . $attr . '>' . esc_html($o_text) . '</a></div>';
+            }
+            echo '</div></div></div>';
+        }
+        echo '</div>';
+        self::render_modal();
     }
 
     /* ------------------------------------------------------------ rendering */
@@ -390,6 +737,18 @@ class ZapPopPop_Promo {
             self::dismiss_button($item);
             echo '</div>';
             return;
+        }
+
+        if ($slot === 'pro_extensions') { /* ZAPPOPPOP_PRO_LOCK */
+            self::render_extensions($item);
+            return;
+        }
+        if ($slot === 'builder_pro_settings') {
+            self::render_builder_rows($item);
+            return;
+        }
+        if ($slot === 'upgrade_popup') {
+            return; // only printed together with a teaser that opens it
         }
 
         if ($slot === 'builder_box') {

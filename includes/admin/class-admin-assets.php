@@ -532,6 +532,9 @@ class ZapPopPop_Admin_Assets {
                         'activated'  => __('Add-on activated. Reloading to load its modules…', 'zappoppop'),
                         'failed'     => __('Something went wrong. Please try again.', 'zappoppop'),
                         'native'     => __('Use the WordPress Plugins screen', 'zappoppop'),
+                        'activatedLabel' => __('Activated', 'zappoppop'),
+                        'deactivatedLabel' => __('Deactivated', 'zappoppop'),
+                        'deactivated' => __('Add-on deactivated. Reloading…', 'zappoppop'),
                     ],
                 ]);
             }

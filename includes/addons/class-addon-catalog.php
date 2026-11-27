@@ -104,6 +104,21 @@ class ZapPopPop_Addon_Catalog {
         return 'inactive';
     }
 
+    /** Installed version of the add-on plugin, '' when it is not installed. */
+    public static function version($it) {
+        if (!function_exists('get_plugins')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        $all = get_plugins();
+        return isset($all[$it['file']]['Version']) ? (string) $all[$it['file']]['Version'] : '';
+    }
+
+    /** Plain WordPress link that activates or deactivates the add-on (used when JavaScript is off). */
+    public static function toggle_url($it, $active) {
+        $what = $active ? 'deactivate' : 'activate';
+        return wp_nonce_url(self_admin_url('plugins.php?action=' . $what . '&plugin=' . rawurlencode($it['file'])), $what . '-plugin_' . $it['file']);
+    }
+
     public static function can_install() {
         $mods = function_exists('wp_is_file_mod_allowed') ? wp_is_file_mod_allowed('can_install_plugins') : !(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS);
         return $mods && current_user_can('install_plugins');

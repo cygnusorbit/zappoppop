@@ -38,5 +38,6 @@ if (!current_user_can('manage_options')) {
         data-l-next="<?php echo esc_attr__('Next page', 'zappoppop'); ?>"
         data-l-last="<?php echo esc_attr__('Last page', 'zappoppop'); ?>"></div>
     <?php include ZAPPOPPOP_PATH . 'templates/extend/addons.php'; ?>
+    <?php ZapPopPop_Promo::render('pro_extensions'); /* ZAPPOPPOP_PRO_LOCK: static Pro cards, text from defaults/promo.json */ ?>
 </div>
 <?php include ZAPPOPPOP_PATH . 'templates/settings/modal-module-categories.php'; /* ZAPPOPPOP_CATS_ON_EXTEND */ ?>

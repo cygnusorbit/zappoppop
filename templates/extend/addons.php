@@ -39,7 +39,7 @@ if (!$zappoppop_addons) {
                 <?php if ($zappoppop_it['description'] !== '') : ?>
                     <p class="zpp-ext-item-desc"><?php echo esc_html($zappoppop_it['description']); ?></p>
                 <?php endif; ?>
-                <?php if ($zappoppop_act) : ?>
+                <?php if ($zappoppop_act && $zappoppop_status === 'missing') : ?>
                     <div class="zpp-ext-item-actions">
                         <a class="button<?php echo $zappoppop_act['primary'] ? ' button-primary' : ''; ?>" href="<?php echo esc_url($zappoppop_act['url']); ?>"<?php echo $zappoppop_act['external'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?><?php echo $zappoppop_act['act'] !== '' ? ' data-zpp-act="' . esc_attr($zappoppop_act['act']) . '"' : ''; ?>>
                             <?php echo esc_html($zappoppop_act['label']); ?>
@@ -47,6 +47,29 @@ if (!$zappoppop_addons) {
                                 <span class="screen-reader-text"><?php esc_html_e('(opens in a new tab)', 'zappoppop'); ?></span>
                             <?php endif; ?>
                         </a>
+                    </div>
+                <?php endif; ?>
+                <?php if ($zappoppop_status !== 'missing') :
+                    $zappoppop_ver = ZapPopPop_Addon_Catalog::version($zappoppop_it);
+                    $zappoppop_on  = ($zappoppop_status === 'active');
+                    ?>
+                    <div class="zpp-ext-item-actions zpp-ext-item-installed">
+                        <span class="zpp-ext-item-ver">
+                            <?php
+                            if ($zappoppop_ver !== '') {
+                                /* translators: %s: add-on version number */
+                                echo esc_html(sprintf(__('Version: %s', 'zappoppop'), $zappoppop_ver));
+                            }
+                            ?>
+                        </span>
+                        <?php if (current_user_can('activate_plugins')) : ?>
+                            <span class="zpp-ext-switch-wrap">
+                                <span class="zpp-ext-switch-label"><?php echo $zappoppop_on ? esc_html__('Activated', 'zappoppop') : esc_html__('Deactivated', 'zappoppop'); ?></span>
+                                <a class="zpp-ext-switch<?php echo $zappoppop_on ? ' is-on' : ''; ?>" role="switch" aria-checked="<?php echo $zappoppop_on ? 'true' : 'false'; ?>" href="<?php echo esc_url(ZapPopPop_Addon_Catalog::toggle_url($zappoppop_it, $zappoppop_on)); ?>">
+                                    <span class="screen-reader-text"><?php echo $zappoppop_on ? esc_html__('Deactivate', 'zappoppop') : esc_html__('Activate', 'zappoppop'); ?></span>
+                                </a>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>

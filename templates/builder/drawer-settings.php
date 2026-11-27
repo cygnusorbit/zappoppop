@@ -72,6 +72,7 @@ if (!defined('ABSPATH')) {
             ?>
 
         </div>
+        <?php ZapPopPop_Promo::render('builder_pro_settings'); /* ZAPPOPPOP_PRO_LOCK: static locked rows, text from defaults/promo.json */ ?>
         <div class="zappoppop-defaults-box" style="margin-top:16px;padding:12px;border:1px dashed #cbd5e1;border-radius:6px;background:#f8fafc;">
             <p style="margin:0 0 8px;font-size:12px;line-height:1.4;color:#475569;"><?php esc_html_e('Use this popup\'s canvas and popup settings (not its layers) as the starting point for every new popup.', 'zappoppop'); ?></p>
             <button type="button" class="button" data-zpp-defaults-save="popup"><?php esc_html_e('Save as default for new popups', 'zappoppop'); ?></button>

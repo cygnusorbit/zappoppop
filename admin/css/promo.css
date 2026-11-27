@@ -67,3 +67,72 @@
 .zpp-promo-slide.fit-auto .zpp-promo-bg{position:static;display:block;width:100%;height:auto;max-width:100%}
 .zpp-promo-slide.fit-auto .zpp-promo-slide-body{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden}
 .zpp-promo-slide.fit-auto.no-copy::before,.zpp-promo-slide.fit-auto.no-copy .zpp-promo-slide-body{display:none}
+
+/* ZAPPOPPOP_PRO_LOCK: static Pro teasers. Colours follow the Theme page variables; --zpp-promo-* come from defaults/promo.json. */
+.zpp-pro-lock-section{position:relative;margin:24px 0 0}
+.zpp-pro-lock-section>.zpp-promo-x{position:absolute;top:12px;right:12px}
+.zpp-pro-lock-item{position:relative;cursor:pointer;-webkit-transition:border-color .15s ease,-webkit-box-shadow .15s ease;transition:border-color .15s ease,box-shadow .15s ease}
+.zpp-pro-lock-item:hover,.zpp-pro-lock-item:focus{border-color:var(--zpp-c-primary,#c1272d);outline:0;-webkit-box-shadow:0 0 0 1px var(--zpp-c-primary,#c1272d);box-shadow:0 0 0 1px var(--zpp-c-primary,#c1272d)}
+.zpp-pro-lock-cta{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;gap:4px;margin-top:auto;padding-top:10px;border-top:var(--zpp-bw,1px) solid var(--zpp-c-row-border,#eee);font-size:var(--zpp-fs-small,12px);color:var(--zpp-c-muted,#646970)}
+.zpp-pro-lock-cta .dashicons{width:14px;height:14px;font-size:14px}
+.zpp-pro-lock-btn{display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;gap:5px;min-height:28px;padding:0 12px;border:0;border-radius:var(--zpp-r-button,3px);background:var(--zpp-promo-cta-bg,#d9600b);color:var(--zpp-promo-cta-fg,#fff);font-size:var(--zpp-fs-small,12px);font-weight:600;line-height:1;text-decoration:none;-webkit-box-shadow:none;box-shadow:none;white-space:nowrap}
+.zpp-pro-lock-btn .dashicons{color:inherit}
+a.zpp-pro-lock-btn:hover,a.zpp-pro-lock-btn:focus{color:var(--zpp-promo-cta-fg,#fff);-webkit-filter:brightness(1.1);filter:brightness(1.1);outline:0;text-decoration:none}
+a.zpp-pro-lock-btn:focus-visible{outline:2px solid var(--zpp-promo-cta-bg,#d9600b);outline-offset:2px}
+.zpp-pro-lock-link{color:var(--zpp-c-link,#2271b1);text-decoration:none}
+.zappoppop-pro-lock-group{position:relative;margin-top:14px}
+.zappoppop-pro-lock-group>.zpp-promo-x{position:absolute;top:-4px;right:0}
+.zappoppop-pro-lock-head{margin:0 0 6px;padding-right:28px;font-size:11px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#475569}
+.zappoppop-pro-lock-note{margin:0 0 8px;font-size:12px;line-height:1.45;color:#64748b}
+.zappoppop-pro-lock-row{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;gap:8px;margin:0 0 6px;padding:9px 12px;border:1px solid var(--zpp-c-border,#e2e8f0);border-radius:var(--zpp-r-button,6px);background:#fff;color:#334155;cursor:pointer;box-sizing:border-box}
+.zappoppop-pro-lock-row:hover,.zappoppop-pro-lock-row:focus{border-color:var(--zpp-c-primary,#c1272d);outline:0}
+.zappoppop-pro-lock-row>.dashicons{width:18px;height:18px;font-size:18px;color:#64748b;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto}
+.zpp-pro-lock-txt{display:block;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}
+.zpp-pro-lock-name{display:block;font-size:13px;font-weight:600;line-height:1.3}
+.zpp-pro-lock-desc{display:block;font-size:11px;line-height:1.35;color:#64748b}
+.zappoppop-pro-lock-row .zpp-pro-lock-ico{color:#94a3b8}
+.zpp-pro-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1000000;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;padding:16px;box-sizing:border-box}
+.zpp-pro-modal[hidden]{display:none}
+.zpp-pro-modal-backdrop{position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(15,23,42,.55)}
+.zpp-pro-modal-box{position:relative;width:100%;max-width:440px;max-height:calc(100vh - 32px);overflow:auto;padding:24px;box-sizing:border-box;background:var(--zpp-promo-bg,var(--zpp-c-bg-card,#fff));color:var(--zpp-promo-fg,var(--zpp-c-text,#1d2327));border-radius:var(--zpp-r-card,6px);-webkit-box-shadow:0 20px 50px rgba(0,0,0,.3);box-shadow:0 20px 50px rgba(0,0,0,.3);outline:0}
+.zpp-pro-modal-x{position:absolute;top:10px;right:10px}
+.zpp-pro-modal-img{display:block;max-width:100%;height:auto;margin:0 0 14px;border-radius:var(--zpp-r-button,3px)}
+.zpp-pro-modal-title{margin:0 28px 8px 0;font-size:18px;line-height:1.3;color:inherit}
+.zpp-pro-modal-text{margin:0 0 12px;font-size:13px;line-height:1.5;color:inherit}
+.zpp-pro-modal-list{margin:0 0 16px;padding:0;list-style:none}
+.zpp-pro-modal-list li{display:-webkit-box;display:-ms-flexbox;display:flex;gap:6px;margin:0 0 6px;font-size:13px;line-height:1.4}
+.zpp-pro-modal-list .dashicons{width:18px;height:18px;font-size:18px;color:var(--zpp-c-primary,#c1272d);-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto}
+.zpp-pro-modal-actions{display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px}
+.zpp-pro-modal-actions .zpp-promo-btn.button{background:var(--zpp-promo-cta-bg,var(--zpp-c-primary,#c1272d));border-color:var(--zpp-promo-cta-bg,var(--zpp-c-primary,#c1272d));color:var(--zpp-promo-cta-fg,var(--zpp-c-primary-text,#fff));text-decoration:none}
+@media (prefers-reduced-motion:reduce){.zpp-pro-lock-item{-webkit-transition:none;transition:none}}
+
+/* ZAPPOPPOP_PRO_ACC: Pro features as accordions with greyed-out sample controls (builder Popup Settings drawer).
+   The accordion itself is styled by the builder theme; only the Pro parts are styled here. */
+.zappoppop-pro-lock-group .zappoppop-acc-header{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;gap:8px}
+.zpp-pro-badge{display:inline-block;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:700;line-height:16px;letter-spacing:.03em;text-transform:uppercase;background:var(--zpp-c-primary,#c1272d);color:var(--zpp-c-primary-text,#fff)}
+.zpp-pro-acc-body{cursor:pointer}
+.zpp-pro-acc-desc{margin:0 0 10px;font-size:12px;line-height:1.4}
+.zpp-pro-acc-ctls{opacity:.5;-webkit-filter:grayscale(1);filter:grayscale(1);cursor:not-allowed}
+.zpp-pro-ctl{display:block;margin:0 0 10px;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.zpp-pro-ctl--toggle{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;gap:10px}
+.zpp-pro-ctl-label{display:block;margin:0 0 4px;font-size:11px;font-weight:700;text-transform:uppercase}
+.zpp-pro-ctl--toggle .zpp-pro-ctl-label{margin:0}
+.zpp-pro-ctl select,.zpp-pro-ctl input[type="text"],.zpp-pro-ctl input[type="number"],.zpp-pro-ctl textarea{width:100%;max-width:100%;box-sizing:border-box;font-size:12px}
+.zpp-pro-ctl input[type="range"]{width:100%}
+.zpp-pro-ctl input[type="color"]{width:48px;height:28px;padding:0}
+.zpp-pro-acc-foot{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;gap:8px;margin-top:4px}
+.zpp-pro-acc-foot .dashicons{width:16px;height:16px;font-size:16px}
+.zpp-pro-acc-btn.button{cursor:pointer}
+
+/* ZAPPOPPOP_PRO_PREVIEW: the greyed copy never takes a click itself, so it reaches the accordion body (upgrade dialog) */
+.zpp-pro-acc-real,.zpp-pro-acc-real *{pointer-events:none!important;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.zpp-pro-acc-real{margin:0 0 10px}
+
+/* ZAPPOPPOP_PRO_OVERLAY: darker layer + one centred button over the greyed-out controls (hover / keyboard focus; always on touch screens) */
+.zpp-pro-acc-wrap{position:relative;overflow:hidden;border-radius:6px}
+.zpp-pro-acc-wrap .zpp-pro-acc-ctls,.zpp-pro-acc-wrap .zpp-pro-acc-real{margin:0}
+.zpp-pro-acc-overlay{position:absolute;top:0;right:0;bottom:0;left:0;z-index:2;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;background:rgba(2,6,23,.74);opacity:0;-webkit-transition:opacity .15s ease;transition:opacity .15s ease}
+.zpp-pro-acc-wrap:hover .zpp-pro-acc-overlay,.zpp-pro-acc-wrap:focus-within .zpp-pro-acc-overlay{opacity:1}
+.zpp-pro-acc-cta.button{cursor:pointer;text-decoration:none;white-space:nowrap}
+@media (hover:none){.zpp-pro-acc-overlay{opacity:1;background:rgba(2,6,23,.5)}}
+@media (prefers-reduced-motion:reduce){.zpp-pro-acc-overlay{-webkit-transition:none;transition:none}}
