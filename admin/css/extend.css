@@ -156,3 +156,7 @@ body.wp-admin #wpcontent .zappoppop-extend-wrap .zappoppop-dash-bar { box-sizing
 #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch.is-on:before { -webkit-transform: translateX(16px); transform: translateX(16px); }
 #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch:focus { outline: 2px solid var(--zpp-c-link, #2271b1); outline-offset: 2px; -webkit-box-shadow: none; box-shadow: none; }
 @media (prefers-reduced-motion: reduce) { #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch, #wpbody-content .zappoppop-extend-wrap a.zpp-ext-switch:before { -webkit-transition: none; transition: none; } }
+
+/* Info bar above the add-on grid: icon + one line, colours come from .zpp-mod-notice. */
+.zpp-ext-addons .zpp-ext-addon-info { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 8px; margin: 0 0 16px; }
+.zpp-ext-addon-info .dashicons { -ms-flex-negative: 0; flex-shrink: 0; width: 18px; height: 18px; font-size: 18px; line-height: 18px; color: var(--zpp-c-info, #0284c7); }

@@ -14,6 +14,10 @@ if (!$zappoppop_addons) {
         <h3 id="zpp-ext-addons-title"><?php esc_html_e('Add-ons', 'zappoppop'); ?></h3>
     </div>
     <p class="zpp-ext-help"><?php esc_html_e('Add-ons are separate plugins. WordPress installs and updates them, so ZapPopPop never accepts uploaded code. Modules from an active add-on appear in the list above.', 'zappoppop'); ?></p>
+    <div class="zpp-mod-notice zpp-ext-addon-info" role="note">
+        <span class="dashicons dashicons-info" aria-hidden="true"></span>
+        <span><?php esc_html_e('Once an add-on is activated, its module appears in the builder under Popup Settings.', 'zappoppop'); ?></span>
+    </div>
     <div class="zpp-ext-grid zpp-ext-addon-grid">
         <?php foreach ($zappoppop_addons as $zappoppop_it) :
             $zappoppop_status = ZapPopPop_Addon_Catalog::status($zappoppop_it);
